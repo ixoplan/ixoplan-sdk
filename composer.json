@@ -1,0 +1,36 @@
+{
+	"name":"ixolit/dislo-sdk",
+	"license": "MIT",
+	"type": "library",
+	"description": "Client library for Dislo APIs",
+	"autoload": {
+		"psr-4": {
+			"Ixolit\\Dislo\\": "./src"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Ixolit\\Dislo\\": "./tests"
+		}
+	},
+	"require": {
+		"psr/http-message": "^1.0",
+		"psr/http-message-implementation": "^1.0",
+		"ixolit/dislo-sdk-http": "^1.0"
+	},
+	"suggest": {
+		"ixolit/dislo-sdk-http-guzzle": "Guzzle connector for the Dislo SDK"
+	},
+	"require-dev": {
+		"ixolit/dislo-sdk-http-guzzle": "dev-master",
+		"phpunit/phpunit": "^4.8",
+		"phpmd/phpmd": "^2.4",
+		"phing/phing": "^2.14"
+	},
+	"repositories": [
+		{
+			"type": "path",
+			"url": "../dislo-sdk-http-guzzle"
+		}
+	]
+}
