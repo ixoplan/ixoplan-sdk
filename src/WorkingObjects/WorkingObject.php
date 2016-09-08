@@ -10,5 +10,8 @@ interface WorkingObject {
 	 */
 	public static function fromResponse(array $response);
 
+	/**
+	 * @return array
+	 */
 	public function toArray();
 }

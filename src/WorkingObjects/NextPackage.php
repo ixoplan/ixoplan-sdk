@@ -2,6 +2,6 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
-class NextPackage implements WorkingObject {
+class NextPackage extends Package implements WorkingObject {
 
 }

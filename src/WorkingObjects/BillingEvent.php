@@ -202,6 +202,9 @@ class BillingEvent implements WorkingObject {
 		return $this->subscription;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function toArray() {
 		return array(
 			'_type'          => 'BillingEvent',
