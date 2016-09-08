@@ -34,17 +34,26 @@ class HTTPRequestClient implements RequestClient {
 
 	/**
 	 * @param HTTPClientAdapter $httpClient
-	 * @param TimeProvider      $timeProvider
 	 * @param string            $host
 	 * @param string            $apiKey
 	 * @param string            $apiSecret
+	 * @param TimeProvider|null $timeProvider
 	 */
-	public function __construct(HTTPClientAdapter $httpClient, TimeProvider $timeProvider, $host, $apiKey, $apiSecret) {
-		$this->httpClient = $httpClient;
-		$this->host = $host;
+	public function __construct(
+		HTTPClientAdapter $httpClient,
+		$host,
+		$apiKey,
+		$apiSecret,
+		TimeProvider $timeProvider = null
+	) {
+		if (!$timeProvider) {
+			$timeProvider = new StandardTimeProvider();
+		}
+		$this->httpClient   = $httpClient;
+		$this->host         = $host;
 		$this->timeProvider = $timeProvider;
-		$this->apiKey = $apiKey;
-		$this->apiSecret = $apiSecret;
+		$this->apiKey       = $apiKey;
+		$this->apiSecret    = $apiSecret;
 	}
 
 	/**
@@ -56,20 +65,20 @@ class HTTPRequestClient implements RequestClient {
 	 * @throws InvalidResponseData
 	 */
 	public function request($uri, array $params) {
-		$payload = \json_encode($params);
-		$uri = $this->httpClient->createUri()
-			->withScheme('https:')
-			->withHost($this->host)
-			->withPath($uri)
-			->withQuery(
-				'api_key=' . \urlencode($this->apiKey) .
-				'&timestamp=' . \urlencode($this->timeProvider->getTimestamp()));
+		$payload   = \json_encode($params);
+		$uri       = $this->httpClient->createUri()
+									  ->withScheme('https:')
+									  ->withHost($this->host)
+									  ->withPath($uri)
+									  ->withQuery(
+										  'api_key=' . \urlencode($this->apiKey) .
+										  '&timestamp=' . \urlencode($this->timeProvider->getTimestamp()));
 		$signature = \hash_hmac('MD5', $uri . $payload, $this->apiSecret);
-		$uri = $uri->withQuery($uri->getQuery() . '&signature=' . \urlencode($signature));
-		$request = $this->httpClient->createRequest()
-									->withUri($uri)
-									->withMethod('POST')
-									->withHeader('Content-Type', 'text/json');
+		$uri       = $uri->withQuery($uri->getQuery() . '&signature=' . \urlencode($signature));
+		$request   = $this->httpClient->createRequest()
+									  ->withUri($uri)
+									  ->withMethod('POST')
+									  ->withHeader('Content-Type', 'text/json');
 
 		$response = $this->httpClient->send($request);
 
