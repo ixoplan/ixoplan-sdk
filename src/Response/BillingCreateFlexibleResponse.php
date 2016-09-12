@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\Flexible;
 
-class BillingCreateFlexible {
+class BillingCreateFlexibleResponse {
 	/**
 	 * @var Flexible
 	 */
@@ -20,9 +20,16 @@ class BillingCreateFlexible {
 	/**
 	 * @param array $response
 	 *
-	 * @return BillingCreateFlexible
+	 * @return BillingCreateFlexibleResponse
 	 */
-	public function fromResponse(array $response) {
-		return new BillingCreateFlexible(Flexible::fromResponse($response['flexible']));
+	public static function fromResponse(array $response) {
+		return new BillingCreateFlexibleResponse(Flexible::fromResponse($response['flexible']));
+	}
+
+	/**
+	 * @return Flexible
+	 */
+	public function getFlexible() {
+		return $this->flexible;
 	}
 }

@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\Flexible;
 
-class BillingCloseFlexible {
+class BillingCloseFlexibleResponse {
 	/**
 	 * @var Flexible
 	 */
@@ -20,10 +20,10 @@ class BillingCloseFlexible {
 	/**
 	 * @param array $response
 	 *
-	 * @return BillingCloseFlexible
+	 * @return BillingCloseFlexibleResponse
 	 */
 	public static function fromResponse(array $response) {
-		return new BillingCloseFlexible(Flexible::fromResponse($response['flexible']));
+		return new BillingCloseFlexibleResponse(Flexible::fromResponse($response['flexible']));
 	}
 
 	/**
