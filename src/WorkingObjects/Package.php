@@ -113,4 +113,57 @@ class Package implements WorkingObject {
 	public function getRecurringPeriod() {
 		return $this->recurringPeriod;
 	}
+
+	/**
+	 * @param array $response
+	 *
+	 * @return self
+	 */
+	public static function fromResponse(array $response) {
+		$displayNames = [];
+		foreach ($response['displayNames'] as $displayName) {
+			$displayNames[] = DisplayName::fromResponse($displayName);
+		}
+		$addonPackages = [];
+		foreach ($response['addonPackages'] as $addonPackage) {
+			$addonPackages[] = Package::fromResponse($addonPackage);
+		}
+		return new Package(
+			$response['packageIdentifier'],
+			$response['serviceIdentifier'],
+			$displayNames,
+			$response['signupAvailable'],
+			$addonPackages,
+			$response['metaData'],
+			PackagePeriod::fromResponse($response['initialPeriod']),
+			($response['recurringPeriod']?PackagePeriod::fromResponse($response['recurringPeriod']):null)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function toArray() {
+		$displayNames = [];
+		foreach ($this->displayNames as $displayName) {
+			$displayNames[] = $displayName->toArray();
+		}
+
+		$addonPackages = [];
+		foreach ($this->addonPackages as $package) {
+			$addonPackages[] = $package->toArray();
+		}
+
+		return [
+			'_type' => 'Package',
+			'packageIdentifier' => $this->packageIdentifier,
+			'serviceIdentifier' => $this->serviceIdentifier,
+			'displayNames'      => $displayNames,
+			'signupAvailable'   => $this->signupAvailable,
+			'addonPackages'     => $addonPackages,
+			'metaData'          => $this->metaData,
+			'initialPeriod'     => $this->initialPeriod->toArray(),
+			'recurringPeriod'   => ($this->recurringPeriod?$this->recurringPeriod->toArray():null)
+		];
+	}
 }

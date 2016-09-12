@@ -1,4 +1,7 @@
 <?php
+/**
+ * This file is only used by the CDE to autoload classes for this library.
+ */
 
 namespace Ixolit\Dislo;
 
