@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "da1f5fa17d15c8b2afc8573415f48962",
-    "content-hash": "af83f698b92161d8cb48a6e6b7844e5a",
+    "hash": "0eeadd9593e97936f97f9c40af7c18a4",
+    "content-hash": "ce64389cc61d91e8712da1cc911463c8",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -180,12 +180,17 @@
         },
         {
             "name": "ixolit/dislo-sdk-http-guzzle",
-            "version": "dev-master",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Ixolit/dislo-sdk-http-guzzle.git",
+                "reference": "789f6e13ca2ebe19300604e310fd972c62f97002"
+            },
             "dist": {
-                "type": "path",
-                "url": "../dislo-sdk-http-guzzle",
-                "reference": "c4bf56b107223a3ad1f53a8ba0b3d77f1ac33d9b",
-                "shasum": null
+                "type": "zip",
+                "url": "https://api.github.com/repos/Ixolit/dislo-sdk-http-guzzle/zipball/789f6e13ca2ebe19300604e310fd972c62f97002",
+                "reference": "789f6e13ca2ebe19300604e310fd972c62f97002",
+                "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^6.2",
@@ -200,14 +205,11 @@
                     "Ixolit\\Dislo\\HTTP\\Guzzle\\": "./src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Ixolit\\Dislo\\HTTP\\Guzzle\\": "./tests"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
-            ]
+            ],
+            "time": "2016-09-08 13:41:18"
         },
         {
             "name": "psr/http-message",
@@ -1726,9 +1728,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "ixolit/dislo-sdk-http-guzzle": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

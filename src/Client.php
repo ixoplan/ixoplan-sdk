@@ -7,6 +7,7 @@ use Ixolit\Dislo\Request\RequestClient;
 use Ixolit\Dislo\Response\BillingCloseFlexibleResponse;
 use Ixolit\Dislo\Response\BillingCreateFlexibleResponse;
 use Ixolit\Dislo\Response\BillingCreatePaymentResponse;
+use Ixolit\Dislo\Response\BillingExternalCreateChargebackResponse;
 use Ixolit\Dislo\Response\BillingExternalCreateChargeResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
@@ -116,6 +117,27 @@ class Client {
 		return BillingCreatePaymentResponse::fromResponse($response);
 	}
 
+	/**
+	 * Create an external charge.
+	 *
+	 * @param User|int $user                  unique user id
+	 * @param string   $externalProfileId     the external profile to which the charge should be linked, this is the
+	 *                                        "externalId" you passed in the "subscription/externalCreate" call
+	 * @param string   $accountIdentifier     the billing account identifier, you will this from dislo staff
+	 * @param string   $currencyCode          currency code EUR, USD, ...
+	 * @param float    $amount                the amount of the charge
+	 * @param string   $externalTransactionId external unique id for the charge
+	 * @param int|null $upgradeId             the unique upgrade id to which the charge should be linked, you get this
+	 *                                        from the
+	 *                                        "subscription/externalChangePackage" or
+	 *                                        "subscription/externalCreateAddonSubscription" call
+	 * @param array    $paymentDetails        additional data you want to save with the charge
+	 * @param string   $description           description of the charge
+	 * @param string   $status                status the charge should be created with, you might want to log erroneous
+	 *                                        charges in dislo too, but you don't have to. @see BillingEvent::STATUS_*
+	 *
+	 * @return BillingExternalCreateChargeResponse
+	 */
 	public function billingExternalCreateCharge(
 		$user,
 		$externalProfileId,
@@ -141,5 +163,49 @@ class Client {
 			'status'                => $status,
 		]);
 		return BillingExternalCreateChargeResponse::fromResponse($response);
+	}
+
+	/**
+	 * Create a charge back for an external charge by using the original transaction ID
+	 *
+	 * @param string $accountIdentifier     the billing account identifier, assigned by dislo staff
+	 * @param string $originalTransactionID external unique id of the original charge
+	 * @param string $description           textual description of the chargeback for support
+	 *
+	 * @return BillingExternalCreateChargebackResponse
+	 */
+	public function billingExternalCreateChargebackByTransactionId(
+		$accountIdentifier,
+		$originalTransactionID,
+		$description = ''
+	) {
+		$response = $this->requestClient->request('/frontend/billing/externalCreateChargeback', [
+			'accountIdentifier'     => $accountIdentifier,
+			'externalTransactionId' => $originalTransactionID,
+			'description'           => $description,
+		]);
+		return BillingExternalCreateChargebackResponse::fromResponse($response);
+	}
+
+	/**
+	 * Create a charge back for an external charge by using the original billing event ID
+	 *
+	 * @param string $accountIdentifier      the billing account identifier, assigned by dislo staff
+	 * @param int    $originalBillingEventId ID of the original billing event.
+	 * @param string $description            textual description of the chargeback for support
+	 *
+	 * @return BillingExternalCreateChargebackResponse
+	 */
+	public function billingExternalCreateChargebackByEventId(
+		$accountIdentifier,
+		$originalBillingEventId,
+		$description = ''
+	) {
+		$response = $this->requestClient->request('/frontend/billing/externalCreateChargeback', [
+			'accountIdentifier' => $accountIdentifier,
+			'billingEventId'    => $originalBillingEventId,
+			'description'       => $description,
+		]);
+		return BillingExternalCreateChargebackResponse::fromResponse($response);
 	}
 }
