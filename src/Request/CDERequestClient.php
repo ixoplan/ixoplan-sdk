@@ -13,12 +13,12 @@ class CDERequestClient implements RequestClient {
 	 * @param string $uri
 	 * @param array  $params
 	 *
-	 * @return string
+	 * @return array
 	 *
 	 * @throws InvalidResponseData
 	 */
 	public function request($uri, array $params) {
-		$response = \apiCall('dislo',$uri,\json_encode($params));
+		$response = \apiCall('dislo', $uri, \json_encode($params));
 
 		$decodedBody = \json_decode($response->body);
 		if (\json_last_error() == JSON_ERROR_NONE) {

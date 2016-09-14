@@ -22,14 +22,6 @@ class BillingCreatePaymentResponse {
 		$this->billingEvent = $billingEvent;
 	}
 
-	public static function fromResponse(array $response) {
-		return new BillingCreatePaymentResponse(
-			$response['redirectUrl'],
-			$response['metaData'],
-			BillingEvent::fromResponse($response['billingEvent'])
-		);
-	}
-
 	/**
 	 * @return string
 	 */
@@ -49,5 +41,18 @@ class BillingCreatePaymentResponse {
 	 */
 	public function getBillingEvent() {
 		return $this->billingEvent;
+	}
+
+	/**
+	 * @param array $response
+	 *
+	 * @return BillingCreatePaymentResponse
+	 */
+	public static function fromResponse(array $response) {
+		return new BillingCreatePaymentResponse(
+			$response['redirectUrl'],
+			$response['metaData'],
+			BillingEvent::fromResponse($response['billingEvent'])
+		);
 	}
 }

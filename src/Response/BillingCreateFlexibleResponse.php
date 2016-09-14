@@ -18,18 +18,18 @@ class BillingCreateFlexibleResponse {
 	}
 
 	/**
+	 * @return Flexible
+	 */
+	public function getFlexible() {
+		return $this->flexible;
+	}
+
+	/**
 	 * @param array $response
 	 *
 	 * @return BillingCreateFlexibleResponse
 	 */
 	public static function fromResponse(array $response) {
 		return new BillingCreateFlexibleResponse(Flexible::fromResponse($response['flexible']));
-	}
-
-	/**
-	 * @return Flexible
-	 */
-	public function getFlexible() {
-		return $this->flexible;
 	}
 }

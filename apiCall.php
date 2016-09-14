@@ -7,8 +7,8 @@
  * @param string $uri
  * @param array $params
  *
- * @return array
+ * @return stdClass
  */
 function apiCall($api, $uri, $params) {
-	return array();
+	return new stdClass();
 }

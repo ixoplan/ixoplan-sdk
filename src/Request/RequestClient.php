@@ -12,7 +12,7 @@ interface RequestClient {
 	 * @param string $uri
 	 * @param array $params
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function request($uri, array $params);
 }

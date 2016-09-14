@@ -3,12 +3,33 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 class User implements WorkingObject {
+	/**
+	 * @var int
+	 */
 	private $userId;
+	/**
+	 * @var \DateTime
+	 */
 	private $createdAt;
+	/**
+	 * @var bool
+	 */
 	private $loginDisabled;
+	/**
+	 * @var string
+	 */
 	private $language;
+	/**
+	 * @var \DateTime|null
+	 */
 	private $lastLoginDate;
+	/**
+	 * @var string
+	 */
 	private $lastLoginIp;
+	/**
+	 * @var array
+	 */
 	private $metaData;
 
 	/**
