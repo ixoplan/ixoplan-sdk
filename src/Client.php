@@ -49,16 +49,20 @@ class Client {
 	 * @throws ObjectNotFoundException
 	 */
 	private function request($uri, $data) {
-		$response = $this->requestClient->request($uri, $data);
-		if ($response['success'] == false) {
-			switch ($response['code']) {
-				case 404:
-					throw new ObjectNotFoundException($response['message'], $response['code']);
-				default:
-					throw new DisloException($response['message'], $response['code']);
+		try {
+			$response = $this->requestClient->request($uri, $data);
+			if ($response['success'] === false) {
+				switch ($response['code']) {
+					case 404:
+						throw new ObjectNotFoundException($response['message'], $response['code']);
+					default:
+						throw new DisloException($response['message'], $response['code']);
+				}
+			} else {
+				return $response;
 			}
-		} else {
-			return $response;
+		} catch (\Exception $e) {
+			throw new DisloException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
 
