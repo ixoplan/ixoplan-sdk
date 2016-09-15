@@ -20,7 +20,7 @@ class CDERequestClient implements RequestClient {
 	public function request($uri, array $params) {
 		$response = \apiCall('dislo', $uri, \json_encode($params));
 
-		$decodedBody = \json_decode($response->body);
+		$decodedBody = \json_decode($response->body, true);
 		if (\json_last_error() == JSON_ERROR_NONE) {
 			return $decodedBody;
 		}
