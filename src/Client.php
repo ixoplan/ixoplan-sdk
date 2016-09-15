@@ -51,7 +51,7 @@ class Client {
 	private function request($uri, $data) {
 		try {
 			$response = $this->requestClient->request($uri, $data);
-			if ($response['success'] === false) {
+			if (isset($response['success']) && $response['success'] === false) {
 				switch ($response['code']) {
 					case 404:
 						throw new ObjectNotFoundException($response['message'], $response['code']);
