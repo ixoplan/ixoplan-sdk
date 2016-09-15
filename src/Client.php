@@ -205,7 +205,7 @@ class Client {
 		$amount,
 		$externalTransactionId,
 		$upgradeId = null,
-		array $paymentDetails = [],
+		$paymentDetails = [],
 		$description = '',
 		$status = 'success'
 	) {

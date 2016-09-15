@@ -27,7 +27,7 @@ class BillingExternalCreateChargebackResponse {
 	 *
 	 * @return BillingExternalCreateChargebackResponse
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		return new BillingExternalCreateChargebackResponse($response['billingEventId']);
 	}
 }

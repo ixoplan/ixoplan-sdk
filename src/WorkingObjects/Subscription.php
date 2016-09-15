@@ -85,7 +85,7 @@ class Subscription implements WorkingObject {
 	 */
 	public function __construct($subscriptionId, Package $currentPackage, $userId, $status, \DateTime $startedAt,
 								$canceledAt, $closedAt, $expiresAt, $nextBillingAt, $currencyCode, $isInitialPeriod,
-								$isProvisioned, array $provisioningMetaData, $nextPackage, array $addonSubscriptions) {
+								$isProvisioned, $provisioningMetaData, $nextPackage, $addonSubscriptions) {
 		$this->subscriptionId       = $subscriptionId;
 		$this->currentPackage       = $currentPackage;
 		$this->userId               = $userId;
@@ -213,7 +213,7 @@ class Subscription implements WorkingObject {
 	 *
 	 * @return self
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		$addonSubscriptions = [];
 		foreach ($response['addonSubscriptions'] as $addonSubscription) {
 			$addonSubscriptions[] = Subscription::fromResponse($addonSubscription);

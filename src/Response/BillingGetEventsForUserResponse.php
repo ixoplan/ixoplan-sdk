@@ -13,7 +13,7 @@ class BillingGetEventsForUserResponse {
 	/**
 	 * @param BillingEvent[] $billingEvents
 	 */
-	public function __construct(array $billingEvents) {
+	public function __construct($billingEvents) {
 		$this->billingEvents = $billingEvents;
 	}
 
@@ -29,7 +29,7 @@ class BillingGetEventsForUserResponse {
 	 *
 	 * @return BillingGetEventsForUserResponse
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		$billingEvents = [];
 		foreach ($response['billingEvents'] as $billingEventArray) {
 			$billingEvents[] = BillingEvent::fromResponse($billingEventArray);

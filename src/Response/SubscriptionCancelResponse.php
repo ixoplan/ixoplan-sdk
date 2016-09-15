@@ -29,7 +29,7 @@ class SubscriptionCancelResponse {
 	 *
 	 * @return SubscriptionCancelResponse
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		return new SubscriptionCancelResponse(
 			Subscription::fromResponse($response['subscription'])
 		);

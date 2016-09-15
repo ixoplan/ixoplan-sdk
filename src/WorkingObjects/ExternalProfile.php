@@ -29,7 +29,7 @@ class ExternalProfile implements WorkingObject {
 	 * @param array  $extraData
 	 * @param string $externalId
 	 */
-	public function __construct($userId, $subscriptionId, array $extraData, $externalId) {
+	public function __construct($userId, $subscriptionId, $extraData, $externalId) {
 		$this->userId         = $userId;
 		$this->subscriptionId = $subscriptionId;
 		$this->extraData      = $extraData;
@@ -71,7 +71,7 @@ class ExternalProfile implements WorkingObject {
 	 *
 	 * @return self
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		return new ExternalProfile(
 			$response['userId'],
 			$response['subscriptionId'],

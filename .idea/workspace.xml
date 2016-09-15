@@ -4,6 +4,32 @@
     <list default="true" id="f9143044-1ea4-4b2d-9343-75c717ad0780" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Client.php" afterPath="$PROJECT_DIR$/src/Client.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingCloseFlexibleResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingCloseFlexibleResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingCreateFlexibleResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingCreateFlexibleResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingCreatePaymentResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingCreatePaymentResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingExternalCreateChargeResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingExternalCreateChargeResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingExternalCreateChargebackResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingExternalCreateChargebackResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingExternalGetProfileResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingExternalGetProfileResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingGetEventResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingGetEventResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingGetEventsForUserResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingGetEventsForUserResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingGetFlexibleResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingGetFlexibleResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/SubscriptionCalculateAddonPriceResponse.php" afterPath="$PROJECT_DIR$/src/Response/SubscriptionCalculateAddonPriceResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/SubscriptionCalculatePackageChangeResponse.php" afterPath="$PROJECT_DIR$/src/Response/SubscriptionCalculatePackageChangeResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/SubscriptionCalculatePriceResponse.php" afterPath="$PROJECT_DIR$/src/Response/SubscriptionCalculatePriceResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/SubscriptionCancelPackageChangeResponse.php" afterPath="$PROJECT_DIR$/src/Response/SubscriptionCancelPackageChangeResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/SubscriptionCancelResponse.php" afterPath="$PROJECT_DIR$/src/Response/SubscriptionCancelResponse.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/BillingEvent.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/BillingEvent.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/DisplayName.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/DisplayName.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/ExternalProfile.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/ExternalProfile.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/Flexible.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/Flexible.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/MetaProfileElement.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/MetaProfileElement.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/NextPackage.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/NextPackage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/Package.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/Package.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/PackagePeriod.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/PackagePeriod.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/Price.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/Price.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/Subscription.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/Subscription.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/User.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/User.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/WorkingObject.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/WorkingObject.php" />
     </list>
     <ignored path="dislo-sdk.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,14 +50,102 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Client.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Client.php">
+      <file leaf-file-name="SubscriptionCancelResponse.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCancelResponse.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="53" column="47" selection-start-line="53" selection-start-column="47" selection-end-line="53" selection-end-column="47" />
-              <folding>
-                <element signature="e#32#75#0#PHP" expanded="true" />
-              </folding>
+            <state relative-caret-position="527">
+              <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SubscriptionCancelPackageChangeResponse.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCancelPackageChangeResponse.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="223">
+              <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BillingExternalCreateChargeResponse.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Response/BillingExternalCreateChargeResponse.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="493">
+              <caret line="29" column="40" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BillingExternalGetProfileResponse.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Response/BillingExternalGetProfileResponse.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="516">
+              <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BillingGetEventResponse.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Response/BillingGetEventResponse.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="516">
+              <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BillingGetEventsForUserResponse.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Response/BillingGetEventsForUserResponse.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="159">
+              <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BillingGetFlexibleResponse.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Response/BillingGetFlexibleResponse.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="516">
+              <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SubscriptionCalculateAddonPriceResponse.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCalculateAddonPriceResponse.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="465">
+              <caret line="47" column="40" selection-start-line="47" selection-start-column="40" selection-end-line="47" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SubscriptionCalculatePackageChangeResponse.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCalculatePackageChangeResponse.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="448">
+              <caret line="61" column="40" selection-start-line="61" selection-start-column="40" selection-end-line="61" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SubscriptionCalculatePriceResponse.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCalculatePriceResponse.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="482">
+              <caret line="33" column="40" selection-start-line="33" selection-start-column="40" selection-end-line="33" selection-end-column="40" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -51,46 +165,46 @@
         <option value="$PROJECT_DIR$/src/Request/StandardTimeProvider.php" />
         <option value="$PROJECT_DIR$/dislo-autoload.php" />
         <option value="$PROJECT_DIR$/src/Request/HTTPRequestClient.php" />
-        <option value="$PROJECT_DIR$/src/WorkingObjects/DisplayName.php" />
-        <option value="$PROJECT_DIR$/src/WorkingObjects/WorkingObject.php" />
-        <option value="$PROJECT_DIR$/src/WorkingObjects/Flexible.php" />
-        <option value="$PROJECT_DIR$/src/WorkingObjects/MetaProfileElement.php" />
         <option value="$PROJECT_DIR$/src/cde-autoload.php" />
-        <option value="$PROJECT_DIR$/src/WorkingObjects/Package.php" />
-        <option value="$PROJECT_DIR$/src/WorkingObjects/NextPackage.php" />
-        <option value="$PROJECT_DIR$/src/WorkingObjects/PackagePeriod.php" />
-        <option value="$PROJECT_DIR$/src/WorkingObjects/Subscription.php" />
         <option value="$PROJECT_DIR$/src/Response/BillingCreateFlexible.php" />
         <option value="$PROJECT_DIR$/src/Response/BillingCloseFlexible.php" />
-        <option value="$PROJECT_DIR$/src/Response/BillingExternalCreateChargeResponse.php" />
         <option value="$PROJECT_DIR$/src/HTTP/HTTPClientAdapter.php" />
-        <option value="$PROJECT_DIR$/src/WorkingObjects/BillingEvent.php" />
         <option value="$PROJECT_DIR$/src/Response/ExternalCreateChargebackResponse.php" />
-        <option value="$PROJECT_DIR$/src/Response/BillingExternalCreateChargebackResponse.php" />
-        <option value="$PROJECT_DIR$/src/WorkingObjects/ExternalProfile.php" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/src/WorkingObjects/User.php" />
         <option value="$PROJECT_DIR$/src/BillingExternalGetProfileResponse.php" />
-        <option value="$PROJECT_DIR$/src/Response/BillingExternalGetProfileResponse.php" />
         <option value="$PROJECT_DIR$/src/Exceptions/DisloException.php" />
         <option value="$PROJECT_DIR$/src/Exceptions/ObjectNotFoundException.php" />
-        <option value="$PROJECT_DIR$/src/Response/BillingGetEventsForUserResponse.php" />
         <option value="$PROJECT_DIR$/src/Request/RequestClient.php" />
         <option value="$PROJECT_DIR$/apiCall.php" />
-        <option value="$PROJECT_DIR$/src/Response/BillingGetFlexibleResponse.php" />
-        <option value="$PROJECT_DIR$/src/Response/BillingGetEventResponse.php" />
-        <option value="$PROJECT_DIR$/src/Response/BillingCreatePaymentResponse.php" />
-        <option value="$PROJECT_DIR$/src/Response/BillingCreateFlexibleResponse.php" />
-        <option value="$PROJECT_DIR$/src/Response/BillingCloseFlexibleResponse.php" />
-        <option value="$PROJECT_DIR$/src/Response/SubscriptionCalculateAddonPriceResponse.php" />
+        <option value="$PROJECT_DIR$/composer.json" />
+        <option value="$PROJECT_DIR$/src/Request/CDERequestClient.php" />
+        <option value="$PROJECT_DIR$/src/Client.php" />
+        <option value="$PROJECT_DIR$/src/WorkingObjects/BillingEvent.php" />
+        <option value="$PROJECT_DIR$/src/WorkingObjects/DisplayName.php" />
+        <option value="$PROJECT_DIR$/src/WorkingObjects/ExternalProfile.php" />
+        <option value="$PROJECT_DIR$/src/WorkingObjects/Flexible.php" />
+        <option value="$PROJECT_DIR$/src/WorkingObjects/MetaProfileElement.php" />
+        <option value="$PROJECT_DIR$/src/WorkingObjects/NextPackage.php" />
+        <option value="$PROJECT_DIR$/src/WorkingObjects/Package.php" />
+        <option value="$PROJECT_DIR$/src/WorkingObjects/PackagePeriod.php" />
         <option value="$PROJECT_DIR$/src/WorkingObjects/Price.php" />
+        <option value="$PROJECT_DIR$/src/WorkingObjects/Subscription.php" />
+        <option value="$PROJECT_DIR$/src/WorkingObjects/User.php" />
+        <option value="$PROJECT_DIR$/src/WorkingObjects/WorkingObject.php" />
+        <option value="$PROJECT_DIR$/src/Response/BillingCloseFlexibleResponse.php" />
+        <option value="$PROJECT_DIR$/src/Response/BillingCreateFlexibleResponse.php" />
+        <option value="$PROJECT_DIR$/src/Response/BillingCreatePaymentResponse.php" />
+        <option value="$PROJECT_DIR$/src/Response/BillingExternalCreateChargebackResponse.php" />
+        <option value="$PROJECT_DIR$/src/Response/BillingExternalCreateChargeResponse.php" />
+        <option value="$PROJECT_DIR$/src/Response/BillingExternalGetProfileResponse.php" />
+        <option value="$PROJECT_DIR$/src/Response/BillingGetEventResponse.php" />
+        <option value="$PROJECT_DIR$/src/Response/BillingGetEventsForUserResponse.php" />
+        <option value="$PROJECT_DIR$/src/Response/BillingGetFlexibleResponse.php" />
+        <option value="$PROJECT_DIR$/src/Response/SubscriptionCalculateAddonPriceResponse.php" />
         <option value="$PROJECT_DIR$/src/Response/SubscriptionCalculatePackageChangeResponse.php" />
         <option value="$PROJECT_DIR$/src/Response/SubscriptionCalculatePriceResponse.php" />
         <option value="$PROJECT_DIR$/src/Response/SubscriptionCancelPackageChangeResponse.php" />
         <option value="$PROJECT_DIR$/src/Response/SubscriptionCancelResponse.php" />
-        <option value="$PROJECT_DIR$/composer.json" />
-        <option value="$PROJECT_DIR$/src/Request/CDERequestClient.php" />
-        <option value="$PROJECT_DIR$/src/Client.php" />
       </list>
     </option>
   </component>
@@ -300,16 +414,17 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42752000" />
+    <option name="totallyTimeSpent" value="43305000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1280" y="-277" width="1920" height="1132" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1773163" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1773163" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298077" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973376" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -320,7 +435,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -499,214 +613,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/BillingGetEventsForUserResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="46" selection-start-line="29" selection-start-column="46" selection-end-line="29" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/BillingGetEventResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/BillingExternalGetProfileResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="32" column="27" selection-start-line="32" selection-start-column="27" selection-end-line="32" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/BillingExternalCreateChargeResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="31" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/BillingExternalCreateChargebackResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="54" selection-start-line="27" selection-start-column="54" selection-end-line="27" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/BillingCreatePaymentResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="935">
-          <caret line="56" column="5" selection-start-line="56" selection-start-column="5" selection-end-line="56" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/BillingCreateFlexibleResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" column="5" selection-start-line="33" selection-start-column="5" selection-end-line="33" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/BillingCloseFlexibleResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" column="5" selection-start-line="33" selection-start-column="5" selection-end-line="33" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/BillingGetFlexibleResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/PackagePeriod.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="501">
-          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/Package.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="156" column="16" selection-start-line="156" selection-start-column="16" selection-end-line="156" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/MetaProfileElement.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="718">
-          <caret line="74" column="1" selection-start-line="74" selection-start-column="1" selection-end-line="74" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/NextPackage.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="633">
-          <caret line="57" column="5" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/Flexible.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="718">
-          <caret line="79" column="7" selection-start-line="79" selection-start-column="7" selection-end-line="79" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/ExternalProfile.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="718">
-          <caret line="79" column="10" selection-start-line="79" selection-start-column="10" selection-end-line="79" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/DisplayName.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="18" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/BillingEvent.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="18" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/Subscription.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="718">
-          <caret line="208" column="5" selection-start-line="208" selection-start-column="5" selection-end-line="208" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/User.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="112" column="19" selection-start-line="112" selection-start-column="19" selection-end-line="112" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/WorkingObject.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/Price.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-799">
-          <caret line="50" column="20" selection-start-line="50" selection-start-column="20" selection-end-line="50" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCalculateAddonPriceResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5">
-          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCalculatePackageChangeResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="67" column="5" selection-start-line="7" selection-start-column="0" selection-end-line="67" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCalculatePriceResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="31" column="49" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCancelResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" column="32" selection-start-line="33" selection-start-column="32" selection-end-line="33" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCancelPackageChangeResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="45" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/composer.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -733,11 +639,219 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Client.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="53" column="47" selection-start-line="53" selection-start-column="47" selection-end-line="53" selection-end-column="47" />
+        <state relative-caret-position="233">
+          <caret line="155" column="20" selection-start-line="155" selection-start-column="14" selection-end-line="155" selection-end-column="20" />
           <folding>
             <element signature="e#32#75#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/BillingEvent.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="64" column="40" selection-start-line="64" selection-start-column="40" selection-end-line="64" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/DisplayName.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="30" column="40" selection-start-line="30" selection-start-column="40" selection-end-line="30" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/ExternalProfile.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="73" column="40" selection-start-line="73" selection-start-column="40" selection-end-line="73" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/Flexible.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="55" column="40" selection-start-line="55" selection-start-column="40" selection-end-line="55" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/MetaProfileElement.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="244">
+          <caret line="55" column="40" selection-start-line="55" selection-start-column="40" selection-end-line="55" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/NextPackage.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="25" column="40" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/Package.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="121" column="40" selection-start-line="121" selection-start-column="40" selection-end-line="121" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/PackagePeriod.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="33" column="40" selection-start-line="33" selection-start-column="40" selection-end-line="33" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/Price.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="98" column="40" selection-start-line="98" selection-start-column="40" selection-end-line="98" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/Subscription.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="215" column="40" selection-start-line="215" selection-start-column="40" selection-end-line="215" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="111" column="40" selection-start-line="111" selection-start-column="40" selection-end-line="111" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/WorkingObject.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="40" selection-start-line="10" selection-start-column="40" selection-end-line="10" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/BillingCloseFlexibleResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="516">
+          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/BillingCreateFlexibleResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="516">
+          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/BillingCreatePaymentResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="422">
+          <caret line="50" column="40" selection-start-line="50" selection-start-column="40" selection-end-line="50" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/BillingExternalCreateChargebackResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="29" column="40" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/BillingExternalCreateChargeResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="29" column="40" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/BillingExternalGetProfileResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="516">
+          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/BillingGetEventResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="516">
+          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/BillingGetEventsForUserResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/BillingGetFlexibleResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="516">
+          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCalculateAddonPriceResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="47" column="40" selection-start-line="47" selection-start-column="40" selection-end-line="47" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCalculatePackageChangeResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="448">
+          <caret line="61" column="40" selection-start-line="61" selection-start-column="40" selection-end-line="61" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCalculatePriceResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="482">
+          <caret line="33" column="40" selection-start-line="33" selection-start-column="40" selection-end-line="33" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCancelPackageChangeResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCancelResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>

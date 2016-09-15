@@ -46,8 +46,8 @@ class Package implements WorkingObject {
 	 * @param PackagePeriod      $initialPeriod
 	 * @param PackagePeriod|null $recurringPeriod
 	 */
-	public function __construct($packageIdentifier, $serviceIdentifier, array $displayNames, $signupAvailable,
-								array $addonPackages, array $metaData, PackagePeriod $initialPeriod, $recurringPeriod) {
+	public function __construct($packageIdentifier, $serviceIdentifier, $displayNames, $signupAvailable,
+								$addonPackages, $metaData, PackagePeriod $initialPeriod, $recurringPeriod) {
 		$this->packageIdentifier = $packageIdentifier;
 		$this->serviceIdentifier = $serviceIdentifier;
 		$this->displayNames      = $displayNames;
@@ -119,7 +119,7 @@ class Package implements WorkingObject {
 	 *
 	 * @return self
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		$displayNames = [];
 		foreach ($response['displayNames'] as $displayName) {
 			$displayNames[] = DisplayName::fromResponse($displayName);

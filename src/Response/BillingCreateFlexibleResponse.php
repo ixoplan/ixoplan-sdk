@@ -29,7 +29,7 @@ class BillingCreateFlexibleResponse {
 	 *
 	 * @return BillingCreateFlexibleResponse
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		return new BillingCreateFlexibleResponse(Flexible::fromResponse($response['flexible']));
 	}
 }

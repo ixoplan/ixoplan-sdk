@@ -29,7 +29,7 @@ class BillingExternalGetProfileResponse {
 	 *
 	 * @return BillingExternalGetProfileResponse
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		return new BillingExternalGetProfileResponse(ExternalProfile::fromResponse($response['externalProfile']));
 	}
 }

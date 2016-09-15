@@ -7,8 +7,8 @@ class NextPackage extends Package implements WorkingObject {
 	private $effectiveAt;
 
 	public function __construct(
-		$packageIdentifier, $serviceIdentifier, array $displayNames, $signupAvailable,
-		array $addonPackages, array $metaData, PackagePeriod $initialPeriod, $recurringPeriod,
+		$packageIdentifier, $serviceIdentifier, $displayNames, $signupAvailable,
+		$addonPackages, $metaData, PackagePeriod $initialPeriod, $recurringPeriod,
 		$paid, \DateTime $effectiveAt
 	) {
 		parent::__construct($packageIdentifier, $serviceIdentifier, $displayNames, $signupAvailable,
@@ -23,7 +23,7 @@ class NextPackage extends Package implements WorkingObject {
 	 *
 	 * @return self
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		$displayNames = [];
 		foreach ($response['displayNames'] as $displayName) {
 			$displayNames[] = DisplayName::fromResponse($displayName);

@@ -17,8 +17,8 @@ class PackagePeriod implements WorkingObject {
 	public function __construct(
 		$length,
 		$lengthUnit,
-		array $metaData = [],
-		array $basePrice = []
+		$metaData = [],
+		$basePrice = []
 	) {
 		$this->length     = $length;
 		$this->lengthUnit = $lengthUnit;
@@ -31,7 +31,7 @@ class PackagePeriod implements WorkingObject {
 	 *
 	 * @return self
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		$prices = [];
 		foreach ($response['basePrice'] as $price) {
 			$prices[] = Price::fromResponse($price);

@@ -59,7 +59,7 @@ class SubscriptionCalculatePackageChangeResponse {
 	 *
 	 * @return SubscriptionCalculatePackageChangeResponse
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		return new SubscriptionCalculatePackageChangeResponse(
 			$response['needsBilling'],
 			Price::fromResponse($response['price']),

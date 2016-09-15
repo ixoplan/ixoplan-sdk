@@ -13,7 +13,7 @@ class SubscriptionCancelPackageChangeResponse {
 	/**
 	 * @param Subscription[] $subscriptions
 	 */
-	public function __construct(array $subscriptions) {
+	public function __construct($subscriptions) {
 		$this->subscriptions = $subscriptions;
 	}
 
@@ -29,7 +29,7 @@ class SubscriptionCancelPackageChangeResponse {
 	 *
 	 * @return SubscriptionCancelPackageChangeResponse
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		$subscriptions = [];
 		foreach ($response['subscriptions'] as $subscriptionData) {
 			$subscriptions[] = Subscription::fromResponse($subscriptionData);

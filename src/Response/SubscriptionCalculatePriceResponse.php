@@ -31,7 +31,7 @@ class SubscriptionCalculatePriceResponse {
 	 *
 	 * @return SubscriptionCalculatePriceResponse
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		return new SubscriptionCalculatePriceResponse(
 			Price::fromResponse($response['price'])
 		);

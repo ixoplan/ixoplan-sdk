@@ -48,7 +48,7 @@ class Price implements WorkingObject {
 	 * @param string  $tag          defines the type of price, options are
 	 * @param Price[] $compositePrices
 	 */
-	public function __construct($amount, $currencyCode, $tag, $group = '', array $compositePrices = []) {
+	public function __construct($amount, $currencyCode, $tag, $group = '', $compositePrices = []) {
 		$this->amount          = $amount;
 		$this->currencyCode    = $currencyCode;
 		$this->group           = $group;
@@ -96,7 +96,7 @@ class Price implements WorkingObject {
 	 *
 	 * @return self
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		$compositePrices = [];
 		if (isset($response['compositePrices'])) {
 			foreach ($response['compositePrices'] as $compositePrice) {

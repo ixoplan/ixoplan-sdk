@@ -62,7 +62,7 @@ class BillingEvent implements WorkingObject {
 	 *
 	 * @return self
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		if (isset($response['subscription']) && $response['subscription']) {
 			$subscription = Subscription::fromResponse($response['subscription']);
 		} else {

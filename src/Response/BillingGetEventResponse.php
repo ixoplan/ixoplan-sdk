@@ -29,7 +29,7 @@ class BillingGetEventResponse {
 	 *
 	 * @return BillingGetEventResponse
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		return new BillingGetEventResponse(BillingEvent::fromResponse($response['billingEvent']));
 	}
 }

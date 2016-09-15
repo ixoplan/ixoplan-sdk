@@ -53,7 +53,7 @@ class Flexible implements WorkingObject {
 	 *
 	 * @return self
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		return new Flexible(
 			$response['flexibleId'],
 			$response['status'],

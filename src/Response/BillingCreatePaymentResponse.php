@@ -16,7 +16,7 @@ class BillingCreatePaymentResponse {
 	 * @param array $metaData
 	 * @param BillingEvent $billingEvent
 	 */
-	public function __construct($redirectUrl, array $metaData, BillingEvent $billingEvent) {
+	public function __construct($redirectUrl, $metaData, BillingEvent $billingEvent) {
 		$this->redirectUrl  = $redirectUrl;
 		$this->metaData     = $metaData;
 		$this->billingEvent = $billingEvent;
@@ -48,7 +48,7 @@ class BillingCreatePaymentResponse {
 	 *
 	 * @return BillingCreatePaymentResponse
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		return new BillingCreatePaymentResponse(
 			$response['redirectUrl'],
 			$response['metaData'],

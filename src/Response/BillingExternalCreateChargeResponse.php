@@ -27,7 +27,7 @@ class BillingExternalCreateChargeResponse {
 	 *
 	 * @return BillingExternalCreateChargeResponse
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		return new BillingExternalCreateChargeResponse($response['billingEventId']);
 	}
 }

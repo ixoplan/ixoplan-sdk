@@ -53,7 +53,7 @@ class MetaProfileElement implements WorkingObject {
 	 *
 	 * @return self
 	 */
-	public static function fromResponse(array $response) {
+	public static function fromResponse($response) {
 		return new MetaProfileElement(
 			$response['name'],
 			(bool)$response['required'],
