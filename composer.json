@@ -13,8 +13,10 @@
 			"Ixolit\\Dislo\\": "./tests"
 		}
 	},
+	"require": {
+		"ixolit/dislo-sdk-http": "^1.0"
+	},
 	"suggest": {
-		"ixolit/dislo-sdk-http": "HTTP client connector for the Dislo SDK",
 		"ixolit/dislo-sdk-http-guzzle": "Guzzle connector for the Dislo SDK"
 	},
 	"require-dev": {
