@@ -371,7 +371,7 @@ class Client {
 	 * @throws DisloException
 	 */
 	public function billingGetFlexible($user) {
-		$response = $this->request('/frontend/billing/getBillingEventsForUser', [
+		$response = $this->request('/frontend/billing/getFlexible', [
 			'userId' => ($user instanceof User ? $user->getUserId() : $user),
 		]);
 		return BillingGetFlexibleResponse::fromResponse($response);
