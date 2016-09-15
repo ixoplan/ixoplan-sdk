@@ -14,8 +14,6 @@
 		}
 	},
 	"require": {
-		"psr/http-message": "^1.0",
-		"psr/http-message-implementation": "^1.0",
 		"ixolit/dislo-sdk-http": "^1.0"
 	},
 	"suggest": {

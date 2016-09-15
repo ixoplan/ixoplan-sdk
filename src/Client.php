@@ -15,6 +15,11 @@ use Ixolit\Dislo\Response\BillingExternalGetProfileResponse;
 use Ixolit\Dislo\Response\BillingGetEventResponse;
 use Ixolit\Dislo\Response\BillingGetEventsForUserResponse;
 use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
+use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponse;
+use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponse;
+use Ixolit\Dislo\Response\SubscriptionCalculatePriceResponse;
+use Ixolit\Dislo\Response\SubscriptionCancelPackageChangeResponse;
+use Ixolit\Dislo\Response\SubscriptionCancelResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\WorkingObjects\User;
@@ -296,17 +301,18 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/ExternalGetProfile
 	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
 	 *
-	 * @param string $subscriptionId ID for the subscription expected to have an external profile
+	 * @param Subscription|int $subscription ID for the subscription expected to have an external profile
 	 *
 	 * @return BillingExternalGetProfileResponse
 	 *
 	 * @throws DisloException
 	 */
 	public function billingExternalGetProfileBySubscriptionId(
-		$subscriptionId
+		$subscription
 	) {
 		$response = $this->request('/frontend/billing/externalGetProfile', [
-			'subscriptionId' => $subscriptionId,
+			'subscriptionId' =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
 		]);
 		return BillingExternalGetProfileResponse::fromResponse($response);
 	}
@@ -365,5 +371,130 @@ class Client {
 			'userId' => ($user instanceof User ? $user->getUserId() : $user),
 		]);
 		return BillingGetFlexibleResponse::fromResponse($response);
+	}
+
+	/**
+	 * Calculate the price for a subscription addon.
+	 *
+	 * @see https://docs.dislo.com/display/DIS/CalculateAddonPrice
+	 *
+	 * @param User|int         $user
+	 * @param Subscription|int $subscription
+	 * @param string|string[]  $packageIdentifiers
+	 * @param string|null      $couponCode
+	 *
+	 * @return SubscriptionCalculateAddonPriceResponse
+	 *
+	 * @throws DisloException
+	 */
+	public function subscriptionCalculateAddonPrice($user, $subscription, $packageIdentifiers, $couponCode = null) {
+		$response = $this->request('/frontend/subscription/calculateAddonPrice', [
+			'userId'             => ($user instanceof User ? $user->getUserId() : $user),
+			'subscriptionId'     =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+			'packageIdentifiers' => $packageIdentifiers,
+			'couponCode'         => $couponCode,
+		]);
+		return SubscriptionCalculateAddonPriceResponse::fromResponse($response);
+	}
+
+	/**
+	 * Calculate the price for a potential package change.
+	 *
+	 * @see https://docs.dislo.com/display/DIS/CalculatePackageChange
+	 *
+	 * @param Subscription|int $subscription
+	 * @param string           $newPackageIdentifier
+	 * @param string|null      $couponCode
+	 *
+	 * @return SubscriptionCalculatePackageChangeResponse
+	 *
+	 * @throws DisloException
+	 */
+	public function subscriptionCalculatePackageChange($subscription, $newPackageIdentifier, $couponCode = null) {
+		$response = $this->request('/frontend/subscription/calculatePackageChange', [
+			'subscriptionId'       =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+			'newPackageIdentifier' => $newPackageIdentifier,
+			'couponCode'           => $couponCode,
+		]);
+		return SubscriptionCalculatePackageChangeResponse::fromResponse($response);
+	}
+
+	/**
+	 * Calculates the price for creating a new subscription for an existing user.
+	 *
+	 * @see https://docs.dislo.com/display/DIS/CalculateSubscriptionPrice
+	 *
+	 * @param User|int        $user                    the unique user id for which the subscription is created
+	 * @param string          $packageIdentifier       the package for the subscription
+	 * @param string          $currencyCode            currency which should be used for the user
+	 * @param string|null     $couponCode              optional - coupon which should be applied
+	 * @param string|string[] $addonPackageIdentifiers optional - additional addon packages
+	 *
+	 * @return SubscriptionCalculatePriceResponse
+	 */
+	public function subscriptionCalculatePrice(
+		$user, $packageIdentifier, $currencyCode, $couponCode = null,
+		$addonPackageIdentifiers = []
+	) {
+		$response = $this->request('/frontend/subscription/calculateSubscriptionPrice', [
+			'userId'                  =>
+				($user instanceof User ? $user->getUserId() : $user),
+			'packageIdentifier'       => $packageIdentifier,
+			'currencyCode'            => $currencyCode,
+			'couponCode'              => $couponCode,
+			'addonPackageIdentifiers' => $addonPackageIdentifiers,
+		]);
+		return SubscriptionCalculatePriceResponse::fromResponse($response);
+	}
+
+	/**
+	 * Cancel a future package change
+	 *
+	 * NOTE: this call only works for package changes which are not applied immediately. In that case you need to call
+	 * ChangePackage again.
+	 *
+	 * @see https://docs.dislo.com/display/DIS/CancelPackageChange
+	 *
+	 * @param Subscription|int $subscription the unique subscription id to change
+	 *
+	 * @return SubscriptionCancelPackageChangeResponse
+	 */
+	public function subscriptionCancelPackageChange(
+		$subscription
+	) {
+		$response = $this->request('/frontend/subscription/cancelPackageChange', [
+			'subscriptionId' =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+		]);
+		return SubscriptionCancelPackageChangeResponse::fromResponse($response);
+	}
+
+	/**
+	 * Cancels a single subscription.
+	 *
+	 * @param Subscription|int $subscription     the id of the subscription you want to cancel
+	 * @param string           $cancelReason     optional - the reason why the user canceled (should be predefined
+	 *                                           reasons by your frontend)
+	 * @param string           $userCancelReason optional - a user defined cancellation reason
+	 * @param string           $userComments     optional - comments from the user
+	 *
+	 * @return SubscriptionCancelResponse
+	 */
+	public function subscriptionCancel(
+		$subscription,
+		$cancelReason = '',
+		$userCancelReason = '',
+		$userComments = ''
+	) {
+		$response = $this->request('/frontend/subscription/cancelPackageChange', [
+			'subscriptionId'   =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+			'cancelReason'     => $cancelReason,
+			'userCancelReason' => $userCancelReason,
+			'userComments'     => $userComments,
+		]);
+		return SubscriptionCancelResponse::fromResponse($response);
 	}
 }
