@@ -2,34 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f9143044-1ea4-4b2d-9343-75c717ad0780" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Client.php" afterPath="$PROJECT_DIR$/src/Client.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingCloseFlexibleResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingCloseFlexibleResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingCreateFlexibleResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingCreateFlexibleResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingCreatePaymentResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingCreatePaymentResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingExternalCreateChargeResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingExternalCreateChargeResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingExternalCreateChargebackResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingExternalCreateChargebackResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingExternalGetProfileResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingExternalGetProfileResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingGetEventResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingGetEventResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingGetEventsForUserResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingGetEventsForUserResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/BillingGetFlexibleResponse.php" afterPath="$PROJECT_DIR$/src/Response/BillingGetFlexibleResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/SubscriptionCalculateAddonPriceResponse.php" afterPath="$PROJECT_DIR$/src/Response/SubscriptionCalculateAddonPriceResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/SubscriptionCalculatePackageChangeResponse.php" afterPath="$PROJECT_DIR$/src/Response/SubscriptionCalculatePackageChangeResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/SubscriptionCalculatePriceResponse.php" afterPath="$PROJECT_DIR$/src/Response/SubscriptionCalculatePriceResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/SubscriptionCancelPackageChangeResponse.php" afterPath="$PROJECT_DIR$/src/Response/SubscriptionCancelPackageChangeResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Response/SubscriptionCancelResponse.php" afterPath="$PROJECT_DIR$/src/Response/SubscriptionCancelResponse.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/BillingEvent.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/BillingEvent.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/DisplayName.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/DisplayName.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/ExternalProfile.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/ExternalProfile.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/Flexible.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/Flexible.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/MetaProfileElement.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/MetaProfileElement.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/NextPackage.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/NextPackage.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/Package.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/Package.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/PackagePeriod.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/PackagePeriod.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/Price.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/Price.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/Subscription.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/Subscription.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/User.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/User.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WorkingObjects/WorkingObject.php" afterPath="$PROJECT_DIR$/src/WorkingObjects/WorkingObject.php" />
     </list>
     <ignored path="dislo-sdk.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,7 +23,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SubscriptionCancelResponse.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Client.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Client.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="250">
+              <caret line="373" column="65" selection-start-line="373" selection-start-column="65" selection-end-line="373" selection-end-column="65" />
+              <folding>
+                <element signature="e#32#75#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SubscriptionCancelResponse.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCancelResponse.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="527">
@@ -65,26 +50,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="223">
               <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BillingExternalCreateChargeResponse.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Response/BillingExternalCreateChargeResponse.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="29" column="40" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="40" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BillingExternalGetProfileResponse.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Response/BillingExternalGetProfileResponse.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="516">
-              <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -113,8 +78,18 @@
       <file leaf-file-name="BillingGetFlexibleResponse.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Response/BillingGetFlexibleResponse.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="516">
+            <state relative-caret-position="527">
               <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Package.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/WorkingObjects/Package.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="214">
+              <caret line="121" column="40" selection-start-line="121" selection-start-column="40" selection-end-line="121" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -178,7 +153,6 @@
         <option value="$PROJECT_DIR$/apiCall.php" />
         <option value="$PROJECT_DIR$/composer.json" />
         <option value="$PROJECT_DIR$/src/Request/CDERequestClient.php" />
-        <option value="$PROJECT_DIR$/src/Client.php" />
         <option value="$PROJECT_DIR$/src/WorkingObjects/BillingEvent.php" />
         <option value="$PROJECT_DIR$/src/WorkingObjects/DisplayName.php" />
         <option value="$PROJECT_DIR$/src/WorkingObjects/ExternalProfile.php" />
@@ -205,6 +179,7 @@
         <option value="$PROJECT_DIR$/src/Response/SubscriptionCalculatePriceResponse.php" />
         <option value="$PROJECT_DIR$/src/Response/SubscriptionCancelPackageChangeResponse.php" />
         <option value="$PROJECT_DIR$/src/Response/SubscriptionCancelResponse.php" />
+        <option value="$PROJECT_DIR$/src/Client.php" />
       </list>
     </option>
   </component>
@@ -414,20 +389,20 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43305000" />
+    <option name="totallyTimeSpent" value="43801000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1280" y="-277" width="1920" height="1132" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1773163" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1773163" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298077" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973376" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -637,16 +612,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Client.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="155" column="20" selection-start-line="155" selection-start-column="14" selection-end-line="155" selection-end-column="20" />
-          <folding>
-            <element signature="e#32#75#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/WorkingObjects/BillingEvent.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="214">
@@ -691,14 +656,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="214">
           <caret line="25" column="40" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/Package.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="121" column="40" selection-start-line="121" selection-start-column="40" selection-end-line="121" selection-end-column="40" />
           <folding />
         </state>
       </provider>
@@ -807,14 +764,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Response/BillingGetFlexibleResponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="516">
-          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Response/SubscriptionCalculateAddonPriceResponse.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="465">
@@ -852,6 +801,32 @@
         <state relative-caret-position="527">
           <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Response/BillingGetFlexibleResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WorkingObjects/Package.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="121" column="40" selection-start-line="121" selection-start-column="40" selection-end-line="121" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Client.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="373" column="65" selection-start-line="373" selection-start-column="65" selection-end-line="373" selection-end-column="65" />
+          <folding>
+            <element signature="e#32#75#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
