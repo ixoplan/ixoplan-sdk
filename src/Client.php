@@ -487,7 +487,7 @@ class Client {
 			'couponCode'           => $couponCode,
 		];
 		$this->userToData($userTokenOrId, $data);
-		$response = $this->request('/frontend/subscription/calculatePackageChange', );
+		$response = $this->request('/frontend/subscription/calculatePackageChange', $data);
 		return SubscriptionCalculatePackageChangeResponse::fromResponse($response);
 	}
 
