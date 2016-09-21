@@ -37,6 +37,34 @@ class Client {
 	 */
 	private $requestClient;
 
+	private function userToData($userTokenOrId, &$data = []) {
+		if ($userTokenOrId instanceof User) {
+			$data['userId'] = $userTokenOrId->getUserId();
+			return $data;
+		}
+		if (\is_null($userTokenOrId)) {
+			return $data;
+		}
+		if (\is_bool($userTokenOrId) || \is_float($userTokenOrId) || \is_resource($userTokenOrId) ||
+			\is_array($userTokenOrId)
+		) {
+			throw new \InvalidArgumentException('Invalid user specification: ' . \var_export($userTokenOrId, true));
+		}
+		if (\is_object($userTokenOrId)) {
+			if (!\method_exists($userTokenOrId, '__toString')) {
+				throw new \InvalidArgumentException('Invalid user specification: ' . \var_export($userTokenOrId, true));
+			}
+			$userTokenOrId = $userTokenOrId->__toString();
+		}
+
+		if (\is_int($userTokenOrId) || \preg_match('/^[1-9][0-9]+$/D', $userTokenOrId)) {
+			$data['userId'] = (int)$userTokenOrId;
+		} else {
+			$data['authToken'] = $userTokenOrId;
+		}
+		return $data;
+	}
+
 	/**
 	 * Perform a request and handle errors.
 	 *
@@ -92,18 +120,19 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/CloseFlexible
 	 *
-	 * @param User|int     $user
-	 * @param Flexible|int $flexible
+	 * @param User|int|string $userTokenOrId
+	 * @param Flexible|int    $flexible
 	 *
 	 * @return BillingCloseFlexibleResponse
 	 *
 	 * @throws DisloException
 	 */
-	public function billingCloseFlexible($user, $flexible) {
-		$response = $this->request('/frontend/billing/closeFlexible', [
-			'userId'     => ($user instanceof User ? $user->getUserId() : (int)$user),
-			'flexibleId' => ($flexible instanceof Flexible ? $flexible->getFlexibleId() : (int)$flexible),
-		]);
+	public function billingCloseFlexible($userTokenOrId, $flexible) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$data['flexibleId'] = ($flexible instanceof Flexible ? $flexible->getFlexibleId() : (int)$flexible);
+
+		$response = $this->request('/frontend/billing/closeFlexible', $data);
 		return BillingCloseFlexibleResponse::fromResponse($response);
 	}
 
@@ -115,23 +144,23 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/CreateFlexible
 	 *
-	 * @param User|int $user
-	 * @param string   $billingMethod
-	 * @param string   $returnUrl
-	 * @param array    $paymentDetails
-	 * @param string   $currencyCode
+	 * @param User|int|string $userTokenOrId user authentication token or id
+	 * @param string          $billingMethod
+	 * @param string          $returnUrl
+	 * @param array           $paymentDetails
+	 * @param string          $currencyCode
 	 *
 	 * @return BillingCreateFlexibleResponse
 	 *
 	 * @throws DisloException
 	 */
-	public function billingCreateFlexible($user, $billingMethod, $returnUrl, $paymentDetails, $currencyCode = '') {
-		$data = [
-			'userId'         => ($user instanceof User ? $user->getUserId() : (int)$user),
-			'billingMethod'  => $billingMethod,
-			'returnUrl'      => $returnUrl,
-			'paymentDetails' => $paymentDetails,
-		];
+	public function billingCreateFlexible($userTokenOrId, $billingMethod, $returnUrl, $paymentDetails,
+										  $currencyCode = '') {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$data['billingMethod']  = $billingMethod;
+		$data['returnUrl']      = $returnUrl;
+		$data['paymentDetails'] = $paymentDetails;
 		if ($currencyCode) {
 			$data['currencyCode'] = $currencyCode;
 		}
@@ -149,7 +178,7 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/CreatePayment
 	 *
-	 * @param User|int         $user
+	 * @param User|int|string  $userTokenOrId user authentication token or id
 	 * @param Subscription|int $subscription
 	 * @param string           $billingMethod
 	 * @param string           $returnUrl
@@ -159,15 +188,15 @@ class Client {
 	 *
 	 * @throws DisloException
 	 */
-	public function billingCreatePayment($user, $subscription, $billingMethod, $returnUrl, $paymentDetails) {
-		$response = $this->request('/frontend/billing/createPayment', [
-			'userId'         => ($user instanceof User ? $user->getUserId() : (int)$user),
-			'billingMethod'  => $billingMethod,
-			'returnUrl'      => $returnUrl,
-			'subscriptionId' =>
-				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
-			'paymentDetails' => $paymentDetails,
-		]);
+	public function billingCreatePayment($userTokenOrId, $subscription, $billingMethod, $returnUrl, $paymentDetails) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$data['billingMethod']  = $billingMethod;
+		$data['returnUrl']      = $returnUrl;
+		$data['subscriptionId'] =
+			($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription);
+		$data['paymentDetails'] = $paymentDetails;
+		$response               = $this->request('/frontend/billing/createPayment', $data);
 		return BillingCreatePaymentResponse::fromResponse($response);
 	}
 
@@ -177,28 +206,30 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/ExternalCreateCharge
 	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
 	 *
-	 * @param User|int $user                  unique user id
-	 * @param string   $externalProfileId     the external profile to which the charge should be linked, this is the
-	 *                                        "externalId" you passed in the "subscription/externalCreate" call
-	 * @param string   $accountIdentifier     the billing account identifier, you will this from dislo staff
-	 * @param string   $currencyCode          currency code EUR, USD, ...
-	 * @param float    $amount                the amount of the charge
-	 * @param string   $externalTransactionId external unique id for the charge
-	 * @param int|null $upgradeId             the unique upgrade id to which the charge should be linked, you get this
-	 *                                        from the
-	 *                                        "subscription/externalChangePackage" or
-	 *                                        "subscription/externalCreateAddonSubscription" call
-	 * @param array    $paymentDetails        additional data you want to save with the charge
-	 * @param string   $description           description of the charge
-	 * @param string   $status                status the charge should be created with, you might want to log erroneous
-	 *                                        charges in dislo too, but you don't have to. @see BillingEvent::STATUS_*
+	 * @param User|int|string $userTokenOrId         user authentication token or id
+	 * @param string          $externalProfileId     the external profile to which the charge should be linked, this is
+	 *                                               the
+	 *                                               "externalId" you passed in the "subscription/externalCreate" call
+	 * @param string          $accountIdentifier     the billing account identifier, you will this from dislo staff
+	 * @param string          $currencyCode          currency code EUR, USD, ...
+	 * @param float           $amount                the amount of the charge
+	 * @param string          $externalTransactionId external unique id for the charge
+	 * @param int|null        $upgradeId             the unique upgrade id to which the charge should be linked, you
+	 *                                               get this from the
+	 *                                               "subscription/externalChangePackage" or
+	 *                                               "subscription/externalCreateAddonSubscription" call
+	 * @param array           $paymentDetails        additional data you want to save with the charge
+	 * @param string          $description           description of the charge
+	 * @param string          $status                status the charge should be created with, you might want to log
+	 *                                               erroneous charges in dislo too, but you don't have to. @see
+	 *                                               BillingEvent::STATUS_*
 	 *
 	 * @return BillingExternalCreateChargeResponse
 	 *
 	 * @throws DisloException
 	 */
 	public function billingExternalCreateCharge(
-		$user,
+		$userTokenOrId,
 		$externalProfileId,
 		$accountIdentifier,
 		$currencyCode,
@@ -209,18 +240,19 @@ class Client {
 		$description = '',
 		$status = 'success'
 	) {
-		$response = $this->request('/frontend/billing/externalCreateCharge', [
-			'userId'                => ($user instanceof User ? $user->getUserId() : (int)$user),
-			'externalProfileId'     => $externalProfileId,
-			'accountIdentifier'     => $accountIdentifier,
-			'currencyCode'          => $currencyCode,
-			'amount'                => $amount,
-			'externalTransactionId' => $externalTransactionId,
-			'upgradeId'             => $upgradeId,
-			'paymentDetails'        => $paymentDetails,
-			'description'           => $description,
-			'status'                => $status,
-		]);
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$data['externalProfileId']     = $externalProfileId;
+		$data['accountIdentifier']     = $accountIdentifier;
+		$data['currencyCode']          = $currencyCode;
+		$data['amount']                = $amount;
+		$data['externalTransactionId'] = $externalTransactionId;
+		$data['upgradeId']             = $upgradeId;
+		$data['paymentDetails']        = $paymentDetails;
+		$data['description']           = $description;
+		$data['status']                = $status;
+
+		$response = $this->request('/frontend/billing/externalCreateCharge', $data);
 		return BillingExternalCreateChargeResponse::fromResponse($response);
 	}
 
@@ -230,9 +262,11 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/ExternalCreateChargeback
 	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
 	 *
-	 * @param string $accountIdentifier     the billing account identifier, assigned by dislo staff
-	 * @param string $originalTransactionID external unique id of the original charge
-	 * @param string $description           textual description of the chargeback for support
+	 * @param string               $accountIdentifier     the billing account identifier, assigned by dislo staff
+	 * @param string               $originalTransactionID external unique id of the original charge
+	 * @param User|int|string|null $userTokenOrId         optional - if passed, the subscription ID will be checked
+	 *                                                    against the user ID.
+	 * @param string               $description           textual description of the chargeback for support
 	 *
 	 * @return BillingExternalCreateChargebackResponse
 	 *
@@ -241,13 +275,16 @@ class Client {
 	public function billingExternalCreateChargebackByTransactionId(
 		$accountIdentifier,
 		$originalTransactionID,
+		$userTokenOrId = null,
 		$description = ''
 	) {
-		$response = $this->request('/frontend/billing/externalCreateChargeback', [
+		$data = [
 			'accountIdentifier'     => $accountIdentifier,
 			'externalTransactionId' => $originalTransactionID,
 			'description'           => $description,
-		]);
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/billing/externalCreateChargeback', $data);
 		return BillingExternalCreateChargebackResponse::fromResponse($response);
 	}
 
@@ -257,9 +294,11 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/ExternalCreateChargeback
 	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
 	 *
-	 * @param string $accountIdentifier      the billing account identifier, assigned by dislo staff
-	 * @param int    $originalBillingEventId ID of the original billing event.
-	 * @param string $description            textual description of the chargeback for support
+	 * @param string               $accountIdentifier      the billing account identifier, assigned by dislo staff
+	 * @param int                  $originalBillingEventId ID of the original billing event.
+	 * @param User|int|string|null $userTokenOrId          optional - if passed, the subscription ID will be checked
+	 *                                                     against the user ID.
+	 * @param string               $description            textual description of the chargeback for support
 	 *
 	 * @return BillingExternalCreateChargebackResponse
 	 *
@@ -268,13 +307,16 @@ class Client {
 	public function billingExternalCreateChargebackByEventId(
 		$accountIdentifier,
 		$originalBillingEventId,
+		$userTokenOrId = null,
 		$description = ''
 	) {
-		$response = $this->request('/frontend/billing/externalCreateChargeback', [
+		$data = [
 			'accountIdentifier' => $accountIdentifier,
 			'billingEventId'    => $originalBillingEventId,
 			'description'       => $description,
-		]);
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/billing/externalCreateChargeback', $data);
 		return BillingExternalCreateChargebackResponse::fromResponse($response);
 	}
 
@@ -284,18 +326,23 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/ExternalGetProfile
 	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
 	 *
-	 * @param string $externalId ID for the external profile
+	 * @param string               $externalId    ID for the external profile
+	 * @param User|int|string|null $userTokenOrId optional - if passed, the subscription ID will be checked against
+	 *                                            the user ID.
 	 *
 	 * @return BillingExternalGetProfileResponse
 	 *
 	 * @throws DisloException
 	 */
 	public function billingExternalGetProfileByExternalId(
-		$externalId
+		$externalId,
+		$userTokenOrId = null
 	) {
-		$response = $this->request('/frontend/billing/externalGetProfile', [
+		$data = [
 			'externalId' => $externalId,
-		]);
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/billing/externalGetProfile', $data);
 		return BillingExternalGetProfileResponse::fromResponse($response);
 	}
 
@@ -305,19 +352,24 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/ExternalGetProfile
 	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
 	 *
-	 * @param Subscription|int $subscription ID for the subscription expected to have an external profile
+	 * @param Subscription|int     $subscription  ID for the subscription expected to have an external profile
+	 * @param User|int|string|null $userTokenOrId optional - if passed, the subscription ID will be checked against
+	 *                                            the user ID.
 	 *
 	 * @return BillingExternalGetProfileResponse
 	 *
 	 * @throws DisloException
 	 */
 	public function billingExternalGetProfileBySubscriptionId(
-		$subscription
+		$subscription,
+		$userTokenOrId = null
 	) {
-		$response = $this->request('/frontend/billing/externalGetProfile', [
+		$data = [
 			'subscriptionId' =>
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
-		]);
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/billing/externalGetProfile', $data);
 		return BillingExternalGetProfileResponse::fromResponse($response);
 	}
 
@@ -326,18 +378,23 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/GetBillingEvent
 	 *
-	 * @param int $billingEventId unique id of the billing event
+	 * @param int                  $billingEventId unique id of the billing event
+	 * @param User|int|string|null $userTokenOrId  optional - if passed, the subscription ID will be checked against
+	 *                                             the user ID.
 	 *
 	 * @return BillingGetEventResponse
 	 *
 	 * @throws DisloException
 	 */
 	public function billingGetEvent(
-		$billingEventId
+		$billingEventId,
+		$userTokenOrId = null
 	) {
-		$response = $this->request('/frontend/billing/getBillingEvent', [
+		$data     = [
 			'billingEventId' => $billingEventId,
-		]);
+		];
+		$data     = $this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/billing/getBillingEvent', $data);
 		return BillingGetEventResponse::fromResponse($response);
 	}
 
@@ -346,34 +403,34 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/GetBillingEventsForUser
 	 *
-	 * @param User|int $user User or user ID to get billing events for.
+	 * @param User|int|string $userTokenOrId User or user ID to get billing events for.
 	 *
 	 * @return BillingGetEventsForUserResponse
 	 *
 	 * @throws DisloException
 	 */
 	public function billingGetEventsForUser(
-		$user
+		$userTokenOrId
 	) {
-		$response = $this->request('/frontend/billing/getBillingEventsForUser', [
-			'userId' => ($user instanceof User ? $user->getUserId() : $user),
-		]);
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/billing/getBillingEventsForUser', $data);
 		return BillingGetEventsForUserResponse::fromResponse($response);
 	}
 
 	/**
 	 * Get flexible payment method for a user
 	 *
-	 * @param User|int $user User or user ID to get billing events for.
+	 * @param User|int|string $userTokenOrId User or user ID to get billing events for.
 	 *
 	 * @return BillingGetFlexibleResponse
 	 *
 	 * @throws DisloException
 	 */
-	public function billingGetFlexible($user) {
-		$response = $this->request('/frontend/billing/getFlexible', [
-			'userId' => ($user instanceof User ? $user->getUserId() : $user),
-		]);
+	public function billingGetFlexible($userTokenOrId) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/billing/getFlexible', $data);
 		return BillingGetFlexibleResponse::fromResponse($response);
 	}
 
@@ -382,23 +439,26 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/CalculateAddonPrice
 	 *
-	 * @param User|int         $user
-	 * @param Subscription|int $subscription
-	 * @param string|string[]  $packageIdentifiers
-	 * @param string|null      $couponCode
+	 * @param User|int|string|null $userTokenOrId optional - if passed, the subscription ID will be checked against
+	 *                                            the user ID.
+	 * @param Subscription|int     $subscription
+	 * @param string|string[]      $packageIdentifiers
+	 * @param string|null          $couponCode
 	 *
 	 * @return SubscriptionCalculateAddonPriceResponse
 	 *
 	 * @throws DisloException
 	 */
-	public function subscriptionCalculateAddonPrice($user, $subscription, $packageIdentifiers, $couponCode = null) {
-		$response = $this->request('/frontend/subscription/calculateAddonPrice', [
-			'userId'             => ($user instanceof User ? $user->getUserId() : $user),
+	public function subscriptionCalculateAddonPrice($userTokenOrId, $subscription, $packageIdentifiers,
+													$couponCode = null) {
+		$data = [
 			'subscriptionId'     =>
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
 			'packageIdentifiers' => $packageIdentifiers,
 			'couponCode'         => $couponCode,
-		]);
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/calculateAddonPrice', $data);
 		return SubscriptionCalculateAddonPriceResponse::fromResponse($response);
 	}
 
@@ -409,19 +469,25 @@ class Client {
 	 *
 	 * @param Subscription|int $subscription
 	 * @param string           $newPackageIdentifier
+	 * @param null             $userTokenOrId
 	 * @param string|null      $couponCode
 	 *
 	 * @return SubscriptionCalculatePackageChangeResponse
-	 *
-	 * @throws DisloException
 	 */
-	public function subscriptionCalculatePackageChange($subscription, $newPackageIdentifier, $couponCode = null) {
-		$response = $this->request('/frontend/subscription/calculatePackageChange', [
+	public function subscriptionCalculatePackageChange(
+		$subscription,
+		$newPackageIdentifier,
+		$userTokenOrId = null,
+		$couponCode = null
+	) {
+		$data = [
 			'subscriptionId'       =>
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
 			'newPackageIdentifier' => $newPackageIdentifier,
 			'couponCode'           => $couponCode,
-		]);
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/calculatePackageChange', );
 		return SubscriptionCalculatePackageChangeResponse::fromResponse($response);
 	}
 
@@ -430,7 +496,8 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/CalculateSubscriptionPrice
 	 *
-	 * @param User|int        $user                    the unique user id for which the subscription is created
+	 * @param User|int|string $userTokenOrId           the unique user id for which the subscription is
+	 *                                                 created
 	 * @param string          $packageIdentifier       the package for the subscription
 	 * @param string          $currencyCode            currency which should be used for the user
 	 * @param string|null     $couponCode              optional - coupon which should be applied
@@ -439,17 +506,17 @@ class Client {
 	 * @return SubscriptionCalculatePriceResponse
 	 */
 	public function subscriptionCalculatePrice(
-		$user, $packageIdentifier, $currencyCode, $couponCode = null,
+		$userTokenOrId, $packageIdentifier, $currencyCode, $couponCode = null,
 		$addonPackageIdentifiers = []
 	) {
-		$response = $this->request('/frontend/subscription/calculateSubscriptionPrice', [
-			'userId'                  =>
-				($user instanceof User ? $user->getUserId() : $user),
+		$data = [
 			'packageIdentifier'       => $packageIdentifier,
 			'currencyCode'            => $currencyCode,
 			'couponCode'              => $couponCode,
 			'addonPackageIdentifiers' => $addonPackageIdentifiers,
-		]);
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/calculateSubscriptionPrice', $data);
 		return SubscriptionCalculatePriceResponse::fromResponse($response);
 	}
 
@@ -461,44 +528,54 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/CancelPackageChange
 	 *
-	 * @param Subscription|int $subscription the unique subscription id to change
+	 * @param Subscription|int     $subscription  the unique subscription id to change
+	 * @param User|int|string|null $userTokenOrId optional - if passed, the subscription ID will be checked against
+	 *                                            the user ID.
 	 *
 	 * @return SubscriptionCancelPackageChangeResponse
 	 */
 	public function subscriptionCancelPackageChange(
-		$subscription
+		$subscription,
+		$userTokenOrId = null
 	) {
-		$response = $this->request('/frontend/subscription/cancelPackageChange', [
+		$data = [
 			'subscriptionId' =>
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
-		]);
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/cancelPackageChange', $data);
 		return SubscriptionCancelPackageChangeResponse::fromResponse($response);
 	}
 
 	/**
 	 * Cancels a single subscription.
 	 *
-	 * @param Subscription|int $subscription     the id of the subscription you want to cancel
-	 * @param string           $cancelReason     optional - the reason why the user canceled (should be predefined
-	 *                                           reasons by your frontend)
-	 * @param string           $userCancelReason optional - a user defined cancellation reason
-	 * @param string           $userComments     optional - comments from the user
+	 * @param Subscription|int     $subscription     the id of the subscription you want to cancel
+	 * @param User|int|string|null $userTokenOrId    optional - if passed, the subscription ID will be checked against
+	 *                                               the user ID.
+	 * @param string               $cancelReason     optional - the reason why the user canceled (should be predefined
+	 *                                               reasons by your frontend)
+	 * @param string               $userCancelReason optional - a user defined cancellation reason
+	 * @param string               $userComments     optional - comments from the user
 	 *
 	 * @return SubscriptionCancelResponse
 	 */
 	public function subscriptionCancel(
 		$subscription,
+		$userTokenOrId = null,
 		$cancelReason = '',
 		$userCancelReason = '',
 		$userComments = ''
 	) {
-		$response = $this->request('/frontend/subscription/cancelPackageChange', [
+		$data = [
 			'subscriptionId'   =>
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
 			'cancelReason'     => $cancelReason,
 			'userCancelReason' => $userCancelReason,
 			'userComments'     => $userComments,
-		]);
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/cancelPackageChange', $data);
 		return SubscriptionCancelResponse::fromResponse($response);
 	}
 }
