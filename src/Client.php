@@ -15,11 +15,26 @@ use Ixolit\Dislo\Response\BillingExternalGetProfileResponse;
 use Ixolit\Dislo\Response\BillingGetEventResponse;
 use Ixolit\Dislo\Response\BillingGetEventsForUserResponse;
 use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
+use Ixolit\Dislo\Response\CouponCodeCheckResponse;
+use Ixolit\Dislo\Response\CouponCodeValidateResponse;
+use Ixolit\Dislo\Response\PackagesListResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculatePriceResponse;
 use Ixolit\Dislo\Response\SubscriptionCancelPackageChangeResponse;
 use Ixolit\Dislo\Response\SubscriptionCancelResponse;
+use Ixolit\Dislo\Response\SubscriptionChangeResponse;
+use Ixolit\Dislo\Response\SubscriptionCloseResponse;
+use Ixolit\Dislo\Response\SubscriptionContinueResponse;
+use Ixolit\Dislo\Response\SubscriptionCreateAddonResponse;
+use Ixolit\Dislo\Response\SubscriptionCreateResponse;
+use Ixolit\Dislo\Response\SubscriptionExternalAddonCreateResponse;
+use Ixolit\Dislo\Response\SubscriptionExternalChangePeriodResponse;
+use Ixolit\Dislo\Response\SubscriptionExternalChangeResponse;
+use Ixolit\Dislo\Response\SubscriptionExternalCloseResponse;
+use Ixolit\Dislo\Response\SubscriptionExternalCreateResponse;
+use Ixolit\Dislo\Response\SubscriptionGetAllResponse;
+use Ixolit\Dislo\Response\SubscriptionGetResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\WorkingObjects\User;
@@ -32,6 +47,9 @@ use Ixolit\Dislo\WorkingObjects\User;
  * https://docs.dislo.com/
  */
 class Client {
+	const COUPON_EVENT_START = 'subscription_start';
+	const COUPON_EVENT_UPGRADE = 'subscription_upgrade';
+
 	/**
 	 * @var RequestClient
 	 */
@@ -120,14 +138,17 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/CloseFlexible
 	 *
-	 * @param User|int|string $userTokenOrId
 	 * @param Flexible|int    $flexible
+	 * @param User|int|string $userTokenOrId User authentication token or user ID.
 	 *
 	 * @return BillingCloseFlexibleResponse
 	 *
 	 * @throws DisloException
 	 */
-	public function billingCloseFlexible($userTokenOrId, $flexible) {
+	public function billingCloseFlexible(
+		$flexible,
+		$userTokenOrId = null
+	) {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
 		$data['flexibleId'] = ($flexible instanceof Flexible ? $flexible->getFlexibleId() : (int)$flexible);
@@ -144,7 +165,7 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/CreateFlexible
 	 *
-	 * @param User|int|string $userTokenOrId user authentication token or id
+	 * @param User|int|string $userTokenOrId User authentication token or user ID.
 	 * @param string          $billingMethod
 	 * @param string          $returnUrl
 	 * @param array           $paymentDetails
@@ -154,8 +175,13 @@ class Client {
 	 *
 	 * @throws DisloException
 	 */
-	public function billingCreateFlexible($userTokenOrId, $billingMethod, $returnUrl, $paymentDetails,
-										  $currencyCode = '') {
+	public function billingCreateFlexible(
+		$userTokenOrId,
+		$billingMethod,
+		$returnUrl,
+		$paymentDetails,
+		$currencyCode = ''
+	) {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
 		$data['billingMethod']  = $billingMethod;
@@ -178,17 +204,23 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/CreatePayment
 	 *
-	 * @param User|int|string  $userTokenOrId user authentication token or id
 	 * @param Subscription|int $subscription
 	 * @param string           $billingMethod
 	 * @param string           $returnUrl
 	 * @param array            $paymentDetails
+	 * @param User|int|string  $userTokenOrId user authentication token or id
 	 *
 	 * @return BillingCreatePaymentResponse
 	 *
 	 * @throws DisloException
 	 */
-	public function billingCreatePayment($userTokenOrId, $subscription, $billingMethod, $returnUrl, $paymentDetails) {
+	public function billingCreatePayment(
+		$subscription,
+		$billingMethod,
+		$returnUrl,
+		$paymentDetails,
+		$userTokenOrId = null
+	) {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
 		$data['billingMethod']  = $billingMethod;
@@ -206,30 +238,28 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/ExternalCreateCharge
 	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
 	 *
-	 * @param User|int|string $userTokenOrId         user authentication token or id
 	 * @param string          $externalProfileId     the external profile to which the charge should be linked, this is
-	 *                                               the
-	 *                                               "externalId" you passed in the "subscription/externalCreate" call
+	 *                                               the "externalId" you passed in the "subscription/externalCreate"
+	 *                                               call
 	 * @param string          $accountIdentifier     the billing account identifier, you will this from dislo staff
 	 * @param string          $currencyCode          currency code EUR, USD, ...
 	 * @param float           $amount                the amount of the charge
 	 * @param string          $externalTransactionId external unique id for the charge
 	 * @param int|null        $upgradeId             the unique upgrade id to which the charge should be linked, you
-	 *                                               get this from the
-	 *                                               "subscription/externalChangePackage" or
+	 *                                               get this from the "subscription/externalChangePackage" or
 	 *                                               "subscription/externalCreateAddonSubscription" call
 	 * @param array           $paymentDetails        additional data you want to save with the charge
 	 * @param string          $description           description of the charge
 	 * @param string          $status                status the charge should be created with, you might want to log
 	 *                                               erroneous charges in dislo too, but you don't have to. @see
 	 *                                               BillingEvent::STATUS_*
+	 * @param User|int|string $userTokenOrId         User authentication token or user ID.
 	 *
 	 * @return BillingExternalCreateChargeResponse
 	 *
 	 * @throws DisloException
 	 */
 	public function billingExternalCreateCharge(
-		$userTokenOrId,
 		$externalProfileId,
 		$accountIdentifier,
 		$currencyCode,
@@ -238,7 +268,8 @@ class Client {
 		$upgradeId = null,
 		$paymentDetails = [],
 		$description = '',
-		$status = 'success'
+		$status = 'success',
+		$userTokenOrId = null
 	) {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
@@ -262,11 +293,10 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/ExternalCreateChargeback
 	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
 	 *
-	 * @param string               $accountIdentifier     the billing account identifier, assigned by dislo staff
-	 * @param string               $originalTransactionID external unique id of the original charge
-	 * @param User|int|string|null $userTokenOrId         optional - if passed, the subscription ID will be checked
-	 *                                                    against the user ID.
-	 * @param string               $description           textual description of the chargeback for support
+	 * @param string          $accountIdentifier     the billing account identifier, assigned by dislo staff
+	 * @param string          $originalTransactionID external unique id of the original charge
+	 * @param string          $description           textual description of the chargeback for support
+	 * @param User|int|string $userTokenOrId         User authentication token or user ID.
 	 *
 	 * @return BillingExternalCreateChargebackResponse
 	 *
@@ -275,8 +305,8 @@ class Client {
 	public function billingExternalCreateChargebackByTransactionId(
 		$accountIdentifier,
 		$originalTransactionID,
-		$userTokenOrId = null,
-		$description = ''
+		$description = '',
+		$userTokenOrId = null
 	) {
 		$data = [
 			'accountIdentifier'     => $accountIdentifier,
@@ -294,11 +324,10 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/ExternalCreateChargeback
 	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
 	 *
-	 * @param string               $accountIdentifier      the billing account identifier, assigned by dislo staff
-	 * @param int                  $originalBillingEventId ID of the original billing event.
-	 * @param User|int|string|null $userTokenOrId          optional - if passed, the subscription ID will be checked
-	 *                                                     against the user ID.
-	 * @param string               $description            textual description of the chargeback for support
+	 * @param string          $accountIdentifier      the billing account identifier, assigned by dislo staff
+	 * @param int             $originalBillingEventId ID of the original billing event.
+	 * @param string          $description            textual description of the chargeback for support
+	 * @param User|int|string $userTokenOrId          User authentication token or user ID.
 	 *
 	 * @return BillingExternalCreateChargebackResponse
 	 *
@@ -307,8 +336,8 @@ class Client {
 	public function billingExternalCreateChargebackByEventId(
 		$accountIdentifier,
 		$originalBillingEventId,
-		$userTokenOrId = null,
-		$description = ''
+		$description = '',
+		$userTokenOrId = null
 	) {
 		$data = [
 			'accountIdentifier' => $accountIdentifier,
@@ -326,9 +355,8 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/ExternalGetProfile
 	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
 	 *
-	 * @param string               $externalId    ID for the external profile
-	 * @param User|int|string|null $userTokenOrId optional - if passed, the subscription ID will be checked against
-	 *                                            the user ID.
+	 * @param string          $externalId    ID for the external profile
+	 * @param User|int|string $userTokenOrId User authentication token or user ID.
 	 *
 	 * @return BillingExternalGetProfileResponse
 	 *
@@ -352,9 +380,8 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/ExternalGetProfile
 	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
 	 *
-	 * @param Subscription|int     $subscription  ID for the subscription expected to have an external profile
-	 * @param User|int|string|null $userTokenOrId optional - if passed, the subscription ID will be checked against
-	 *                                            the user ID.
+	 * @param Subscription|int $subscription  ID for the subscription expected to have an external profile
+	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
 	 *
 	 * @return BillingExternalGetProfileResponse
 	 *
@@ -378,9 +405,8 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/GetBillingEvent
 	 *
-	 * @param int                  $billingEventId unique id of the billing event
-	 * @param User|int|string|null $userTokenOrId  optional - if passed, the subscription ID will be checked against
-	 *                                             the user ID.
+	 * @param int             $billingEventId unique id of the billing event
+	 * @param User|int|string $userTokenOrId  User authentication token or user ID.
 	 *
 	 * @return BillingGetEventResponse
 	 *
@@ -403,7 +429,7 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/GetBillingEventsForUser
 	 *
-	 * @param User|int|string $userTokenOrId User or user ID to get billing events for.
+	 * @param User|int|string $userTokenOrId User authentication token or user ID.
 	 *
 	 * @return BillingGetEventsForUserResponse
 	 *
@@ -421,13 +447,15 @@ class Client {
 	/**
 	 * Get flexible payment method for a user
 	 *
-	 * @param User|int|string $userTokenOrId User or user ID to get billing events for.
+	 * @param User|int|string $userTokenOrId User authentication token or user ID.
 	 *
 	 * @return BillingGetFlexibleResponse
 	 *
 	 * @throws DisloException
 	 */
-	public function billingGetFlexible($userTokenOrId) {
+	public function billingGetFlexible(
+		$userTokenOrId
+	) {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/billing/getFlexible', $data);
@@ -439,18 +467,21 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/CalculateAddonPrice
 	 *
-	 * @param User|int|string|null $userTokenOrId optional - if passed, the subscription ID will be checked against
-	 *                                            the user ID.
-	 * @param Subscription|int     $subscription
-	 * @param string|string[]      $packageIdentifiers
-	 * @param string|null          $couponCode
+	 * @param Subscription|int $subscription
+	 * @param string|string[]  $packageIdentifiers
+	 * @param string|null      $couponCode
+	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
 	 *
 	 * @return SubscriptionCalculateAddonPriceResponse
 	 *
 	 * @throws DisloException
 	 */
-	public function subscriptionCalculateAddonPrice($userTokenOrId, $subscription, $packageIdentifiers,
-													$couponCode = null) {
+	public function subscriptionCalculateAddonPrice(
+		$subscription,
+		$packageIdentifiers,
+		$couponCode = null,
+		$userTokenOrId = null
+	) {
 		$data = [
 			'subscriptionId'     =>
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
@@ -469,16 +500,16 @@ class Client {
 	 *
 	 * @param Subscription|int $subscription
 	 * @param string           $newPackageIdentifier
-	 * @param null             $userTokenOrId
 	 * @param string|null      $couponCode
+	 * @param User|string|int  $userTokenOrId User authentication token or user ID.
 	 *
 	 * @return SubscriptionCalculatePackageChangeResponse
 	 */
 	public function subscriptionCalculatePackageChange(
 		$subscription,
 		$newPackageIdentifier,
-		$userTokenOrId = null,
-		$couponCode = null
+		$couponCode = null,
+		$userTokenOrId = null
 	) {
 		$data = [
 			'subscriptionId'       =>
@@ -496,18 +527,20 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/CalculateSubscriptionPrice
 	 *
-	 * @param User|int|string $userTokenOrId           the unique user id for which the subscription is
-	 *                                                 created
 	 * @param string          $packageIdentifier       the package for the subscription
 	 * @param string          $currencyCode            currency which should be used for the user
 	 * @param string|null     $couponCode              optional - coupon which should be applied
 	 * @param string|string[] $addonPackageIdentifiers optional - additional addon packages
+	 * @param User|int|string $userTokenOrId           User authentication token or user ID.
 	 *
 	 * @return SubscriptionCalculatePriceResponse
 	 */
 	public function subscriptionCalculatePrice(
-		$userTokenOrId, $packageIdentifier, $currencyCode, $couponCode = null,
-		$addonPackageIdentifiers = []
+		$packageIdentifier,
+		$currencyCode,
+		$couponCode = null,
+		$addonPackageIdentifiers = [],
+		$userTokenOrId = null
 	) {
 		$data = [
 			'packageIdentifier'       => $packageIdentifier,
@@ -528,9 +561,8 @@ class Client {
 	 *
 	 * @see https://docs.dislo.com/display/DIS/CancelPackageChange
 	 *
-	 * @param Subscription|int     $subscription  the unique subscription id to change
-	 * @param User|int|string|null $userTokenOrId optional - if passed, the subscription ID will be checked against
-	 *                                            the user ID.
+	 * @param Subscription|int $subscription  the unique subscription id to change
+	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
 	 *
 	 * @return SubscriptionCancelPackageChangeResponse
 	 */
@@ -550,22 +582,21 @@ class Client {
 	/**
 	 * Cancels a single subscription.
 	 *
-	 * @param Subscription|int     $subscription     the id of the subscription you want to cancel
-	 * @param User|int|string|null $userTokenOrId    optional - if passed, the subscription ID will be checked against
-	 *                                               the user ID.
-	 * @param string               $cancelReason     optional - the reason why the user canceled (should be predefined
+	 * @param Subscription|int $subscription         the id of the subscription you want to cancel
+	 * @param string           $cancelReason         optional - the reason why the user canceled (should be predefined
 	 *                                               reasons by your frontend)
-	 * @param string               $userCancelReason optional - a user defined cancellation reason
-	 * @param string               $userComments     optional - comments from the user
+	 * @param string           $userCancelReason     optional - a user defined cancellation reason
+	 * @param string           $userComments         optional - comments from the user
+	 * @param User|int|string  $userTokenOrId        User authentication token or user ID.
 	 *
 	 * @return SubscriptionCancelResponse
 	 */
 	public function subscriptionCancel(
 		$subscription,
-		$userTokenOrId = null,
 		$cancelReason = '',
 		$userCancelReason = '',
-		$userComments = ''
+		$userComments = '',
+		$userTokenOrId = null
 	) {
 		$data = [
 			'subscriptionId'   =>
@@ -577,5 +608,467 @@ class Client {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/cancelPackageChange', $data);
 		return SubscriptionCancelResponse::fromResponse($response);
+	}
+
+	/**
+	 * Change the package for a subscription.
+	 *
+	 * @param Subscription|int $subscription                the unique subscription id to change
+	 * @param array            $newPackageIdentifier        the identifier of the new package
+	 * @param string[]         $addonPackageIdentifiers     optional - package identifiers of the addons
+	 * @param string           $couponCode                  optional - the coupon code to apply
+	 * @param array            $metaData                    optional - additional data (if supported by Dislo
+	 *                                                      installation)
+	 * @param bool             $useFlexible                 use the existing flexible payment method from the user to
+	 *                                                      pay for the package change immediately
+	 * @param User|int|string  $userTokenOrId               User authentication token or user ID.
+	 *
+	 * @return SubscriptionChangeResponse
+	 */
+	public function subscriptionChange(
+		$subscription,
+		$newPackageIdentifier,
+		$addonPackageIdentifiers = [],
+		$couponCode = '',
+		$metaData = [],
+		$useFlexible = false,
+		$userTokenOrId = null
+	) {
+		$data = [
+			'subscriptionId'       =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+			'newPackageIdentifier' => $newPackageIdentifier,
+		];
+		if ($addonPackageIdentifiers) {
+			$data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
+		}
+		if ($couponCode) {
+			$data['couponCode'] = $couponCode;
+		}
+		if ($metaData) {
+			$data['metaData'] = $metaData;
+		}
+		$data['useFlexible'] = $useFlexible;
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/changePackage', $data);
+		return SubscriptionChangeResponse::fromResponse($response);
+	}
+
+	/**
+	 * Check if a coupon code is valid.
+	 *
+	 * @param string      $couponCode
+	 * @param string|null $event @see self::COUPON_EVENT_*
+	 *
+	 * @return CouponCodeCheckResponse
+	 */
+	public function couponCodeCheck(
+		$couponCode,
+		$event = null
+	) {
+		$data = [
+			'couponCode' => $couponCode,
+		];
+		if ($event) {
+			$data['event'] = $event;
+		}
+		$response = $this->request('/frontend/subscription/checkCouponCode', $data);
+		return CouponCodeCheckResponse::fromResponse($response, $couponCode, $event);
+	}
+
+	/**
+	 * Closes a subscription immediately
+	 *
+	 * @param Subscription|int $subscription      the id of the subscription you want to close
+	 * @param string           $closeReason       optional - the reason why the subscription was closed (should be
+	 *                                            predefined reasons by your frontend)
+	 * @param User|int|string  $userTokenOrId     User authentication token or user ID.
+	 *
+	 * @return SubscriptionCloseResponse
+	 */
+	public function subscriptionClose(
+		$subscription,
+		$closeReason = '',
+		$userTokenOrId = null
+	) {
+		$data = [
+			'subscriptionId' =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+			'closeReason'    => $closeReason,
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/closeSubscription', $data);
+		return SubscriptionCloseResponse::fromResponse($response);
+	}
+
+	/**
+	 * Continues a previously cancelled subscription (undo cancellation).
+	 *
+	 * @param Subscription|int $subscription  the id of the subscription you want to close
+	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
+	 *
+	 * @return SubscriptionCloseResponse
+	 */
+	public function subscriptionContinue(
+		$subscription,
+		$userTokenOrId = null
+	) {
+		$data = [
+			'subscriptionId' =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/continueSubscription', $data);
+		return SubscriptionContinueResponse::fromResponse($response);
+	}
+
+	/**
+	 * Create an addon subscription.
+	 *
+	 * @param Subscription|int $subscription
+	 * @param string[]         $packageIdentifiers
+	 * @param string           $couponCode
+	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
+	 *
+	 * @return SubscriptionCloseResponse
+	 */
+	public function subscriptionCreateAddon(
+		$subscription,
+		$packageIdentifiers,
+		$couponCode = '',
+		$userTokenOrId = null
+	) {
+		$data = [
+			'subscriptionId'     =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+			'packageIdentifiers' => $packageIdentifiers,
+		];
+		if ($couponCode) {
+			$data['couponCode'] = $couponCode;
+		}
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/createAddonSubscription', $data);
+		return SubscriptionCreateAddonResponse::fromResponse($response);
+	}
+
+	/**
+	 * Create a new subscription for a user, with optional addons.
+	 *
+	 * NOTE: users are locked to one currency code once their first subscription is created. You MUST pass the
+	 * users currency code in $currencyCode if it is already set up. You can obtain the currency code via
+	 * userGetBalance.
+	 *
+	 * NOTE: Always observe the needsBilling flag in the response. If it is true, call createPayment afterwards. If
+	 * it is false, you can use createFlexible to register a payment method without a payment. Don't mix up the two!
+	 *
+	 * @param User|int|string $userTokenOrId User authentication token or user ID.
+	 * @param string          $packageIdentifier
+	 * @param string          $currencyCode
+	 * @param string          $couponCode
+	 * @param array           $addonPackageIdentifiers
+	 *
+	 * @return SubscriptionCreateResponse
+	 */
+	public function subscriptionCreate(
+		$userTokenOrId,
+		$packageIdentifier,
+		$currencyCode,
+		$couponCode = '',
+		$addonPackageIdentifiers = []
+	) {
+		$data = [
+			'packageIdentifier' => $packageIdentifier,
+			'currencyCode'      => $currencyCode,
+		];
+		if ($addonPackageIdentifiers) {
+			$data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
+		}
+		if ($couponCode) {
+			$data['couponCode'] = $couponCode;
+		}
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/createSubscription', $data);
+		return SubscriptionCreateResponse::fromResponse($response);
+	}
+
+	/**
+	 * Change the package for an external subscription.
+	 *
+	 * @param Subscription|int $subscription                the unique subscription id to change
+	 * @param string           $newPackageIdentifier        the identifier for the new plan.
+	 * @param \DateTime        $newPeriodEnd                end date, has to be >= now.
+	 * @param string[]         $addonPackageIdentifiers     optional - package identifiers of the addons
+	 * @param null             $newExternalId               if provided, a new external profile will be created for the
+	 *                                                      given subscription, the old one is invalidated
+	 * @param array            $extraData                   required when newExternalId is set, key value data for
+	 *                                                      external profile
+	 * @param User|int|string  $userTokenOrId               User authentication token or user ID.
+	 *
+	 * @return SubscriptionExternalChangeResponse
+	 */
+	public function subscriptionExternalChange(
+		$subscription,
+		$newPackageIdentifier,
+		\DateTime $newPeriodEnd,
+		$addonPackageIdentifiers = [],
+		$newExternalId = null,
+		$extraData = [],
+		$userTokenOrId = null
+	) {
+		$newPeriodEnd = clone $newPeriodEnd;
+		$newPeriodEnd->setTimezone(new \DateTimeZone('UTC'));
+		$data = [
+			'subscriptionId'       =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+			'newPackageIdentifier' => $newPackageIdentifier,
+			'newPeriodEnd'         => $newPeriodEnd->format('Y-m-d H:i:s'),
+		];
+		if ($addonPackageIdentifiers) {
+			$data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
+		}
+		if ($newExternalId) {
+			$data['newExternalId'] = $newExternalId;
+			$data['extraData']     = $extraData;
+		}
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/externalChangePackage', $data);
+		return SubscriptionExternalChangeResponse::fromResponse($response);
+	}
+
+	/**
+	 * Change the period end of an external subscription
+	 *
+	 * @param Subscription|int $subscription
+	 * @param \DateTime        $newPeriodEnd
+	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
+	 *
+	 * @return SubscriptionExternalChangePeriodResponse
+	 */
+	public function subscriptionExternalChangePeriod(
+		$subscription,
+		\DateTime $newPeriodEnd,
+		$userTokenOrId = null
+	) {
+		$newPeriodEnd = clone $newPeriodEnd;
+		$newPeriodEnd->setTimezone(new \DateTimeZone('UTC'));
+		$data = [
+			'subscriptionId' =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+			'newPeriodEnd'   => $newPeriodEnd->format('Y-m-d H:i:s'),
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/externalChangePeriod', $data);
+		return SubscriptionExternalChangePeriodResponse::fromResponse($response);
+	}
+
+	/**
+	 * Closes an external subscription immediately.
+	 *
+	 * @param Subscription|int $subscription
+	 * @param string           $closeReason
+	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
+	 *
+	 * @return SubscriptionExternalCloseResponse
+	 */
+	public function subscriptionExternalClose(
+		$subscription,
+		$closeReason = '',
+		$userTokenOrId = null
+	) {
+		$data = [
+			'subscriptionId' =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+		];
+		if ($closeReason) {
+			$data['closeReason'] = $closeReason;
+		}
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/externalCloseSubscription', $data);
+		return SubscriptionExternalCloseResponse::fromResponse($response);
+	}
+
+	/**
+	 * Create an external addon subscription.
+	 *
+	 * @param Subscription|int $subscription
+	 * @param string[]         $packageIdentifiers
+	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
+	 *
+	 * @return SubscriptionExternalAddonCreateResponse
+	 */
+	public function subscriptionExternalAddonCreate(
+		$subscription,
+		$packageIdentifiers,
+		$userTokenOrId = null
+	) {
+		$data = [
+			'subscriptionId'     =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+			'packageIdentifiers' => $packageIdentifiers,
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/externalCreateAddonSubscription', $data);
+		return SubscriptionExternalAddonCreateResponse::fromResponse($response);
+	}
+
+	/**
+	 * Create an external subscription.
+	 *
+	 * @param string          $packageIdentifier            the package for the subscription
+	 * @param string          $externalId                   unique id for the external profile that is created for this
+	 *                                                      subscription
+	 * @param array           $extraData                    key/value array where you can save whatever you need with
+	 *                                                      the external profile, you can fetch this later on by
+	 *                                                      passing the externalId to "billing/externalGetProfile"
+	 * @param string          $currencyCode                 currency which should be used for the user
+	 * @param array           $addonPackageIdentifiers      optional - additional addon packages
+	 * @param \DateTime|null  $periodEnd                    end of the first period, if omitted, dislo will calculate
+	 *                                                      the period end itself by using the package duration
+	 * @param User|int|string $userTokenOrId                User authentication token or user ID.
+	 *
+	 * @return SubscriptionExternalCreateResponse
+	 */
+	public function subscriptionExternalCreate(
+		$packageIdentifier,
+		$externalId,
+		$extraData,
+		$currencyCode,
+		$addonPackageIdentifiers = [],
+		\DateTime $periodEnd = null,
+		$userTokenOrId = null
+	) {
+		$data = [
+			'packageIdentifier'       => $packageIdentifier,
+			'externalId'              => $externalId,
+			'extraData'               => $extraData,
+			'currencyCode'            => $currencyCode,
+			'addonPackageIdentifiers' => $addonPackageIdentifiers,
+		];
+		if ($periodEnd) {
+			$periodEnd = clone $periodEnd;
+			$periodEnd->setTimezone(new \DateTimeZone('UTC'));
+			$data['periodEnd'] = $periodEnd->format(['Y-m-d H:i:s']);
+		}
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/externalCreateSubscription', $data);
+		return SubscriptionExternalCreateResponse::fromResponse($response);
+	}
+
+	/**
+	 * Retrieve a list of all packages registered in the system.
+	 *
+	 * @param string|null $serviceIdentifier
+	 *
+	 * @return PackagesListResponse
+	 */
+	public function packagesList(
+		$serviceIdentifier = null
+	) {
+		$data = [];
+		if ($serviceIdentifier) {
+			$data['serviceIdentifier'] = $serviceIdentifier;
+		}
+		$response = $this->request('/frontend/subscription/getPackages', $data);
+		return PackagesListResponse::fromResponse($response);
+	}
+
+	/**
+	 * Retrieves a single subscription by its id.
+	 *
+	 * @param Subscription|int $subscription
+	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
+	 *
+	 * @return SubscriptionGetResponse
+	 */
+	public function subscriptionGet(
+		$subscription,
+		$userTokenOrId = null
+	) {
+		$data = [
+			'subscriptionId' =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/getSubscription', $data);
+		return SubscriptionGetResponse::fromResponse($response);
+	}
+
+	/**
+	 * Retrieves all subscriptions for a user.
+	 *
+	 * @param User|int|string $userTokenOrId User authentication token or user ID.
+	 *
+	 * @return SubscriptionGetAllResponse
+	 */
+	public function subscriptionGetAll(
+		$userTokenOrId
+	) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/getSubscriptions', $data);
+		return SubscriptionGetAllResponse::fromResponse($response);
+	}
+
+	/**
+	 * Check if a coupon is valid for the given context package/addons/event/user/sub and calculates the discounted
+	 * price, for new subscriptions.
+	 *
+	 * @param string $couponCode
+	 * @param string $packageIdentifier
+	 * @param array  $addonPackageIdentifiers
+	 * @param string $currencyCode
+	 *
+	 * @return CouponCodeValidateResponse
+	 */
+	public function couponCodeValidateNew(
+		$couponCode,
+		$packageIdentifier,
+		$addonPackageIdentifiers = [],
+		$currencyCode
+	) {
+		$data     = [
+			'couponCode'              => $couponCode,
+			'packageIdentifier'       => $packageIdentifier,
+			'addonPackageIdentifiers' => $addonPackageIdentifiers,
+			'event'                   => self::COUPON_EVENT_START,
+			'currencyCode'            => $currencyCode,
+		];
+		$response = $this->request('/frontend/subscription/validateCoupon', $data);
+		return CouponCodeValidateResponse::fromResponse($response, self::COUPON_EVENT_START, $couponCode);
+	}
+
+	/**
+	 * Check if a coupon is valid for the given context package/addons/event/user/sub and calculates the discounted
+	 * price, for upgrades
+	 *
+	 * @param string           $couponCode
+	 * @param string           $packageIdentifier
+	 * @param array            $addonPackageIdentifiers
+	 * @param string           $currencyCode
+	 * @param User|string|int  $userTokenOrId
+	 * @param Subscription|int $subscription
+	 *
+	 * @return CouponCodeValidateResponse
+	 */
+	public function couponCodeValidateUpgrade(
+		$couponCode,
+		$packageIdentifier,
+		$addonPackageIdentifiers,
+		$currencyCode,
+		$subscription,
+		$userTokenOrId = null
+	) {
+		$data = [
+			'couponCode'              => $couponCode,
+			'packageIdentifier'       => $packageIdentifier,
+			'addonPackageIdentifiers' => $addonPackageIdentifiers,
+			'event'                   => self::COUPON_EVENT_UPGRADE,
+			'currencyCode'            => $currencyCode,
+			'subscriptionId'          =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/validateCoupon', $data);
+		return CouponCodeValidateResponse::fromResponse($response, self::COUPON_EVENT_UPGRADE, $couponCode);
 	}
 }
