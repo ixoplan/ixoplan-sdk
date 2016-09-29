@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f9143044-1ea4-4b2d-9343-75c717ad0780" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.xml" afterPath="$PROJECT_DIR$/build.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.json" afterPath="$PROJECT_DIR$/composer.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.lock" afterPath="$PROJECT_DIR$/composer.lock" />
-    </list>
+    <list default="true" id="f9143044-1ea4-4b2d-9343-75c717ad0780" name="Default" comment="" />
     <ignored path="dislo-sdk.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -354,12 +348,12 @@
       <workItem from="1473750722164" duration="5543000" />
       <workItem from="1473842534307" duration="8899000" />
       <workItem from="1473930251593" duration="1264000" />
-      <workItem from="1475149089373" duration="1148000" />
+      <workItem from="1475149089373" duration="1384000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44949000" />
+    <option name="totallyTimeSpent" value="45185000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1280" y="-277" width="1920" height="1132" extended-state="6" />
