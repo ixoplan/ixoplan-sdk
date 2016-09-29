@@ -2,10 +2,14 @@
 
 namespace Ixolit\Dislo;
 
+use Ixolit\Dislo\Exceptions\AuthenticationException;
+use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
+use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\DisloException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\CDERequestClient;
 use Ixolit\Dislo\Request\RequestClient;
+use Ixolit\Dislo\Response\UserAuthenticateResponse;
 use Ixolit\Dislo\Response\BillingCloseFlexibleResponse;
 use Ixolit\Dislo\Response\BillingCreateFlexibleResponse;
 use Ixolit\Dislo\Response\BillingCreatePaymentResponse;
@@ -17,6 +21,7 @@ use Ixolit\Dislo\Response\BillingGetEventsForUserResponse;
 use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
+use Ixolit\Dislo\Response\UserDeauthenticateResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponse;
@@ -35,6 +40,18 @@ use Ixolit\Dislo\Response\SubscriptionExternalCloseResponse;
 use Ixolit\Dislo\Response\SubscriptionExternalCreateResponse;
 use Ixolit\Dislo\Response\SubscriptionGetAllResponse;
 use Ixolit\Dislo\Response\SubscriptionGetResponse;
+use Ixolit\Dislo\Response\UserChangeResponse;
+use Ixolit\Dislo\Response\UserCreateResponse;
+use Ixolit\Dislo\Response\UserDeleteResponse;
+use Ixolit\Dislo\Response\UserDisableLoginResponse;
+use Ixolit\Dislo\Response\UserEnableLoginResponse;
+use Ixolit\Dislo\Response\UserGetBalanceResponse;
+use Ixolit\Dislo\Response\UserGetMetaProfileResponse;
+use Ixolit\Dislo\Response\UserGetResponse;
+use Ixolit\Dislo\Response\UserGetSignupStatusResponse;
+use Ixolit\Dislo\Response\UserGetTokensResponse;
+use Ixolit\Dislo\Response\UserSignupWithPaymentResponse;
+use Ixolit\Dislo\Response\UserUpdateTokenResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\WorkingObjects\User;
@@ -1070,5 +1087,320 @@ class Client {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/validateCoupon', $data);
 		return CouponCodeValidateResponse::fromResponse($response, self::COUPON_EVENT_UPGRADE, $couponCode);
+	}
+
+	/**
+	 * Authenticate a user. Returns an access token for subsequent API calls.
+	 *
+	 * @param string $username      Username.
+	 * @param string $password      User password.
+	 * @param string $ipAddress     IP address of the user attempting to authenticate.
+	 * @param int    $tokenLifetime Authentication token lifetime in seconds. TokenLifeTime is renewed and extended
+	 *                              by API calls automatically, using the inital tokenlifetime.
+	 * @param string $metainfo      Meta information to store with token (4096 bytes)
+	 *
+	 * @return UserAuthenticateResponse
+	 *
+	 * @throws AuthenticationException
+	 * @throws AuthenticationInvalidCredentialsException
+	 * @throws AuthenticationRateLimitedException
+	 */
+	public function userAuthenticate(
+		$username,
+		$password,
+		$ipAddress,
+		$tokenLifetime = 1800,
+		$metainfo = ''
+	) {
+		$data     = [
+			'username'      => $username,
+			'password'      => $password,
+			'ipAddress'     => $ipAddress,
+			'tokenlifetime' => \round($tokenLifetime / 60),
+			'metainfo'      => $metainfo,
+		];
+		$response = $this->request('/frontend/user/authenticate', $data);
+
+		if (isset($response['error'])) {
+			switch ($response['error']) {
+				case 'rate_limit':
+					throw new AuthenticationRateLimitedException($username);
+				case 'invalid_credentials':
+					throw new AuthenticationInvalidCredentialsException($username);
+				case null;
+					break;
+				default:
+					throw new AuthenticationException($username);
+			}
+		}
+
+		return UserAuthenticateResponse::fromResponse($response);
+	}
+
+	/**
+	 * Deauthenticate a token.
+	 *
+	 * @param string $authToken
+	 *
+	 * @return UserDeauthenticateResponse
+	 */
+	public function userDeauthenticate(
+		$authToken
+	) {
+		$data     = [
+			'authToken' => $authToken,
+		];
+		$response = $this->request('/frontend/user/deAuthToken', $data);
+		return UserDeauthenticateResponse::fromResponse($response);
+	}
+
+	/**
+	 * Change data of an existing user.
+	 *
+	 * @param User|string|int $userTokenOrId the unique user id to change
+	 * @param string          $language      iso-2-letter language key to use for this user
+	 * @param string[]        $metaData      meta data for this user (such as first name, last names etc.). NOTE: these
+	 *                                       meta data keys must exist in the meta data profile in Distribload
+	 *
+	 * @return UserChangeResponse
+	 */
+	public function userChange(
+		$userTokenOrId,
+		$language,
+		$metaData
+	) {
+		$data = [
+			'language' => $language,
+			'metaData' => $metaData,
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/user/change', $data);
+		return UserChangeResponse::fromResponse($response);
+	}
+
+	/**
+	 * Creates a new user with the given meta data.
+	 *
+	 * @param string   $language          iso-2-letter language key to use for this user
+	 * @param string   $plaintextPassword password for this user
+	 * @param string[] $metaData          meta data for this user (such as first name, last names etc.). NOTE: these
+	 *                                    meta data keys must exist in the meta data profile in Distribload
+	 *
+	 * @return UserCreateResponse
+	 */
+	public function userCreate(
+		$language,
+		$plaintextPassword,
+		$metaData
+	) {
+		$data     = [
+			'language'          => $language,
+			'plaintextPassword' => $plaintextPassword,
+			'metaData'          => $metaData,
+		];
+		$response = $this->request('/frontend/user/create', $data);
+		return UserCreateResponse::fromResponse($response);
+	}
+
+	/**
+	 * Soft-delete a user.
+	 *
+	 * @param User|string|int $userTokenOrId
+	 *
+	 * @return UserDeleteResponse
+	 */
+	public function userDelete(
+		$userTokenOrId
+	) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/user/delete', $data);
+		return UserDeleteResponse::fromResponse($response);
+	}
+
+	/**
+	 * Disable website login capability for user.
+	 *
+	 * @param User|string|int $userTokenOrId
+	 *
+	 * @return UserDisableLoginResponse
+	 */
+	public function userDisableLogin(
+		$userTokenOrId
+	) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/user/disableLogin', $data);
+		return UserDisableLoginResponse::fromResponse($response);
+	}
+
+	/**
+	 * Enable website login capability for user.
+	 *
+	 * @param User|string|int $userTokenOrId
+	 *
+	 * @return UserEnableLoginResponse
+	 */
+	public function userEnableLogin(
+		$userTokenOrId
+	) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/user/enableLogin', $data);
+		return UserEnableLoginResponse::fromResponse($response);
+	}
+
+	/**
+	 * Get a user's balance.
+	 *
+	 * @param User|string|int $userTokenOrId
+	 *
+	 * @return UserGetBalanceResponse
+	 */
+	public function userGetBalance(
+		$userTokenOrId
+	) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/user/getBalance', $data);
+		return UserGetBalanceResponse::fromResponse($response);
+	}
+
+	/**
+	 * Retrieve a list of metadata elements.
+	 *
+	 * @return UserGetMetaProfileResponse
+	 */
+	public function userGetMetaProfile() {
+		$data     = [];
+		$response = $this->request('/frontend/user/getMetaProfile', $data);
+		return UserGetMetaProfileResponse::fromResponse($response);
+	}
+
+	/**
+	 * Get the status of a Single-Step signup (usually called after the user comes back from the payment provider).
+	 *
+	 * @param string $signupIdentifier unique signup identifier returned from UserSignupWithPayment
+	 *
+	 * @return UserGetSignupStatusResponse
+	 */
+	public function userGetSignupStatus(
+		$signupIdentifier
+	) {
+		$data     = [
+			'signupIdentifier' => $signupIdentifier,
+		];
+		$response = $this->request('/frontend/user/getSignupStatus', $data);
+		return UserGetSignupStatusResponse::fromResponse($response);
+	}
+
+	/**
+	 * Retrieves the users authentication tokens.
+	 *
+	 * @param User|string|int $userTokenOrId
+	 *
+	 * @return UserGetTokensResponse
+	 */
+	public function userGetTokens(
+		$userTokenOrId
+	) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/user/getTokens', $data);
+		return UserGetTokensResponse::fromResponse($response);
+	}
+
+	/**
+	 * Retrieves a user.
+	 *
+	 * @param User|string|int $userTokenOrId
+	 *
+	 * @return UserGetResponse
+	 */
+	public function userGet(
+		$userTokenOrId
+	) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/user/get', $data);
+		return UserGetResponse::fromResponse($response);
+	}
+
+	/**
+	 * Single-Step Signup with Subscription and Payment.
+	 *
+	 * @param string $language                ISO-2-letter language key to use for this user
+	 * @param string $plaintextPassword       password for this user
+	 * @param array  $metaData                meta data for this user (such as first name, last names etc.). NOTE:
+	 *                                        these meta data keys must exist in the meta data profile in Dislo
+	 * @param string $packageIdentifier       the package for the subscription
+	 * @param string $currencyCode            currency which should be used for the user
+	 * @param string $billingMethod           the billing method identifier
+	 * @param string $returnUrl               the finalize URL on your side, to which the user will be redirected after
+	 *                                        payment (for redirect-based payment such as PayPal)
+	 * @param array  $paymentDetails          optional - additional data for payment (e.g. transactionToken for credit
+	 *                                        card payments)
+	 * @param string $couponCode              optional - coupon which should be applied
+	 * @param array  $addonPackageIdentifiers optional - additional addon packages
+	 *
+	 * @return UserSignupWithPaymentResponse
+	 */
+	public function userSignupWithPayment(
+		$language,
+		$plaintextPassword,
+		$metaData,
+		$packageIdentifier,
+		$currencyCode,
+		$billingMethod,
+		$returnUrl,
+		$paymentDetails = [],
+		$couponCode = '',
+		$addonPackageIdentifiers = []
+	) {
+		$data = [
+			'language' => $language,
+			'plaintextPassword' => $plaintextPassword,
+			'metaData' => $metaData,
+			'packageIdentifier' => $packageIdentifier,
+			'currencyCode' => $currencyCode,
+			'billingMethod' => $billingMethod,
+			'returnUrl' => $returnUrl,
+		];
+		if ($paymentDetails) {
+			$data['paymentDetails'] = $paymentDetails;
+		}
+		if ($couponCode) {
+			$data['couponCode'] = $couponCode;
+		}
+		if ($addonPackageIdentifiers) {
+			$data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
+		}
+		$response = $this->request('/frontend/user/signupWithPayment', $data);
+		return UserSignupWithPaymentResponse::fromResponse($response);
+	}
+
+	/**
+	 * Update a users AuthToken MetaInfo
+	 *
+	 * @param string $authToken
+	 * @param string $metaInfo
+	 * @param string $ipAddress
+	 *
+	 * @return UserUpdateTokenResponse
+	 */
+	public function userUpdateToken(
+		$authToken,
+		$metaInfo,
+		$ipAddress = ''
+	) {
+		$data = [
+			'authToken' => $authToken,
+			'metaInfo' => $metaInfo
+		];
+		if ($ipAddress) {
+			$data['ipAddress'] = $ipAddress;
+		}
+		$response = $this->request('/frontend/user/updateToken', $data);
+		return UserUpdateTokenResponse::fromResponse($response);
 	}
 }
