@@ -11,6 +11,12 @@
 		<exec command="vendor/bin/phpmd src text phpmd.xml" checkreturn="true" logoutput="true" />
 	</target>
 
+	<target name="docs">
+		<exec
+			command="vendor/bin/apigen generate -s src -d docs/ --title &quot;Dislo SDK&quot; --main=&quot;Ixolit\\Dislo\\Client&quot; -o --tree"
+			checkreturn="true" logoutput="true" />
+	</target>
+
 	<target name="qa">
 		<phingcall target="phpunit" />
 		<phingcall target="phpmd" />

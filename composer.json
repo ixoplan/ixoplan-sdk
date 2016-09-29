@@ -13,16 +13,18 @@
 			"Ixolit\\Dislo\\": "./tests"
 		}
 	},
-	"require": {
-		"ixolit/dislo-sdk-http": "^1.0"
-	},
 	"suggest": {
 		"ixolit/dislo-sdk-http-guzzle": "Guzzle connector for the Dislo SDK"
+	},
+	"require": {
+		"ixolit/dislo-sdk-http": "^1.0"
 	},
 	"require-dev": {
 		"ixolit/dislo-sdk-http-guzzle": "^1.0",
 		"phpunit/phpunit": "^4.8",
 		"phpmd/phpmd": "^2.4",
-		"phing/phing": "^2.14"
-	}
+		"phing/phing": "^2.14",
+		"apigen/apigen": "^4.1"
+	},
+	"minimum-stability": "dev"
 }
