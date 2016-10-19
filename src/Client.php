@@ -4,6 +4,7 @@ namespace Ixolit\Dislo;
 
 use Ixolit\Dislo\Exceptions\AuthenticationException;
 use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
+use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\DisloException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
@@ -45,6 +46,7 @@ use Ixolit\Dislo\Response\UserCreateResponse;
 use Ixolit\Dislo\Response\UserDeleteResponse;
 use Ixolit\Dislo\Response\UserDisableLoginResponse;
 use Ixolit\Dislo\Response\UserEnableLoginResponse;
+use Ixolit\Dislo\Response\UserFindResponse;
 use Ixolit\Dislo\Response\UserGetBalanceResponse;
 use Ixolit\Dislo\Response\UserGetMetaProfileResponse;
 use Ixolit\Dislo\Response\UserGetResponse;
@@ -115,15 +117,22 @@ class Client {
 		try {
 			$response = $this->requestClient->request($uri, $data);
 			if (isset($response['success']) && $response['success'] === false) {
-				switch ($response['code']) {
+				switch ($response['errors'][0]['code']) {
 					case 404:
-						throw new ObjectNotFoundException($response['message'], $response['code']);
+						throw new ObjectNotFoundException($response['errors'][0]['message'],
+							$response['errors'][0]['code']);
+					case 9002:
+						throw new InvalidTokenException();
 					default:
-						throw new DisloException($response['message'], $response['code']);
+						throw new DisloException($response['errors'][0]['message'], $response['errors'][0]['code']);
 				}
 			} else {
 				return $response;
 			}
+		} catch (ObjectNotFoundException $e) {
+			throw $e;
+		} catch (DisloException $e) {
+			throw $e;
 		} catch (\Exception $e) {
 			throw new DisloException($e->getMessage(), $e->getCode(), $e);
 		}
@@ -1402,5 +1411,19 @@ class Client {
 		}
 		$response = $this->request('/frontend/user/updateToken', $data);
 		return UserUpdateTokenResponse::fromResponse($response);
+	}
+
+	/**
+	 * Searches among the unique properties of all users in order to find one user. The search term must match exactly.
+	 *
+	 * @param string $searchTerm
+	 *
+	 * @return User
+	 *
+	 * @throws ObjectNotFoundException
+	 */
+	public function userFind($searchTerm) {
+		$response = $this->request('/frontend/user/findUser', ['searchTerm' => $searchTerm]);
+		return UserFindResponse::fromResponse($response);
 	}
 }
