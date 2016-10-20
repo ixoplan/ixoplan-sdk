@@ -2,6 +2,8 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
+
 class Package implements WorkingObject {
 	/**
 	 * @var string
@@ -77,6 +79,19 @@ class Package implements WorkingObject {
 	 */
 	public function getDisplayNames() {
 		return $this->displayNames;
+	}
+
+	/**
+	 * @param string $languageCode
+	 * @return DisplayName
+	 */
+	public function getDisplayNameForLanguage($languageCode) {
+		foreach ($this->displayNames as $displayName) {
+			if ($displayName->getLanguage() == $languageCode) {
+				return $displayName;
+			}
+		}
+		throw new ObjectNotFoundException();
 	}
 
 	/**
