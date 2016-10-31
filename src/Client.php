@@ -22,6 +22,7 @@ use Ixolit\Dislo\Response\BillingGetEventsForUserResponse;
 use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
+use Ixolit\Dislo\Response\UserChangePasswordResponse;
 use Ixolit\Dislo\Response\UserDeauthenticateResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponse;
@@ -73,8 +74,16 @@ class Client {
 	 * @var RequestClient
 	 */
 	private $requestClient;
+	/**
+	 * @var bool
+	 */
+	private $forceTokenMode;
 
 	private function userToData($userTokenOrId, &$data = []) {
+		if ($this->forceTokenMode) {
+			$data['authToken'] = $userTokenOrId;
+			return $data;
+		}
 		if ($userTokenOrId instanceof User) {
 			$data['userId'] = $userTokenOrId->getUserId();
 			return $data;
@@ -119,12 +128,15 @@ class Client {
 			if (isset($response['success']) && $response['success'] === false) {
 				switch ($response['errors'][0]['code']) {
 					case 404:
-						throw new ObjectNotFoundException($response['errors'][0]['message'],
+						throw new ObjectNotFoundException(
+							$response['errors'][0]['message'] . ' while trying to query ' . $uri,
 							$response['errors'][0]['code']);
 					case 9002:
 						throw new InvalidTokenException();
 					default:
-						throw new DisloException($response['errors'][0]['message'], $response['errors'][0]['code']);
+						throw new DisloException(
+							$response['errors'][0]['message'] . ' while trying to query ' . $uri,
+							$response['errors'][0]['code']);
 				}
 			} else {
 				return $response;
@@ -142,11 +154,12 @@ class Client {
 	 * Initialize the client with a RequestClient, the class that is responsible for transporting messages to and
 	 * from the Dislo API. If no RequestClient is passed, this class attempts to use the CDE-internal API method.
 	 *
-	 * @param RequestClient|null $requestClient Required when not running in the CDE.
+	 * @param RequestClient|null $requestClient  Required when not running in the CDE.
+	 * @param bool               $forceTokenMode Force using tokens. Does not allow passing a user Id.
 	 *
 	 * @throws DisloException if the $requestClient parameter is missing
 	 */
-	public function __construct(RequestClient $requestClient = null) {
+	public function __construct(RequestClient $requestClient = null, $forceTokenMode = true) {
 		if (!$requestClient) {
 			if (\function_exists('\\apiCall')) {
 				$requestClient = new CDERequestClient();
@@ -155,6 +168,7 @@ class Client {
 			}
 		}
 		$this->requestClient = $requestClient;
+		$this->forceTokenMode = $forceTokenMode;
 	}
 
 	/**
@@ -1188,6 +1202,26 @@ class Client {
 	}
 
 	/**
+	 * Change password of an existing user.
+	 *
+	 * @param User|string|int $userTokenOrId the unique user id to change
+	 * @param string          $newPassword   the new password
+	 *
+	 * @return UserChangeResponse
+	 */
+	public function userChangePassword(
+		$userTokenOrId,
+		$newPassword
+	) {
+		$data = [
+			'plaintextPassword' => $newPassword,
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/user/changePassword', $data);
+		return UserChangePasswordResponse::fromResponse($response);
+	}
+
+	/**
 	 * Creates a new user with the given meta data.
 	 *
 	 * @param string   $language          iso-2-letter language key to use for this user
@@ -1418,7 +1452,7 @@ class Client {
 	 *
 	 * @param string $searchTerm
 	 *
-	 * @return User
+	 * @return UserFindResponse
 	 *
 	 * @throws ObjectNotFoundException
 	 */

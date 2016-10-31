@@ -3,6 +3,11 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 class Subscription implements WorkingObject {
+	const STATUS_PENDING = 'pending';
+	const STATUS_RUNNING = 'running';
+	const STATUS_CANCELED = 'canceled';
+	const STATUS_CLOSED = 'closed';
+
 	/**
 	 * @var int
 	 */
@@ -176,7 +181,7 @@ class Subscription implements WorkingObject {
 	/**
 	 * @return boolean
 	 */
-	public function isIsInitialPeriod() {
+	public function isInitialPeriod() {
 		return $this->isInitialPeriod;
 	}
 
@@ -206,6 +211,24 @@ class Subscription implements WorkingObject {
 	 */
 	public function getAddonSubscriptions() {
 		return $this->addonSubscriptions;
+	}
+
+	/**
+	 * @return PackagePeriod
+	 */
+	public function getCurrentPeriod() {
+		if ($this->isInitialPeriod()) {
+			return $this->getCurrentPackage()->getInitialPeriod();
+		} else {
+			return $this->getCurrentPackage()->getRecurringPeriod();
+		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isInPaidPeriod() {
+		return $this->getCurrentPeriod()->isPaid();
 	}
 
 	/**

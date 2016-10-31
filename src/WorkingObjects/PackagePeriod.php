@@ -2,6 +2,8 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
+
 class PackagePeriod implements WorkingObject {
 	private $length;
 	private $lengthUnit;
@@ -89,5 +91,23 @@ class PackagePeriod implements WorkingObject {
 	 */
 	public function getBasePrice() {
 		return $this->basePrice;
+	}
+
+	public function getBasePriceForCurrency($currency) {
+		foreach ($this->basePrice as $price) {
+			if ($price->getCurrencyCode() == $currency) {
+				return $price;
+			}
+		}
+		throw new ObjectNotFoundException('No base price for currency: ' . $currency);
+	}
+
+	public function isPaid() {
+		foreach ($this->basePrice as $price) {
+			if ($price->getAmount() > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -84,6 +84,8 @@ class Package implements WorkingObject {
 	/**
 	 * @param string $languageCode
 	 * @return DisplayName
+	 *
+	 * @throws ObjectNotFoundException
 	 */
 	public function getDisplayNameForLanguage($languageCode) {
 		foreach ($this->displayNames as $displayName) {
