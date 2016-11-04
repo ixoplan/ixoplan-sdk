@@ -4,13 +4,12 @@ namespace Ixolit\Dislo;
 
 use Ixolit\Dislo\Exceptions\AuthenticationException;
 use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
-use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\DisloException;
+use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\CDERequestClient;
 use Ixolit\Dislo\Request\RequestClient;
-use Ixolit\Dislo\Response\UserAuthenticateResponse;
 use Ixolit\Dislo\Response\BillingCloseFlexibleResponse;
 use Ixolit\Dislo\Response\BillingCreateFlexibleResponse;
 use Ixolit\Dislo\Response\BillingCreatePaymentResponse;
@@ -22,8 +21,6 @@ use Ixolit\Dislo\Response\BillingGetEventsForUserResponse;
 use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
-use Ixolit\Dislo\Response\UserChangePasswordResponse;
-use Ixolit\Dislo\Response\UserDeauthenticateResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponse;
@@ -42,8 +39,11 @@ use Ixolit\Dislo\Response\SubscriptionExternalCloseResponse;
 use Ixolit\Dislo\Response\SubscriptionExternalCreateResponse;
 use Ixolit\Dislo\Response\SubscriptionGetAllResponse;
 use Ixolit\Dislo\Response\SubscriptionGetResponse;
+use Ixolit\Dislo\Response\UserAuthenticateResponse;
+use Ixolit\Dislo\Response\UserChangePasswordResponse;
 use Ixolit\Dislo\Response\UserChangeResponse;
 use Ixolit\Dislo\Response\UserCreateResponse;
+use Ixolit\Dislo\Response\UserDeauthenticateResponse;
 use Ixolit\Dislo\Response\UserDeleteResponse;
 use Ixolit\Dislo\Response\UserDisableLoginResponse;
 use Ixolit\Dislo\Response\UserEnableLoginResponse;
@@ -167,7 +167,7 @@ class Client {
 				throw new DisloException('A RequestClient parameter is required when not running in the CDE!');
 			}
 		}
-		$this->requestClient = $requestClient;
+		$this->requestClient  = $requestClient;
 		$this->forceTokenMode = $forceTokenMode;
 	}
 
@@ -251,8 +251,6 @@ class Client {
 	 * @param User|int|string  $userTokenOrId user authentication token or id
 	 *
 	 * @return BillingCreatePaymentResponse
-	 *
-	 * @throws DisloException
 	 */
 	public function billingCreatePayment(
 		$subscription,
@@ -264,7 +262,7 @@ class Client {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
 		$data['billingMethod']  = $billingMethod;
-		$data['returnUrl']      = $returnUrl;
+		$data['returnUrl']      = (string)$returnUrl;
 		$data['subscriptionId'] =
 			($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription);
 		$data['paymentDetails'] = $paymentDetails;
@@ -827,7 +825,7 @@ class Client {
 			$data['couponCode'] = $couponCode;
 		}
 		$this->userToData($userTokenOrId, $data);
-		$response = $this->request('/frontend/subscription/createSubscription', $data);
+		$response = $this->request('/frontend/subscription/create', $data);
 		return SubscriptionCreateResponse::fromResponse($response);
 	}
 
@@ -1401,13 +1399,13 @@ class Client {
 		$addonPackageIdentifiers = []
 	) {
 		$data = [
-			'language' => $language,
+			'language'          => $language,
 			'plaintextPassword' => $plaintextPassword,
-			'metaData' => $metaData,
+			'metaData'          => $metaData,
 			'packageIdentifier' => $packageIdentifier,
-			'currencyCode' => $currencyCode,
-			'billingMethod' => $billingMethod,
-			'returnUrl' => $returnUrl,
+			'currencyCode'      => $currencyCode,
+			'billingMethod'     => $billingMethod,
+			'returnUrl'         => $returnUrl,
 		];
 		if ($paymentDetails) {
 			$data['paymentDetails'] = $paymentDetails;
@@ -1438,7 +1436,7 @@ class Client {
 	) {
 		$data = [
 			'authToken' => $authToken,
-			'metaInfo' => $metaInfo
+			'metaInfo'  => $metaInfo,
 		];
 		if ($ipAddress) {
 			$data['ipAddress'] = $ipAddress;

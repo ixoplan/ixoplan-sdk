@@ -33,18 +33,24 @@ class User implements WorkingObject {
 	private $metaData;
 
 	/**
+	 * @var string|null
+	 */
+	private $currencyCode;
+
+	/**
 	 * User constructor.
 	 *
-	 * @param int $userId
+	 * @param int       $userId
 	 * @param \DateTime $createdAt
-	 * @param bool $loginDisabled
-	 * @param string $language
+	 * @param bool      $loginDisabled
+	 * @param string    $language
 	 * @param \DateTime $lastLoginDate
-	 * @param string $lastLoginIp
-	 * @param array $metaData
+	 * @param string    $lastLoginIp
+	 * @param array     $metaData
+	 * @param string|null  $currencyCode
 	 */
 	public function __construct($userId, $createdAt, $loginDisabled, $language, $lastLoginDate, $lastLoginIp,
-								$metaData) {
+								$metaData, $currencyCode = null) {
 		$this->userId        = $userId;
 		$this->createdAt     = $createdAt;
 		$this->loginDisabled = $loginDisabled;
@@ -52,6 +58,7 @@ class User implements WorkingObject {
 		$this->lastLoginDate = $lastLoginDate;
 		$this->lastLoginIp   = $lastLoginIp;
 		$this->metaData      = $metaData;
+		$this->currencyCode = $currencyCode;
 	}
 
 	/**
@@ -103,6 +110,12 @@ class User implements WorkingObject {
 		return $this->metaData;
 	}
 
+	/**
+	 * @return null|string
+	 */
+	public function getCurrencyCode() {
+		return $this->currencyCode;
+	}
 
 	/**
 	 * @param array $response
@@ -117,7 +130,8 @@ class User implements WorkingObject {
 			$response['language'],
 			($response['lastLoginDate']?new \DateTime($response['lastLoginDate']):null),
 			$response['lastLoginIp'],
-			$response['metaData']
+			$response['metaData'],
+			(isset($response['currencyCode'])?$response['currencyCode']:null)
 		);
 	}
 
@@ -132,7 +146,8 @@ class User implements WorkingObject {
 			'language' => $this->language,
 			'lastLoginDate' => ($this->lastLoginDate?$this->lastLoginDate->format('Y-m-d H:i:s'):null),
 			'lastLoginIp' => $this->lastLoginIp,
-			'metaData' => $this->metaData
+			'metaData' => $this->metaData,
+			'currencyCode' => $this->currencyCode
 		];
 	}
 }

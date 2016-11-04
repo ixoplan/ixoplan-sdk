@@ -45,11 +45,11 @@ class Package implements WorkingObject {
 	 * @param bool               $signupAvailable
 	 * @param Package[]          $addonPackages
 	 * @param string[]           $metaData
-	 * @param PackagePeriod      $initialPeriod
+	 * @param PackagePeriod|null $initialPeriod
 	 * @param PackagePeriod|null $recurringPeriod
 	 */
 	public function __construct($packageIdentifier, $serviceIdentifier, $displayNames, $signupAvailable,
-								$addonPackages, $metaData, PackagePeriod $initialPeriod, $recurringPeriod) {
+								$addonPackages, $metaData, $initialPeriod, $recurringPeriod) {
 		$this->packageIdentifier = $packageIdentifier;
 		$this->serviceIdentifier = $serviceIdentifier;
 		$this->displayNames      = $displayNames;
@@ -93,7 +93,8 @@ class Package implements WorkingObject {
 				return $displayName;
 			}
 		}
-		throw new ObjectNotFoundException();
+		throw new ObjectNotFoundException('No display name for language ' . $languageCode . ' on package ' .
+			$this->packageIdentifier);
 	}
 
 	/**
@@ -118,7 +119,7 @@ class Package implements WorkingObject {
 	}
 
 	/**
-	 * @return PackagePeriod
+	 * @return PackagePeriod|null
 	 */
 	public function getInitialPeriod() {
 		return $this->initialPeriod;
@@ -152,7 +153,7 @@ class Package implements WorkingObject {
 			$response['signupAvailable'],
 			$addonPackages,
 			$response['metaData'],
-			PackagePeriod::fromResponse($response['initialPeriod']),
+			($response['initialPeriod']?PackagePeriod::fromResponse($response['initialPeriod']):null),
 			($response['recurringPeriod']?PackagePeriod::fromResponse($response['recurringPeriod']):null)
 		);
 	}

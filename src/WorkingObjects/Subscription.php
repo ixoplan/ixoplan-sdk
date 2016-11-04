@@ -76,7 +76,7 @@ class Subscription implements WorkingObject {
 	 * @param Package        $currentPackage
 	 * @param int            $userId
 	 * @param string         $status
-	 * @param \DateTime      $startedAt
+	 * @param \DateTime|null $startedAt
 	 * @param \DateTime|null $canceledAt
 	 * @param \DateTime|null $closedAt
 	 * @param \DateTime|null $expiresAt
@@ -88,9 +88,10 @@ class Subscription implements WorkingObject {
 	 * @param Package|null   $nextPackage
 	 * @param Subscription[] $addonSubscriptions
 	 */
-	public function __construct($subscriptionId, Package $currentPackage, $userId, $status, \DateTime $startedAt,
-								$canceledAt, $closedAt, $expiresAt, $nextBillingAt, $currencyCode, $isInitialPeriod,
-								$isProvisioned, $provisioningMetaData, $nextPackage, $addonSubscriptions) {
+	public function __construct(
+		$subscriptionId, Package $currentPackage, $userId, $status, $startedAt,
+		$canceledAt, $closedAt, $expiresAt, $nextBillingAt, $currencyCode, $isInitialPeriod,
+		$isProvisioned, $provisioningMetaData, $nextPackage, $addonSubscriptions) {
 		$this->subscriptionId       = $subscriptionId;
 		$this->currentPackage       = $currentPackage;
 		$this->userId               = $userId;
@@ -285,5 +286,12 @@ class Subscription implements WorkingObject {
 			'nextPackage' => ($this->nextPackage?$this->nextPackage->toArray():null),
 			'addonSubscriptions' => $addonSubscriptions
 		];
+	}
+
+	public function isActive() {
+		return \in_array($this->getStatus(), [
+			self::STATUS_RUNNING,
+			self::STATUS_CANCELED
+		]);
 	}
 }
