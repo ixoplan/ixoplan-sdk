@@ -19,6 +19,7 @@ use Ixolit\Dislo\Response\BillingExternalGetProfileResponse;
 use Ixolit\Dislo\Response\BillingGetEventResponse;
 use Ixolit\Dislo\Response\BillingGetEventsForUserResponse;
 use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
+use Ixolit\Dislo\Response\BillingMethodsGetResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
@@ -172,6 +173,26 @@ class Client {
 	}
 
 	/**
+	 * Retrieve the list of payment methods.
+	 *
+	 * @param string|null $packageIdentifier
+	 *
+	 * @return BillingMethodsGetResponse
+	 */
+	public function billingMethodsGet(
+		$packageIdentifier = null
+	) {
+		if (!$packageIdentifier) {
+			$response = $this->request('/frontend/billing/getPaymentMethods', []);
+		} else {
+			$response = $this->request('/frontend/billing/getPaymentMethodsForPackage', [
+				'packageIdentifier' => $packageIdentifier
+			]);
+		}
+		return BillingMethodsGetResponse::fromResponse($response);
+	}
+
+	/**
 	 * Closes the flexible payment method for a user.
 	 *
 	 * Note: once you close an active flexible, subscriptions cannot get extended automatically!
@@ -267,6 +288,9 @@ class Client {
 			($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription);
 		$data['paymentDetails'] = $paymentDetails;
 		$response               = $this->request('/frontend/billing/createPayment', $data);
+		if (!$response['redirectUrl']) {
+			$response['redirectUrl'] = $returnUrl;
+		}
 		return BillingCreatePaymentResponse::fromResponse($response);
 	}
 
