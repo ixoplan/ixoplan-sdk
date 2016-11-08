@@ -1051,7 +1051,7 @@ class Client {
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
 		];
 		$this->userToData($userTokenOrId, $data);
-		$response = $this->request('/frontend/subscription/getSubscription', $data);
+		$response = $this->request('/frontend/subscription/get', $data);
 		return SubscriptionGetResponse::fromResponse($response);
 	}
 
