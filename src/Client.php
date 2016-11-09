@@ -54,6 +54,9 @@ use Ixolit\Dislo\Response\UserGetMetaProfileResponse;
 use Ixolit\Dislo\Response\UserGetResponse;
 use Ixolit\Dislo\Response\UserGetSignupStatusResponse;
 use Ixolit\Dislo\Response\UserGetTokensResponse;
+use Ixolit\Dislo\Response\UserRecoveryCheckResponse;
+use Ixolit\Dislo\Response\UserRecoveryFinishResponse;
+use Ixolit\Dislo\Response\UserRecoveryStartResponse;
 use Ixolit\Dislo\Response\UserSignupWithPaymentResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
@@ -186,7 +189,7 @@ class Client {
 			$response = $this->request('/frontend/billing/getPaymentMethods', []);
 		} else {
 			$response = $this->request('/frontend/billing/getPaymentMethodsForPackage', [
-				'packageIdentifier' => $packageIdentifier
+				'packageIdentifier' => $packageIdentifier,
 			]);
 		}
 		return BillingMethodsGetResponse::fromResponse($response);
@@ -1481,5 +1484,61 @@ class Client {
 	public function userFind($searchTerm) {
 		$response = $this->request('/frontend/user/findUser', ['searchTerm' => $searchTerm]);
 		return UserFindResponse::fromResponse($response);
+	}
+
+
+	/**
+	 * Start the user recovery process.
+	 *
+	 * @param string $userIdentifier Unique identifier for the user needing recovery.
+	 * @param string $ipAddress      IP address of the request.
+	 * @param string $resetLink      Link the user can click to do password recovery. %s will be replaced with the
+	 *                               recovery code.
+	 *
+	 * @return UserRecoveryStartResponse
+	 */
+	public function userRecoveryStart($userIdentifier, $ipAddress, $resetLink) {
+		$response = $this->request('/frontend/user/passwordRecovery/start', [
+			'identifier' => $userIdentifier,
+			'ipAddress' => $ipAddress,
+			'resetLink' => $resetLink
+		]);
+		return UserRecoveryStartResponse::fromResponse($response);
+	}
+
+	/**
+	 * Check if a given token is valid.
+	 *
+	 * @param string $recoveryToken
+	 * @param string $ipAddress
+	 *
+	 * @return UserRecoveryCheckResponse
+	 */
+	public function userRecoveryCheck($recoveryToken, $ipAddress) {
+		$response = $this->request('/frontend/user/passwordRecovery/check', [
+			'recoveryToken' => $recoveryToken,
+			'ipAddress' => (string)$ipAddress
+		]);
+		return UserRecoveryCheckResponse::fromResponse($response);
+	}
+
+	/**
+	 * Finish the account recovery process.
+	 *
+	 * @param string $recoveryToken
+	 * @param string $ipAddress
+	 * @param string $newPassword
+	 *
+	 * @return UserRecoveryFinishResponse
+	 *
+	 * @throws ObjectNotFoundException
+	 */
+	public function userRecoveryFinish($recoveryToken, $ipAddress, $newPassword) {
+		$response = $this->request('/frontend/user/passwordRecovery/finalize', [
+			'recoveryToken' => $recoveryToken,
+			'ipAddress' => $ipAddress,
+			'plaintextPassword' => $newPassword
+		]);
+		return UserRecoveryFinishResponse::fromResponse($response);
 	}
 }
