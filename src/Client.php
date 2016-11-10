@@ -26,6 +26,7 @@ use Ixolit\Dislo\Response\PackagesListResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculatePriceResponse;
+use Ixolit\Dislo\Response\SubscriptionCallSpiResponse;
 use Ixolit\Dislo\Response\SubscriptionCancelPackageChangeResponse;
 use Ixolit\Dislo\Response\SubscriptionCancelResponse;
 use Ixolit\Dislo\Response\SubscriptionChangeResponse;
@@ -1540,5 +1541,33 @@ class Client {
 			'plaintextPassword' => $newPassword
 		]);
 		return UserRecoveryFinishResponse::fromResponse($response);
+	}
+
+	/**
+	 * Call a service provider function related to the subscription. Specific calls depend on the SPI connected to
+	 * the service behind the subscription.
+	 *
+	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
+	 * @param Subscription|int $subscriptionId
+	 * @param string           $method
+	 * @param array            $params
+	 */
+	public function subscriptionCallSpi(
+		$userTokenOrId,
+		$subscriptionId,
+		$method,
+		$params
+	) {
+		if ($subscriptionId instanceof Subscription) {
+			$subscriptionId = $subscriptionId->getSubscriptionId();
+		}
+		$data = [
+			'subscriptionId' => $subscriptionId,
+			'method' => $method,
+			'params' => $params
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/callSpi', $data);
+		return SubscriptionCallSpiResponse::fromResponse($response);
 	}
 }
