@@ -40,6 +40,7 @@ use Ixolit\Dislo\Response\SubscriptionExternalChangeResponse;
 use Ixolit\Dislo\Response\SubscriptionExternalCloseResponse;
 use Ixolit\Dislo\Response\SubscriptionExternalCreateResponse;
 use Ixolit\Dislo\Response\SubscriptionGetAllResponse;
+use Ixolit\Dislo\Response\SubscriptionGetPossibleUpgradesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetResponse;
 use Ixolit\Dislo\Response\UserAuthenticateResponse;
 use Ixolit\Dislo\Response\UserChangePasswordResponse;
@@ -72,8 +73,11 @@ use Ixolit\Dislo\WorkingObjects\User;
  * https://docs.dislo.com/
  */
 class Client {
-	const COUPON_EVENT_START = 'subscription_start';
-	const COUPON_EVENT_UPGRADE = 'subscription_upgrade';
+	const COUPON_EVENT_START    = 'subscription_start';
+	const COUPON_EVENT_UPGRADE  = 'subscription_upgrade';
+
+	const PLAN_CHANGE_IMMEDIATE = 'immediate';
+	const PLAN_CHANGE_QUEUED    = 'queued';
 
 	/**
 	 * @var RequestClient
@@ -1551,6 +1555,8 @@ class Client {
 	 * @param Subscription|int $subscriptionId
 	 * @param string           $method
 	 * @param array            $params
+	 *
+	 * @return SubscriptionCallSpiResponse
 	 */
 	public function subscriptionCallSpi(
 		$userTokenOrId,
@@ -1569,5 +1575,22 @@ class Client {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/callSpi', $data);
 		return SubscriptionCallSpiResponse::fromResponse($response);
+	}
+
+	public function subscriptionGetPossibleUpgrades(
+		$userTokenOrId,
+		$subscriptionId,
+		$type = ''
+	) {
+		$data = [
+			'subscriptionId' =>
+				($subscriptionId instanceof Subscription?$subscriptionId->getSubscriptionId():$subscriptionId)
+		];
+		if ($type) {
+			$data['type'] = $type;
+		}
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/getPossiblePlanChanges', $data);
+		return SubscriptionGetPossibleUpgradesResponse::fromResponse($response);
 	}
 }

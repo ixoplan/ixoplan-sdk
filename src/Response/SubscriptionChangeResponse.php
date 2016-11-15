@@ -47,7 +47,7 @@ class SubscriptionChangeResponse {
 	/**
 	 * @return boolean
 	 */
-	public function isNeedsBilling() {
+	public function needsBilling() {
 		return $this->needsBilling;
 	}
 
