@@ -190,7 +190,16 @@ class Subscription implements WorkingObject {
 	 * @return boolean
 	 */
 	public function isIsProvisioned() {
-		return $this->isProvisioned;
+		return $this->isProvisioned();
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isProvisioned() {
+		//todo workaround for API problem
+		return !empty($this->getProvisioningMetaData());
+		//return $this->isProvisioned;
 	}
 
 	/**
