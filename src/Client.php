@@ -22,6 +22,7 @@ use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
 use Ixolit\Dislo\Response\BillingMethodsGetResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
+use Ixolit\Dislo\Response\PackageGetResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponse;
@@ -1022,6 +1023,24 @@ class Client {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/externalCreateSubscription', $data);
 		return SubscriptionExternalCreateResponse::fromResponse($response);
+	}
+
+	/**
+	 * @param string $packageIdentifier
+	 *
+	 * @return PackageGetResponse
+	 * @throws ObjectNotFoundException
+	 */
+	public function packageGet(
+		$packageIdentifier
+	) {
+		$packages = $this->packagesList(null)->getPackages();
+		foreach ($packages as $package) {
+			if ($package->getPackageIdentifier() == $packageIdentifier) {
+				return new PackageGetResponse($package);
+			}
+		}
+		throw new ObjectNotFoundException('package with ID ' . $packageIdentifier);
 	}
 
 	/**

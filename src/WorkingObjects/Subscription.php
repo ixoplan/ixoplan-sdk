@@ -238,6 +238,9 @@ class Subscription implements WorkingObject {
 	 * @return bool
 	 */
 	public function isInPaidPeriod() {
+		if (!$this->isActive()) {
+			return false;
+		}
 		return $this->getCurrentPeriod()->isPaid();
 	}
 
