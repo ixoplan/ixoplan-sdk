@@ -3,6 +3,11 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 class Flexible implements WorkingObject {
+
+	const STATUS_ACTIVE = 'active';
+	const STATUS_CLOSED = 'closed';
+	const STATUS_PENDING = 'pending';
+
 	/**
 	 * @var int
 	 */
