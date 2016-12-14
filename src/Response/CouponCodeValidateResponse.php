@@ -30,7 +30,7 @@ class CouponCodeValidateResponse extends CouponCodeResponse {
 	}
 
 	public static function fromResponse($response, $couponCode, $event) {
-		return new CouponCodeCheckResponse(
+		return new CouponCodeValidateResponse(
 			$response['valid'],
 			$response['reason'],
 			$couponCode,
