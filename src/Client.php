@@ -1633,7 +1633,8 @@ class Client {
 	) {
 		$data = [
 			'verificationLink' => $verificationLink,
-			'ipAddress' => (string)$ipAddress
+			'ipAddress' => (string)$ipAddress,
+			'verificationType' => 'email',
 		];
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/user/verification/start', $data);
