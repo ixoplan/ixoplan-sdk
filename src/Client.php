@@ -62,6 +62,7 @@ use Ixolit\Dislo\Response\UserRecoveryFinishResponse;
 use Ixolit\Dislo\Response\UserRecoveryStartResponse;
 use Ixolit\Dislo\Response\UserSignupWithPaymentResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
+use Ixolit\Dislo\Response\UserVerificationStartResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\WorkingObjects\User;
@@ -1026,6 +1027,53 @@ class Client {
 	}
 
 	/**
+	 * Call a service provider function related to the subscription. Specific calls depend on the SPI connected to
+	 * the service behind the subscription.
+	 *
+	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
+	 * @param Subscription|int $subscriptionId
+	 * @param string           $method
+	 * @param array            $params
+	 *
+	 * @return SubscriptionCallSpiResponse
+	 */
+	public function subscriptionCallSpi(
+		$userTokenOrId,
+		$subscriptionId,
+		$method,
+		$params
+	) {
+		if ($subscriptionId instanceof Subscription) {
+			$subscriptionId = $subscriptionId->getSubscriptionId();
+		}
+		$data = [
+			'subscriptionId' => $subscriptionId,
+			'method' => $method,
+			'params' => $params
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/callSpi', $data);
+		return SubscriptionCallSpiResponse::fromResponse($response);
+	}
+
+	public function subscriptionGetPossibleUpgrades(
+		$userTokenOrId,
+		$subscriptionId,
+		$type = ''
+	) {
+		$data = [
+			'subscriptionId' =>
+				($subscriptionId instanceof Subscription?$subscriptionId->getSubscriptionId():$subscriptionId)
+		];
+		if ($type) {
+			$data['type'] = $type;
+		}
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/getPossiblePlanChanges', $data);
+		return SubscriptionGetPossibleUpgradesResponse::fromResponse($response);
+	}
+
+	/**
 	 * @param string $packageIdentifier
 	 *
 	 * @return PackageGetResponse
@@ -1567,49 +1615,47 @@ class Client {
 	}
 
 	/**
-	 * Call a service provider function related to the subscription. Specific calls depend on the SPI connected to
-	 * the service behind the subscription.
+	 * Starts the User Verification ProcessWhen using this call, the user will receive an email to his stored email
+	 * address which gives instruction on how to verify. The email message must be configured by using the template
+	 * "token-verification".
 	 *
-	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
-	 * @param Subscription|int $subscriptionId
-	 * @param string           $method
-	 * @param array            $params
+	 * @param string|int|User $userTokenOrId
+	 * @param string          $ipAddress
+	 * @param string          $verificationLink
 	 *
-	 * @return SubscriptionCallSpiResponse
+	 * @return UserVerificationStartResponse
 	 */
-	public function subscriptionCallSpi(
+	public function userEmailVerificationStart(
 		$userTokenOrId,
-		$subscriptionId,
-		$method,
-		$params
+		$ipAddress,
+		$verificationLink
 	) {
-		if ($subscriptionId instanceof Subscription) {
-			$subscriptionId = $subscriptionId->getSubscriptionId();
-		}
 		$data = [
-			'subscriptionId' => $subscriptionId,
-			'method' => $method,
-			'params' => $params
+			'verificationLink' => $verificationLink,
+			'ipAddress' => (string)$ipAddress
 		];
 		$this->userToData($userTokenOrId, $data);
-		$response = $this->request('/frontend/subscription/callSpi', $data);
-		return SubscriptionCallSpiResponse::fromResponse($response);
+		$response = $this->request('/frontend/user/verification/start', $data);
+		return UserVerificationStartResponse::fromResponse($response);
 	}
 
-	public function subscriptionGetPossibleUpgrades(
-		$userTokenOrId,
-		$subscriptionId,
-		$type = ''
+	/**
+	 * Finalizes the users verification Process
+	 *
+	 * @param string|int|User $userTokenOrId
+	 * @param string          $ipAddress
+	 * @param string          $verificationLink
+	 *
+	 * @return UserVerificationStartResponse
+	 */
+	public function userEmailVerificationFinish(
+		$verificationToken
 	) {
 		$data = [
-			'subscriptionId' =>
-				($subscriptionId instanceof Subscription?$subscriptionId->getSubscriptionId():$subscriptionId)
+			'verificationToken' => $verificationToken,
+			'verificationType' => 'email'
 		];
-		if ($type) {
-			$data['type'] = $type;
-		}
-		$this->userToData($userTokenOrId, $data);
-		$response = $this->request('/frontend/subscription/getPossiblePlanChanges', $data);
-		return SubscriptionGetPossibleUpgradesResponse::fromResponse($response);
+		$response = $this->request('/frontend/user/verification/finalize', $data);
+		return UserVerificationFinishResponse::fromResponse($response);
 	}
 }
