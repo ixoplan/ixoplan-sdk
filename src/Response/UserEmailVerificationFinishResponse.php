@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\User;
 
-class UserVerificationFinishResponse {
+class UserEmailVerificationFinishResponse {
 	/**
 	 * @var User
 	 */
@@ -27,9 +27,9 @@ class UserVerificationFinishResponse {
 	/**
 	 * @param array $response
 	 *
-	 * @return UserVerificationFinishResponse
+	 * @return UserEmailVerificationFinishResponse
 	 */
-	public function fromResponse($response) {
-		return new UserVerificationFinishResponse(User::fromResponse($response['user']));
+	public static function fromResponse($response) {
+		return new UserEmailVerificationFinishResponse(User::fromResponse($response['user']));
 	}
 }

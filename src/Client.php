@@ -50,6 +50,7 @@ use Ixolit\Dislo\Response\UserCreateResponse;
 use Ixolit\Dislo\Response\UserDeauthenticateResponse;
 use Ixolit\Dislo\Response\UserDeleteResponse;
 use Ixolit\Dislo\Response\UserDisableLoginResponse;
+use Ixolit\Dislo\Response\UserEmailVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserEnableLoginResponse;
 use Ixolit\Dislo\Response\UserFindResponse;
 use Ixolit\Dislo\Response\UserGetBalanceResponse;
@@ -62,7 +63,7 @@ use Ixolit\Dislo\Response\UserRecoveryFinishResponse;
 use Ixolit\Dislo\Response\UserRecoveryStartResponse;
 use Ixolit\Dislo\Response\UserSignupWithPaymentResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
-use Ixolit\Dislo\Response\UserVerificationStartResponse;
+use Ixolit\Dislo\Response\UserEmailVerificationStartResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\WorkingObjects\User;
@@ -1623,7 +1624,7 @@ class Client {
 	 * @param string          $ipAddress
 	 * @param string          $verificationLink
 	 *
-	 * @return UserVerificationStartResponse
+	 * @return UserEmailVerificationStartResponse
 	 */
 	public function userEmailVerificationStart(
 		$userTokenOrId,
@@ -1636,17 +1637,15 @@ class Client {
 		];
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/user/verification/start', $data);
-		return UserVerificationStartResponse::fromResponse($response);
+		return UserEmailVerificationStartResponse::fromResponse($response);
 	}
 
 	/**
 	 * Finalizes the users verification Process
 	 *
-	 * @param string|int|User $userTokenOrId
-	 * @param string          $ipAddress
-	 * @param string          $verificationLink
+	 * @param $verificationToken
 	 *
-	 * @return UserVerificationStartResponse
+	 * @return UserEmailVerificationFinishResponse
 	 */
 	public function userEmailVerificationFinish(
 		$verificationToken
@@ -1656,6 +1655,6 @@ class Client {
 			'verificationType' => 'email'
 		];
 		$response = $this->request('/frontend/user/verification/finalize', $data);
-		return UserVerificationFinishResponse::fromResponse($response);
+		return UserEmailVerificationFinishResponse::fromResponse($response);
 	}
 }

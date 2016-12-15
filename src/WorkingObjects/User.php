@@ -168,7 +168,7 @@ class User implements WorkingObject {
 			'lastLoginIp' => $this->lastLoginIp,
 			'metaData' => $this->metaData,
 			'currencyCode' => $this->currencyCode,
-			'verifiedData' => $this->verifiedData.
+			'verifiedData' => $this->verifiedData,
 		];
 	}
 }
