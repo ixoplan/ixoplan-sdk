@@ -1656,5 +1656,6 @@ class Client {
 		];
 		$response = $this->request('/frontend/user/verification/finalize', $data);
 		return UserEmailVerificationFinishResponse::fromResponse($response);
+
 	}
 }
