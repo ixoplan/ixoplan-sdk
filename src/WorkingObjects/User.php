@@ -38,19 +38,23 @@ class User implements WorkingObject {
 	private $currencyCode;
 
 	/**
-	 * User constructor.
-	 *
-	 * @param int       $userId
-	 * @param \DateTime $createdAt
-	 * @param bool      $loginDisabled
-	 * @param string    $language
-	 * @param \DateTime $lastLoginDate
-	 * @param string    $lastLoginIp
-	 * @param array     $metaData
-	 * @param string|null  $currencyCode
+	 * @var array
+	 */
+	private $verifiedData = [];
+
+	/**
+	 * @param int         $userId
+	 * @param \DateTime   $createdAt
+	 * @param bool        $loginDisabled
+	 * @param string      $language
+	 * @param \DateTime   $lastLoginDate
+	 * @param string      $lastLoginIp
+	 * @param array       $metaData
+	 * @param string|null $currencyCode
+	 * @param string[]    $verifiedData
 	 */
 	public function __construct($userId, $createdAt, $loginDisabled, $language, $lastLoginDate, $lastLoginIp,
-								$metaData, $currencyCode = null) {
+								$metaData, $currencyCode = null, $verifiedData = []) {
 		$this->userId        = $userId;
 		$this->createdAt     = $createdAt;
 		$this->loginDisabled = $loginDisabled;
@@ -58,7 +62,8 @@ class User implements WorkingObject {
 		$this->lastLoginDate = $lastLoginDate;
 		$this->lastLoginIp   = $lastLoginIp;
 		$this->metaData      = $metaData;
-		$this->currencyCode = $currencyCode;
+		$this->currencyCode  = $currencyCode;
+		$this->verifiedData  = $verifiedData;
 	}
 
 	/**
@@ -118,6 +123,20 @@ class User implements WorkingObject {
 	}
 
 	/**
+	 * @return string[]
+	 */
+	public function getVerifiedData() {
+		return $this->verifiedData;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isEmailVerified() {
+		return in_array('email', $this->verifiedData);
+	}
+
+	/**
 	 * @param array $response
 	 *
 	 * @return self
@@ -131,7 +150,8 @@ class User implements WorkingObject {
 			($response['lastLoginDate']?new \DateTime($response['lastLoginDate']):null),
 			$response['lastLoginIp'],
 			$response['metaData'],
-			(isset($response['currencyCode'])?$response['currencyCode']:null)
+			(isset($response['currencyCode'])?$response['currencyCode']:null),
+			(isset($response['verifiedData'])?$response['verifiedData']:[])
 		);
 	}
 
@@ -147,7 +167,8 @@ class User implements WorkingObject {
 			'lastLoginDate' => ($this->lastLoginDate?$this->lastLoginDate->format('Y-m-d H:i:s'):null),
 			'lastLoginIp' => $this->lastLoginIp,
 			'metaData' => $this->metaData,
-			'currencyCode' => $this->currencyCode
+			'currencyCode' => $this->currencyCode,
+			'verifiedData' => $this->verifiedData.
 		];
 	}
 }
