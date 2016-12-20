@@ -61,7 +61,6 @@ use Ixolit\Dislo\Response\UserGetTokensResponse;
 use Ixolit\Dislo\Response\UserRecoveryCheckResponse;
 use Ixolit\Dislo\Response\UserRecoveryFinishResponse;
 use Ixolit\Dislo\Response\UserRecoveryStartResponse;
-use Ixolit\Dislo\Response\UserSignupWithPaymentResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
 use Ixolit\Dislo\Response\UserEmailVerificationStartResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
@@ -1465,59 +1464,6 @@ class Client {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/user/get', $data);
 		return UserGetResponse::fromResponse($response);
-	}
-
-	/**
-	 * Single-Step Signup with Subscription and Payment.
-	 *
-	 * @param string $language                ISO-2-letter language key to use for this user
-	 * @param string $plaintextPassword       password for this user
-	 * @param array  $metaData                meta data for this user (such as first name, last names etc.). NOTE:
-	 *                                        these meta data keys must exist in the meta data profile in Dislo
-	 * @param string $packageIdentifier       the package for the subscription
-	 * @param string $currencyCode            currency which should be used for the user
-	 * @param string $billingMethod           the billing method identifier
-	 * @param string $returnUrl               the finalize URL on your side, to which the user will be redirected after
-	 *                                        payment (for redirect-based payment such as PayPal)
-	 * @param array  $paymentDetails          optional - additional data for payment (e.g. transactionToken for credit
-	 *                                        card payments)
-	 * @param string $couponCode              optional - coupon which should be applied
-	 * @param array  $addonPackageIdentifiers optional - additional addon packages
-	 *
-	 * @return UserSignupWithPaymentResponse
-	 */
-	public function userSignupWithPayment(
-		$language,
-		$plaintextPassword,
-		$metaData,
-		$packageIdentifier,
-		$currencyCode,
-		$billingMethod,
-		$returnUrl,
-		$paymentDetails = [],
-		$couponCode = '',
-		$addonPackageIdentifiers = []
-	) {
-		$data = [
-			'language'          => $language,
-			'plaintextPassword' => $plaintextPassword,
-			'metaData'          => $metaData,
-			'packageIdentifier' => $packageIdentifier,
-			'currencyCode'      => $currencyCode,
-			'billingMethod'     => $billingMethod,
-			'returnUrl'         => $returnUrl,
-		];
-		if ($paymentDetails) {
-			$data['paymentDetails'] = $paymentDetails;
-		}
-		if ($couponCode) {
-			$data['couponCode'] = $couponCode;
-		}
-		if ($addonPackageIdentifiers) {
-			$data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
-		}
-		$response = $this->request('/frontend/user/signupWithPayment', $data);
-		return UserSignupWithPaymentResponse::fromResponse($response);
 	}
 
 	/**
