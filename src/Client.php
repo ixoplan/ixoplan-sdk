@@ -10,12 +10,14 @@ use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\CDERequestClient;
 use Ixolit\Dislo\Request\RequestClient;
+use Ixolit\Dislo\Response\BillingCloseActiveRecurringResponse;
 use Ixolit\Dislo\Response\BillingCloseFlexibleResponse;
 use Ixolit\Dislo\Response\BillingCreateFlexibleResponse;
 use Ixolit\Dislo\Response\BillingCreatePaymentResponse;
 use Ixolit\Dislo\Response\BillingExternalCreateChargebackResponse;
 use Ixolit\Dislo\Response\BillingExternalCreateChargeResponse;
 use Ixolit\Dislo\Response\BillingExternalGetProfileResponse;
+use Ixolit\Dislo\Response\BillingGetActiveRecurringResponse;
 use Ixolit\Dislo\Response\BillingGetEventResponse;
 use Ixolit\Dislo\Response\BillingGetEventsForUserResponse;
 use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
@@ -532,6 +534,52 @@ class Client {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/billing/getFlexible', $data);
 		return BillingGetFlexibleResponse::fromResponse($response);
+	}
+
+	/**
+	 * Get active recurring payment method for a subscription
+	 *
+	 * @param Subscription|int $subscription  ID for the subscription expected to have an external profile
+	 * @param User|int|string $userTokenOrId User authentication token or user ID.
+	 *
+	 * @return BillingGetActiveRecurringResponse
+	 *
+	 * @throws DisloException
+	 */
+	public function billingGetActiveRecurring(
+		$subscription,
+		$userTokenOrId = null
+	) {
+		$data = [
+			'subscriptionId' =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/billing/getActiveRecurring', $data);
+		return BillingGetActiveRecurringResponse::fromResponse($response);
+	}
+
+	/**
+	 * Close active recurring payment method for a subscription
+	 *
+	 * @param Subscription|int $subscription  ID for the subscription expected to have an external profile
+	 * @param User|int|string $userTokenOrId User authentication token or user ID.
+	 *
+	 * @return BillingCloseActiveRecurringResponse
+	 *
+	 * @throws DisloException
+	 */
+	public function billingCloseActiveRecurring(
+		$subscription,
+		$userTokenOrId = null
+	) {
+		$data = [
+			'subscriptionId' =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/billing/closeActiveRecurring', $data);
+		return BillingCloseActiveRecurringResponse::fromResponse($response);
 	}
 
 	/**
