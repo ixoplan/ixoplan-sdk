@@ -8,7 +8,7 @@ class BillingEvent implements WorkingObject {
 	const TYPE_REFUND = 'refund';
 	const TYPE_CHARGEBACK = 'chargeback';
 
-	const STATUS_PENDING = 'pending';
+	const STATUS_REQUESTED = 'requested';
 	const STATUS_SUCCESS = 'success';
 	const STATUS_ERROR = 'error';
 
