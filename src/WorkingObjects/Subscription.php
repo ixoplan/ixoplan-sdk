@@ -3,10 +3,12 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 class Subscription implements WorkingObject {
+
 	const STATUS_PENDING = 'pending';
 	const STATUS_RUNNING = 'running';
 	const STATUS_CANCELED = 'canceled';
 	const STATUS_CLOSED = 'closed';
+	const STATUS_ARCHIVED = 'archived';
 
 	/**
 	 * @var int
