@@ -726,7 +726,7 @@ class Client {
 			'userComments'     => $userComments,
 		];
 		$this->userToData($userTokenOrId, $data);
-		$response = $this->request('/frontend/subscription/cancelPackageChange', $data);
+		$response = $this->request('/frontend/subscription/cancel', $data);
 		return SubscriptionCancelResponse::fromResponse($response);
 	}
 
