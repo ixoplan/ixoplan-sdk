@@ -817,7 +817,7 @@ class Client {
 			'closeReason'    => $closeReason,
 		];
 		$this->userToData($userTokenOrId, $data);
-		$response = $this->request('/frontend/subscription/closeSubscription', $data);
+		$response = $this->request('/frontend/subscription/close', $data);
 		return SubscriptionCloseResponse::fromResponse($response);
 	}
 
@@ -838,7 +838,7 @@ class Client {
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
 		];
 		$this->userToData($userTokenOrId, $data);
-		$response = $this->request('/frontend/subscription/continueSubscription', $data);
+		$response = $this->request('/frontend/subscription/continue', $data);
 		return SubscriptionContinueResponse::fromResponse($response);
 	}
 
