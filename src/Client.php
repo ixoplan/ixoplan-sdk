@@ -827,7 +827,7 @@ class Client {
 	 * @param Subscription|int $subscription  the id of the subscription you want to close
 	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
 	 *
-	 * @return SubscriptionCloseResponse
+	 * @return SubscriptionContinueResponse
 	 */
 	public function subscriptionContinue(
 		$subscription,
