@@ -622,6 +622,7 @@ class Client {
 	 * @param string           $newPackageIdentifier
 	 * @param string|null      $couponCode
 	 * @param User|string|int  $userTokenOrId User authentication token or user ID.
+	 * @param string[]		   $addonPackageIdentifiers
 	 *
 	 * @return SubscriptionCalculatePackageChangeResponse
 	 */
@@ -629,13 +630,15 @@ class Client {
 		$subscription,
 		$newPackageIdentifier,
 		$couponCode = null,
-		$userTokenOrId = null
+		$userTokenOrId = null,
+		$addonPackageIdentifiers = []
 	) {
 		$data = [
-			'subscriptionId'       =>
+			'subscriptionId'          =>
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
-			'newPackageIdentifier' => $newPackageIdentifier,
-			'couponCode'           => $couponCode,
+			'newPackageIdentifier'    => $newPackageIdentifier,
+			'couponCode'           	  => $couponCode,
+			'addonPackageIdentifiers' => $addonPackageIdentifiers
 		];
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/calculatePackageChange', $data);
