@@ -10,11 +10,16 @@ class BillingCreateFlexibleResponse {
 	 */
 	private $flexible;
 
+	/** @var string */
+	private $redirectUrl;
+
 	/**
-	 * @param Flexible $flexible
+	 * @param Flexible      $flexible
+	 * @param string|null   $redirectUrl
 	 */
-	public function __construct($flexible) {
+	public function __construct($flexible, $redirectUrl = null) {
 		$this->flexible = $flexible;
+		$this->redirectUrl = $redirectUrl;
 	}
 
 	/**
@@ -25,11 +30,21 @@ class BillingCreateFlexibleResponse {
 	}
 
 	/**
+	 * @return null|string
+	 */
+	public function getRedirectUrl() {
+		return $this->redirectUrl;
+	}
+
+	/**
 	 * @param array $response
 	 *
 	 * @return BillingCreateFlexibleResponse
 	 */
 	public static function fromResponse($response) {
-		return new BillingCreateFlexibleResponse(Flexible::fromResponse($response['flexible']));
+		return new BillingCreateFlexibleResponse(
+			Flexible::fromResponse($response['flexible']),
+			isset($response['redirectUrl']) ? $response['redirectUrl'] : null
+		);
 	}
 }

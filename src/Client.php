@@ -20,6 +20,7 @@ use Ixolit\Dislo\Response\BillingExternalGetProfileResponse;
 use Ixolit\Dislo\Response\BillingGetActiveRecurringResponse;
 use Ixolit\Dislo\Response\BillingGetEventResponse;
 use Ixolit\Dislo\Response\BillingGetEventsForUserResponse;
+use Ixolit\Dislo\Response\BillingGetFlexibleByIdentifierResponse;
 use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
 use Ixolit\Dislo\Response\BillingMethodsGetResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
@@ -258,7 +259,7 @@ class Client {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
 		$data['billingMethod']  = $billingMethod;
-		$data['returnUrl']      = $returnUrl;
+		$data['returnUrl']      = (string)$returnUrl;
 		$data['paymentDetails'] = $paymentDetails;
 		if ($currencyCode) {
 			$data['currencyCode'] = $currencyCode;
@@ -534,6 +535,29 @@ class Client {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/billing/getFlexible', $data);
 		return BillingGetFlexibleResponse::fromResponse($response);
+	}
+
+	/**
+	 * Get specific payment method for a user by its identifier
+	 *
+	 * @param int 			  $flexibleIdentifier
+	 * @param User|int|string $userTokenOrId User authentication token or user ID.
+	 *
+	 * @return BillingGetFlexibleByIdentifierResponse
+	 *
+	 * @throws DisloException
+	 * @throws ObjectNotFoundException
+	 */
+	public function billingGetFlexibleByIdentifier(
+		$flexibleIdentifier,
+		$userTokenOrId
+	) {
+		$data = [
+			'flexibleId' => $flexibleIdentifier
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/billing/getFlexibleById', $data);
+		return BillingGetFlexibleByIdentifierResponse::fromResponse($response);
 	}
 
 	/**

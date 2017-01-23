@@ -19,14 +19,21 @@ class BillingMethod implements WorkingObject {
 	private $displayName;
 
 	/**
-	 * @param int $billingMethodId
-	 * @param string $name
-	 * @param string $displayName
+	 * @var bool|null
 	 */
-	public function __construct($billingMethodId, $name, $displayName) {
+	private $available;
+
+	/**
+	 * @param int    	$billingMethodId
+	 * @param string 	$name
+	 * @param string 	$displayName
+	 * @param bool|null $available
+	 */
+	public function __construct($billingMethodId, $name, $displayName, $available = null) {
 		$this->billingMethodId = $billingMethodId;
 		$this->name            = $name;
 		$this->displayName     = $displayName;
+		$this->available       = $available;
 	}
 
 	/**
@@ -51,6 +58,13 @@ class BillingMethod implements WorkingObject {
 	}
 
 	/**
+	 * @return bool|null
+	 */
+	public function isAvailable() {
+		return $this->available;
+	}
+
+	/**
 	 * @param array $response
 	 *
 	 * @return self
@@ -59,7 +73,8 @@ class BillingMethod implements WorkingObject {
 		return new BillingMethod(
 			$response['billingMethodId'],
 			$response['name'],
-			$response['displayName']
+			$response['displayName'],
+			isset($response['available']) ? $response['available'] : null
 		);
 	}
 
@@ -71,7 +86,8 @@ class BillingMethod implements WorkingObject {
 			'_type' => 'BillingMethod',
 			'billingMethodId' => $this->getBillingMethodId(),
 			'name' => $this->getName(),
-			'displayName' => $this->getDisplayName()
+			'displayName' => $this->getDisplayName(),
+			'available' => $this->isAvailable(),
 		];
 	}
 }
