@@ -22,6 +22,7 @@ use Ixolit\Dislo\Response\BillingGetEventResponse;
 use Ixolit\Dislo\Response\BillingGetEventsForUserResponse;
 use Ixolit\Dislo\Response\BillingGetFlexibleByIdentifierResponse;
 use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
+use Ixolit\Dislo\Response\BillingMethodsGetAvailableResponse;
 use Ixolit\Dislo\Response\BillingMethodsGetResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
@@ -203,6 +204,27 @@ class Client {
 			]);
 		}
 		return BillingMethodsGetResponse::fromResponse($response);
+	}
+
+	/**
+	 * Retrieve the list of available payment methods.
+	 *
+	 * @param string|null $packageIdentifier
+	 *
+	 * @return BillingMethodsGetAvailableResponse
+	 */
+	public function billingMethodsGetAvailable(
+		$packageIdentifier = null
+	) {
+		$billingMethods = $this->billingMethodsGet($packageIdentifier)->getBillingMethods();
+		$availableBillingMethods = [];
+		foreach ($billingMethods as $billingMethod) {
+			if ($billingMethod->isAvailable()) {
+				$availableBillingMethods[] = $billingMethod;
+			}
+		}
+
+		return new BillingMethodsGetAvailableResponse($availableBillingMethods);
 	}
 
 	/**
