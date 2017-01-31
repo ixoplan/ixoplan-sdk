@@ -1567,6 +1567,29 @@ class Client {
 	}
 
 	/**
+	 * Extend a users AuthToken expiry time
+	 *
+	 * @param string $authToken
+	 * @param string $ipAddress
+	 *
+	 * @return UserUpdateTokenResponse
+	 */
+	public function userExtendToken(
+		$authToken,
+		$ipAddress = ''
+	) {
+		$data = [
+			'authToken' => $authToken,
+			'forceExtend' => true,
+		];
+		if ($ipAddress) {
+			$data['ipAddress'] = $ipAddress;
+		}
+		$response = $this->request('/frontend/user/updateToken', $data);
+		return UserUpdateTokenResponse::fromResponse($response);
+	}
+
+	/**
 	 * Searches among the unique properties of all users in order to find one user. The search term must match exactly.
 	 *
 	 * @param string $searchTerm
