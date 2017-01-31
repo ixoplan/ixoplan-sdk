@@ -1571,21 +1571,25 @@ class Client {
 	 *
 	 * @param string $authToken
 	 * @param string $ipAddress
+	 * @param int    $tokenLifetime
 	 *
 	 * @return UserUpdateTokenResponse
 	 */
 	public function userExtendToken(
 		$authToken,
-		$ipAddress = ''
+		$ipAddress = '',
+		$tokenLifetime = null
 	) {
 		$data = [
 			'authToken' => $authToken,
-			'forceExtend' => true,
 		];
 		if ($ipAddress) {
 			$data['ipAddress'] = $ipAddress;
 		}
-		$response = $this->request('/frontend/user/updateToken', $data);
+		if (isset($tokenLifetime)) {
+			$data['tokenlifetime'] = \round($tokenLifetime / 60);
+		}
+		$response = $this->request('/frontend/user/extendTokenLifeTime', $data);
 		return UserUpdateTokenResponse::fromResponse($response);
 	}
 
