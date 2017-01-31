@@ -1569,9 +1569,9 @@ class Client {
 	/**
 	 * Extend a users AuthToken expiry time
 	 *
-	 * @param string $authToken
-	 * @param string $ipAddress
-	 * @param int    $tokenLifetime
+	 * @param string   $authToken
+	 * @param string   $ipAddress
+	 * @param int|null $tokenLifetime   Omit to use lifetime set initially
 	 *
 	 * @return UserUpdateTokenResponse
 	 */
