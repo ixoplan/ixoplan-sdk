@@ -10,16 +10,21 @@ class CouponCodeValidateResponse extends CouponCodeResponse {
 	 */
 	private $discountedPrice;
 
+	/** @var Price|null */
+	private $recurringPrice;
+
 	/**
-	 * @param bool   $valid
-	 * @param string $reason
-	 * @param string $couponCode
-	 * @param string $event
-	 * @param Price  $discountedPrice
+	 * @param bool   	 $valid
+	 * @param string 	 $reason
+	 * @param string 	 $couponCode
+	 * @param string 	 $event
+	 * @param Price 	 $discountedPrice
+	 * @param Price|null $recurringPrice
 	 */
-	public function __construct($valid, $reason, $couponCode, $event, Price $discountedPrice) {
+	public function __construct($valid, $reason, $couponCode, $event, Price $discountedPrice, Price $recurringPrice = null) {
 		parent::__construct($valid, $reason, $couponCode, $event);
 		$this->discountedPrice = $discountedPrice;
+		$this->recurringPrice = $recurringPrice;
 	}
 
 	/**
@@ -29,13 +34,21 @@ class CouponCodeValidateResponse extends CouponCodeResponse {
 		return $this->discountedPrice;
 	}
 
+	/**
+	 * @return Price|null
+	 */
+	public function getRecurringPrice() {
+		return $this->recurringPrice;
+	}
+
 	public static function fromResponse($response, $couponCode, $event) {
 		return new CouponCodeValidateResponse(
 			$response['valid'],
 			$response['reason'],
 			$couponCode,
 			$event,
-			Price::fromResponse($response['discountedPrice'])
+			Price::fromResponse($response['discountedPrice']),
+			Price::fromResponse($response['recurringPrice'])
 		);
 	}
 }
