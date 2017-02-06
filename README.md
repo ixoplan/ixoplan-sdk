@@ -6,7 +6,7 @@ PHP SDK for the Dislo API
 ## Usage
 
 ### Instantiate the Client
-The client itself uses a RequestClient interface to communicate with the Dislo API. When running in CDE the RequestClient can be omitted, causing the client to use CDE's internal functions.
+The client is designed for different transport layers. It needs a RequestClient interface (e.g. HTTPRequestClient) to actually communicate with Dislo.
 
     use Ixolit\Dislo\Client;
     use Ixolit\Dislo\HTTP\Guzzle\GuzzleHTTPClientAdapter;

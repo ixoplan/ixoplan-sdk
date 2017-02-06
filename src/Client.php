@@ -8,7 +8,6 @@ use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\DisloException;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
-use Ixolit\Dislo\Request\CDERequestClient;
 use Ixolit\Dislo\Request\RequestClient;
 use Ixolit\Dislo\Response\BillingCloseActiveRecurringResponse;
 use Ixolit\Dislo\Response\BillingCloseFlexibleResponse;
@@ -71,8 +70,10 @@ use Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\WorkingObjects\User;
 
 /**
- * The main client class for use with the Dislo API. Requires a RequestClient class as a parameter when not running
- * inside the CDE. (e.g. HTTPRequestClient).
+ * The main client class for use with the Dislo API.
+ *
+ * Designed for different transport layers. Requires a RequestClient interface for actual communication with Dislo
+ * (e.g. HTTPRequestClient).
  *
  * For details about the Dislo API, the available calls and Dislo itself please read the documentation available at
  * https://docs.dislo.com/
@@ -166,20 +167,16 @@ class Client {
 
 	/**
 	 * Initialize the client with a RequestClient, the class that is responsible for transporting messages to and
-	 * from the Dislo API. If no RequestClient is passed, this class attempts to use the CDE-internal API method.
+	 * from the Dislo API.
 	 *
-	 * @param RequestClient|null $requestClient  Required when not running in the CDE.
-	 * @param bool               $forceTokenMode Force using tokens. Does not allow passing a user Id.
+	 * @param RequestClient $requestClient  Required when not running in the CDE.
+	 * @param bool          $forceTokenMode Force using tokens. Does not allow passing a user Id.
 	 *
 	 * @throws DisloException if the $requestClient parameter is missing
 	 */
-	public function __construct(RequestClient $requestClient = null, $forceTokenMode = true) {
-		if (!$requestClient) {
-			if (\function_exists('\\apiCall')) {
-				$requestClient = new CDERequestClient();
-			} else {
-				throw new DisloException('A RequestClient parameter is required when not running in the CDE!');
-			}
+	public function __construct(RequestClient $requestClient, $forceTokenMode = true) {
+		if (!($requestClient instanceof RequestClient)) {
+			throw new DisloException('A RequestClient parameter is required!');
 		}
 		$this->requestClient  = $requestClient;
 		$this->forceTokenMode = $forceTokenMode;
