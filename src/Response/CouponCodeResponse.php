@@ -82,6 +82,13 @@ abstract class CouponCodeResponse {
 		}
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getEvent() {
+		return $this->event;
+	}
+
 	public static function fromResponse($response, $couponCode, $event) {
 		return new CouponCodeCheckResponse(
 			$response['valid'],
