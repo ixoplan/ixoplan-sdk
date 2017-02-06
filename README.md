@@ -82,3 +82,15 @@ Deauthenticate:
 
     $client->userDeauthenticate($token);
     setcookie('authToken', null, -1);
+
+### Packages
+
+Retrieve a list of packages, optionally filtered by service ID:
+
+    $apiClient = new \Ixolit\Dislo\Client();
+
+    $response = $apiClient->packagesList("1");
+
+    foreach ($response->getPackages() as $package) {
+        echo $package->getDisplayNameForLanguage('en')->getName(), "\n";
+    }
