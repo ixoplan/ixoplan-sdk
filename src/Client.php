@@ -48,13 +48,13 @@ use Ixolit\Dislo\Response\SubscriptionGetAllResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPossibleUpgradesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetResponse;
 use Ixolit\Dislo\Response\UserAuthenticateResponse;
-use Ixolit\Dislo\Response\UserChangePasswordResponse;
 use Ixolit\Dislo\Response\UserChangeResponse;
 use Ixolit\Dislo\Response\UserCreateResponse;
 use Ixolit\Dislo\Response\UserDeauthenticateResponse;
 use Ixolit\Dislo\Response\UserDeleteResponse;
 use Ixolit\Dislo\Response\UserDisableLoginResponse;
 use Ixolit\Dislo\Response\UserEmailVerificationFinishResponse;
+use Ixolit\Dislo\Response\UserEmailVerificationStartResponse;
 use Ixolit\Dislo\Response\UserEnableLoginResponse;
 use Ixolit\Dislo\Response\UserFindResponse;
 use Ixolit\Dislo\Response\UserGetBalanceResponse;
@@ -66,7 +66,6 @@ use Ixolit\Dislo\Response\UserRecoveryCheckResponse;
 use Ixolit\Dislo\Response\UserRecoveryFinishResponse;
 use Ixolit\Dislo\Response\UserRecoveryStartResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
-use Ixolit\Dislo\Response\UserEmailVerificationStartResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\WorkingObjects\User;
@@ -1412,7 +1411,7 @@ class Client {
 		];
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/user/changePassword', $data);
-		return UserChangePasswordResponse::fromResponse($response);
+		return UserChangeResponse::fromResponse($response);
 	}
 
 	/**

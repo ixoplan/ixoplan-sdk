@@ -27,9 +27,9 @@ class SubscriptionContinueResponse {
 	/**
 	 * @param array $response
 	 *
-	 * @return SubscriptionCloseResponse
+	 * @return SubscriptionContinueResponse
 	 */
 	public static function fromResponse($response) {
-		return new SubscriptionCloseResponse(Subscription::fromResponse($response['subscription']));
+		return new SubscriptionContinueResponse(Subscription::fromResponse($response['subscription']));
 	}
 }
