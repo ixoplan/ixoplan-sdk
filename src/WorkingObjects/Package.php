@@ -38,6 +38,9 @@ class Package implements WorkingObject {
 	 */
 	private $recurringPeriod;
 
+	/** @var bool */
+	private $hasTrialPeriod;
+
 	/**
 	 * @param string             $packageIdentifier
 	 * @param string             $serviceIdentifier
@@ -47,9 +50,10 @@ class Package implements WorkingObject {
 	 * @param string[]           $metaData
 	 * @param PackagePeriod|null $initialPeriod
 	 * @param PackagePeriod|null $recurringPeriod
+	 * @param bool               $hasTrialPeriod
 	 */
 	public function __construct($packageIdentifier, $serviceIdentifier, $displayNames, $signupAvailable,
-								$addonPackages, $metaData, $initialPeriod, $recurringPeriod) {
+								$addonPackages, $metaData, $initialPeriod, $recurringPeriod, $hasTrialPeriod = false) {
 		$this->packageIdentifier = $packageIdentifier;
 		$this->serviceIdentifier = $serviceIdentifier;
 		$this->displayNames      = $displayNames;
@@ -58,6 +62,7 @@ class Package implements WorkingObject {
 		$this->metaData          = $metaData;
 		$this->initialPeriod     = $initialPeriod;
 		$this->recurringPeriod   = $recurringPeriod;
+		$this->hasTrialPeriod    = $hasTrialPeriod;
 	}
 
 	/**
@@ -133,6 +138,13 @@ class Package implements WorkingObject {
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function hasTrialPeriod() {
+		return $this->hasTrialPeriod;
+	}
+
+	/**
 	 * @param array $response
 	 *
 	 * @return self
@@ -154,7 +166,8 @@ class Package implements WorkingObject {
 			$addonPackages,
 			$response['metaData'],
 			($response['initialPeriod']?PackagePeriod::fromResponse($response['initialPeriod']):null),
-			($response['recurringPeriod']?PackagePeriod::fromResponse($response['recurringPeriod']):null)
+			($response['recurringPeriod']?PackagePeriod::fromResponse($response['recurringPeriod']):null),
+			(isset($response['hasTrialPeriod']) ? $response['hasTrialPeriod'] : false)
 		);
 	}
 
