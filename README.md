@@ -59,6 +59,9 @@ Get user from token:
         // token invalid, e.g. expired
         setcookie('authToken', null, -1);
     }
+    catch (\Ixolit\Dislo\Exceptions\DisloException $e) {
+        // other, e.g. missing arguments
+    }
 
 A token's expiry time is extended automatically on usage.
 
@@ -77,6 +80,9 @@ Verify a token, explicitly extend its expiry time and optionally change its life
         // token invalid, e.g. expired
         setcookie('authToken', null, -1);
     }
+    catch (\Ixolit\Dislo\Exceptions\DisloException $e) {
+        // other, e.g. missing arguments
+    }
 
 Deauthenticate:
 
@@ -93,4 +99,23 @@ Retrieve a list of packages, optionally filtered by service ID:
 
     foreach ($response->getPackages() as $package) {
         echo $package->getDisplayNameForLanguage('en')->getName(), "\n";
+    }
+
+### Subscriptions
+
+Retrieve a list of subscriptions for a user:
+
+    $apiClient = new \Ixolit\Dislo\Client();
+
+    $response = $client->subscriptionGetAll($token);
+
+    foreach ($response->getSubscriptions() as $subscription) {
+        print_r([
+            'status' => $subscription->getStatus(),
+            'active' => $subscription->isActive(),
+            'startedAt' => $subscription->getStartedAt()->format('c'),
+            'package' => $subscription->getCurrentPackage()->getDisplayNameForLanguage('en')->getName(),
+            'price (EU)' => $subscription->getCurrentPeriod()->getBasePriceForCurrency('EUR')->getAmount(),
+            'metaData' => $subscription->getProvisioningMetaData(),
+        ]);
     }
