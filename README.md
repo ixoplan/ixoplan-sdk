@@ -105,7 +105,7 @@ Retrieve a list of packages, optionally filtered by service ID:
 
 Retrieve a list of subscriptions for a user:
 
-    $apiClient = new \Ixolit\Dislo\Client();
+    $apiClient = new \Ixolit\Dislo\Client($httpClient);
 
     $response = $client->subscriptionGetAll($token);
 
