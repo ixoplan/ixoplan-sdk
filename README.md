@@ -26,7 +26,7 @@ The client is designed for different transport layers. It needs a RequestClient 
 ### Login
 Authenticate user, retrieve token and user data:
 
-    $apiClient = new \Ixolit\Dislo\Client();
+    $apiClient = new \Ixolit\Dislo\Client($httpClient);
 
     try {
         $authResponse = $apiClient->userAuthenticate(
@@ -50,7 +50,7 @@ Get user from token:
 
     $token = getcookie('authToken');
 
-    $apiClient = new \Ixolit\Dislo\Client();
+    $apiClient = new \Ixolit\Dislo\Client($httpClient);
     
     try {
         $user = $client->userGet($token);
@@ -66,7 +66,7 @@ Verify a token, explicitly extend its expiry time and optionally change its life
 
     $token = getcookie('authToken');
 
-    $apiClient = new \Ixolit\Dislo\Client();
+    $apiClient = new \Ixolit\Dislo\Client($httpClient);
     
     try {
         $response = $client->userExtendToken($token, $ipAdress, 3600);
@@ -87,7 +87,7 @@ Deauthenticate:
 
 Retrieve a list of packages, optionally filtered by service ID:
 
-    $apiClient = new \Ixolit\Dislo\Client();
+    $apiClient = new \Ixolit\Dislo\Client($httpClient);
 
     $response = $apiClient->packagesList("1");
 
