@@ -32,25 +32,31 @@ class Flexible implements WorkingObject {
 	 */
 	private $billingMethod;
 
+	/** @var BillingMethod */
+	private $billingMethodObject;
+
 	/**
-	 * @param int       $flexibleId
-	 * @param string    $status
-	 * @param string[]  $metaData
-	 * @param \DateTime $createdAt
-	 * @param string    $billingMethod
+	 * @param int           	 $flexibleId
+	 * @param string        	 $status
+	 * @param string[]      	 $metaData
+	 * @param \DateTime     	 $createdAt
+	 * @param string        	 $billingMethod
+	 * @param BillingMethod|null $billingMethodObject
 	 */
 	public function __construct(
 		$flexibleId,
 		$status,
 		$metaData,
 		\DateTime $createdAt,
-		$billingMethod
+		$billingMethod,
+		BillingMethod $billingMethodObject = null
 	) {
 		$this->flexibleId    = $flexibleId;
 		$this->status        = $status;
 		$this->metaData      = $metaData;
 		$this->createdAt     = $createdAt;
 		$this->billingMethod = $billingMethod;
+		$this->billingMethodObject = $billingMethodObject;
 	}
 
 	/**
@@ -64,7 +70,8 @@ class Flexible implements WorkingObject {
 			$response['status'],
 			$response['metaData'],
 			new \DateTime($response['createdAt']),
-			$response['billingMethod']
+			$response['billingMethod'],
+			isset($response['billingMethodObject']) ? BillingMethod::fromResponse($response['billingMethodObject']) : null
 		);
 	}
 
@@ -79,6 +86,7 @@ class Flexible implements WorkingObject {
 			'metaData'      => $this->getMetaData(),
 			'createdAt'     => $this->getCreatedAt()->format('Y-m-d H:i:s'),
 			'billingMethod' => $this->getBillingMethod(),
+			'billingMethodObject' => $this->getBillingMethodObject()->toArray(),
 		];
 	}
 
@@ -115,5 +123,12 @@ class Flexible implements WorkingObject {
 	 */
 	public function getBillingMethod() {
 		return $this->billingMethod;
+	}
+
+	/**
+	 * @return BillingMethod|null
+	 */
+	public function getBillingMethodObject() {
+		return $this->billingMethodObject;
 	}
 }
