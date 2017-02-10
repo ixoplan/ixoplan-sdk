@@ -2,9 +2,6 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
-use Ixolit\Dislo\WorkingObjects\BillingMethod;
-use Ixolit\Dislo\WorkingObjects\Subscription;
-
 class Recurring implements WorkingObject {
 
 	const STATUS_ACTIVE = 'active';
