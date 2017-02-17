@@ -5,27 +5,41 @@ namespace Ixolit\Dislo\WorkingObjects;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 
 class PackagePeriod implements WorkingObject {
+
+	/** @var int */
 	private $length;
+
+	/** @var string */
 	private $lengthUnit;
+
+	/** @var array */
 	private $metaData = [];
+
+	/** @var array|Price[] */
 	private $basePrice = [];
 
+	/** @var int|null */
+	private $minimumTermLength;
+
 	/**
-	 * @param int     $length
-	 * @param string  $lengthUnit
-	 * @param array   $metaData
-	 * @param Price[] $basePrice
+	 * @param int      $length
+	 * @param string   $lengthUnit
+	 * @param array    $metaData
+	 * @param Price[]  $basePrice
+	 * @param int|null $minimumTermLength
 	 */
 	public function __construct(
 		$length,
 		$lengthUnit,
 		$metaData = [],
-		$basePrice = []
+		$basePrice = [],
+		$minimumTermLength = null
 	) {
-		$this->length     = $length;
-		$this->lengthUnit = $lengthUnit;
-		$this->metaData   = $metaData;
-		$this->basePrice  = $basePrice;
+		$this->length     		 = $length;
+		$this->lengthUnit 		 = $lengthUnit;
+		$this->metaData   		 = $metaData;
+		$this->basePrice  		 = $basePrice;
+		$this->minimumTermLength = $minimumTermLength;
 	}
 
 	/**
@@ -43,7 +57,8 @@ class PackagePeriod implements WorkingObject {
 			$response['length'],
 			$response['lengthUnit'],
 			$response['metaData'],
-			$prices
+			$prices,
+			isset($response['minimumTermLength']) ? $response['minimumTermLength'] : null
 		);
 	}
 
@@ -62,6 +77,7 @@ class PackagePeriod implements WorkingObject {
 			'lengthUnit' => $this->lengthUnit,
 			'metaData'   => $this->metaData,
 			'basePrice'  => $basePrice,
+			'minimumTermLength' => $this->minimumTermLength,
 		];
 	}
 
@@ -91,6 +107,13 @@ class PackagePeriod implements WorkingObject {
 	 */
 	public function getBasePrice() {
 		return $this->basePrice;
+	}
+
+	/**
+	 * @return int|null
+	 */
+	public function getMinimumTermLength() {
+		return $this->minimumTermLength;
 	}
 
 	public function getBasePriceForCurrency($currency) {

@@ -71,6 +71,9 @@ class Subscription implements WorkingObject {
 	 */
 	private $addonSubscriptions = [];
 
+	/** @var \DateTime|null */
+	private $minimumTermEndsAt;
+
 	/**
 	 * Subscription constructor.
 	 *
@@ -89,11 +92,12 @@ class Subscription implements WorkingObject {
 	 * @param array          $provisioningMetaData
 	 * @param Package|null   $nextPackage
 	 * @param Subscription[] $addonSubscriptions
+	 * @param \DateTime|null $minimumTermEndsAt
 	 */
 	public function __construct(
 		$subscriptionId, Package $currentPackage, $userId, $status, $startedAt,
 		$canceledAt, $closedAt, $expiresAt, $nextBillingAt, $currencyCode, $isInitialPeriod,
-		$isProvisioned, $provisioningMetaData, $nextPackage, $addonSubscriptions) {
+		$isProvisioned, $provisioningMetaData, $nextPackage, $addonSubscriptions, $minimumTermEndsAt = null) {
 		$this->subscriptionId       = $subscriptionId;
 		$this->currentPackage       = $currentPackage;
 		$this->userId               = $userId;
@@ -109,6 +113,7 @@ class Subscription implements WorkingObject {
 		$this->provisioningMetaData = $provisioningMetaData;
 		$this->nextPackage          = $nextPackage;
 		$this->addonSubscriptions   = $addonSubscriptions;
+		$this->minimumTermEndsAt    = $minimumTermEndsAt;
 	}
 
 	/**
@@ -225,6 +230,10 @@ class Subscription implements WorkingObject {
 		return $this->addonSubscriptions;
 	}
 
+	public function getMinimumTermEndsAt() {
+		return $this->minimumTermEndsAt;
+	}
+
 	/**
 	 * @return PackagePeriod
 	 */
@@ -271,7 +280,8 @@ class Subscription implements WorkingObject {
 			$response['isProvisioned'],
 			$response['provisioningMetaData'],
 			($response['nextPackage']?Package::fromResponse($response['nextPackage']):null),
-			$addonSubscriptions
+			$addonSubscriptions,
+			(isset($response['minimumTermEndsAt']) ? new \DateTime($response['minimumTermEndsAt']) : null)
 		);
 	}
 
@@ -298,7 +308,8 @@ class Subscription implements WorkingObject {
 			'isProvisioned' => $this->isProvisioned,
 			'provisioningMetaData' => $this->provisioningMetaData,
 			'nextPackage' => ($this->nextPackage?$this->nextPackage->toArray():null),
-			'addonSubscriptions' => $addonSubscriptions
+			'addonSubscriptions' => $addonSubscriptions,
+			'minimumTermEndsAt' => ($this->minimumTermEndsAt ? $this->minimumTermEndsAt->format('Y-m-d H:i:s') : null),
 		];
 	}
 
