@@ -309,6 +309,7 @@ class Client {
 	 * @param string           $returnUrl
 	 * @param array            $paymentDetails
 	 * @param User|int|string  $userTokenOrId user authentication token or id
+	 * @param string|null      $countryCode
 	 *
 	 * @return BillingCreatePaymentResponse
 	 */
@@ -317,7 +318,8 @@ class Client {
 		$billingMethod,
 		$returnUrl,
 		$paymentDetails,
-		$userTokenOrId = null
+		$userTokenOrId = null,
+		$countryCode = null
 	) {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
@@ -326,6 +328,7 @@ class Client {
 		$data['subscriptionId'] =
 			($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription);
 		$data['paymentDetails'] = $paymentDetails;
+		$data['countryCode'] = $countryCode;
 		$response               = $this->request('/frontend/billing/createPayment', $data);
 		if (!$response['redirectUrl']) {
 			$response['redirectUrl'] = $returnUrl;
