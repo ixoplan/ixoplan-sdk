@@ -189,17 +189,20 @@ class Client {
 	 * Retrieve the list of payment methods.
 	 *
 	 * @param string|null $packageIdentifier
+	 * @param string|null $countryCode
 	 *
 	 * @return BillingMethodsGetResponse
 	 */
 	public function billingMethodsGet(
-		$packageIdentifier = null
+		$packageIdentifier = null,
+		$countryCode = null
 	) {
 		if (!$packageIdentifier) {
 			$response = $this->request('/frontend/billing/getPaymentMethods', []);
 		} else {
 			$response = $this->request('/frontend/billing/getPaymentMethodsForPackage', [
 				'packageIdentifier' => $packageIdentifier,
+				'countryCode' => $countryCode
 			]);
 		}
 		return BillingMethodsGetResponse::fromResponse($response);
@@ -209,13 +212,15 @@ class Client {
 	 * Retrieve the list of available payment methods.
 	 *
 	 * @param string|null $packageIdentifier
+	 * @param string|null $countryCode
 	 *
 	 * @return BillingMethodsGetAvailableResponse
 	 */
 	public function billingMethodsGetAvailable(
-		$packageIdentifier = null
+		$packageIdentifier = null,
+		$countryCode = null
 	) {
-		$billingMethods = $this->billingMethodsGet($packageIdentifier)->getBillingMethods();
+		$billingMethods = $this->billingMethodsGet($packageIdentifier, $countryCode)->getBillingMethods();
 		$availableBillingMethods = [];
 		foreach ($billingMethods as $billingMethod) {
 			if ($billingMethod->isAvailable()) {
