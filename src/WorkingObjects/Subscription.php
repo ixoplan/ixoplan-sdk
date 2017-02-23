@@ -9,6 +9,8 @@ class Subscription implements WorkingObject {
 	const STATUS_CANCELED = 'canceled';
 	const STATUS_CLOSED = 'closed';
 	const STATUS_ARCHIVED = 'archived';
+	const STATUS_SUSPENDED_RUNNING = 'suspended_running';
+	const STATUS_SUSPENDED_CANCELED = 'suspended_canceled';
 
 	/**
 	 * @var int
