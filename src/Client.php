@@ -169,7 +169,7 @@ class Client {
 	 * Initialize the client with a RequestClient, the class that is responsible for transporting messages to and
 	 * from the Dislo API.
 	 *
-	 * @param RequestClient $requestClient  Required when not running in the CDE.
+	 * @param RequestClient $requestClient
 	 * @param bool          $forceTokenMode Force using tokens. Does not allow passing a user Id.
 	 *
 	 * @throws DisloException if the $requestClient parameter is missing
