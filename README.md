@@ -3,13 +3,14 @@ PHP SDK for the Dislo API
 
 ## Installation
 
-Simply add ixolit/dislo-sdk to your composer.json, e.g:
+Simply add ixolit/dislo-sdk and a provider of ixolit/dislo-sdk-http (e.g. ixolit/dislo-sdk-http-guzzle) to your composer.json, e.g:
 
     {
         "name": "myvendor/myproject",
         "description": "Using dislo-sdk",
         "require": {
             "ixolit/dislo-sdk": "*"
+            "ixolit/dislo-sdk-http-guzzle": "*"
         }
     }
 
