@@ -34,6 +34,8 @@ The client is designed for different transport layers. It needs a RequestClient 
 
     $apiClient = new Client($httpClient);
 
+Most methods related to user data can be used with either a user ID, a `\Ixolit\Dislo\WorkingObjects\User` object or an authentication token. However, the less secure options have to be requested explicitely by passing `$forceTokenMode = false` to the constructor. Don't use this option unless you really need it, e.g. for implementing administrative functionality.
+
 ### Login
 Authenticate user, retrieve token and user data:
 
