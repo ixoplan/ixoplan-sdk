@@ -219,6 +219,17 @@ class Subscription implements WorkingObject {
 	}
 
 	/**
+	 * @param string $metaDataName
+	 *
+	 * @return string|null
+	 */
+	public function getProvisioningMetaDataEntry($metaDataName) {
+		$provisioningMetaData = $this->getProvisioningMetaData();
+
+		return isset($provisioningMetaData[$metaDataName]) ? $provisioningMetaData[$metaDataName] : null;
+	}
+
+	/**
 	 * @return Package|null
 	 */
 	public function getNextPackage() {
