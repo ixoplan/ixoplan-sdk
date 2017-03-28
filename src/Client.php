@@ -62,9 +62,13 @@ use Ixolit\Dislo\Response\UserGetMetaProfileResponse;
 use Ixolit\Dislo\Response\UserGetResponse;
 use Ixolit\Dislo\Response\UserGetSignupStatusResponse;
 use Ixolit\Dislo\Response\UserGetTokensResponse;
+use Ixolit\Dislo\Response\UserPhoneVerificationFinishResponse;
+use Ixolit\Dislo\Response\UserPhoneVerificationStartResponse;
 use Ixolit\Dislo\Response\UserRecoveryCheckResponse;
 use Ixolit\Dislo\Response\UserRecoveryFinishResponse;
 use Ixolit\Dislo\Response\UserRecoveryStartResponse;
+use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
+use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
@@ -1736,4 +1740,91 @@ class Client {
 		return UserEmailVerificationFinishResponse::fromResponse($response);
 
 	}
+
+    /**
+     * @param string|int|User $userTokenOrId
+     * @param string          $ipAddress
+     * @param string          $phoneNumber
+     *
+     * @return UserPhoneVerificationStartResponse
+     */
+    public function userPhoneVerificationStart(
+        $userTokenOrId,
+        $ipAddress,
+        $phoneNumber
+    ) {
+        $data = [
+            'verificationType' => 'phone',
+            'ipAddress' => (string)$ipAddress,
+            'extraData' => [
+                'phoneNumber' => $phoneNumber
+            ]
+        ];
+        $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/user/verification/start', $data);
+        return UserPhoneVerificationStartResponse::fromResponse($response);
+    }
+
+    /**
+     * @param string|int|User $userTokenOrId
+     * @param string          $verificationPin
+     *
+     * @return UserEmailVerificationFinishResponse
+     */
+    public function userPhoneVerificationFinish(
+        $userTokenOrId,
+        $verificationPin
+    ) {
+        $data = [
+            'verificationType' => 'phone',
+            'verificationPin' => $verificationPin
+        ];
+        $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/user/verification/finalize', $data);
+        return UserPhoneVerificationFinishResponse::fromResponse($response);
+    }
+
+    /**
+     * @param string|int|User $userTokenOdId
+     * @param string          $ipAddress
+     * @param string          $phoneNumber
+     *
+     * @return Response\UserVerificationStartResponse
+     */
+    public function userSmsVerificationStart(
+        $userTokenOdId,
+        $ipAddress,
+        $phoneNumber
+    ) {
+        $data = [
+            'verificationType' => 'sms',
+            'ipAddress' => (string)$ipAddress,
+            'extraData' => [
+                'phoneNumber' => $phoneNumber
+            ]
+        ];
+        $this->userToData($userTokenOdId, $data);
+        $response = $this->request('/frontend/user/verification/start', $data);
+        return UserSmsVerificationStartResponse::fromResponse($response);
+    }
+
+    /**
+     * @param string|int|User $userTokenOrId
+     * @param string          $verificationPin
+     *
+     * @return UserEmailVerificationFinishResponse
+     */
+    public function userSmsVerificationFinish(
+        $userTokenOrId,
+        $verificationPin
+    ) {
+        $data = [
+            'verificationType' => 'sms',
+            'verificationPin' => $verificationPin
+        ];
+        $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/user/verification/finalize', $data);
+        return UserSmsVerificationFinishResponse::fromResponse($response);
+    }
+    
 }
