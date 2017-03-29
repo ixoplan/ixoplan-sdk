@@ -1134,35 +1134,38 @@ class Client {
 		return SubscriptionExternalCreateResponse::fromResponse($response);
 	}
 
-	/**
-	 * Call a service provider function related to the subscription. Specific calls depend on the SPI connected to
-	 * the service behind the subscription.
-	 *
-	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
-	 * @param Subscription|int $subscriptionId
-	 * @param string           $method
-	 * @param array            $params
-	 *
-	 * @return SubscriptionCallSpiResponse
-	 */
-	public function subscriptionCallSpi(
-		$userTokenOrId,
-		$subscriptionId,
-		$method,
-		$params
-	) {
-		if ($subscriptionId instanceof Subscription) {
-			$subscriptionId = $subscriptionId->getSubscriptionId();
-		}
-		$data = [
-			'subscriptionId' => $subscriptionId,
-			'method' => $method,
-			'params' => $params
-		];
-		$this->userToData($userTokenOrId, $data);
-		$response = $this->request('/frontend/subscription/callSpi', $data);
-		return SubscriptionCallSpiResponse::fromResponse($response);
-	}
+    /**
+     * Call a service provider function related to the subscription. Specific calls depend on the SPI connected to
+     * the service behind the subscription.
+     *
+     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param Subscription|int $subscriptionId
+     * @param string           $method
+     * @param array            $params
+     * @param int|null         $serviceId
+     *
+     * @return SubscriptionCallSpiResponse
+     */
+    public function subscriptionCallSpi(
+        $userTokenOrId,
+        $subscriptionId,
+        $method,
+        $params,
+        $serviceId = null
+    ) {
+        if ($subscriptionId instanceof Subscription) {
+            $subscriptionId = $subscriptionId->getSubscriptionId();
+        }
+        $data = [
+            'subscriptionId' => $subscriptionId,
+            'method' => $method,
+            'params' => $params,
+            'serviceId' => $serviceId
+        ];
+        $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/subscription/callSpi', $data);
+        return SubscriptionCallSpiResponse::fromResponse($response);
+    }
 
 	public function subscriptionGetPossibleUpgrades(
 		$userTokenOrId,
