@@ -1320,28 +1320,32 @@ class Client {
 		return CouponCodeValidateResponse::fromResponse($response, self::COUPON_EVENT_UPGRADE, $couponCode);
 	}
 
-	/**
-	 * Authenticate a user. Returns an access token for subsequent API calls.
-	 *
-	 * @param string $username      Username.
-	 * @param string $password      User password.
-	 * @param string $ipAddress     IP address of the user attempting to authenticate.
-	 * @param int    $tokenLifetime Authentication token lifetime in seconds. TokenLifeTime is renewed and extended
-	 *                              by API calls automatically, using the inital tokenlifetime.
-	 * @param string $metainfo      Meta information to store with token (4096 bytes)
-	 *
-	 * @return UserAuthenticateResponse
-	 *
-	 * @throws AuthenticationException
-	 * @throws AuthenticationInvalidCredentialsException
-	 * @throws AuthenticationRateLimitedException
-	 */
+    /**
+     * Authenticate a user. Returns an access token for subsequent API calls.
+     *
+     * @param string $username      Username.
+     * @param string $password      User password.
+     * @param string $ipAddress     IP address of the user attempting to authenticate.
+     * @param int    $tokenLifetime Authentication token lifetime in seconds. TokenLifeTime is renewed and extended
+     *                              by API calls automatically, using the inital tokenlifetime.
+     * @param string $metainfo      Meta information to store with token (4096 bytes)
+     * @param bool   $ignoreRateLimit
+     *
+     * @return UserAuthenticateResponse
+     * @throws AuthenticationException
+     * @throws AuthenticationInvalidCredentialsException
+     * @throws AuthenticationRateLimitedException
+     * @throws DisloException
+     * @throws ObjectNotFoundException
+     * @throws \Exception
+     */
 	public function userAuthenticate(
 		$username,
 		$password,
 		$ipAddress,
 		$tokenLifetime = 1800,
-		$metainfo = ''
+		$metainfo = '',
+		$ignoreRateLimit = false
 	) {
 		$data     = [
 			'username'      => $username,
@@ -1349,6 +1353,7 @@ class Client {
 			'ipAddress'     => $ipAddress,
 			'tokenlifetime' => \round($tokenLifetime / 60),
 			'metainfo'      => $metainfo,
+			'ignoreRateLimit' => $ignoreRateLimit,
 		];
 		$response = $this->request('/frontend/user/authenticate', $data);
 
@@ -1829,5 +1834,5 @@ class Client {
         $response = $this->request('/frontend/user/verification/finalize', $data);
         return UserSmsVerificationFinishResponse::fromResponse($response);
     }
-    
+
 }
