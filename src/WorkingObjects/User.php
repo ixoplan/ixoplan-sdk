@@ -116,6 +116,17 @@ class User implements WorkingObject {
 	}
 
 	/**
+	 * @param string $metaDataName
+	 *
+	 * @return string|null
+	 */
+	public function getMetaDataEntry($metaDataName) {
+		$metaData = $this->getMetaData();
+
+		return isset($metaData[$metaDataName]) ? $metaData[$metaDataName] : null;
+	}
+
+	/**
 	 * @return null|string
 	 */
 	public function getCurrencyCode() {

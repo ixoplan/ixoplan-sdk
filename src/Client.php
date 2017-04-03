@@ -61,9 +61,13 @@ use Ixolit\Dislo\Response\UserGetMetaProfileResponse;
 use Ixolit\Dislo\Response\UserGetResponse;
 use Ixolit\Dislo\Response\UserGetSignupStatusResponse;
 use Ixolit\Dislo\Response\UserGetTokensResponse;
+use Ixolit\Dislo\Response\UserPhoneVerificationFinishResponse;
+use Ixolit\Dislo\Response\UserPhoneVerificationStartResponse;
 use Ixolit\Dislo\Response\UserRecoveryCheckResponse;
 use Ixolit\Dislo\Response\UserRecoveryFinishResponse;
 use Ixolit\Dislo\Response\UserRecoveryStartResponse;
+use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
+use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
@@ -1127,35 +1131,38 @@ class Client {
 		return SubscriptionExternalCreateResponse::fromResponse($response);
 	}
 
-	/**
-	 * Call a service provider function related to the subscription. Specific calls depend on the SPI connected to
-	 * the service behind the subscription.
-	 *
-	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
-	 * @param Subscription|int $subscriptionId
-	 * @param string           $method
-	 * @param array            $params
-	 *
-	 * @return SubscriptionCallSpiResponse
-	 */
-	public function subscriptionCallSpi(
-		$userTokenOrId,
-		$subscriptionId,
-		$method,
-		$params
-	) {
-		if ($subscriptionId instanceof Subscription) {
-			$subscriptionId = $subscriptionId->getSubscriptionId();
-		}
-		$data = [
-			'subscriptionId' => $subscriptionId,
-			'method' => $method,
-			'params' => $params
-		];
-		$this->userToData($userTokenOrId, $data);
-		$response = $this->request('/frontend/subscription/callSpi', $data);
-		return SubscriptionCallSpiResponse::fromResponse($response);
-	}
+    /**
+     * Call a service provider function related to the subscription. Specific calls depend on the SPI connected to
+     * the service behind the subscription.
+     *
+     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param Subscription|int $subscriptionId
+     * @param string           $method
+     * @param array            $params
+     * @param int|null         $serviceId
+     *
+     * @return SubscriptionCallSpiResponse
+     */
+    public function subscriptionCallSpi(
+        $userTokenOrId,
+        $subscriptionId,
+        $method,
+        $params,
+        $serviceId = null
+    ) {
+        if ($subscriptionId instanceof Subscription) {
+            $subscriptionId = $subscriptionId->getSubscriptionId();
+        }
+        $data = [
+            'subscriptionId' => $subscriptionId,
+            'method' => $method,
+            'params' => $params,
+            'serviceId' => $serviceId
+        ];
+        $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/subscription/callSpi', $data);
+        return SubscriptionCallSpiResponse::fromResponse($response);
+    }
 
 	public function subscriptionGetPossibleUpgrades(
 		$userTokenOrId,
@@ -1310,28 +1317,32 @@ class Client {
 		return CouponCodeValidateResponse::fromResponse($response, self::COUPON_EVENT_UPGRADE, $couponCode);
 	}
 
-	/**
-	 * Authenticate a user. Returns an access token for subsequent API calls.
-	 *
-	 * @param string $username      Username.
-	 * @param string $password      User password.
-	 * @param string $ipAddress     IP address of the user attempting to authenticate.
-	 * @param int    $tokenLifetime Authentication token lifetime in seconds. TokenLifeTime is renewed and extended
-	 *                              by API calls automatically, using the inital tokenlifetime.
-	 * @param string $metainfo      Meta information to store with token (4096 bytes)
-	 *
-	 * @return UserAuthenticateResponse
-	 *
-	 * @throws AuthenticationException
-	 * @throws AuthenticationInvalidCredentialsException
-	 * @throws AuthenticationRateLimitedException
-	 */
+    /**
+     * Authenticate a user. Returns an access token for subsequent API calls.
+     *
+     * @param string $username      Username.
+     * @param string $password      User password.
+     * @param string $ipAddress     IP address of the user attempting to authenticate.
+     * @param int    $tokenLifetime Authentication token lifetime in seconds. TokenLifeTime is renewed and extended
+     *                              by API calls automatically, using the inital tokenlifetime.
+     * @param string $metainfo      Meta information to store with token (4096 bytes)
+     * @param bool   $ignoreRateLimit
+     *
+     * @return UserAuthenticateResponse
+     * @throws AuthenticationException
+     * @throws AuthenticationInvalidCredentialsException
+     * @throws AuthenticationRateLimitedException
+     * @throws DisloException
+     * @throws ObjectNotFoundException
+     * @throws \Exception
+     */
 	public function userAuthenticate(
 		$username,
 		$password,
 		$ipAddress,
 		$tokenLifetime = 1800,
-		$metainfo = ''
+		$metainfo = '',
+		$ignoreRateLimit = false
 	) {
 		$data     = [
 			'username'      => $username,
@@ -1339,6 +1350,7 @@ class Client {
 			'ipAddress'     => $ipAddress,
 			'tokenlifetime' => \round($tokenLifetime / 60),
 			'metainfo'      => $metainfo,
+			'ignoreRateLimit' => $ignoreRateLimit,
 		];
 		$response = $this->request('/frontend/user/authenticate', $data);
 
@@ -1733,4 +1745,91 @@ class Client {
 		return UserEmailVerificationFinishResponse::fromResponse($response);
 
 	}
+
+    /**
+     * @param string|int|User $userTokenOrId
+     * @param string          $ipAddress
+     * @param string          $phoneNumber
+     *
+     * @return UserPhoneVerificationStartResponse
+     */
+    public function userPhoneVerificationStart(
+        $userTokenOrId,
+        $ipAddress,
+        $phoneNumber
+    ) {
+        $data = [
+            'verificationType' => 'phone',
+            'ipAddress' => (string)$ipAddress,
+            'extraData' => [
+                'phoneNumber' => $phoneNumber
+            ]
+        ];
+        $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/user/verification/start', $data);
+        return UserPhoneVerificationStartResponse::fromResponse($response);
+    }
+
+    /**
+     * @param string|int|User $userTokenOrId
+     * @param string          $verificationPin
+     *
+     * @return UserEmailVerificationFinishResponse
+     */
+    public function userPhoneVerificationFinish(
+        $userTokenOrId,
+        $verificationPin
+    ) {
+        $data = [
+            'verificationType' => 'phone',
+            'verificationPin' => $verificationPin
+        ];
+        $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/user/verification/finalize', $data);
+        return UserPhoneVerificationFinishResponse::fromResponse($response);
+    }
+
+    /**
+     * @param string|int|User $userTokenOdId
+     * @param string          $ipAddress
+     * @param string          $phoneNumber
+     *
+     * @return Response\UserVerificationStartResponse
+     */
+    public function userSmsVerificationStart(
+        $userTokenOdId,
+        $ipAddress,
+        $phoneNumber
+    ) {
+        $data = [
+            'verificationType' => 'sms',
+            'ipAddress' => (string)$ipAddress,
+            'extraData' => [
+                'phoneNumber' => $phoneNumber
+            ]
+        ];
+        $this->userToData($userTokenOdId, $data);
+        $response = $this->request('/frontend/user/verification/start', $data);
+        return UserSmsVerificationStartResponse::fromResponse($response);
+    }
+
+    /**
+     * @param string|int|User $userTokenOrId
+     * @param string          $verificationPin
+     *
+     * @return UserEmailVerificationFinishResponse
+     */
+    public function userSmsVerificationFinish(
+        $userTokenOrId,
+        $verificationPin
+    ) {
+        $data = [
+            'verificationType' => 'sms',
+            'verificationPin' => $verificationPin
+        ];
+        $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/user/verification/finalize', $data);
+        return UserSmsVerificationFinishResponse::fromResponse($response);
+    }
+
 }

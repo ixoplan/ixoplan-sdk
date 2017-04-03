@@ -124,6 +124,17 @@ class Package implements WorkingObject {
 	}
 
 	/**
+	 * @param string $metaDataName
+	 *
+	 * @return null|string
+	 */
+	public function getMetaDataEntry($metaDataName) {
+		$metaData = $this->getMetaData();
+
+		return isset($metaData[$metaDataName]) ? $metaData[$metaDataName] : null;
+	}
+
+	/**
 	 * @return PackagePeriod|null
 	 */
 	public function getInitialPeriod() {
