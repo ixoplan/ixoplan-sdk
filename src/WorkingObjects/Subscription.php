@@ -329,7 +329,9 @@ class Subscription implements WorkingObject {
 	public function isActive() {
 		return \in_array($this->getStatus(), [
 			self::STATUS_RUNNING,
-			self::STATUS_CANCELED
+			self::STATUS_CANCELED,
+			self::STATUS_SUSPENDED_RUNNING,
+			self::STATUS_SUSPENDED_CANCELED,
 		]);
 	}
 }
