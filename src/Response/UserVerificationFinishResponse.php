@@ -13,19 +13,19 @@ use Ixolit\Dislo\WorkingObjects\User;
 class UserVerificationFinishResponse {
 
     /**
-     * @var User
+     * @var User|null
      */
     private $user;
 
     /**
      * @param User $user
      */
-    public function __construct(User $user) {
+    public function __construct(User $user = null) {
         $this->user = $user;
     }
 
     /**
-     * @return User
+     * @return User|null
      */
     public function getUser() {
         return $this->user;
@@ -37,7 +37,7 @@ class UserVerificationFinishResponse {
      * @return UserEmailVerificationFinishResponse
      */
     public static function fromResponse($response) {
-        return new self(User::fromResponse($response['user']));
+        return new self(!empty($response['user']) ? User::fromResponse($response['user']) : null);
     }
 
 }

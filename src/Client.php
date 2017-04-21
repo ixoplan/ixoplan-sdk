@@ -69,6 +69,7 @@ use Ixolit\Dislo\Response\UserRecoveryStartResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
+use Ixolit\Dislo\Response\UserVerificationStartResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\WorkingObjects\User;
@@ -1773,16 +1774,19 @@ class Client {
     /**
      * @param string|int|User $userTokenOrId
      * @param string          $verificationPin
+	 * @param string|null	  $phoneNumber
      *
-     * @return UserEmailVerificationFinishResponse
+     * @return UserPhoneVerificationFinishResponse
      */
     public function userPhoneVerificationFinish(
         $userTokenOrId,
-        $verificationPin
+        $verificationPin,
+		$phoneNumber = null
     ) {
         $data = [
             'verificationType' => 'phone',
-            'verificationPin' => $verificationPin
+            'verificationPin' => $verificationPin,
+			'phoneNumber' => $phoneNumber,
         ];
         $this->userToData($userTokenOrId, $data);
         $response = $this->request('/frontend/user/verification/finalize', $data);
@@ -1794,7 +1798,7 @@ class Client {
      * @param string          $ipAddress
      * @param string          $phoneNumber
      *
-     * @return Response\UserVerificationStartResponse
+     * @return UserVerificationStartResponse
      */
     public function userSmsVerificationStart(
         $userTokenOdId,
@@ -1816,16 +1820,19 @@ class Client {
     /**
      * @param string|int|User $userTokenOrId
      * @param string          $verificationPin
+	 * @param string|null	  $phoneNumber
      *
-     * @return UserEmailVerificationFinishResponse
+     * @return UserSmsVerificationFinishResponse
      */
     public function userSmsVerificationFinish(
         $userTokenOrId,
-        $verificationPin
+        $verificationPin,
+		$phoneNumber = null
     ) {
         $data = [
             'verificationType' => 'sms',
-            'verificationPin' => $verificationPin
+            'verificationPin' => $verificationPin,
+			'phoneNumber' => $phoneNumber,
         ];
         $this->userToData($userTokenOrId, $data);
         $response = $this->request('/frontend/user/verification/finalize', $data);
