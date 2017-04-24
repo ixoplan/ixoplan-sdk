@@ -58,6 +58,11 @@ class BillingEvent implements WorkingObject {
 	private $subscription;
 
 	/**
+	 * @var \DateTime|null
+	 */
+	private $modifiedAt;
+
+	/**
 	 * @param array $response
 	 *
 	 * @return self
@@ -80,7 +85,8 @@ class BillingEvent implements WorkingObject {
 			$response['description'],
 			$response['techinfo'],
 			$response['billingMethod'],
-			$subscription
+			$subscription,
+			isset($response['modifiedAt']) ? new \DateTime($response['modifiedAt']) : null
 		);
 	}
 
@@ -98,6 +104,7 @@ class BillingEvent implements WorkingObject {
 	 * @param string|null       $techinfo
 	 * @param string            $billingMethod
 	 * @param Subscription|null $subscription
+	 * @param \DateTime|null    $modifiedAt
 	 */
 	public function __construct(
 		$billingEventId,
@@ -110,7 +117,8 @@ class BillingEvent implements WorkingObject {
 		$description,
 		$techinfo,
 		$billingMethod,
-		Subscription $subscription = null
+		Subscription $subscription = null,
+		$modifiedAt = null
 	) {
 		$this->billingEventId = $billingEventId;
 		$this->userId         = $userId;
@@ -123,6 +131,7 @@ class BillingEvent implements WorkingObject {
 		$this->techinfo       = $techinfo;
 		$this->billingMethod  = $billingMethod;
 		$this->subscription   = $subscription;
+		$this->modifiedAt     = $modifiedAt;
 	}
 
 	/**
@@ -203,6 +212,13 @@ class BillingEvent implements WorkingObject {
 	}
 
 	/**
+	 * @return \DateTime|null
+	 */
+	public function getModifiedAt() {
+		return $this->modifiedAt;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function toArray() {
@@ -219,6 +235,7 @@ class BillingEvent implements WorkingObject {
 			'techinfo'       => $this->getDescription(),
 			'billingMethod'  => $this->getBillingMethod(),
 			'subscription'   => ($this->getSubscription() ? $this->getSubscription()->toArray() : null),
+			'modifiedAt'	 => ($this->getModifiedAt() ? $this->getModifiedAt()->format('Y-m-d H:i:s') : null),
 		);
 	}
 }
