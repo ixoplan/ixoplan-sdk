@@ -1279,7 +1279,7 @@ class Client {
 			'currencyCode'            => $currencyCode,
 		];
 		$response = $this->request('/frontend/subscription/validateCoupon', $data);
-		return CouponCodeValidateResponse::fromResponse($response, self::COUPON_EVENT_START, $couponCode);
+		return CouponCodeValidateResponse::fromResponse($response, $couponCode, self::COUPON_EVENT_START);
 	}
 
 	/**
@@ -1314,7 +1314,7 @@ class Client {
 		];
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/validateCoupon', $data);
-		return CouponCodeValidateResponse::fromResponse($response, self::COUPON_EVENT_UPGRADE, $couponCode);
+		return CouponCodeValidateResponse::fromResponse($response, $couponCode, self::COUPON_EVENT_UPGRADE);
 	}
 
     /**
