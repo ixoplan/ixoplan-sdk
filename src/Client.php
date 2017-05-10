@@ -187,6 +187,13 @@ class Client {
 		$this->forceTokenMode = $forceTokenMode;
 	}
 
+    /**
+     * @return bool
+     */
+	public function isForceTokenMode() {
+	    return $this->forceTokenMode;
+    }
+
 	/**
 	 * Retrieve the list of payment methods.
 	 *
@@ -249,7 +256,7 @@ class Client {
 	 */
 	public function billingCloseFlexible(
 		$flexible,
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
@@ -320,7 +327,7 @@ class Client {
 		$billingMethod,
 		$returnUrl,
 		$paymentDetails,
-		$userTokenOrId = null,
+		$userTokenOrId,
 		$countryCode = null
 	) {
 		$data = [];
@@ -603,7 +610,7 @@ class Client {
 	 */
 	public function billingGetActiveRecurring(
 		$subscription,
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'subscriptionId' =>
@@ -626,7 +633,7 @@ class Client {
 	 */
 	public function billingCloseActiveRecurring(
 		$subscription,
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'subscriptionId' =>
@@ -655,7 +662,7 @@ class Client {
 		$subscription,
 		$packageIdentifiers,
 		$couponCode = null,
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'subscriptionId'     =>
@@ -718,7 +725,7 @@ class Client {
 		$currencyCode,
 		$couponCode = null,
 		$addonPackageIdentifiers = [],
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'packageIdentifier'       => $packageIdentifier,
@@ -914,7 +921,7 @@ class Client {
 		$subscription,
 		$packageIdentifiers,
 		$couponCode = '',
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'subscriptionId'     =>
@@ -1077,7 +1084,7 @@ class Client {
 	public function subscriptionExternalAddonCreate(
 		$subscription,
 		$packageIdentifiers,
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'subscriptionId'     =>
@@ -1113,7 +1120,7 @@ class Client {
 		$currencyCode,
 		$addonPackageIdentifiers = [],
 		\DateTime $periodEnd = null,
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'packageIdentifier'       => $packageIdentifier,
@@ -1529,23 +1536,6 @@ class Client {
 		$data     = [];
 		$response = $this->request('/frontend/user/getMetaProfile', $data);
 		return UserGetMetaProfileResponse::fromResponse($response);
-	}
-
-	/**
-	 * Get the status of a Single-Step signup (usually called after the user comes back from the payment provider).
-	 *
-	 * @param string $signupIdentifier unique signup identifier returned from UserSignupWithPayment
-	 *
-	 * @return UserGetSignupStatusResponse
-	 */
-	public function userGetSignupStatus(
-		$signupIdentifier
-	) {
-		$data     = [
-			'signupIdentifier' => $signupIdentifier,
-		];
-		$response = $this->request('/frontend/user/getSignupStatus', $data);
-		return UserGetSignupStatusResponse::fromResponse($response);
 	}
 
 	/**

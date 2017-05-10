@@ -42,19 +42,34 @@ class User implements WorkingObject {
 	 */
 	private $verifiedData = [];
 
-	/**
-	 * @param int         $userId
-	 * @param \DateTime   $createdAt
-	 * @param bool        $loginDisabled
-	 * @param string      $language
-	 * @param \DateTime   $lastLoginDate
-	 * @param string      $lastLoginIp
-	 * @param array       $metaData
-	 * @param string|null $currencyCode
-	 * @param string[]    $verifiedData
-	 */
-	public function __construct($userId, $createdAt, $loginDisabled, $language, $lastLoginDate, $lastLoginIp,
-								$metaData, $currencyCode = null, $verifiedData = []) {
+    /**
+     * @var AuthToken
+     */
+	private $authToken;
+
+    /**
+     * @param int            $userId
+     * @param \DateTime      $createdAt
+     * @param bool           $loginDisabled
+     * @param string         $language
+     * @param \DateTime      $lastLoginDate
+     * @param string         $lastLoginIp
+     * @param array          $metaData
+     * @param string|null    $currencyCode
+     * @param string[]       $verifiedData
+     * @param AuthToken|null $authToken
+     */
+	public function __construct($userId,
+                                $createdAt,
+                                $loginDisabled,
+                                $language,
+                                $lastLoginDate,
+                                $lastLoginIp,
+								$metaData,
+                                $currencyCode = null,
+                                $verifiedData = [],
+                                $authToken = null
+    ) {
 		$this->userId        = $userId;
 		$this->createdAt     = $createdAt;
 		$this->loginDisabled = $loginDisabled;
@@ -64,6 +79,7 @@ class User implements WorkingObject {
 		$this->metaData      = $metaData;
 		$this->currencyCode  = $currencyCode;
 		$this->verifiedData  = $verifiedData;
+		$this->authToken     = $authToken;
 	}
 
 	/**
@@ -147,6 +163,13 @@ class User implements WorkingObject {
 		return in_array('email', $this->verifiedData);
 	}
 
+    /**
+     * @return AuthToken|null
+     */
+	public function getAuthToken() {
+	    return $this->authToken;
+    }
+
 	/**
 	 * @param array $response
 	 *
@@ -155,14 +178,15 @@ class User implements WorkingObject {
 	public static function fromResponse($response) {
 		return new User(
 			$response['userId'],
-			new \DateTime($response['createdAt']),
-			$response['loginDisabled'],
-			$response['language'],
-			($response['lastLoginDate']?new \DateTime($response['lastLoginDate']):null),
-			$response['lastLoginIp'],
-			$response['metaData'],
-			(isset($response['currencyCode'])?$response['currencyCode']:null),
-			(isset($response['verifiedData'])?$response['verifiedData']:[])
+            new \DateTime($response['createdAt']),
+            $response['loginDisabled'],
+            $response['language'],
+            ($response['lastLoginDate'] ? new \DateTime($response['lastLoginDate']) : null),
+            $response['lastLoginIp'],
+            $response['metaData'],
+            (isset($response['currencyCode']) ? $response['currencyCode'] : null),
+            (isset($response['verifiedData']) ? $response['verifiedData'] : []),
+            (isset($response['authToken']) ? $response['authToken'] : null)
 		);
 	}
 
@@ -171,15 +195,16 @@ class User implements WorkingObject {
 	 */
 	public function toArray() {
 		return [
-			'_type' => 'User',
-			'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
-			'loginDisabled' => $this->loginDisabled,
-			'language' => $this->language,
-			'lastLoginDate' => ($this->lastLoginDate?$this->lastLoginDate->format('Y-m-d H:i:s'):null),
-			'lastLoginIp' => $this->lastLoginIp,
-			'metaData' => $this->metaData,
-			'currencyCode' => $this->currencyCode,
-			'verifiedData' => $this->verifiedData,
+			'_type'         => 'User',
+            'createdAt'     => $this->createdAt->format('Y-m-d H:i:s'),
+            'loginDisabled' => $this->loginDisabled,
+            'language'      => $this->language,
+            'lastLoginDate' => ($this->lastLoginDate ? $this->lastLoginDate->format('Y-m-d H:i:s') : null),
+            'lastLoginIp'   => $this->lastLoginIp,
+            'metaData'      => $this->metaData,
+            'currencyCode'  => $this->currencyCode,
+            'verifiedData'  => $this->verifiedData,
+            'authToken'     => $this->authToken,
 		];
 	}
 }
