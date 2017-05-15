@@ -68,7 +68,7 @@ class User implements WorkingObject {
 								$metaData,
                                 $currencyCode = null,
                                 $verifiedData = [],
-                                $authToken = null
+                                AuthToken $authToken = null
     ) {
 		$this->userId        = $userId;
 		$this->createdAt     = $createdAt;
@@ -186,7 +186,7 @@ class User implements WorkingObject {
             $response['metaData'],
             (isset($response['currencyCode']) ? $response['currencyCode'] : null),
             (isset($response['verifiedData']) ? $response['verifiedData'] : []),
-            (isset($response['authToken']) ? $response['authToken'] : null)
+            (isset($response['authToken']) ? AuthToken::fromResponse($response['authToken']) : null)
 		);
 	}
 
@@ -204,7 +204,7 @@ class User implements WorkingObject {
             'metaData'      => $this->metaData,
             'currencyCode'  => $this->currencyCode,
             'verifiedData'  => $this->verifiedData,
-            'authToken'     => $this->authToken,
+            'authToken'     => ($this->authToken ? $this->authToken->toArray() : null),
 		];
 	}
 }

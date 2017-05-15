@@ -56,6 +56,7 @@ use Ixolit\Dislo\Response\UserEmailVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserEmailVerificationStartResponse;
 use Ixolit\Dislo\Response\UserEnableLoginResponse;
 use Ixolit\Dislo\Response\UserFindResponse;
+use Ixolit\Dislo\Response\UserGetAuthenticatedResponse;
 use Ixolit\Dislo\Response\UserGetBalanceResponse;
 use Ixolit\Dislo\Response\UserGetMetaProfileResponse;
 use Ixolit\Dislo\Response\UserGetResponse;
@@ -1621,6 +1622,30 @@ class Client {
 		$response = $this->request('/frontend/user/extendTokenLifeTime', $data);
 		return UserUpdateTokenResponse::fromResponse($response);
 	}
+
+    /**
+     * Get user with validated frontend auth token.
+     *
+     * @param string $authToken
+     * @param string $ipAddress
+     *
+     * @return UserGetAuthenticatedResponse
+     */
+	public function userGetAuthenticated(
+	    $authToken,
+        $ipAddress = ''
+    ) {
+        $data = [
+            'authToken' => $authToken,
+        ];
+
+        if ($ipAddress) {
+            $data['ipAddress'] = $ipAddress;
+        }
+
+        $response = $this->request('/frontend/user/getAuthenticatedUser', $data);
+        return UserGetAuthenticatedResponse::fromResponse($response);
+    }
 
 	/**
 	 * Searches among the unique properties of all users in order to find one user. The search term must match exactly.
