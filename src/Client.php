@@ -1643,7 +1643,7 @@ class Client {
             $data['ipAddress'] = $ipAddress;
         }
 
-        $response = $this->request('/frontend/user/getAuthenticatedUser', $data);
+        $response = $this->request('/frontend/user/getAuthenticated', $data);
         return UserGetAuthenticatedResponse::fromResponse($response);
     }
 
