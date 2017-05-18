@@ -402,6 +402,50 @@ class Client {
 	}
 
 	/**
+	 * Create an external charge.
+	 *
+	 * @see https://docs.dislo.com/display/DIS/ExternalCreateChargeWithoutProfile
+	 *
+	 * @param string          $accountIdentifier     the billing account identifier, you will this from dislo staff
+	 * @param string          $currencyCode          currency code EUR, USD, ...
+	 * @param float           $amount                the amount of the charge
+	 * @param string          $externalTransactionId external unique id for the charge
+	 * @param array           $paymentDetails        additional data you want to save with the charge
+	 * @param string          $description           description of the charge
+	 * @param string          $status                status the charge should be created with, you might want to log
+	 *                                               erroneous charges in dislo too, but you don't have to. @see
+	 *                                               BillingEvent::STATUS_*
+	 * @param User|int|string $userTokenOrId         User authentication token or user ID.
+	 *
+	 * @return BillingExternalCreateChargeResponse
+	 *
+	 * @throws DisloException
+	 */
+	public function billingExternalCreateChargeWithoutProfile(
+		$accountIdentifier,
+		$currencyCode,
+		$amount,
+		$externalTransactionId = null,
+		$paymentDetails = [],
+		$description = '',
+		$status = 'success',
+		$userTokenOrId = null
+	) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$data['accountIdentifier']     = $accountIdentifier;
+		$data['currencyCode']          = $currencyCode;
+		$data['amount']                = $amount;
+		$data['externalTransactionId'] = $externalTransactionId;
+		$data['paymentDetails']        = $paymentDetails;
+		$data['description']           = $description;
+		$data['status']                = $status;
+
+		$response = $this->request('/frontend/billing/externalCreateChargeWithoutProfile', $data);
+		return BillingExternalCreateChargeResponse::fromResponse($response);
+	}
+
+	/**
 	 * Create a charge back for an external charge by using the original transaction ID
 	 *
 	 * @see https://docs.dislo.com/display/DIS/ExternalCreateChargeback
