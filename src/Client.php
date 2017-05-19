@@ -9,6 +9,7 @@ use Ixolit\Dislo\Exceptions\DisloException;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\RequestClient;
+use Ixolit\Dislo\Request\RequestClientEx;
 use Ixolit\Dislo\Response\BillingCloseActiveRecurringResponse;
 use Ixolit\Dislo\Response\BillingCloseFlexibleResponse;
 use Ixolit\Dislo\Response\BillingCreateFlexibleResponse;
@@ -98,6 +99,21 @@ class Client {
 	 * @var bool
 	 */
 	private $forceTokenMode;
+
+	/**
+	 * @return RequestClient|RequestClientEx
+	 *
+	 * @throws \Exception
+	 */
+	private function getRequestClientEx() {
+		if ($this->requestClient instanceof RequestClientEx) {
+			return $this->requestClient;
+		}
+		else {
+			// TODO: specific exception
+			throw new \Exception('not implemented');
+		}
+	}
 
 	private function userToData($userTokenOrId, &$data = []) {
 		if ($this->forceTokenMode) {
@@ -1883,4 +1899,24 @@ class Client {
         return UserSmsVerificationFinishResponse::fromResponse($response);
     }
 
+	/**
+	 *
+	 */
+	public function exportStreamQuery(
+		$query,
+		$parameters = null,
+		$stream = null
+	) {
+		$data = [
+			'query' => $query
+		];
+		if ($parameters) {
+			$data['parameters'] = $parameters;
+		}
+		if (!$stream) {
+			$stream = \fopen('php://stdout', 'w');
+		}
+		$response = $this->getRequestClientEx()->requestStream('/export/v2/query', $data, $stream);
+		return $response;
+	}
 }
