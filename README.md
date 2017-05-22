@@ -66,7 +66,7 @@ Get user from token:
     $apiClient = new \Ixolit\Dislo\Client($httpClient);
     
     try {
-        $user = $client->userGet($token);
+        $user = $apiClient->userGet($token);
     }
     catch (\Ixolit\Dislo\Exceptions\InvalidTokenException $e) {
         // token invalid, e.g. expired
@@ -85,7 +85,7 @@ Verify a token, explicitly extend its expiry time and optionally change its life
     $apiClient = new \Ixolit\Dislo\Client($httpClient);
     
     try {
-        $response = $client->userExtendToken($token, $ipAdress, 3600);
+        $response = $apiClient->userExtendToken($token, $ipAdress, 3600);
         $authToken = $response->getAuthToken();
         echo $authToken->getValidUntil()->format('c');
     }
@@ -99,7 +99,7 @@ Verify a token, explicitly extend its expiry time and optionally change its life
 
 Deauthenticate:
 
-    $client->userDeauthenticate($token);
+    $apiClient->userDeauthenticate($token);
     setcookie('authToken', null, -1);
 
 ### Packages
@@ -120,7 +120,7 @@ Retrieve a list of subscriptions for a user:
 
     $apiClient = new \Ixolit\Dislo\Client($httpClient);
 
-    $response = $client->subscriptionGetAll($token);
+    $response = $apiClient->subscriptionGetAll($token);
 
     foreach ($response->getSubscriptions() as $subscription) {
         print_r([
@@ -132,3 +132,18 @@ Retrieve a list of subscriptions for a user:
             'metaData' => $subscription->getProvisioningMetaData(),
         ]);
     }
+
+### Search API
+
+Run a parametrized query against the search database in Dislo, pass a file resource to stream the returned data to.
+
+    $apiClient = new \Ixolit\Dislo\Client($httpClient);
+
+    $date = date('Y-m-d');
+    $file = fopen('/path/to/file', 'w');
+
+    $apiClient->exportStreamQuery(
+        'select * from users where last_indexed_at > :_last(date)',
+        ['last' => $date],
+        $file
+    );
