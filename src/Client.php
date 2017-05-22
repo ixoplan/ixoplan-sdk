@@ -1901,6 +1901,31 @@ class Client {
     }
 
 	/**
+	 * Run a stored report against Dislo's search database streaming the returned data. Requires a RequestClient with
+	 * streaming support.
+	 *
+	 * @param int             $reportId as shown in Dislo's administrator interface
+	 * @param array|null      $parameters name/value pairs to fill placeholders within the report
+	 * @param mixed|null      $stream String, resource, object or interface to stream the response body to, default to stdout
+	 *
+	 * @return StreamInterface
+	 */
+	public function exportStreamReport(
+		$reportId,
+		$parameters = null,
+		$stream = null
+	) {
+    	$data = [];
+		if ($parameters) {
+			$data['parameters'] = $parameters;
+		}
+		if (!$stream) {
+			$stream = \fopen('php://stdout', 'w');
+		}
+		return $this->getRequestClientExtra()->requestStream('/export/v2/report/' . $reportId, $data, $stream);
+	}
+
+	/**
 	 * Run a query against Dislo's search database streaming the returned data. Requires a RequestClient with
 	 * streaming support.
 	 *
