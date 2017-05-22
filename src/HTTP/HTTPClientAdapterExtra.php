@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * @package Dislo
  */
-interface HTTPClientAdapterEx {
+interface HTTPClientAdapterExtra {
 
 	const OPTION_RESPONSE_BODY_STREAM = 'response_body_stream';
 

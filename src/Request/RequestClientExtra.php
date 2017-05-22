@@ -9,7 +9,7 @@ use Psr\Http\Message\StreamInterface;
  *
  * @package Dislo
  */
-interface RequestClientEx {
+interface RequestClientExtra {
 	/**
 	 * @param string $uri
 	 * @param array $params

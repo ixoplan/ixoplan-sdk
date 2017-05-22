@@ -10,7 +10,7 @@ use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\RequestClient;
-use Ixolit\Dislo\Request\RequestClientEx;
+use Ixolit\Dislo\Request\RequestClientExtra;
 use Ixolit\Dislo\Response\BillingCloseActiveRecurringResponse;
 use Ixolit\Dislo\Response\BillingCloseFlexibleResponse;
 use Ixolit\Dislo\Response\BillingCreateFlexibleResponse;
@@ -102,12 +102,12 @@ class Client {
 	private $forceTokenMode;
 
 	/**
-	 * @return RequestClientEx
+	 * @return RequestClientExtra
 	 *
 	 * @throws NotImplementedException
 	 */
-	private function getRequestClientEx() {
-		if ($this->requestClient instanceof RequestClientEx) {
+	private function getRequestClientExtra() {
+		if ($this->requestClient instanceof RequestClientExtra) {
 			return $this->requestClient;
 		}
 		else {
@@ -1916,7 +1916,7 @@ class Client {
 		if (!$stream) {
 			$stream = \fopen('php://stdout', 'w');
 		}
-		$response = $this->getRequestClientEx()->requestStream('/export/v2/query', $data, $stream);
+		$response = $this->getRequestClientExtra()->requestStream('/export/v2/query', $data, $stream);
 		return $response;
 	}
 }

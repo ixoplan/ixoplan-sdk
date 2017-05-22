@@ -5,7 +5,7 @@ namespace Ixolit\Dislo\Request;
 use Ixolit\Dislo\Exceptions\DisloException;
 use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\HTTP\HTTPClientAdapter;
-use Ixolit\Dislo\HTTP\HTTPClientAdapterEx;
+use Ixolit\Dislo\HTTP\HTTPClientAdapterExtra;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 
@@ -14,7 +14,7 @@ use Psr\Http\Message\StreamInterface;
  *
  * @package Dislo
  */
-class HTTPRequestClient implements RequestClient, RequestClientEx {
+class HTTPRequestClient implements RequestClient, RequestClientExtra {
 
 	/**
 	 * @var HTTPClientAdapter
@@ -38,12 +38,12 @@ class HTTPRequestClient implements RequestClient, RequestClientEx {
 	private $apiSecret;
 
 	/**
-	 * @return HTTPClientAdapterEx
+	 * @return HTTPClientAdapterExtra
 	 *
 	 * @throws NotImplementedException
 	 */
-	private function getHttpClientEx() {
-		if ($this->httpClient instanceof HTTPClientAdapterEx) {
+	private function getHttpClientExtra() {
+		if ($this->httpClient instanceof HTTPClientAdapterExtra) {
 			return $this->httpClient;
 		}
 		else {
@@ -138,8 +138,8 @@ class HTTPRequestClient implements RequestClient, RequestClientEx {
 
 		$request = $this->prepareRequest($uri, $params);
 
-		$response = $this->getHttpClientEx()->sendAdvanced($request, [
-			HTTPClientAdapterEx::OPTION_RESPONSE_BODY_STREAM => $stream,
+		$response = $this->getHttpClientExtra()->sendAdvanced($request, [
+			HTTPClientAdapterExtra::OPTION_RESPONSE_BODY_STREAM => $stream,
 		]);
 
 		if ($response->getStatusCode() == 200) {
