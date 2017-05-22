@@ -60,7 +60,7 @@ class HTTPRequestClient implements RequestClient, RequestClientEx {
 	private function prepareRequest($path, array $params) {
 		$payload   = \json_encode($params);
 		$uri       = $this->httpClient->createUri()
-			->withScheme('http')
+			->withScheme('https')
 			->withHost($this->host)
 			->withPath($path)
 			->withQuery(
