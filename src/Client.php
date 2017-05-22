@@ -75,6 +75,7 @@ use Ixolit\Dislo\Response\UserVerificationStartResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\WorkingObjects\User;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * The main client class for use with the Dislo API.
@@ -1900,7 +1901,14 @@ class Client {
     }
 
 	/**
+	 * Run a query against the Dislo's search database streaming the returned data. Requires a RequestClient with
+	 * streaming support.
 	 *
+	 * @param string          $query SQL statement to execute, may contain ":_name(type)" placeholders
+	 * @param array|null      $parameters name/value pairs to fill placeholders within the query
+	 * @param mixed|null      $stream String, resource, object or interface to stream the response body to
+	 *
+	 * @return StreamInterface
 	 */
 	public function exportStreamQuery(
 		$query,
@@ -1916,7 +1924,6 @@ class Client {
 		if (!$stream) {
 			$stream = \fopen('php://stdout', 'w');
 		}
-		$response = $this->getRequestClientExtra()->requestStream('/export/v2/query', $data, $stream);
-		return $response;
+		return $this->getRequestClientExtra()->requestStream('/export/v2/query', $data, $stream);
 	}
 }
