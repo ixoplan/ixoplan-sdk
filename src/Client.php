@@ -7,6 +7,7 @@ use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
 use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\DisloException;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
+use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\RequestClient;
 use Ixolit\Dislo\Request\RequestClientEx;
@@ -101,17 +102,16 @@ class Client {
 	private $forceTokenMode;
 
 	/**
-	 * @return RequestClient|RequestClientEx
+	 * @return RequestClientEx
 	 *
-	 * @throws \Exception
+	 * @throws NotImplementedException
 	 */
 	private function getRequestClientEx() {
 		if ($this->requestClient instanceof RequestClientEx) {
 			return $this->requestClient;
 		}
 		else {
-			// TODO: specific exception
-			throw new \Exception('not implemented');
+			throw new NotImplementedException();
 		}
 	}
 

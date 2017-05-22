@@ -3,6 +3,7 @@
 namespace Ixolit\Dislo\Request;
 
 use Ixolit\Dislo\Exceptions\DisloException;
+use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\HTTP\HTTPClientAdapter;
 use Ixolit\Dislo\HTTP\HTTPClientAdapterEx;
 use Psr\Http\Message\RequestInterface;
@@ -39,15 +40,14 @@ class HTTPRequestClient implements RequestClient, RequestClientEx {
 	/**
 	 * @return HTTPClientAdapterEx
 	 *
-	 * @throws \Exception
+	 * @throws NotImplementedException
 	 */
 	private function getHttpClientEx() {
 		if ($this->httpClient instanceof HTTPClientAdapterEx) {
 			return $this->httpClient;
 		}
 		else {
-			// TODO: specific exception
-			throw new \Exception('not implemented');
+			throw new NotImplementedException();
 		}
 	}
 
