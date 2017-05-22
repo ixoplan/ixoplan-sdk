@@ -131,6 +131,8 @@ class HTTPRequestClient implements RequestClient, RequestClientEx {
 	 * @param mixed $stream
 	 *
 	 * @return StreamInterface
+	 *
+	 * @throws InvalidResponseData
 	 */
 	public function requestStream($uri, array $params, $stream) {
 
@@ -140,6 +142,10 @@ class HTTPRequestClient implements RequestClient, RequestClientEx {
 			HTTPClientAdapterEx::OPTION_RESPONSE_BODY_STREAM => $stream,
 		]);
 
-		return $response->getBody();
+		if ($response->getStatusCode() == 200) {
+			return $response->getBody();
+		}
+
+		throw new InvalidResponseData($response->getReasonPhrase(), $response->getStatusCode());
 	}
 }
