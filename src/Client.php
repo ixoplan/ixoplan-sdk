@@ -1901,12 +1901,12 @@ class Client {
     }
 
 	/**
-	 * Run a query against the Dislo's search database streaming the returned data. Requires a RequestClient with
+	 * Run a query against Dislo's search database streaming the returned data. Requires a RequestClient with
 	 * streaming support.
 	 *
 	 * @param string          $query SQL statement to execute, may contain ":_name(type)" placeholders
 	 * @param array|null      $parameters name/value pairs to fill placeholders within the query
-	 * @param mixed|null      $stream String, resource, object or interface to stream the response body to
+	 * @param mixed|null      $stream String, resource, object or interface to stream the response body to, default to stdout
 	 *
 	 * @return StreamInterface
 	 */
