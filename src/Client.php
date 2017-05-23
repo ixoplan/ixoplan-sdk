@@ -7,8 +7,10 @@ use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
 use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\DisloException;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
+use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\RequestClient;
+use Ixolit\Dislo\Request\RequestClientExtra;
 use Ixolit\Dislo\Response\BillingCloseActiveRecurringResponse;
 use Ixolit\Dislo\Response\BillingCloseFlexibleResponse;
 use Ixolit\Dislo\Response\BillingCreateFlexibleResponse;
@@ -74,6 +76,7 @@ use Ixolit\Dislo\Response\UserVerificationStartResponse;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\WorkingObjects\User;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * The main client class for use with the Dislo API.
@@ -99,6 +102,20 @@ class Client {
 	 * @var bool
 	 */
 	private $forceTokenMode;
+
+	/**
+	 * @return RequestClientExtra
+	 *
+	 * @throws NotImplementedException
+	 */
+	private function getRequestClientExtra() {
+		if ($this->requestClient instanceof RequestClientExtra) {
+			return $this->requestClient;
+		}
+		else {
+			throw new NotImplementedException();
+		}
+	}
 
 	private function userToData($userTokenOrId, &$data = []) {
 		if ($this->forceTokenMode) {
@@ -1898,4 +1915,55 @@ class Client {
         return UserSmsVerificationFinishResponse::fromResponse($response);
     }
 
+	/**
+	 * Run a stored report against Dislo's search database streaming the returned data. Requires a RequestClient with
+	 * streaming support.
+	 *
+	 * @param int             $reportId as shown in Dislo's administrator interface
+	 * @param array|null      $parameters name/value pairs to fill placeholders within the report
+	 * @param mixed|null      $stream String, resource, object or interface to stream the response body to, default to stdout
+	 *
+	 * @return StreamInterface
+	 */
+	public function exportStreamReport(
+		$reportId,
+		$parameters = null,
+		$stream = null
+	) {
+    	$data = [];
+		if ($parameters) {
+			$data['parameters'] = $parameters;
+		}
+		if (!$stream) {
+			$stream = \fopen('php://stdout', 'w');
+		}
+		return $this->getRequestClientExtra()->requestStream('/export/v2/report/' . $reportId, $data, $stream);
+	}
+
+	/**
+	 * Run a query against Dislo's search database streaming the returned data. Requires a RequestClient with
+	 * streaming support.
+	 *
+	 * @param string          $query SQL statement to execute, may contain ":_name(type)" placeholders
+	 * @param array|null      $parameters name/value pairs to fill placeholders within the query
+	 * @param mixed|null      $stream String, resource, object or interface to stream the response body to, default to stdout
+	 *
+	 * @return StreamInterface
+	 */
+	public function exportStreamQuery(
+		$query,
+		$parameters = null,
+		$stream = null
+	) {
+		$data = [
+			'query' => $query
+		];
+		if ($parameters) {
+			$data['parameters'] = $parameters;
+		}
+		if (!$stream) {
+			$stream = \fopen('php://stdout', 'w');
+		}
+		return $this->getRequestClientExtra()->requestStream('/export/v2/query', $data, $stream);
+	}
 }
