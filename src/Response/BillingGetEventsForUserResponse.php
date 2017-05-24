@@ -10,11 +10,18 @@ class BillingGetEventsForUserResponse {
 	 */
 	private $billingEvents;
 
-	/**
-	 * @param BillingEvent[] $billingEvents
-	 */
-	public function __construct($billingEvents) {
+    /**
+     * @var int|null
+     */
+	private $totalCount;
+
+    /**
+     * @param BillingEvent[] $billingEvents
+     * @param int|null       $totalCount
+     */
+	public function __construct($billingEvents, $totalCount = null) {
 		$this->billingEvents = $billingEvents;
+		$this->totalCount = $totalCount;
 	}
 
 	/**
@@ -23,6 +30,13 @@ class BillingGetEventsForUserResponse {
 	public function getBillingEvents() {
 		return $this->billingEvents;
 	}
+
+    /**
+     * @return int|null
+     */
+	public function getTotalCount() {
+	    return $this->totalCount;
+    }
 
 	/**
 	 * @param array $response
@@ -35,6 +49,9 @@ class BillingGetEventsForUserResponse {
 			$billingEvents[] = BillingEvent::fromResponse($billingEventArray);
 		}
 
-		return new BillingGetEventsForUserResponse($billingEvents);
+		return new BillingGetEventsForUserResponse(
+		    $billingEvents,
+            isset($response['totalCount']) ? (int)$response['totalCount'] : null
+        );
 	}
 }
