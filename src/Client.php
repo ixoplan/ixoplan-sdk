@@ -93,6 +93,9 @@ class Client {
 	const PLAN_CHANGE_IMMEDIATE = 'immediate';
 	const PLAN_CHANGE_QUEUED    = 'queued';
 
+	const ORDER_DIR_ASC = 'ASC';
+	const ORDER_DIR_DESC = 'DESC';
+
 	/**
 	 * @var RequestClient
 	 */
@@ -597,15 +600,25 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/GetBillingEventsForUser
 	 *
 	 * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param int             $limit
+     * @param int             $offset
+     * @param string          $orderDir
 	 *
 	 * @return BillingGetEventsForUserResponse
 	 *
 	 * @throws DisloException
 	 */
 	public function billingGetEventsForUser(
-		$userTokenOrId
+		$userTokenOrId,
+        $limit = 10,
+        $offset = 0,
+        $orderDir = self::ORDER_DIR_ASC
 	) {
-		$data = [];
+		$data = [
+            'limit'    => $limit,
+            'offset'   => $offset,
+            'orderDir' => $orderDir,
+        ];
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/billing/getBillingEventsForUser', $data);
 		return BillingGetEventsForUserResponse::fromResponse($response);
