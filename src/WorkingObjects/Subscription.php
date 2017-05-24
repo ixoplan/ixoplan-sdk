@@ -275,24 +275,27 @@ class Subscription implements WorkingObject {
 	 */
 	public static function fromResponse($response) {
 		$addonSubscriptions = [];
-		foreach ($response['addonSubscriptions'] as $addonSubscription) {
-			$addonSubscriptions[] = Subscription::fromResponse($addonSubscription);
+		if(isset($response['addonSubscriptions'])) {
+			foreach ($response['addonSubscriptions'] as $addonSubscription) {
+				$addonSubscriptions[] = Subscription::fromResponse($addonSubscription);
+			}
 		}
+
 		return new Subscription(
 			$response['subscriptionId'],
 			Package::fromResponse($response['currentPackage']),
 			$response['userId'],
 			$response['status'],
-			($response['startedAt']?new \DateTime($response['startedAt']):null),
-			($response['canceledAt']?new \DateTime($response['canceledAt']):null),
-			($response['closedAt']?new \DateTime($response['closedAt']):null),
-			($response['expiresAt']?new \DateTime($response['expiresAt']):null),
-			($response['nextBillingAt']?new \DateTime($response['nextBillingAt']):null),
+			(isset($response['startedAt']) && $response['startedAt'] ?new \DateTime($response['startedAt']):null),
+			(isset($response['canceledAt']) && $response['canceledAt'] ?new \DateTime($response['canceledAt']):null),
+			(isset($response['closedAt']) && $response['closedAt'] ?new \DateTime($response['closedAt']):null),
+			(isset($response['expiresAt']) && $response['expiresAt'] ?new \DateTime($response['expiresAt']):null),
+			(isset($response['nextBillingAt']) && $response['nextBillingAt'] ?new \DateTime($response['nextBillingAt']):null),
 			$response['currencyCode'],
 			$response['isInitialPeriod'],
 			$response['isProvisioned'],
-			$response['provisioningMetaData'],
-			($response['nextPackage']?Package::fromResponse($response['nextPackage']):null),
+			isset($response['provisioningMetaData']) ? $response['provisioningMetaData'] : array(),
+			(isset($response['nextPackage']) && $response['nextPackage']?Package::fromResponse($response['nextPackage']):null),
 			$addonSubscriptions,
 			(isset($response['minimumTermEndsAt']) ? new \DateTime($response['minimumTermEndsAt']) : null)
 		);

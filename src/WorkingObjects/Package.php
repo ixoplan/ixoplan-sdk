@@ -166,19 +166,22 @@ class Package implements WorkingObject {
 			$displayNames[] = DisplayName::fromResponse($displayName);
 		}
 		$addonPackages = [];
-		foreach ($response['addonPackages'] as $addonPackage) {
-			$addonPackages[] = Package::fromResponse($addonPackage);
+		if(isset($response['addonPackages'])) {
+			foreach ($response['addonPackages'] as $addonPackage) {
+				$addonPackages[] = Package::fromResponse($addonPackage);
+			}
 		}
+
 		return new Package(
 			$response['packageIdentifier'],
 			$response['serviceIdentifier'],
 			$displayNames,
 			$response['signupAvailable'],
 			$addonPackages,
-			$response['metaData'],
-			($response['initialPeriod']?PackagePeriod::fromResponse($response['initialPeriod']):null),
-			($response['recurringPeriod']?PackagePeriod::fromResponse($response['recurringPeriod']):null),
-			(isset($response['hasTrialPeriod']) ? $response['hasTrialPeriod'] : false)
+			isset($response['metaData']) ? $response['metaData'] : array(),
+			isset($response['initialPeriod']) && $response['initialPeriod'] ? PackagePeriod::fromResponse($response['initialPeriod']) : null,
+			isset($response['recurringPeriod']) && $response['recurringPeriod'] ? PackagePeriod::fromResponse($response['recurringPeriod']) : null,
+			isset($response['hasTrialPeriod']) ? $response['hasTrialPeriod'] : false
 		);
 	}
 

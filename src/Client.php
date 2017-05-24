@@ -598,14 +598,22 @@ class Client {
 	 *
 	 * @param User|int|string $userTokenOrId User authentication token or user ID.
 	 *
-	 * @return BillingGetEventsForUserResponse
+	 * @param int|null $limit max count of events to fetch, defaults to 10
+	 * @param int|null $offset offset starting at 0 from where to fetch limit events
+	 * @param string|null $orderDir ASC or DESC defaults to ASC
 	 *
+	 * @return BillingGetEventsForUserResponse
 	 * @throws DisloException
+	 * @throws ObjectNotFoundException
 	 */
 	public function billingGetEventsForUser(
-		$userTokenOrId
+		$userTokenOrId, $limit = 10, $offset = 0, $orderDir = 'ASC'
 	) {
-		$data = [];
+		$data = [
+			'limit' => $limit,
+			'offset' => $offset,
+			'orderDir' => $orderDir
+		];
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/billing/getBillingEventsForUser', $data);
 		return BillingGetEventsForUserResponse::fromResponse($response);

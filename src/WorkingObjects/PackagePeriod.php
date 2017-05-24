@@ -56,7 +56,7 @@ class PackagePeriod implements WorkingObject {
 		return new PackagePeriod(
 			$response['length'],
 			$response['lengthUnit'],
-			$response['metaData'],
+			isset($response['metaData']) ? $response['metaData'] : array(),
 			$prices,
 			isset($response['minimumTermLength']) ? $response['minimumTermLength'] : null
 		);
