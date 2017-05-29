@@ -1964,4 +1964,34 @@ class Client {
 		}
 		return $this->getRequestClientExtra()->requestStream('/export/v2/query', $data, $stream);
 	}
+
+	/**
+	 * Run a stored report against Dislo's search database returning the result as string. Keep memory limits in mind!
+	 *
+	 * @param int             $reportId as shown in Dislo's administrator interface
+	 * @param array|null      $parameters name/value pairs to fill placeholders within the report
+	 *
+	 * @return string
+	 */
+	public function exportReport(
+		$reportId,
+		$parameters = null
+	) {
+		return $this->exportStreamReport($reportId, $parameters, \fopen('php://temp', 'w+'))->getContents();
+	}
+
+	/**
+	 * Run a query against Dislo's search database returning the result as string. Keep memory limits im mind!
+	 *
+	 * @param string          $query SQL statement to execute, may contain ":_name(type)" placeholders
+	 * @param array|null      $parameters name/value pairs to fill placeholders within the query
+	 *
+	 * @return string
+	 */
+	public function exportQuery(
+		$query,
+		$parameters = null
+	) {
+		return $this->exportStreamQuery($query, $parameters, \fopen('php://temp', 'w+'))->getContents();
+	}
 }
