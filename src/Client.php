@@ -58,6 +58,7 @@ use Ixolit\Dislo\Response\UserEmailVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserEmailVerificationStartResponse;
 use Ixolit\Dislo\Response\UserEnableLoginResponse;
 use Ixolit\Dislo\Response\UserFindResponse;
+use Ixolit\Dislo\Response\UserGetAuthenticatedResponse;
 use Ixolit\Dislo\Response\UserGetBalanceResponse;
 use Ixolit\Dislo\Response\UserGetMetaProfileResponse;
 use Ixolit\Dislo\Response\UserGetResponse;
@@ -207,6 +208,13 @@ class Client {
 		$this->forceTokenMode = $forceTokenMode;
 	}
 
+    /**
+     * @return bool
+     */
+	public function isForceTokenMode() {
+	    return $this->forceTokenMode;
+    }
+
 	/**
 	 * Retrieve the list of payment methods.
 	 *
@@ -269,7 +277,7 @@ class Client {
 	 */
 	public function billingCloseFlexible(
 		$flexible,
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
@@ -340,7 +348,7 @@ class Client {
 		$billingMethod,
 		$returnUrl,
 		$paymentDetails,
-		$userTokenOrId = null,
+		$userTokenOrId,
 		$countryCode = null
 	) {
 		$data = [];
@@ -677,7 +685,7 @@ class Client {
 	 */
 	public function billingGetActiveRecurring(
 		$subscription,
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'subscriptionId' =>
@@ -700,7 +708,7 @@ class Client {
 	 */
 	public function billingCloseActiveRecurring(
 		$subscription,
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'subscriptionId' =>
@@ -729,7 +737,7 @@ class Client {
 		$subscription,
 		$packageIdentifiers,
 		$couponCode = null,
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'subscriptionId'     =>
@@ -792,7 +800,7 @@ class Client {
 		$currencyCode,
 		$couponCode = null,
 		$addonPackageIdentifiers = [],
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'packageIdentifier'       => $packageIdentifier,
@@ -988,7 +996,7 @@ class Client {
 		$subscription,
 		$packageIdentifiers,
 		$couponCode = '',
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'subscriptionId'     =>
@@ -1151,7 +1159,7 @@ class Client {
 	public function subscriptionExternalAddonCreate(
 		$subscription,
 		$packageIdentifiers,
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'subscriptionId'     =>
@@ -1187,7 +1195,7 @@ class Client {
 		$currencyCode,
 		$addonPackageIdentifiers = [],
 		\DateTime $periodEnd = null,
-		$userTokenOrId = null
+		$userTokenOrId
 	) {
 		$data = [
 			'packageIdentifier'       => $packageIdentifier,
@@ -1606,23 +1614,6 @@ class Client {
 	}
 
 	/**
-	 * Get the status of a Single-Step signup (usually called after the user comes back from the payment provider).
-	 *
-	 * @param string $signupIdentifier unique signup identifier returned from UserSignupWithPayment
-	 *
-	 * @return UserGetSignupStatusResponse
-	 */
-	public function userGetSignupStatus(
-		$signupIdentifier
-	) {
-		$data     = [
-			'signupIdentifier' => $signupIdentifier,
-		];
-		$response = $this->request('/frontend/user/getSignupStatus', $data);
-		return UserGetSignupStatusResponse::fromResponse($response);
-	}
-
-	/**
 	 * Retrieves the users authentication tokens.
 	 *
 	 * @param User|string|int $userTokenOrId
@@ -1705,6 +1696,30 @@ class Client {
 		$response = $this->request('/frontend/user/extendTokenLifeTime', $data);
 		return UserUpdateTokenResponse::fromResponse($response);
 	}
+
+    /**
+     * Get user with validated frontend auth token.
+     *
+     * @param string $authToken
+     * @param string $ipAddress
+     *
+     * @return UserGetAuthenticatedResponse
+     */
+	public function userGetAuthenticated(
+	    $authToken,
+        $ipAddress = ''
+    ) {
+        $data = [
+            'authToken' => $authToken,
+        ];
+
+        if ($ipAddress) {
+            $data['ipAddress'] = $ipAddress;
+        }
+
+        $response = $this->request('/frontend/user/getAuthenticated', $data);
+        return UserGetAuthenticatedResponse::fromResponse($response);
+    }
 
 	/**
 	 * Searches among the unique properties of all users in order to find one user. The search term must match exactly.
