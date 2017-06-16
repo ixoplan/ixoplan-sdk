@@ -128,6 +128,21 @@ class UserContext {
     }
 
     /**
+     * @param bool $cached
+     *
+     * @return Subscription|null
+     */
+    public function getFirstStartedSubscription($cached = true) {
+        $startedSubscriptions = $this->getStartedSubscriptions($cached);
+
+        if (empty($startedSubscriptions)) {
+            return null;
+        }
+
+        return \reset($startedSubscriptions);
+    }
+
+    /**
      * @param      $subscriptionId
      * @param bool $cached
      *
