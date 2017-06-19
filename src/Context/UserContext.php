@@ -146,9 +146,7 @@ class UserContext {
      * @param      $subscriptionId
      * @param bool $cached
      *
-     * @return Subscription
-     *
-     * @throws ObjectNotFoundException
+     * @return Subscription|null
      */
     public function getSubscription($subscriptionId, $cached = true) {
         $subscriptions = $this->getAllSubscriptions($cached);
@@ -159,7 +157,20 @@ class UserContext {
             }
         }
 
-        throw new ObjectNotFoundException('Subscription #' . $subscriptionId . ' not found.');
+        return null;
+    }
+
+    /**
+     * @param Subscription $subscription
+     *
+     * @return $this
+     */
+    public function addSubscription(Subscription $subscription) {
+        $this->getAllSubscriptions(true);
+
+        $this->subscriptions[] = $subscription;
+
+        return $this;
     }
 
     /**
@@ -180,6 +191,17 @@ class UserContext {
     }
 
     /**
+     * @param Flexible $activeFlexible
+     *
+     * @return $this
+     */
+    public function setActiveFlexible(Flexible $activeFlexible) {
+        $this->activeFlexible = $activeFlexible;
+
+        return $this;
+    }
+
+    /**
      * @param bool $cached
      *
      * @return BillingEvent[]
@@ -194,6 +216,19 @@ class UserContext {
         )->getBillingEvents();
 
         return $this->billingEvents;
+    }
+
+    /**
+     * @param BillingEvent $billingEvent
+     *
+     * @return $this
+     */
+    public function addBillingEvent(BillingEvent $billingEvent) {
+        $this->getBillingEvents(true);
+
+        $this->billingEvents[] = $billingEvent;
+
+        return $this;
     }
 
     /**
