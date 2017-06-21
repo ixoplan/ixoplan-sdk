@@ -219,6 +219,24 @@ class UserContext {
     }
 
     /**
+     * @param int  $billingEventId
+     * @param bool $cached
+     *
+     * @return BillingEvent|null
+     */
+    public function getBillingEvent($billingEventId, $cached = true) {
+        $billingEvents = $this->getBillingEvents($cached);
+
+        foreach ($billingEvents as $billingEvent) {
+            if ($billingEvent->getBillingEventId() == $billingEventId) {
+                return $billingEvent;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param BillingEvent $billingEvent
      *
      * @return $this
