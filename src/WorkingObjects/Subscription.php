@@ -76,6 +76,12 @@ class Subscription implements WorkingObject {
 	/** @var \DateTime|null */
 	private $minimumTermEndsAt;
 
+	/** @var bool */
+	private $isExternal;
+
+	/** @var CouponUsage */
+	private $couponUsage;
+
 	/**
 	 * Subscription constructor.
 	 *
@@ -95,11 +101,14 @@ class Subscription implements WorkingObject {
 	 * @param Package|null   $nextPackage
 	 * @param Subscription[] $addonSubscriptions
 	 * @param \DateTime|null $minimumTermEndsAt
+	 * @param bool           $isExternal
+	 * @param CouponUsage|null $couponUsage
 	 */
 	public function __construct(
 		$subscriptionId, Package $currentPackage, $userId, $status, $startedAt,
 		$canceledAt, $closedAt, $expiresAt, $nextBillingAt, $currencyCode, $isInitialPeriod,
-		$isProvisioned, $provisioningMetaData, $nextPackage, $addonSubscriptions, $minimumTermEndsAt = null) {
+		$isProvisioned, $provisioningMetaData, $nextPackage, $addonSubscriptions, $minimumTermEndsAt = null,
+		$isExternal = false, $couponUsage = null) {
 		$this->subscriptionId       = $subscriptionId;
 		$this->currentPackage       = $currentPackage;
 		$this->userId               = $userId;
@@ -116,6 +125,8 @@ class Subscription implements WorkingObject {
 		$this->nextPackage          = $nextPackage;
 		$this->addonSubscriptions   = $addonSubscriptions;
 		$this->minimumTermEndsAt    = $minimumTermEndsAt;
+		$this->isExternal           = $isExternal;
+		$this->couponUsage          = $couponUsage;
 	}
 
 	/**
@@ -243,8 +254,25 @@ class Subscription implements WorkingObject {
 		return $this->addonSubscriptions;
 	}
 
+	/**
+	 * @return \DateTime|null
+	 */
 	public function getMinimumTermEndsAt() {
 		return $this->minimumTermEndsAt;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isExternal() {
+		return $this->isExternal;
+	}
+
+	/**
+	 * @return CouponUsage
+	 */
+	public function getCouponUsage() {
+		return $this->couponUsage;
 	}
 
 	/**
@@ -297,7 +325,9 @@ class Subscription implements WorkingObject {
 			isset($response['provisioningMetaData']) ? $response['provisioningMetaData'] : array(),
 			(isset($response['nextPackage']) && $response['nextPackage']?Package::fromResponse($response['nextPackage']):null),
 			$addonSubscriptions,
-			(isset($response['minimumTermEndsAt']) ? new \DateTime($response['minimumTermEndsAt']) : null)
+			(isset($response['minimumTermEndsAt']) ? new \DateTime($response['minimumTermEndsAt']) : null),
+			$response['isExternal'],
+			(isset($response['couponUsage']) ? CouponUsage::fromResponse($response['couponUsage']) : null)
 		);
 	}
 
@@ -326,6 +356,8 @@ class Subscription implements WorkingObject {
 			'nextPackage' => ($this->nextPackage?$this->nextPackage->toArray():null),
 			'addonSubscriptions' => $addonSubscriptions,
 			'minimumTermEndsAt' => ($this->minimumTermEndsAt ? $this->minimumTermEndsAt->format('Y-m-d H:i:s') : null),
+			'isExternal' => $this->isExternal,
+			'couponUsage' => ($this->couponUsage ? $this->couponUsage->toArray() : null),
 		];
 	}
 

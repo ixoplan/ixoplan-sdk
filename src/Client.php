@@ -73,6 +73,7 @@ use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
 use Ixolit\Dislo\Response\UserVerificationStartResponse;
+use Ixolit\Dislo\WorkingObjects\BillingEvent;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\WorkingObjects\User;
@@ -422,7 +423,7 @@ class Client {
 	}
 
 	/**
-	 * Create an external charge.
+	 * Create an external charge without an external profile.
 	 *
 	 * @see https://docs.dislo.com/display/DIS/ExternalCreateChargeWithoutProfile
 	 *
@@ -448,7 +449,7 @@ class Client {
 		$externalTransactionId = null,
 		$paymentDetails = [],
 		$description = '',
-		$status = 'success',
+		$status = BillingEvent::STATUS_SUCCESS,
 		$userTokenOrId = null
 	) {
 		$data = [];
@@ -608,9 +609,9 @@ class Client {
 	 * @see https://docs.dislo.com/display/DIS/GetBillingEventsForUser
 	 *
 	 * @param User|int|string $userTokenOrId User authentication token or user ID.
-     * @param int             $limit
-     * @param int             $offset
-     * @param string          $orderDir
+	 * @param int             $limit
+	 * @param int             $offset
+	 * @param string          $orderDir
 	 *
 	 * @return BillingGetEventsForUserResponse
 	 *
@@ -618,15 +619,15 @@ class Client {
 	 */
 	public function billingGetEventsForUser(
 		$userTokenOrId,
-        $limit = 10,
-        $offset = 0,
-        $orderDir = self::ORDER_DIR_ASC
+		$limit = 10,
+		$offset = 0,
+		$orderDir = self::ORDER_DIR_ASC
 	) {
 		$data = [
-            'limit'    => $limit,
-            'offset'   => $offset,
-            'orderDir' => $orderDir,
-        ];
+			'limit'    => $limit,
+			'offset'   => $offset,
+			'orderDir' => $orderDir,
+		];
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/billing/getBillingEventsForUser', $data);
 		return BillingGetEventsForUserResponse::fromResponse($response);
@@ -1207,45 +1208,45 @@ class Client {
 		if ($periodEnd) {
 			$periodEnd = clone $periodEnd;
 			$periodEnd->setTimezone(new \DateTimeZone('UTC'));
-			$data['periodEnd'] = $periodEnd->format(['Y-m-d H:i:s']);
+			$data['periodEnd'] = $periodEnd->format('Y-m-d H:i:s');
 		}
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/externalCreateSubscription', $data);
 		return SubscriptionExternalCreateResponse::fromResponse($response);
 	}
 
-    /**
-     * Call a service provider function related to the subscription. Specific calls depend on the SPI connected to
-     * the service behind the subscription.
-     *
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
-     * @param Subscription|int $subscriptionId
-     * @param string           $method
-     * @param array            $params
-     * @param int|null         $serviceId
-     *
-     * @return SubscriptionCallSpiResponse
-     */
-    public function subscriptionCallSpi(
-        $userTokenOrId,
-        $subscriptionId,
-        $method,
-        $params,
-        $serviceId = null
-    ) {
-        if ($subscriptionId instanceof Subscription) {
-            $subscriptionId = $subscriptionId->getSubscriptionId();
-        }
-        $data = [
-            'subscriptionId' => $subscriptionId,
-            'method' => $method,
-            'params' => $params,
-            'serviceId' => $serviceId
-        ];
-        $this->userToData($userTokenOrId, $data);
-        $response = $this->request('/frontend/subscription/callSpi', $data);
-        return SubscriptionCallSpiResponse::fromResponse($response);
-    }
+	/**
+	 * Call a service provider function related to the subscription. Specific calls depend on the SPI connected to
+	 * the service behind the subscription.
+	 *
+	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
+	 * @param Subscription|int $subscriptionId
+	 * @param string           $method
+	 * @param array            $params
+	 * @param int|null         $serviceId
+	 *
+	 * @return SubscriptionCallSpiResponse
+	 */
+	public function subscriptionCallSpi(
+		$userTokenOrId,
+		$subscriptionId,
+		$method,
+		$params,
+		$serviceId = null
+	) {
+		if ($subscriptionId instanceof Subscription) {
+			$subscriptionId = $subscriptionId->getSubscriptionId();
+		}
+		$data = [
+			'subscriptionId' => $subscriptionId,
+			'method' => $method,
+			'params' => $params,
+			'serviceId' => $serviceId
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/callSpi', $data);
+		return SubscriptionCallSpiResponse::fromResponse($response);
+	}
 
 	public function subscriptionGetPossibleUpgrades(
 		$userTokenOrId,
@@ -1400,25 +1401,25 @@ class Client {
 		return CouponCodeValidateResponse::fromResponse($response, $couponCode, self::COUPON_EVENT_UPGRADE);
 	}
 
-    /**
-     * Authenticate a user. Returns an access token for subsequent API calls.
-     *
-     * @param string $username      Username.
-     * @param string $password      User password.
-     * @param string $ipAddress     IP address of the user attempting to authenticate.
-     * @param int    $tokenLifetime Authentication token lifetime in seconds. TokenLifeTime is renewed and extended
-     *                              by API calls automatically, using the inital tokenlifetime.
-     * @param string $metainfo      Meta information to store with token (4096 bytes)
-     * @param bool   $ignoreRateLimit
-     *
-     * @return UserAuthenticateResponse
-     * @throws AuthenticationException
-     * @throws AuthenticationInvalidCredentialsException
-     * @throws AuthenticationRateLimitedException
-     * @throws DisloException
-     * @throws ObjectNotFoundException
-     * @throws \Exception
-     */
+	/**
+	 * Authenticate a user. Returns an access token for subsequent API calls.
+	 *
+	 * @param string $username      Username.
+	 * @param string $password      User password.
+	 * @param string $ipAddress     IP address of the user attempting to authenticate.
+	 * @param int    $tokenLifetime Authentication token lifetime in seconds. TokenLifeTime is renewed and extended
+	 *                              by API calls automatically, using the inital tokenlifetime.
+	 * @param string $metainfo      Meta information to store with token (4096 bytes)
+	 * @param bool   $ignoreRateLimit
+	 *
+	 * @return UserAuthenticateResponse
+	 * @throws AuthenticationException
+	 * @throws AuthenticationInvalidCredentialsException
+	 * @throws AuthenticationRateLimitedException
+	 * @throws DisloException
+	 * @throws ObjectNotFoundException
+	 * @throws \Exception
+	 */
 	public function userAuthenticate(
 		$username,
 		$password,
@@ -1836,97 +1837,97 @@ class Client {
 
 	}
 
-    /**
-     * @param string|int|User $userTokenOrId
-     * @param string          $ipAddress
-     * @param string          $phoneNumber
-     *
-     * @return UserPhoneVerificationStartResponse
-     */
-    public function userPhoneVerificationStart(
-        $userTokenOrId,
-        $ipAddress,
-        $phoneNumber
-    ) {
-        $data = [
-            'verificationType' => 'phone',
-            'ipAddress' => (string)$ipAddress,
-            'extraData' => [
-                'phoneNumber' => $phoneNumber
-            ]
-        ];
-        $this->userToData($userTokenOrId, $data);
-        $response = $this->request('/frontend/user/verification/start', $data);
-        return UserPhoneVerificationStartResponse::fromResponse($response);
-    }
+	/**
+	 * @param string|int|User $userTokenOrId
+	 * @param string          $ipAddress
+	 * @param string          $phoneNumber
+	 *
+	 * @return UserPhoneVerificationStartResponse
+	 */
+	public function userPhoneVerificationStart(
+		$userTokenOrId,
+		$ipAddress,
+		$phoneNumber
+	) {
+		$data = [
+			'verificationType' => 'phone',
+			'ipAddress' => (string)$ipAddress,
+			'extraData' => [
+				'phoneNumber' => $phoneNumber
+			]
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/user/verification/start', $data);
+		return UserPhoneVerificationStartResponse::fromResponse($response);
+	}
 
-    /**
-     * @param string|int|User $userTokenOrId
-     * @param string          $verificationPin
+	/**
+	 * @param string|int|User $userTokenOrId
+	 * @param string          $verificationPin
 	 * @param string|null	  $phoneNumber
-     *
-     * @return UserPhoneVerificationFinishResponse
-     */
-    public function userPhoneVerificationFinish(
-        $userTokenOrId,
-        $verificationPin,
+	 *
+	 * @return UserPhoneVerificationFinishResponse
+	 */
+	public function userPhoneVerificationFinish(
+		$userTokenOrId,
+		$verificationPin,
 		$phoneNumber = null
-    ) {
-        $data = [
-            'verificationType' => 'phone',
-            'verificationPin' => $verificationPin,
+	) {
+		$data = [
+			'verificationType' => 'phone',
+			'verificationPin' => $verificationPin,
 			'phoneNumber' => $phoneNumber,
-        ];
-        $this->userToData($userTokenOrId, $data);
-        $response = $this->request('/frontend/user/verification/finalize', $data);
-        return UserPhoneVerificationFinishResponse::fromResponse($response);
-    }
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/user/verification/finalize', $data);
+		return UserPhoneVerificationFinishResponse::fromResponse($response);
+	}
 
-    /**
-     * @param string|int|User $userTokenOdId
-     * @param string          $ipAddress
-     * @param string          $phoneNumber
-     *
-     * @return UserVerificationStartResponse
-     */
-    public function userSmsVerificationStart(
-        $userTokenOdId,
-        $ipAddress,
-        $phoneNumber
-    ) {
-        $data = [
-            'verificationType' => 'sms',
-            'ipAddress' => (string)$ipAddress,
-            'extraData' => [
-                'phoneNumber' => $phoneNumber
-            ]
-        ];
-        $this->userToData($userTokenOdId, $data);
-        $response = $this->request('/frontend/user/verification/start', $data);
-        return UserSmsVerificationStartResponse::fromResponse($response);
-    }
+	/**
+	 * @param string|int|User $userTokenOdId
+	 * @param string          $ipAddress
+	 * @param string          $phoneNumber
+	 *
+	 * @return UserVerificationStartResponse
+	 */
+	public function userSmsVerificationStart(
+		$userTokenOdId,
+		$ipAddress,
+		$phoneNumber
+	) {
+		$data = [
+			'verificationType' => 'sms',
+			'ipAddress' => (string)$ipAddress,
+			'extraData' => [
+				'phoneNumber' => $phoneNumber
+			]
+		];
+		$this->userToData($userTokenOdId, $data);
+		$response = $this->request('/frontend/user/verification/start', $data);
+		return UserSmsVerificationStartResponse::fromResponse($response);
+	}
 
-    /**
-     * @param string|int|User $userTokenOrId
-     * @param string          $verificationPin
+	/**
+	 * @param string|int|User $userTokenOrId
+	 * @param string          $verificationPin
 	 * @param string|null	  $phoneNumber
-     *
-     * @return UserSmsVerificationFinishResponse
-     */
-    public function userSmsVerificationFinish(
-        $userTokenOrId,
-        $verificationPin,
+	 *
+	 * @return UserSmsVerificationFinishResponse
+	 */
+	public function userSmsVerificationFinish(
+		$userTokenOrId,
+		$verificationPin,
 		$phoneNumber = null
-    ) {
-        $data = [
-            'verificationType' => 'sms',
-            'verificationPin' => $verificationPin,
+	) {
+		$data = [
+			'verificationType' => 'sms',
+			'verificationPin' => $verificationPin,
 			'phoneNumber' => $phoneNumber,
-        ];
-        $this->userToData($userTokenOrId, $data);
-        $response = $this->request('/frontend/user/verification/finalize', $data);
-        return UserSmsVerificationFinishResponse::fromResponse($response);
-    }
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/user/verification/finalize', $data);
+		return UserSmsVerificationFinishResponse::fromResponse($response);
+	}
 
 	/**
 	 * Run a stored report against Dislo's search database streaming the returned data. Requires a RequestClient with
@@ -1943,7 +1944,7 @@ class Client {
 		$parameters = null,
 		$stream = null
 	) {
-    	$data = [];
+		$data = [];
 		if ($parameters) {
 			$data['parameters'] = $parameters;
 		}
