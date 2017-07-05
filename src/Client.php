@@ -29,6 +29,7 @@ use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
 use Ixolit\Dislo\Response\PackageGetResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
+use Ixolit\Dislo\Response\SubscriptionAttachCouponResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculatePriceResponse;
@@ -403,7 +404,7 @@ class Client {
 		$upgradeId = null,
 		$paymentDetails = [],
 		$description = '',
-		$status = 'success',
+		$status = BillingEvent::STATUS_SUCCESS,
 		$userTokenOrId = null
 	) {
 		$data = [];
@@ -1336,6 +1337,21 @@ class Client {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/getSubscriptions', $data);
 		return SubscriptionGetAllResponse::fromResponse($response);
+	}
+
+	public function subscriptionAttachCoupon(
+		$couponCode,
+		$subscription,
+		$userTokenOrId = null
+	) {
+		$data = [
+			'couponCode'              => $couponCode,
+			'subscriptionId'          =>
+				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+		];
+		$this->userToData($userTokenOrId, $data);
+		$response = $this->request('/frontend/subscription/attachCoupon', $data);
+		return SubscriptionAttachCouponResponse::fromResponse($response);
 	}
 
 	/**
