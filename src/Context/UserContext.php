@@ -3,9 +3,9 @@
 namespace Ixolit\Dislo\Context;
 
 
+use ESY\DisloClient;
 use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
-use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\WorkingObjects\AuthToken;
 use Ixolit\Dislo\WorkingObjects\BillingEvent;
 use Ixolit\Dislo\WorkingObjects\Flexible;
@@ -34,6 +34,9 @@ class UserContext {
 
     /** @var BillingEvent[] */
     private $billingEvents;
+
+    /** @var int */
+    private $billingEventsTotalCount;
 
     /** @var Price */
     private $accountBalance;
@@ -202,18 +205,31 @@ class UserContext {
     }
 
     /**
-     * @param bool $cached
+     * @param int    $limit
+     * @param int    $offset
+     * @param string $orderDir
+     * @param bool   $cached
      *
      * @return BillingEvent[]
      */
-    public function getBillingEvents($cached = true) {
+    public function getBillingEvents($limit = 10,
+                                     $offset = 0,
+                                     $orderDir = DisloClient::ORDER_DIR_DESC,
+                                     $cached = true
+    ) {
         if ($cached && isset($this->billingEvents)) {
             return $this->billingEvents;
         }
 
-        $this->billingEvents = $this->getClient()->billingGetEventsForUser(
-            $this->getUserIdentifierForClient()
-        )->getBillingEvents();
+        $billingEventsResponse = $this->getClient()->billingGetEventsForUser(
+            $this->getUserIdentifierForClient(),
+            $limit,
+            $offset,
+            $orderDir
+        );
+
+        $this->billingEvents = $billingEventsResponse->getBillingEvents();
+        $this->billingEventsTotalCount = $billingEventsResponse->getTotalCount();
 
         return $this->billingEvents;
     }
@@ -247,6 +263,28 @@ class UserContext {
         $this->billingEvents[] = $billingEvent;
 
         return $this;
+    }
+
+    /**
+     * @param int    $limit
+     * @param int    $offset
+     * @param string $orderDir
+     * @param bool   $cached
+     *
+     * @return int
+     */
+    public function getBillingEventsTotalCount($limit = 10,
+                                               $offset = 0,
+                                               $orderDir = DisloClient::ORDER_DIR_DESC,
+                                               $cached = true
+    ) {
+        if ($cached && isset($this->billingEventsTotalCount)) {
+            return $this->billingEventsTotalCount;
+        }
+
+        $this->getBillingEvents($limit, $offset, $orderDir, $cached);
+
+        return $this->billingEventsTotalCount;
     }
 
     /**
