@@ -115,6 +115,21 @@ class UserContext {
     /**
      * @param bool $cached
      *
+     * @return Subscription|null
+     */
+    public function getFirstActiveSubscription($cached = true) {
+        $activeSubscriptions = $this->getActiveSubscriptions($cached);
+
+        if (empty($activeSubscriptions)) {
+            return null;
+        }
+
+        return \reset($activeSubscriptions);
+    }
+
+    /**
+     * @param bool $cached
+     *
      * @return Subscription[]
      */
     public function getStartedSubscriptions($cached = true) {
