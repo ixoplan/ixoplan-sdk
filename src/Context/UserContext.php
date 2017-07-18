@@ -333,6 +333,13 @@ class UserContext {
     }
 
     /**
+     * @return $this
+     */
+    public function saveUserMetaData() {
+        return $this->changeUserMetaData($this->getUser()->getMetaData());
+    }
+
+    /**
      * @param array $userMetaData
      *
      * @return $this
