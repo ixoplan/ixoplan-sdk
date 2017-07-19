@@ -868,7 +868,7 @@ class Client {
 	 * Change the package for a subscription.
 	 *
 	 * @param Subscription|int $subscription                the unique subscription id to change
-	 * @param array            $newPackageIdentifier        the identifier of the new package
+	 * @param string           $newPackageIdentifier        the identifier of the new package
 	 * @param string[]         $addonPackageIdentifiers     optional - package identifiers of the addons
 	 * @param string           $couponCode                  optional - the coupon code to apply
 	 * @param array            $metaData                    optional - additional data (if supported by Dislo
