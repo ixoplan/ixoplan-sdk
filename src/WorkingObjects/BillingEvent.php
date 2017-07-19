@@ -62,6 +62,9 @@ class BillingEvent implements WorkingObject {
 	 */
 	private $modifiedAt;
 
+	/** @var BillingMethod */
+	private $billingMethodObject;
+
 	/**
 	 * @param array $response
 	 *
@@ -86,7 +89,8 @@ class BillingEvent implements WorkingObject {
 			$response['techinfo'],
 			$response['billingMethod'],
 			$subscription,
-			isset($response['modifiedAt']) ? new \DateTime($response['modifiedAt']) : null
+			isset($response['modifiedAt']) ? new \DateTime($response['modifiedAt']) : null,
+			isset($response['billingMethodObject']) ? BillingMethod::fromResponse($response['billingMethodObject']) : null
 		);
 	}
 
@@ -105,6 +109,7 @@ class BillingEvent implements WorkingObject {
 	 * @param string            $billingMethod
 	 * @param Subscription|null $subscription
 	 * @param \DateTime|null    $modifiedAt
+	 * @param BillingMethod|null $billingMethodObject
 	 */
 	public function __construct(
 		$billingEventId,
@@ -118,7 +123,8 @@ class BillingEvent implements WorkingObject {
 		$techinfo,
 		$billingMethod,
 		Subscription $subscription = null,
-		$modifiedAt = null
+		$modifiedAt = null,
+		$billingMethodObject = null
 	) {
 		$this->billingEventId = $billingEventId;
 		$this->userId         = $userId;
@@ -132,6 +138,7 @@ class BillingEvent implements WorkingObject {
 		$this->billingMethod  = $billingMethod;
 		$this->subscription   = $subscription;
 		$this->modifiedAt     = $modifiedAt;
+		$this->billingMethodObject = $billingMethodObject;
 	}
 
 	/**
@@ -219,6 +226,13 @@ class BillingEvent implements WorkingObject {
 	}
 
 	/**
+	 * @return BillingMethod
+	 */
+	public function getBillingMethodObject() {
+		return $this->billingMethodObject;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function toArray() {
@@ -236,6 +250,7 @@ class BillingEvent implements WorkingObject {
 			'billingMethod'  => $this->getBillingMethod(),
 			'subscription'   => ($this->getSubscription() ? $this->getSubscription()->toArray() : null),
 			'modifiedAt'	 => ($this->getModifiedAt() ? $this->getModifiedAt()->format('Y-m-d H:i:s') : null),
+			'billingMethodObject' => ($this->getBillingMethodObject() ? $this->getBillingMethodObject()->toArray() : null),
 		);
 	}
 }
