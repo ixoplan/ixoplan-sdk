@@ -41,6 +41,9 @@ class Package implements WorkingObject {
 	/** @var bool */
 	private $hasTrialPeriod;
 
+	/** @var BillingMethod[] */
+	private $billingMethods;
+
 	/**
 	 * @param string             $packageIdentifier
 	 * @param string             $serviceIdentifier
@@ -51,9 +54,11 @@ class Package implements WorkingObject {
 	 * @param PackagePeriod|null $initialPeriod
 	 * @param PackagePeriod|null $recurringPeriod
 	 * @param bool               $hasTrialPeriod
+	 * @param BillingMethod[]    $billingMethods
 	 */
 	public function __construct($packageIdentifier, $serviceIdentifier, $displayNames, $signupAvailable,
-								$addonPackages, $metaData, $initialPeriod, $recurringPeriod, $hasTrialPeriod = false) {
+								$addonPackages, $metaData, $initialPeriod, $recurringPeriod, $hasTrialPeriod = false,
+								$billingMethods) {
 		$this->packageIdentifier = $packageIdentifier;
 		$this->serviceIdentifier = $serviceIdentifier;
 		$this->displayNames      = $displayNames;
@@ -63,6 +68,7 @@ class Package implements WorkingObject {
 		$this->initialPeriod     = $initialPeriod;
 		$this->recurringPeriod   = $recurringPeriod;
 		$this->hasTrialPeriod    = $hasTrialPeriod;
+		$this->billingMethods    = $billingMethods;
 	}
 
 	/**
@@ -156,6 +162,13 @@ class Package implements WorkingObject {
 	}
 
 	/**
+	 * @return BillingMethod[]
+	 */
+	public function getBillingMethods() {
+		return $this->billingMethods;
+	}
+
+	/**
 	 * @param array $response
 	 *
 	 * @return self
@@ -172,6 +185,13 @@ class Package implements WorkingObject {
 			}
 		}
 
+		$billingMethods = [];
+		if(isset($response['billingMethods'])) {
+			foreach ($response['billingMethods'] as $billingMethod) {
+				$billingMethods[] = BillingMethod::fromResponse($billingMethod);
+			}
+		}
+
 		return new Package(
 			$response['packageIdentifier'],
 			$response['serviceIdentifier'],
@@ -181,7 +201,8 @@ class Package implements WorkingObject {
 			isset($response['metaData']) ? $response['metaData'] : array(),
 			isset($response['initialPeriod']) && $response['initialPeriod'] ? PackagePeriod::fromResponse($response['initialPeriod']) : null,
 			isset($response['recurringPeriod']) && $response['recurringPeriod'] ? PackagePeriod::fromResponse($response['recurringPeriod']) : null,
-			isset($response['hasTrialPeriod']) ? $response['hasTrialPeriod'] : false
+			isset($response['hasTrialPeriod']) ? $response['hasTrialPeriod'] : false,
+			$billingMethods
 		);
 	}
 
@@ -199,6 +220,11 @@ class Package implements WorkingObject {
 			$addonPackages[] = $package->toArray();
 		}
 
+		$billingMethods = [];
+		foreach ($this->billingMethods as $billingMethod) {
+			$billingMethods[] = $billingMethod->toArray();
+		}
+
 		return [
 			'_type' => 'Package',
 			'packageIdentifier' => $this->packageIdentifier,
@@ -208,7 +234,9 @@ class Package implements WorkingObject {
 			'addonPackages'     => $addonPackages,
 			'metaData'          => $this->metaData,
 			'initialPeriod'     => $this->initialPeriod->toArray(),
-			'recurringPeriod'   => ($this->recurringPeriod?$this->recurringPeriod->toArray():null)
+			'recurringPeriod'   => ($this->recurringPeriod?$this->recurringPeriod->toArray():null),
+			'hasTrialPeriod'    => $this->hasTrialPeriod,
+			'billingMethods'    => $billingMethods
 		];
 	}
 }
