@@ -58,7 +58,7 @@ class Package implements WorkingObject {
 	 */
 	public function __construct($packageIdentifier, $serviceIdentifier, $displayNames, $signupAvailable,
 								$addonPackages, $metaData, $initialPeriod, $recurringPeriod, $hasTrialPeriod = false,
-								$billingMethods) {
+								$billingMethods = null) {
 		$this->packageIdentifier = $packageIdentifier;
 		$this->serviceIdentifier = $serviceIdentifier;
 		$this->displayNames      = $displayNames;
