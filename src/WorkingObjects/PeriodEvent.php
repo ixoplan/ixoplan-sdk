@@ -135,7 +135,7 @@ class PeriodEvent {
             isset($response['endsAt']) ? new \DateTime($response['endsAt']) : null,
             isset($response['parentPeriodEventId']) ? $response['parentPeriodEventId'] : null,
             isset($response['originalEndsAt']) ? new \DateTime($response['originalEndsAt']) : null,
-            isset($response['billingEvent']) ? BillingEvent::fromResponse($response['originalEndsAt']) : null
+            isset($response['billingEvent']) ? BillingEvent::fromResponse($response['billingEvent']) : null
         );
     }
 
