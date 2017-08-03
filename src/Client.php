@@ -1420,14 +1420,15 @@ class Client {
 	/**
 	 * Authenticate a user. Returns an access token for subsequent API calls.
 	 *
-	 * @param string $username      Username.
-	 * @param string $password      User password.
-	 * @param string $ipAddress     IP address of the user attempting to authenticate.
-	 * @param int    $tokenLifetime Authentication token lifetime in seconds. TokenLifeTime is renewed and extended
-	 *                              by API calls automatically, using the inital tokenlifetime.
-	 * @param string $metainfo      Meta information to store with token (4096 bytes)
-	 * @param bool   $ignoreRateLimit
-	 *
+     * @param string      $username      Username.
+     * @param string      $password      User password.
+     * @param string      $ipAddress     IP address of the user attempting to authenticate.
+     * @param int         $tokenLifetime Authentication token lifetime in seconds. TokenLifeTime is renewed and extended
+     *                                   by API calls automatically, using the inital tokenlifetime.
+     * @param string      $metainfo      Meta information to store with token (4096 bytes)
+     * @param bool        $ignoreRateLimit
+     * @param string|null $language
+     *
 	 * @return UserAuthenticateResponse
 	 * @throws AuthenticationException
 	 * @throws AuthenticationInvalidCredentialsException
@@ -1442,16 +1443,18 @@ class Client {
 		$ipAddress,
 		$tokenLifetime = 1800,
 		$metainfo = '',
-		$ignoreRateLimit = false
+		$ignoreRateLimit = false,
+        $language = null
 	) {
-		$data     = [
-			'username'      => $username,
-			'password'      => $password,
-			'ipAddress'     => $ipAddress,
-			'tokenlifetime' => \round($tokenLifetime / 60),
-			'metainfo'      => $metainfo,
-			'ignoreRateLimit' => $ignoreRateLimit,
-		];
+        $data = [
+            'username'        => $username,
+            'password'        => $password,
+            'ipAddress'       => $ipAddress,
+            'tokenlifetime'   => \round($tokenLifetime / 60),
+            'metainfo'        => $metainfo,
+            'ignoreRateLimit' => $ignoreRateLimit,
+            'language'        => $language,
+        ];
 		$response = $this->request('/frontend/user/authenticate', $data);
 
 		if (isset($response['error'])) {
