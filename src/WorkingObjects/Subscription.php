@@ -82,33 +82,52 @@ class Subscription implements WorkingObject {
 	/** @var CouponUsage */
 	private $couponUsage;
 
-	/**
-	 * Subscription constructor.
-	 *
-	 * @param int            $subscriptionId
-	 * @param Package        $currentPackage
-	 * @param int            $userId
-	 * @param string         $status
-	 * @param \DateTime|null $startedAt
-	 * @param \DateTime|null $canceledAt
-	 * @param \DateTime|null $closedAt
-	 * @param \DateTime|null $expiresAt
-	 * @param \DateTime|null $nextBillingAt
-	 * @param string         $currencyCode
-	 * @param bool           $isInitialPeriod
-	 * @param bool           $isProvisioned
-	 * @param array          $provisioningMetaData
-	 * @param Package|null   $nextPackage
-	 * @param Subscription[] $addonSubscriptions
-	 * @param \DateTime|null $minimumTermEndsAt
-	 * @param bool           $isExternal
-	 * @param CouponUsage|null $couponUsage
-	 */
-	public function __construct(
-		$subscriptionId, Package $currentPackage, $userId, $status, $startedAt,
-		$canceledAt, $closedAt, $expiresAt, $nextBillingAt, $currencyCode, $isInitialPeriod,
-		$isProvisioned, $provisioningMetaData, $nextPackage, $addonSubscriptions, $minimumTermEndsAt = null,
-		$isExternal = false, $couponUsage = null) {
+	/** @var  */
+	private $currentPeriodEvent;
+
+    /**
+     * Subscription constructor.
+     *
+     * @param int              $subscriptionId
+     * @param Package          $currentPackage
+     * @param int              $userId
+     * @param string           $status
+     * @param \DateTime|null   $startedAt
+     * @param \DateTime|null   $canceledAt
+     * @param \DateTime|null   $closedAt
+     * @param \DateTime|null   $expiresAt
+     * @param \DateTime|null   $nextBillingAt
+     * @param string           $currencyCode
+     * @param bool             $isInitialPeriod
+     * @param bool             $isProvisioned
+     * @param array            $provisioningMetaData
+     * @param Package|null     $nextPackage
+     * @param Subscription[]   $addonSubscriptions
+     * @param \DateTime|null   $minimumTermEndsAt
+     * @param bool             $isExternal
+     * @param CouponUsage|null $couponUsage
+     * @param PeriodEvent|null $currentPeriodEvent
+     */
+	public function __construct($subscriptionId,
+                                Package $currentPackage,
+                                $userId,
+                                $status,
+                                $startedAt,
+                                $canceledAt,
+                                $closedAt,
+                                $expiresAt,
+                                $nextBillingAt,
+                                $currencyCode,
+                                $isInitialPeriod,
+                                $isProvisioned,
+                                $provisioningMetaData,
+                                $nextPackage,
+                                $addonSubscriptions,
+                                $minimumTermEndsAt = null,
+		                    	$isExternal = false,
+                                $couponUsage = null,
+                                PeriodEvent $currentPeriodEvent = null
+    ) {
 		$this->subscriptionId       = $subscriptionId;
 		$this->currentPackage       = $currentPackage;
 		$this->userId               = $userId;
@@ -127,6 +146,7 @@ class Subscription implements WorkingObject {
 		$this->minimumTermEndsAt    = $minimumTermEndsAt;
 		$this->isExternal           = $isExternal;
 		$this->couponUsage          = $couponUsage;
+		$this->currentPeriodEvent   = $currentPeriodEvent;
 	}
 
 	/**
@@ -296,6 +316,13 @@ class Subscription implements WorkingObject {
 		return $this->getCurrentPeriod()->isPaid();
 	}
 
+    /**
+     * @return PeriodEvent|null
+     */
+	public function getCurrentPeriodEvent() {
+	    return $this->currentPeriodEvent;
+    }
+
 	/**
 	 * @param array $response
 	 *
@@ -327,7 +354,10 @@ class Subscription implements WorkingObject {
 			$addonSubscriptions,
 			(isset($response['minimumTermEndsAt']) ? new \DateTime($response['minimumTermEndsAt']) : null),
 			$response['isExternal'],
-			(isset($response['couponUsage']) ? CouponUsage::fromResponse($response['couponUsage']) : null)
+			(isset($response['couponUsage']) ? CouponUsage::fromResponse($response['couponUsage']) : null),
+            isset($response['currentPeriodEvent'])
+                ? PeriodEvent::fromResponse($response['currentPeriodEvent'])
+                : null
 		);
 	}
 
@@ -358,6 +388,7 @@ class Subscription implements WorkingObject {
 			'minimumTermEndsAt' => ($this->minimumTermEndsAt ? $this->minimumTermEndsAt->format('Y-m-d H:i:s') : null),
 			'isExternal' => $this->isExternal,
 			'couponUsage' => ($this->couponUsage ? $this->couponUsage->toArray() : null),
+            'currentPeriodEvent' => $this->currentPeriodEvent ? $this->currentPeriodEvent->toArray() : null,
 		];
 	}
 
