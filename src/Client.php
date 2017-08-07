@@ -1343,12 +1343,26 @@ class Client {
     /**
      * @param int                  $subscriptionId
      * @param User|int|string|null $userTokenOrId
+     * @param int                  $limit
+     * @param int                  $offset
+     * @param string               $orderDir
+     * @param string|null          $orderField
      *
      * @return SubscriptionGetPeriodEventsResponse
      */
-	public function subscriptionGetPeriodEvents($subscriptionId, $userTokenOrId = null) {
+	public function subscriptionGetPeriodEvents($subscriptionId,
+                                                $userTokenOrId = null,
+                                                $limit = 10,
+                                                $offset = 0,
+                                                $orderDir = self::ORDER_DIR_ASC,
+                                                $orderField = null
+    ) {
         $data = [
             'subscriptionId' => $subscriptionId,
+            'limit'          => $limit,
+            'offset'         => $offset,
+            'orderDir'       => $orderDir,
+            'orderField'     => $orderField,
         ];
 
         $data = $this->userToData($userTokenOrId, $data);
