@@ -16,12 +16,16 @@ class SubscriptionGetPeriodEventsResponse {
     /** @var PeriodEvent[] */
     private $periodEvents;
 
+    /** @var int */
+    private $totalCount;
+
     /**
      * SubscriptionGetPeriodEventsResponse constructor.
      *
-     * @param $periodEvents
+     * @param PeriodEvent[] $periodEvents
+     * @param int           $totalCount
      */
-    public function __construct($periodEvents) {
+    public function __construct($periodEvents, $totalCount) {
         $this->periodEvents = $periodEvents;
     }
 
@@ -30,6 +34,10 @@ class SubscriptionGetPeriodEventsResponse {
      */
     public function getPeriodEvents() {
         return $this->periodEvents;
+    }
+
+    public function getTotalCount() {
+        return $this->totalCount;
     }
 
     /**
@@ -43,7 +51,7 @@ class SubscriptionGetPeriodEventsResponse {
             $periodEvents[] = PeriodEvent::fromResponse($subscriptionPeriodEvent);
         }
 
-        return new self($periodEvents);
+        return new self($periodEvents, $response['totalCount']);
     }
 
 }
