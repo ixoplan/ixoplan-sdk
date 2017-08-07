@@ -47,6 +47,7 @@ use Ixolit\Dislo\Response\SubscriptionExternalChangeResponse;
 use Ixolit\Dislo\Response\SubscriptionExternalCloseResponse;
 use Ixolit\Dislo\Response\SubscriptionExternalCreateResponse;
 use Ixolit\Dislo\Response\SubscriptionGetAllResponse;
+use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPossibleUpgradesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetResponse;
 use Ixolit\Dislo\Response\UserAuthenticateResponse;
@@ -1338,6 +1339,23 @@ class Client {
 		$response = $this->request('/frontend/subscription/getSubscriptions', $data);
 		return SubscriptionGetAllResponse::fromResponse($response);
 	}
+
+    /**
+     * @param int                  $subscriptionId
+     * @param User|int|string|null $userTokenOrId
+     *
+     * @return SubscriptionGetPeriodEventsResponse
+     */
+	public function subscriptionGetPeriodEvents($subscriptionId, $userTokenOrId = null) {
+        $data = [
+            'subscriptionId' => $subscriptionId,
+        ];
+
+        $data = $this->userToData($userTokenOrId, $data);
+
+        $response = $this->request('/frontend/subscription/getPeriodEvents', $data);
+        return SubscriptionGetPeriodEventsResponse::fromResponse($response);
+    }
 
 	public function subscriptionAttachCoupon(
 		$couponCode,
