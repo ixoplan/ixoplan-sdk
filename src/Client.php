@@ -1359,7 +1359,7 @@ class Client {
 
         $data = $this->userToData($userTokenOrId, $data);
 
-        $response = $this->request('/frontend/subscription/getPeriodEvents', $data);
+        $response = $this->request('/frontend/subscription/getPeriodHistory', $data);
         return SubscriptionGetPeriodEventsResponse::fromResponse($response);
     }
 
