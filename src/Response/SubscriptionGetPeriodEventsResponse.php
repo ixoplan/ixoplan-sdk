@@ -47,7 +47,7 @@ class SubscriptionGetPeriodEventsResponse {
      */
     public static function fromResponse(array $response) {
         $periodEvents = [];
-        foreach ($response['periodEvents'] as $subscriptionPeriodEvent) {
+        foreach ($response['subscriptionPeriodHistory'] as $subscriptionPeriodEvent) {
             $periodEvents[] = PeriodEvent::fromResponse($subscriptionPeriodEvent);
         }
 
