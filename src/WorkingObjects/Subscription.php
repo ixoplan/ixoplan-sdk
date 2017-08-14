@@ -65,7 +65,7 @@ class Subscription implements WorkingObject {
 	 */
 	private $provisioningMetaData;
 	/**
-	 * @var Package|null
+	 * @var NextPackage|null
 	 */
 	private $nextPackage;
 	/**
@@ -101,7 +101,7 @@ class Subscription implements WorkingObject {
      * @param bool             $isInitialPeriod
      * @param bool             $isProvisioned
      * @param array            $provisioningMetaData
-     * @param Package|null     $nextPackage
+     * @param NextPackage|null $nextPackage
      * @param Subscription[]   $addonSubscriptions
      * @param \DateTime|null   $minimumTermEndsAt
      * @param bool             $isExternal
@@ -261,7 +261,7 @@ class Subscription implements WorkingObject {
 	}
 
 	/**
-	 * @return Package|null
+	 * @return NextPackage|null
 	 */
 	public function getNextPackage() {
 		return $this->nextPackage;
@@ -350,7 +350,7 @@ class Subscription implements WorkingObject {
 			$response['isInitialPeriod'],
 			$response['isProvisioned'],
 			isset($response['provisioningMetaData']) ? $response['provisioningMetaData'] : array(),
-			(isset($response['nextPackage']) && $response['nextPackage']?Package::fromResponse($response['nextPackage']):null),
+			(isset($response['nextPackage']) && $response['nextPackage'] ? NextPackage::fromResponse($response['nextPackage']):null),
 			$addonSubscriptions,
 			(isset($response['minimumTermEndsAt']) ? new \DateTime($response['minimumTermEndsAt']) : null),
 			$response['isExternal'],
