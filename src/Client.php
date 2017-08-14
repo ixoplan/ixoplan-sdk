@@ -993,7 +993,7 @@ class Client {
 	 * @param string           $couponCode
 	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
 	 *
-	 * @return SubscriptionCloseResponse
+	 * @return SubscriptionCreateAddonResponse
 	 */
 	public function subscriptionCreateAddon(
 		$subscription,
@@ -1346,7 +1346,6 @@ class Client {
      * @param int                  $limit
      * @param int                  $offset
      * @param string               $orderDir
-     * @param string|null          $orderField
      *
      * @return SubscriptionGetPeriodEventsResponse
      */
@@ -1354,15 +1353,13 @@ class Client {
                                                 $userTokenOrId = null,
                                                 $limit = 10,
                                                 $offset = 0,
-                                                $orderDir = self::ORDER_DIR_ASC,
-                                                $orderField = null
+                                                $orderDir = self::ORDER_DIR_ASC
     ) {
         $data = [
             'subscriptionId' => $subscriptionId,
             'limit'          => $limit,
             'offset'         => $offset,
             'orderDir'       => $orderDir,
-            'orderField'     => $orderField,
         ];
 
         $data = $this->userToData($userTokenOrId, $data);

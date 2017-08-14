@@ -82,6 +82,13 @@ abstract class CouponCodeResponse {
 		}
 	}
 
+    /**
+     * @return string
+     */
+	public function getCouponCode() {
+	    return $this->couponCode;
+    }
+
 	/**
 	 * @return string
 	 */

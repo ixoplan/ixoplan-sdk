@@ -56,10 +56,10 @@ class SubscriptionCreateAddonResponse {
 	/**
 	 * @param array $response
 	 *
-	 * @return SubscriptionCloseResponse
+	 * @return self
 	 */
 	public static function fromResponse($response) {
-		return new SubscriptionCloseResponse(
+		return new self(
 			Subscription::fromResponse($response['subscription']),
 			$response['needsBilling'],
 			Price::fromResponse($response['price'])
