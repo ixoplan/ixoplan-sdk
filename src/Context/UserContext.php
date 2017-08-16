@@ -3,7 +3,6 @@
 namespace Ixolit\Dislo\Context;
 
 
-use ESY\DisloClient;
 use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\WorkingObjects\AuthToken;
@@ -229,7 +228,7 @@ class UserContext {
      */
     public function getBillingEvents($limit = 10,
                                      $offset = 0,
-                                     $orderDir = DisloClient::ORDER_DIR_DESC,
+                                     $orderDir = Client::ORDER_DIR_DESC,
                                      $cached = true
     ) {
         if ($cached && isset($this->billingEvents)) {
@@ -290,7 +289,7 @@ class UserContext {
      */
     public function getBillingEventsTotalCount($limit = 10,
                                                $offset = 0,
-                                               $orderDir = DisloClient::ORDER_DIR_DESC,
+                                               $orderDir = Client::ORDER_DIR_DESC,
                                                $cached = true
     ) {
         if ($cached && isset($this->billingEventsTotalCount)) {
