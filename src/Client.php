@@ -1368,6 +1368,15 @@ class Client {
         return SubscriptionGetPeriodEventsResponse::fromResponse($response);
     }
 
+	/**
+	 * Attach a coupon to a Subscription.
+	 *
+	 * @param string $couponCode
+	 * @param Subscription|int $subscription
+	 * @param User|int|string $userTokenOrId
+	 *
+	 * @return SubscriptionAttachCouponResponse
+	 */
 	public function subscriptionAttachCoupon(
 		$couponCode,
 		$subscription,
