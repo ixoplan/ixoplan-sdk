@@ -21,16 +21,25 @@ class SubscriptionCreateResponse {
 	 */
 	private $subscription;
 
-	/**
-	 * @param bool         $needsBilling
-	 * @param Price        $price
-	 * @param Subscription $subscription
-	 */
-	public function __construct($needsBilling, Price $price, Subscription $subscription) {
-		$this->needsBilling = $needsBilling;
-		$this->price        = $price;
-		$this->subscription = $subscription;
-	}
+	/** @var bool */
+	private $requireFlexibleForFreeSignup;
+
+    /**
+     * @param bool         $needsBilling
+     * @param Price        $price
+     * @param Subscription $subscription
+     * @param bool         $requireFlexibleForFreeSignup
+     */
+	public function __construct($needsBilling,
+                                Price $price,
+                                Subscription $subscription,
+                                $requireFlexibleForFreeSignup = false
+    ) {
+        $this->needsBilling                 = $needsBilling;
+        $this->price                        = $price;
+        $this->subscription                 = $subscription;
+        $this->requireFlexibleForFreeSignup = $requireFlexibleForFreeSignup;
+    }
 
 	/**
 	 * @return boolean
@@ -53,11 +62,26 @@ class SubscriptionCreateResponse {
 		return $this->subscription;
 	}
 
+    /**
+     * @return bool
+     */
+	public function requiresFlexibleForFreeSignup() {
+	    return $this->requireFlexibleForFreeSignup;
+    }
+
+    /**
+     * @param array $response
+     *
+     * @return SubscriptionCreateResponse
+     */
 	public static function fromResponse($response) {
 		return new SubscriptionCreateResponse(
 			$response['needsBilling'],
 			Price::fromResponse($response['price']),
-			Subscription::fromResponse($response['subscription'])
+			Subscription::fromResponse($response['subscription']),
+            isset($response['requireFlexibleForFreeSignup'])
+                ? $response['requireFlexibleForFreeSignup']
+                : false
 		);
 	}
 }
