@@ -5,68 +5,20 @@ namespace Ixolit\Dislo\Response;
 use Ixolit\Dislo\WorkingObjects\Price;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 
-class SubscriptionCreateResponse {
-	/**
-	 * @var bool
-	 */
-	private $needsBilling;
-
-	/**
-	 * @var Price
-	 */
-	private $price;
-
-	/**
-	 * @var Subscription
-	 */
-	private $subscription;
-
-	/** @var bool */
-	private $requireFlexibleForFreeSignup;
+class SubscriptionCreateResponse extends SubscriptionResponse {
 
     /**
      * @param bool         $needsBilling
      * @param Price        $price
      * @param Subscription $subscription
-     * @param bool         $requireFlexibleForFreeSignup
+     * @param bool         $requireFlexible
      */
 	public function __construct($needsBilling,
                                 Price $price,
                                 Subscription $subscription,
-                                $requireFlexibleForFreeSignup = false
+                                $requireFlexible = false
     ) {
-        $this->needsBilling                 = $needsBilling;
-        $this->price                        = $price;
-        $this->subscription                 = $subscription;
-        $this->requireFlexibleForFreeSignup = $requireFlexibleForFreeSignup;
-    }
-
-	/**
-	 * @return boolean
-	 */
-	public function needsBilling() {
-		return $this->needsBilling;
-	}
-
-	/**
-	 * @return Price
-	 */
-	public function getPrice() {
-		return $this->price;
-	}
-
-	/**
-	 * @return Subscription
-	 */
-	public function getSubscription() {
-		return $this->subscription;
-	}
-
-    /**
-     * @return bool
-     */
-	public function requiresFlexibleForFreeSignup() {
-	    return $this->requireFlexibleForFreeSignup;
+        parent::__construct($subscription, $needsBilling, $price, $requireFlexible);
     }
 
     /**
