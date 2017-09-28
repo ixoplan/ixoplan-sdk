@@ -27,6 +27,7 @@ use Ixolit\Dislo\Response\BillingMethodsGetAvailableResponse;
 use Ixolit\Dislo\Response\BillingMethodsGetResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
+use Ixolit\Dislo\Response\MailTrackOpenedResponse;
 use Ixolit\Dislo\Response\PackageGetResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
 use Ixolit\Dislo\Response\SubscriptionAttachCouponResponse;
@@ -2049,6 +2050,26 @@ class Client {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/user/fireEvent', $data);
 		return UserFireEventResponse::fromResponse($response);
+	}
+
+	/**
+	 * Flags an email as opened
+	 *
+	 * @param int $emailId The identifier from the email beacon
+	 * @param string $checksum The checksum from the email beacon
+	 *
+	 * @return MailTrackOpenedResponse
+	 */
+	public function mailTrackOpened(
+		$emailId,
+		$checksum
+	) {
+		$data = [
+			'emailId' => $emailId,
+			'checksum' => $checksum,
+		];
+		$response = $this->request('/frontend/misc/trackOpenedMail', $data);
+		return MailTrackOpenedResponse::fromResponse($response);
 	}
 
 	/**
