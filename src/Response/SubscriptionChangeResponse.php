@@ -54,8 +54,8 @@ class SubscriptionChangeResponse extends SubscriptionResponse {
 			$response['needsBilling'],
 			Price::fromResponse($response['price']),
 			$response['appliedImmediately'],
-            isset($response['requireFlexibleForFreeChange'])
-                ? $response['requireFlexibleForFreeChange']
+            isset($response['requireFlexibleForFreeUpgrade'])
+                ? $response['requireFlexibleForFreeUpgrade']
                 : false
 		);
 	}
