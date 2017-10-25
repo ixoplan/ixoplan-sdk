@@ -292,36 +292,38 @@ class Client {
 		return BillingCloseFlexibleResponse::fromResponse($response);
 	}
 
-	/**
-	 * Create a new flexible for a user.
-	 *
-	 * Note: there can only be ONE active flexible per user. In case there is already an active one, and you
-	 * successfully create a new one, the old flexible will be closed automatically.
-	 *
-	 * @see https://docs.dislo.com/display/DIS/CreateFlexible
-	 *
-	 * @param User|int|string $userTokenOrId User authentication token or user ID.
-	 * @param string          $billingMethod
-	 * @param string          $returnUrl
-	 * @param array           $paymentDetails
-	 * @param string          $currencyCode
-	 *
-	 * @return BillingCreateFlexibleResponse
-	 *
-	 * @throws DisloException
-	 */
-	public function billingCreateFlexible(
-		$userTokenOrId,
-		$billingMethod,
-		$returnUrl,
-		$paymentDetails,
-		$currencyCode = ''
-	) {
+    /**
+     * Create a new flexible for a user.
+     *
+     * Note: there can only be ONE active flexible per user. In case there is already an active one, and you
+     * successfully create a new one, the old flexible will be closed automatically.
+     *
+     * @see https://docs.dislo.com/display/DIS/CreateFlexible
+     *
+     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param string          $billingMethod
+     * @param string          $returnUrl
+     * @param array           $paymentDetails
+     * @param string          $currencyCode
+     *
+     * @param null            $subscriptionId
+     *
+     * @return BillingCreateFlexibleResponse
+     */
+    public function billingCreateFlexible(
+        $userTokenOrId,
+        $billingMethod,
+        $returnUrl,
+        $paymentDetails,
+        $currencyCode = '',
+        $subscriptionId = null
+    ) {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
 		$data['billingMethod']  = $billingMethod;
 		$data['returnUrl']      = (string)$returnUrl;
 		$data['paymentDetails'] = $paymentDetails;
+		$data['subscriptionId'] = $subscriptionId;
 		if ($currencyCode) {
 			$data['currencyCode'] = $currencyCode;
 		}

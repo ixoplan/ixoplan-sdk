@@ -44,31 +44,45 @@ class Package implements WorkingObject {
 	/** @var BillingMethod[] */
 	private $billingMethods;
 
-	/**
-	 * @param string             $packageIdentifier
-	 * @param string             $serviceIdentifier
-	 * @param DisplayName[]      $displayNames
-	 * @param bool               $signupAvailable
-	 * @param Package[]          $addonPackages
-	 * @param string[]           $metaData
-	 * @param PackagePeriod|null $initialPeriod
-	 * @param PackagePeriod|null $recurringPeriod
-	 * @param bool               $hasTrialPeriod
-	 * @param BillingMethod[]    $billingMethods
-	 */
-	public function __construct($packageIdentifier, $serviceIdentifier, $displayNames, $signupAvailable,
-								$addonPackages, $metaData, $initialPeriod, $recurringPeriod, $hasTrialPeriod = false,
-								$billingMethods = null) {
-		$this->packageIdentifier = $packageIdentifier;
-		$this->serviceIdentifier = $serviceIdentifier;
-		$this->displayNames      = $displayNames;
-		$this->signupAvailable   = $signupAvailable;
-		$this->addonPackages     = $addonPackages;
-		$this->metaData          = $metaData;
-		$this->initialPeriod     = $initialPeriod;
-		$this->recurringPeriod   = $recurringPeriod;
-		$this->hasTrialPeriod    = $hasTrialPeriod;
-		$this->billingMethods    = $billingMethods;
+	/** @var bool */
+	private $requireFlexibleForFreeSignup;
+
+    /**
+     * @param string             $packageIdentifier
+     * @param string             $serviceIdentifier
+     * @param DisplayName[]      $displayNames
+     * @param bool               $signupAvailable
+     * @param Package[]          $addonPackages
+     * @param string[]           $metaData
+     * @param PackagePeriod|null $initialPeriod
+     * @param PackagePeriod|null $recurringPeriod
+     * @param bool               $hasTrialPeriod
+     * @param BillingMethod[]    $billingMethods
+     * @param bool               $requireFlexibleForFreeSignup
+     */
+	public function __construct($packageIdentifier,
+                                $serviceIdentifier,
+                                $displayNames,
+                                $signupAvailable,
+								$addonPackages,
+                                $metaData,
+                                $initialPeriod,
+                                $recurringPeriod,
+                                $hasTrialPeriod = false,
+								$billingMethods = null,
+                                $requireFlexibleForFreeSignup = false
+    ) {
+        $this->packageIdentifier            = $packageIdentifier;
+        $this->serviceIdentifier            = $serviceIdentifier;
+        $this->displayNames                 = $displayNames;
+        $this->signupAvailable              = $signupAvailable;
+        $this->addonPackages                = $addonPackages;
+        $this->metaData                     = $metaData;
+        $this->initialPeriod                = $initialPeriod;
+        $this->recurringPeriod              = $recurringPeriod;
+        $this->hasTrialPeriod               = $hasTrialPeriod;
+        $this->billingMethods               = $billingMethods;
+        $this->requireFlexibleForFreeSignup = $requireFlexibleForFreeSignup;
 	}
 
 	/**
@@ -168,6 +182,13 @@ class Package implements WorkingObject {
 		return $this->billingMethods;
 	}
 
+    /**
+     * @return bool
+     */
+	public function requiresFlexibleForFreeSignup() {
+	    return $this->requireFlexibleForFreeSignup;
+    }
+
 	/**
 	 * @param array $response
 	 *
@@ -202,7 +223,10 @@ class Package implements WorkingObject {
 			isset($response['initialPeriod']) && $response['initialPeriod'] ? PackagePeriod::fromResponse($response['initialPeriod']) : null,
 			isset($response['recurringPeriod']) && $response['recurringPeriod'] ? PackagePeriod::fromResponse($response['recurringPeriod']) : null,
 			isset($response['hasTrialPeriod']) ? $response['hasTrialPeriod'] : false,
-			$billingMethods
+			$billingMethods,
+            isset($response['requireFlexibleForFreeSignup'])
+                ? $response['requireFlexibleForFreeSignup']
+                : false
 		);
 	}
 
@@ -226,17 +250,18 @@ class Package implements WorkingObject {
 		}
 
 		return [
-			'_type' => 'Package',
-			'packageIdentifier' => $this->packageIdentifier,
-			'serviceIdentifier' => $this->serviceIdentifier,
-			'displayNames'      => $displayNames,
-			'signupAvailable'   => $this->signupAvailable,
-			'addonPackages'     => $addonPackages,
-			'metaData'          => $this->metaData,
-			'initialPeriod'     => $this->initialPeriod->toArray(),
-			'recurringPeriod'   => ($this->recurringPeriod?$this->recurringPeriod->toArray():null),
-			'hasTrialPeriod'    => $this->hasTrialPeriod,
-			'billingMethods'    => $billingMethods
-		];
+            '_type'                        => 'Package',
+            'packageIdentifier'            => $this->packageIdentifier,
+            'serviceIdentifier'            => $this->serviceIdentifier,
+            'displayNames'                 => $displayNames,
+            'signupAvailable'              => $this->signupAvailable,
+            'addonPackages'                => $addonPackages,
+            'metaData'                     => $this->metaData,
+            'initialPeriod'                => $this->initialPeriod->toArray(),
+            'recurringPeriod'              => ($this->recurringPeriod ? $this->recurringPeriod->toArray() : null),
+            'hasTrialPeriod'               => $this->hasTrialPeriod,
+            'billingMethods'               => $billingMethods,
+            'requireFlexibleForFreeSignup' => $this->requireFlexibleForFreeSignup,
+        ];
 	}
 }
