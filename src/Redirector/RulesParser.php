@@ -36,6 +36,14 @@ class RulesParser
 
         $data = json_decode($json, true);
 
+        return $this->buildRulesFromData($data);
+    }
+
+    /**
+     * @param mixed $data
+     * @return Rule[]
+     */
+    public function buildRulesFromData($data) {
         if (!is_array($data) || empty($data['redirectorRules'])) {
             return [];
         }
