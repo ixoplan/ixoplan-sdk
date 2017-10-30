@@ -71,7 +71,7 @@ class SetCookie extends Action
         $this->cookieName = $parameters['cookieName'];
         $this->cookieValue = $parameters['cookieValue'];
         $this->maxAge = !empty($parameters['maxAge']) ? (int) $parameters['maxAge'] : null;
-        $this->path = !empty($parameters['path']) ? $parameters['path'] : SELF::DEFAULT_VALUE_PATH;
+        $this->path = !empty($parameters['path']) ? $parameters['path'] : self::DEFAULT_VALUE_PATH;
         $this->httpOnly = !empty($parameters['httpOnly']) ? $parameters['httpOnly'] !== 'false' : self::DEFAULT_VALUE_HTTP_ONLY;
         $this->requireSSL = !empty($parameters['requireSSL']) ? $parameters['requireSSL'] !== 'false' : self::DEFAULT_VALUE_REQUIRE_SSL;
     }

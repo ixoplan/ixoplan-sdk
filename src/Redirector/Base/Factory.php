@@ -30,7 +30,7 @@ class Factory
         $action = new $className;
 
         if (! $action instanceof  Action) {
-            throw new \Exception(__METHOD__.': Class '.$className.' is not type of '.Action::class.'.');
+            throw new \Exception(__METHOD__.': Class '.$className.' is not type of Action.');
         }
 
         if (!empty($actionData['data'])) {
@@ -58,7 +58,7 @@ class Factory
         $condition = new $className;
 
         if (! $condition instanceof  Condition) {
-            throw new \Exception('Class '.$className.' is not type of '.Condition::class.'.');
+            throw new \Exception('Class '.$className.' is not type of Condition');
         }
 
         $condition->setParameters($conditionData['data'] ?: []);
