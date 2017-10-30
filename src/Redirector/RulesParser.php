@@ -3,8 +3,10 @@
 namespace Ixolit\Dislo\Redirector;
 
 use Ixolit\Dislo\Redirector\Base\Factory;
+use Ixolit\Dislo\Redirector\Rules\Conditions\Condition;
 use Ixolit\Dislo\Redirector\Rules\Rule;
 use Ixolit\Dislo\Redirector\Rules\RuleConditionNode;
+use Ixolit\Dislo\Redirector\Rules\RuleNode;
 
 class RulesParser
 {
@@ -52,7 +54,8 @@ class RulesParser
     }
 
     /**
-     * @param array $ruleData
+     * @param array $nodeData
+     * @return RuleNode
      */
     protected function buildNode($nodeData) {
 
@@ -81,6 +84,7 @@ class RulesParser
 
     /**
      * @param RuleConditionNode[]|null $conditionsData
+     * @return Condition[]
      */
     protected function buildConditions($conditionsData) {
         if (!$conditionsData || !is_array($conditionsData)) {
