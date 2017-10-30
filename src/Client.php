@@ -27,6 +27,7 @@ use Ixolit\Dislo\Response\BillingMethodsGetAvailableResponse;
 use Ixolit\Dislo\Response\BillingMethodsGetResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
+use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse;
 use Ixolit\Dislo\Response\PackageGetResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
 use Ixolit\Dislo\Response\SubscriptionAttachCouponResponse;
@@ -2051,6 +2052,17 @@ class Client {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/user/fireEvent', $data);
 		return UserFireEventResponse::fromResponse($response);
+	}
+
+	/**
+	 * Retrieve Dislo's redirector configuration
+	 *
+	 * @return MiscGetRedirectorConfigurationResponse
+	 */
+	public function miscGetRedirectorConfiguration() {
+		$data = [];
+		$response = $this->request('/frontend/misc/getRedirectorConfiguration', $data);
+		return MiscGetRedirectorConfigurationResponse::fromResponse($response);
 	}
 
 	/**
