@@ -2,7 +2,7 @@
 
 namespace Ixolit\Dislo\Redirector\Base;
 
-use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class RedirectorResult
@@ -121,19 +121,19 @@ class RedirectorResult
     }
 
     /**
-     * return PSR 7 Response or null
+     * Put result's properties to PSR-7 response
      *
-     * @return Response|null
+     * @param ResponseInterface $response
+     *
+     * @return ResponseInterface
      */
-    public function getResponse() {
+    public function toResponse(ResponseInterface $response) {
 
-        if (! $this->redirect) {
-            return null;
+        if ($this->isRedirect()) {
+            $response = $response
+                ->withStatus($this->getStatusCode())
+                ->withHeader('Location', $this->getUrl());
         }
-
-        $response = new Response();
-        $response = $response->withStatus($this->getStatusCode());
-        $response = $response->withAddedHeader('Location', [$this->getUrl()]);
 
         foreach ($this->getCookies() as $cookie) {
             $response = $response->withAddedHeader('Set-Cookie', [$cookie->getSetCookieValueString()]);
