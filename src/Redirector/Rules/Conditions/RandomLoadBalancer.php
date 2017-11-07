@@ -17,6 +17,11 @@ class RandomLoadBalancer extends Condition
     /**
      * @var string
      */
+    protected $comparator;
+
+    /**
+     * @var string
+     */
     protected $value;
 
     /**
@@ -42,6 +47,8 @@ class RandomLoadBalancer extends Condition
 
         $this->comparator = $comparator;
         $this->value = $parameters['value'];
+
+        return $this;
     }
 
     /**

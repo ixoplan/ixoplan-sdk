@@ -59,6 +59,8 @@ class UrlSchemeCheck extends Condition
 
         $this->comparator = $comparator;
         $this->value = $parameters['value'];
+
+        return $this;
     }
 
     /**

@@ -57,6 +57,8 @@ class CookieCheck extends Condition
         $this->comparator = $comparator;
         $this->cookieName = $parameters['cookieName'];
         $this->cookieValue = !empty($parameters['cookieValue']) ? $parameters['cookieValue'] : null;
+
+        return $this;
     }
 
     /**

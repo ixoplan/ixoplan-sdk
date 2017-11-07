@@ -62,6 +62,8 @@ abstract class ComparisonCheck extends Condition {
 
         $this->comparator = $parameters['comparator'];
         $this->value = $parameters['value'];
+
+        return $this;
     }
 
     /**

@@ -48,6 +48,8 @@ class CountryCheck extends Condition
 
         $this->comparator = $comparator;
         $this->country = $parameters['country'];
+
+        return $this;
     }
 
     /**

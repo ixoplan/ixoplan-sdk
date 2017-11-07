@@ -34,6 +34,7 @@ class RedirectToUrl extends Action
         $this->statusCode = $parameters['statusCode'] ? (int) $parameters['statusCode'] : 302;
         $this->url = $parameters['url'];
 
+        return $this;
     }
 
     /**

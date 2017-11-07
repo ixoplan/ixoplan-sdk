@@ -20,6 +20,7 @@ class NoRedirection extends Action
     public function setParameters($parameters)
     {
         // no parameters
+        return $this;
     }
 
     /**

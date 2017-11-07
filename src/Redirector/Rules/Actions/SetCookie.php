@@ -75,6 +75,8 @@ class SetCookie extends Action
         $this->path = !empty($parameters['path']) ? $parameters['path'] : self::DEFAULT_VALUE_PATH;
         $this->httpOnly = !empty($parameters['httpOnly']) ? $parameters['httpOnly'] !== 'false' : self::DEFAULT_VALUE_HTTP_ONLY;
         $this->requireSSL = !empty($parameters['requireSSL']) ? $parameters['requireSSL'] !== 'false' : self::DEFAULT_VALUE_REQUIRE_SSL;
+
+        return $this;
     }
 
     /**

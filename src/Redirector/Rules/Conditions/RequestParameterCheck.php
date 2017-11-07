@@ -71,6 +71,8 @@ class RequestParameterCheck extends ComparisonCheck
         $this->comparator = $parameters['comparator'];
         $this->requestParameterName = $parameters['requestParameterName'];
         $this->requestParameterValue = !empty($parameters['requestParameterValue']) ? $parameters['requestParameterValue'] : null;
+
+        return $this;
     }
 
     /**
