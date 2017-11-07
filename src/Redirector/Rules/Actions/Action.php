@@ -30,7 +30,7 @@ abstract class Action extends RuleNode
 
     /**
      * @param RedirectorResult $redirectorResult
-     * @return mixed
+     * @param RedirectorRequestInterface $redirectorRequest
      */
     abstract public function process(RedirectorResult $redirectorResult, RedirectorRequestInterface $redirectorRequest);
 

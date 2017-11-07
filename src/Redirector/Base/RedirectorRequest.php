@@ -248,7 +248,7 @@ class RedirectorRequest implements RedirectorRequestInterface
 
     /**
      * @param string $url
-     * @reutn t
+     * @return $this
      */
     public function setFromUrl($url) {
 

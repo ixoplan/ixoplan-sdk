@@ -63,7 +63,8 @@ class Redirector
     }
 
     /**
-     * @param RedirectorRequestInterface $redirectorResult
+     * @param RedirectorResult $result
+     * @param RedirectorRequestInterface $request
      * @param RuleNode|null $ruleNode
      */
     protected function evaluateRuleNode(RedirectorResult &$result, RedirectorRequestInterface $request, RuleNode $ruleNode = null) {

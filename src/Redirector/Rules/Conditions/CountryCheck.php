@@ -37,6 +37,7 @@ class CountryCheck extends Condition
     /**
      * @param array $parameters
      * @return $this
+     * @throws RedirectorException
      */
     public function setParameters($parameters)
     {
@@ -66,6 +67,8 @@ class CountryCheck extends Condition
 
     /**
      * @param string $countryCode
+     * @return bool
+     * @throws RedirectorException
      */
     public function check($countryCode) {
 

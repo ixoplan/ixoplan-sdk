@@ -2,7 +2,10 @@
 
 namespace Ixolit\Dislo\Redirector\Rules;
 
-
+/**
+ * Class RuleNode
+ * @package Ixolit\Dislo\Redirector\Rules
+ */
 class RuleNode
 {
 

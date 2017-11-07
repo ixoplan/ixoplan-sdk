@@ -36,6 +36,7 @@ class RandomLoadBalancer extends Condition
     /**
      * @param array $parameters
      * @return $this
+     * @throws RedirectorException
      */
     public function setParameters($parameters)
     {
@@ -52,6 +53,8 @@ class RandomLoadBalancer extends Condition
     }
 
     /**
+     * @param RedirectorResult $redirectorResult
+     * @param RedirectorRequestInterface $redirectorRequest
      * @return bool
      */
     public function evaluate(RedirectorResult $redirectorResult, RedirectorRequestInterface $redirectorRequest)

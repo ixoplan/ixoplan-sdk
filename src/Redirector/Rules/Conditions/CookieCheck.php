@@ -45,6 +45,7 @@ class CookieCheck extends Condition
     /**
      * @param array $parameters
      * @return $this
+     * @throws RedirectorException
      */
     public function setParameters($parameters)
     {
@@ -62,6 +63,8 @@ class CookieCheck extends Condition
     }
 
     /**
+     * @param RedirectorResult $redirectorResult
+     * @param RedirectorRequestInterface $redirectorRequest
      * @return bool
      */
     public function evaluate(RedirectorResult $redirectorResult, RedirectorRequestInterface $redirectorRequest)
@@ -72,7 +75,8 @@ class CookieCheck extends Condition
 
     /**
      * @param Cookie[] $cookies
-     * return bool
+     * @return bool
+     * @throws RedirectorException
      */
     public function check($cookies) {
 

@@ -5,6 +5,10 @@ namespace Ixolit\Dislo\Redirector\Rules;
 
 use Ixolit\Dislo\Redirector\Rules\Conditions\Condition;
 
+/**
+ * Class RuleConditionNode
+ * @package Ixolit\Dislo\Redirector\Rules
+ */
 class RuleConditionNode extends RuleNode
 {
 

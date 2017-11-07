@@ -24,8 +24,6 @@ class RedirectToUrl extends Action
     protected $url;
 
     /**
-     * blablabla adfadfdaf
-     *
      * @param array $parameters
      * @return $this
      */

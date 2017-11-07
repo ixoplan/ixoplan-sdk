@@ -8,6 +8,10 @@ use Ixolit\Dislo\Redirector\Rules\Rule;
 use Ixolit\Dislo\Redirector\Rules\RuleConditionNode;
 use Ixolit\Dislo\Redirector\Rules\RuleNode;
 
+/**
+ * Class RulesParser
+ * @package Ixolit\Dislo\Redirector
+ */
 class RulesParser
 {
 

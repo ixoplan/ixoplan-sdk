@@ -115,7 +115,7 @@ class RequestParameterCheck extends ComparisonCheck
 
     /**
      * @param RequestParameter[] $requestParameters
-     * @return []
+     * @return string[]
      */
     protected function sanitizeRequestParameters($requestParameters) {
 

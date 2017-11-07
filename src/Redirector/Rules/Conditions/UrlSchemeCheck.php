@@ -45,6 +45,7 @@ class UrlSchemeCheck extends Condition
     /**
      * @param array $parameters
      * @return $this
+     * @throws RedirectorException
      */
     public function setParameters($parameters)
     {
