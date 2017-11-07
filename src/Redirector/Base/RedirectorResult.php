@@ -34,11 +34,6 @@ class RedirectorResult
     protected $cookies = [];
 
     /**
-     * @var string
-     */
-    protected $method = 'GET';
-
-    /**
      * @return bool
      */
     public function isRedirect()
