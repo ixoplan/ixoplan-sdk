@@ -49,7 +49,7 @@ class RandomLoadBalancer extends Condition
     public function evaluate(RedirectorResult $redirectorResult, RedirectorRequestInterface $redirectorRequest)
     {
 
-        return $this->value < rand(0, 100);
+        return rand(0, 100) < $this->value;
     }
 
 
