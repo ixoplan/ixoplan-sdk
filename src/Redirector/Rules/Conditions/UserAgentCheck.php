@@ -32,7 +32,7 @@ class UserAgentCheck extends ComparisonCheck
     public function evaluate(RedirectorResult $result, RedirectorRequestInterface $request)
     {
 
-        return $this->check($request->getUserAgent());
+        return $this->check($request->getHeader('User-Agent'));
     }
 
     /**

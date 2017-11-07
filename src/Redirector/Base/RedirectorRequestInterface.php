@@ -51,9 +51,10 @@ interface RedirectorRequestInterface
     public function getHeaders();
 
     /**
+     * @param string $key
      * @return string
      */
-    public function getUserAgent();
+    public function getHeader($key);
 
     /**
      * @return string
