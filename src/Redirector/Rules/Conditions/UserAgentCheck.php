@@ -5,7 +5,6 @@ namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 use Ixolit\Dislo\Exceptions\RedirectorException;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResult;
-use Ixolit\Dislo\Redirector\Base\RequestParameter;
 
 
 /**
