@@ -45,11 +45,6 @@ class RedirectorRequest implements RedirectorRequestInterface
     protected $cookies = [];
 
     /**
-     * @var string
-     */
-    protected $userAgent;
-
-    /**
      * @var array
      */
     protected $headers;
@@ -210,25 +205,6 @@ class RedirectorRequest implements RedirectorRequestInterface
     /**
      * @return string
      */
-    public function getUserAgent()
-    {
-        return $this->userAgent;
-    }
-
-    /**
-     * @param string $userAgent
-     * @return RedirectorRequest
-     */
-    public function setUserAgent($userAgent)
-    {
-        $this->userAgent = $userAgent;
-        return $this;
-    }
-
-
-    /**
-     * @return string
-     */
     public function getIpBasedCountryCode()
     {
         return $this->ipBasedCountryCode;
@@ -260,6 +236,14 @@ class RedirectorRequest implements RedirectorRequestInterface
     {
         $this->headers = $headers;
         return $this;
+    }
+
+    /**
+     * @param string $key
+     * @return mixed|null
+     */
+    public function getHeader($key) {
+        return isset($this->headers[$key]) ? $this->headers[$key] : null;
     }
 
     /**
