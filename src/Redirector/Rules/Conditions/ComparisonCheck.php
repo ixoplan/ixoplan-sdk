@@ -2,6 +2,8 @@
 
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 
+use Ixolit\Dislo\Exceptions\RedirectorException;
+
 /**
  * Class ComparisonCheck
  * @package Ixolit\Dislo\Redirector\Rules\Conditions
@@ -34,25 +36,25 @@ abstract class ComparisonCheck extends Condition {
 
     /**
      * @param array $parameters
-     * @throws \Exception
+     * @throws RedirectorException
      */
     protected function validateParameters($parameters) {
         //validation
         if (empty($parameters['value'])) {
-            throw new \Exception(__METHOD__.': Missing parameter "value"');
+            throw new RedirectorException(__METHOD__.': Missing parameter "value"');
         }
         if (empty($parameters['comparator'])) {
-            throw new \Exception(__METHOD__.': Missing parameter "comparator"');
+            throw new RedirectorException(__METHOD__.': Missing parameter "comparator"');
         }
         if (!in_array($parameters['comparator'], $this->getPossibleComparatorOperators())) {
-            throw new \Exception(__METHOD__.': Invalid value of parameter "comparator": '.$parameters['comparator']);
+            throw new RedirectorException(__METHOD__.': Invalid value of parameter "comparator": '.$parameters['comparator']);
         }
     }
 
     /**
      * @param array $parameters
      * @return $this
-     * @throws \Exception
+     * @throws RedirectorException
      */
     public function setParameters($parameters)
     {
@@ -67,7 +69,7 @@ abstract class ComparisonCheck extends Condition {
      * @param string $needle
      * @param string $comparator
      * @return bool
-     * @throws \Exception
+     * @throws RedirectorException
      */
     public function compare($haystack, $needle, $comparator) {
 
@@ -95,7 +97,7 @@ abstract class ComparisonCheck extends Condition {
             return (bool) preg_match($needle, $haystack);
         }
 
-        throw new \Exception(__METHOD__.': Invalid Comparator: '.$comparator);
+        throw new RedirectorException(__METHOD__.': Invalid Comparator: '.$comparator);
     }
 
 

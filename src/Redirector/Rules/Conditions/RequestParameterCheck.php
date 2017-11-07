@@ -2,6 +2,7 @@
 
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 
+use Ixolit\Dislo\Exceptions\RedirectorException;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResult;
 use Ixolit\Dislo\Redirector\Base\RequestParameter;
@@ -41,21 +42,21 @@ class RequestParameterCheck extends ComparisonCheck
 
     /**
      * @param array $parameters
-     * @throws \Exception
+     * @throws RedirectorException
      */
     protected function validateParameters($parameters) {
 
         if (empty($parameters['requestParameterName'])) {
-            throw new \Exception(__METHOD__.': Missing parameter "requestParameterName"');
+            throw new RedirectorException(__METHOD__.': Missing parameter "requestParameterName"');
         }
         if (empty($parameters['comparator'])) {
-            throw new \Exception(__METHOD__.': Missing parameter "comparator"');
+            throw new RedirectorException(__METHOD__.': Missing parameter "comparator"');
         }
         if (!in_array($parameters['comparator'], $this->getPossibleComparatorOperators())) {
-            throw new \Exception(__METHOD__.': Invalid value of parameter "comparator": '.$parameters['comparator']);
+            throw new RedirectorException(__METHOD__.': Invalid value of parameter "comparator": '.$parameters['comparator']);
         }
         if ($parameters['comparator'] != 'exists' && empty($parameters['requestParameterValue'])) {
-            throw new \Exception(__METHOD__.': Missing parameter "requestParameterValue"');
+            throw new RedirectorException(__METHOD__.': Missing parameter "requestParameterValue"');
         }
     }
 
@@ -76,7 +77,7 @@ class RequestParameterCheck extends ComparisonCheck
      * @param RedirectorResult $result
      * @param RedirectorRequestInterface $request
      * @return bool
-     * @throws \Exception
+     * @throws RedirectorException
      */
     public function evaluate(RedirectorResult $result, RedirectorRequestInterface $request)
     {
@@ -87,7 +88,7 @@ class RequestParameterCheck extends ComparisonCheck
     /**
      * @param RequestParameter[] $requestParameters
      * @return bool
-     * @throws \Exception
+     * @throws RedirectorException
      */
     public function check($requestParameters) {
 
@@ -107,7 +108,7 @@ class RequestParameterCheck extends ComparisonCheck
             return array_key_exists($this->requestParameterName, $requestParameters);
         }
 
-        throw new \Exception(__METHOD__.': Invalid value of parameter "comparator": '.$this->comparator);
+        throw new RedirectorException(__METHOD__.': Invalid value of parameter "comparator": '.$this->comparator);
     }
 
     /**

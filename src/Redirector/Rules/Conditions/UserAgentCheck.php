@@ -2,6 +2,7 @@
 
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 
+use Ixolit\Dislo\Exceptions\RedirectorException;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResult;
 use Ixolit\Dislo\Redirector\Base\RequestParameter;
@@ -27,7 +28,7 @@ class UserAgentCheck extends ComparisonCheck
      * @param RedirectorResult $result
      * @param RedirectorRequestInterface $request
      * @return bool
-     * @throws \Exception
+     * @throws RedirectorException
      */
     public function evaluate(RedirectorResult $result, RedirectorRequestInterface $request)
     {
@@ -38,7 +39,7 @@ class UserAgentCheck extends ComparisonCheck
     /**
      * @param string $userAgentData
      * @return bool
-     * @throws \Exception
+     * @throws RedirectorException
      */
     public function check($userAgentData) {
 

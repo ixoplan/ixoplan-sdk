@@ -2,6 +2,7 @@
 
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 
+use Ixolit\Dislo\Exceptions\RedirectorException;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResult;
 
@@ -36,7 +37,7 @@ class RandomLoadBalancer extends Condition
         //validation
         $comparator = $parameters['comparator'] ?: null;
         if (!in_array($comparator, self::getPossibleComparatorOperators())) {
-            throw new \Exception(__METHOD__.': Invalid Operator: '.$comparator);
+            throw new RedirectorException(__METHOD__.': Invalid Operator: '.$comparator);
         }
 
         $this->comparator = $comparator;

@@ -2,6 +2,7 @@
 
 namespace Ixolit\Dislo\Redirector\Rules\Actions;
 
+use Ixolit\Dislo\Exceptions\RedirectorException;
 use Ixolit\Dislo\Redirector\Base\Cookie;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResult;
@@ -49,14 +50,14 @@ class SetCookie extends Action
 
     /**
      * @param array $parameters
-     * @throws \Exception
+     * @throws RedirectorException
      */
     protected function validateParameters($parameters) {
         if (empty($parameters['cookieName'])) {
-            throw new \Exception(__METHOD__.': Missing parameter "cookieName"');
+            throw new RedirectorException(__METHOD__.': Missing parameter "cookieName"');
         }
         if (empty($parameters['cookieValue'])) {
-            throw new \Exception(__METHOD__.': Missing parameter "cookieValue"');
+            throw new RedirectorException(__METHOD__.': Missing parameter "cookieValue"');
         }
     }
 

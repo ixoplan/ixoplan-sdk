@@ -2,6 +2,7 @@
 
 namespace Ixolit\Dislo\Redirector\Base;
 
+use Ixolit\Dislo\Exceptions\RedirectorException;
 use Ixolit\Dislo\Redirector\Rules\Actions\Action;
 use Ixolit\Dislo\Redirector\Rules\Conditions\Condition;
 
@@ -15,13 +16,13 @@ class Factory
     /**
      * @param array $actionData
      * @return Action
-     * @throws \Exception
+     * @throws RedirectorException
      */
     public function createActionFromArray($actionData) {
         $className = "Ixolit\\Dislo\\Redirector\\Rules\\Actions\\".$actionData['type'];
 
         if (!class_exists($className)) {
-            throw new \Exception(__METHOD__.': Class '.$className.' does not exist.');
+            throw new RedirectorException(__METHOD__.': Class '.$className.' does not exist.');
         }
 
         /**
@@ -30,7 +31,7 @@ class Factory
         $action = new $className;
 
         if (! $action instanceof  Action) {
-            throw new \Exception(__METHOD__.': Class '.$className.' is not type of Action.');
+            throw new RedirectorException(__METHOD__.': Class '.$className.' is not type of Action.');
         }
 
         if (!empty($actionData['data'])) {
@@ -43,13 +44,13 @@ class Factory
     /**
      * @param $conditionData
      * @return Condition
-     * @throws \Exception
+     * @throws RedirectorException
      */
     public function createConditionFromArray($conditionData) {
         $className = "Ixolit\\Dislo\\Redirector\\Rules\\Conditions\\".$conditionData['type'];
 
         if (!class_exists($className)) {
-            throw new \Exception('Class '.$className.' does not exist.');
+            throw new RedirectorException('Class '.$className.' does not exist.');
         }
 
         /**
@@ -58,7 +59,7 @@ class Factory
         $condition = new $className;
 
         if (! $condition instanceof  Condition) {
-            throw new \Exception('Class '.$className.' is not type of Condition');
+            throw new RedirectorException('Class '.$className.' is not type of Condition');
         }
 
         $condition->setParameters($conditionData['data'] ?: []);
