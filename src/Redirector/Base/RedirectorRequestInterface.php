@@ -52,7 +52,7 @@ interface RedirectorRequestInterface
 
     /**
      * @param string $key
-     * @return string
+     * @return mixed|null
      */
     public function getHeader($key);
 
