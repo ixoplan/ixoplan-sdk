@@ -36,7 +36,7 @@ class ComparisonCheckTest extends \PHPUnit_Framework_TestCase
     public function testUrlCheck3() {
 
         $url = 'http://www.test.ixolit.com';
-        $comparator = 'includes';
+        $comparator = 'contains';
         $value = 'st.ixolit.';
         $expectedResult = true;
 
@@ -48,7 +48,7 @@ class ComparisonCheckTest extends \PHPUnit_Framework_TestCase
     public function testUrlCheck4() {
 
         $url = 'http://www.test.ixolit.com';
-        $comparator = 'includes';
+        $comparator = 'contains';
         $value = 'https://www.test';
         $expectedResult = false;
 
@@ -74,6 +74,54 @@ class ComparisonCheckTest extends \PHPUnit_Framework_TestCase
         $url = 'http://www.test.ixolit.com';
         $comparator = 'regex';
         $value = '|test.IXOLIT.com|';
+        $expectedResult = false;
+
+        $urlCheck = new UrlCheck();
+        $result = $urlCheck->compare($url, $value, $comparator);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function testUrlCheck7() {
+
+        $url = 'http://www.test.ixolit.com';
+        $comparator = 'not_regex';
+        $value = '|test.IXOLIT.com|';
+        $expectedResult = true;
+
+        $urlCheck = new UrlCheck();
+        $result = $urlCheck->compare($url, $value, $comparator);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function testUrlCheck8() {
+
+        $url = 'http://www.test.ixolit.com';
+        $comparator = 'not_contains';
+        $value = 'https://www.test';
+        $expectedResult = true;
+
+        $urlCheck = new UrlCheck();
+        $result = $urlCheck->compare($url, $value, $comparator);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function testUrlCheck9() {
+
+        $url = 'http://www.test.ixolit.com';
+        $comparator = 'equals';
+        $value = 'http://www.test.ixolit.com';
+        $expectedResult = true;
+
+        $urlCheck = new UrlCheck();
+        $result = $urlCheck->compare($url, $value, $comparator);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function testUrlCheck10() {
+
+        $url = 'http://www.test.ixolit.com';
+        $comparator = 'not_equals';
+        $value = 'http://www.test.ixolit.com';
         $expectedResult = false;
 
         $urlCheck = new UrlCheck();

@@ -7,14 +7,14 @@ use Ixolit\Dislo\Redirector\Rules\Conditions\CountryCheck;
  * Class CountryCheckTest
  * @package Ixolit\Dislo\Redirector
  */
-class CountryCheckTest extends \PHPUnit_Framework_TestCase // TODO
+class CountryCheckTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testCountryCheck1() {
 
         // test data
         $country = 'AT';
-        $comparator = '=';
+        $comparator = 'equals';
         $requestCountry = 'AT';
         $expectedResult = true;
 
@@ -30,7 +30,7 @@ class CountryCheckTest extends \PHPUnit_Framework_TestCase // TODO
 
         // test data
         $country = 'AT';
-        $comparator = '=';
+        $comparator = 'equals';
         $requestCountry = 'DE';
         $expectedResult = false;
 
@@ -46,7 +46,7 @@ class CountryCheckTest extends \PHPUnit_Framework_TestCase // TODO
 
         // test data
         $country = 'AT';
-        $comparator = '!=';
+        $comparator = 'not_equals';
         $requestCountry = 'AT';
         $expectedResult = false;
 
@@ -62,7 +62,7 @@ class CountryCheckTest extends \PHPUnit_Framework_TestCase // TODO
 
         // test data
         $country = 'AT';
-        $comparator = '!=';
+        $comparator = 'not_equals';
         $requestCountry = 'DE';
         $expectedResult = true;
 

@@ -14,7 +14,7 @@ class RequestParameterCheckTest extends \PHPUnit_Framework_TestCase
 
         // set test data
         $parameters = [
-            'comparator' => '=',
+            'comparator' => 'equals',
             'requestParameterName' => 'requestParameterName1',
             'requestParameterValue' => 'requestParameterValue1'
         ];
@@ -42,7 +42,7 @@ class RequestParameterCheckTest extends \PHPUnit_Framework_TestCase
 
         // set test data
         $parameters = [
-            'comparator' => '=',
+            'comparator' => 'equals',
             'requestParameterName' => 'requestParameterName1',
             'requestParameterValue' => 'requestParameterValue1'
         ];
@@ -70,7 +70,7 @@ class RequestParameterCheckTest extends \PHPUnit_Framework_TestCase
 
         // set test data
         $parameters = [
-            'comparator' => '!=',
+            'comparator' => 'not_equals',
             'requestParameterName' => 'requestParameterName1',
             'requestParameterValue' => 'requestParameterValue1'
         ];
@@ -98,7 +98,7 @@ class RequestParameterCheckTest extends \PHPUnit_Framework_TestCase
 
         // set test data
         $parameters = [
-            'comparator' => '!=',
+            'comparator' => 'not_equals',
             'requestParameterName' => 'requestParameterName1',
             'requestParameterValue' => 'requestParameterValue1'
         ];
@@ -127,7 +127,8 @@ class RequestParameterCheckTest extends \PHPUnit_Framework_TestCase
         // set test data
         $parameters = [
             'comparator' => 'exists',
-            'requestParameterName' => 'requestParameterName1'
+            'requestParameterName' => 'requestParameterName1',
+            'requestParameterValue' => ''
         ];
         $requestParameterName = 'requestParameterName1';
         $requestParameterValue = null;
@@ -154,12 +155,69 @@ class RequestParameterCheckTest extends \PHPUnit_Framework_TestCase
         // set test data
         $parameters = [
             'comparator' => 'exists',
-            'requestParameterName' => 'requestParameterName3'
+            'requestParameterName' => 'requestParameterName3',
+            'requestParameterValue' => ''
         ];
         $requestParameterName = 'requestParameterName1';
         $requestParameterValue = null;
 
         $expectedResult = false;
+
+        // build objects
+        $requestParameter = new RequestParameter();
+        $requestParameter->setName($requestParameterName)
+            ->setValue($requestParameterValue);
+        $requestParameters = [$requestParameter];
+        $requestParameterCheck = new RequestParameterCheck($parameters);
+        $requestParameterCheck->setParameters($parameters);
+
+        // test
+        $result = $requestParameterCheck->check($requestParameters);
+
+        $this->assertEquals($expectedResult, $result);
+
+    }
+
+    public function testQueryParameterCheck7() {
+
+        // set test data
+        $parameters = [
+            'comparator' => 'not_exists',
+            'requestParameterName' => 'requestParameterName1',
+            'requestParameterValue' => ''
+        ];
+        $requestParameterName = 'requestParameterName1';
+        $requestParameterValue = null;
+
+        $expectedResult = false;
+
+        // build objects
+        $requestParameter = new RequestParameter();
+        $requestParameter->setName($requestParameterName)
+            ->setValue($requestParameterValue);
+        $requestParameters = [$requestParameter];
+        $requestParameterCheck = new RequestParameterCheck($parameters);
+        $requestParameterCheck->setParameters($parameters);
+
+        // test
+        $result = $requestParameterCheck->check($requestParameters);
+
+        $this->assertEquals($expectedResult, $result);
+
+    }
+
+    public function testQueryParameterCheck8() {
+
+        // set test data
+        $parameters = [
+            'comparator' => 'not_exists',
+            'requestParameterName' => 'requestParameterName3',
+            'requestParameterValue' => ''
+        ];
+        $requestParameterName = 'requestParameterName1';
+        $requestParameterValue = null;
+
+        $expectedResult = true;
 
         // build objects
         $requestParameter = new RequestParameter();

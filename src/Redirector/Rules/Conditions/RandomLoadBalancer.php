@@ -15,53 +15,41 @@ class RandomLoadBalancer extends Condition
 {
 
     /**
-     * @var string
-     */
-    protected $comparator;
-
-    /**
-     * @var string
-     */
-    protected $value;
-
-    /**
      * @return string[]
      */
-    protected static function getPossibleComparatorOperators() {
+    protected function getPossibleComparatorOperators() {
         return [
             'lower_than'
         ];
     }
 
     /**
-     * @param array $parameters
-     * @return $this
-     * @throws RedirectorException
+     * @param RedirectorResult $redirectorResult
+     * @param RedirectorRequestInterface $redirectorRequest
+     * @return array
      */
-    public function setParameters($parameters)
-    {
-        //validation
-        $comparator = $parameters['comparator'] ?: null;
-        if (!in_array($comparator, self::getPossibleComparatorOperators())) {
-            throw new RedirectorException(__METHOD__.': Invalid Operator: '.$comparator);
-        }
-
-        $this->comparator = $comparator;
-        $this->value = $parameters['value'];
-
-        return $this;
+    protected function getParameterKeys() {
+        return [
+            'comparator',
+            'value',
+        ];
     }
 
     /**
-     * @param RedirectorResult $redirectorResult
-     * @param RedirectorRequestInterface $redirectorRequest
+     * @param RedirectorRequestInterface $request
+     * @param RedirectorResult $result
      * @return bool
+     * @throws \Exception
      */
-    public function evaluate(RedirectorResult $redirectorResult, RedirectorRequestInterface $redirectorRequest)
+    public function evaluateFromRequest(RedirectorRequestInterface $request, RedirectorResult $result)
     {
 
-        return rand(0, 100) < $this->value;
+        return $this->evaluate();
     }
 
+    public function evaluate() {
+
+        return ((int) $this->parameters['value']) < rand(0, 99);
+    }
 
 }

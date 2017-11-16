@@ -99,7 +99,7 @@ class Redirector
     protected function evaluateConditions($result, $request, $conditions, $matching) {
 
         foreach ($conditions as $condition) {
-            $singleConditionResult = $condition->evaluate($result, $request);
+            $singleConditionResult = $condition->evaluateFromRequest($request, $result);
 
             // if matching == 'OR' return true if any condition is true
             if ($matching === RuleConditionNode::MATCHING_OR && $singleConditionResult) {

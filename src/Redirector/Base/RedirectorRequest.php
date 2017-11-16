@@ -47,7 +47,7 @@ class RedirectorRequest implements RedirectorRequestInterface
     /**
      * @var array
      */
-    protected $headers;
+    protected $headers = [];
 
     /**
      * country code, e.g.: US, GB, DE, AT
@@ -235,6 +235,23 @@ class RedirectorRequest implements RedirectorRequestInterface
     public function setHeaders($headers)
     {
         $this->headers = $headers;
+        return $this;
+    }
+
+    /**
+     * @param string $headerName
+     * @param string $headerValue
+     * @return RedirectorRequest
+     */
+    public function setHeader($headerName, $headerValue)
+    {
+        $headers = $this->getHeaders();
+        if (!is_array($headers)) {
+            $headers = [];
+        }
+        $headers[$headerName] = $headerValue;
+        $this->setHeaders($headers);
+
         return $this;
     }
 

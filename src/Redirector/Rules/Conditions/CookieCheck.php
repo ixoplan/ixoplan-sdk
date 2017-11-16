@@ -16,61 +16,41 @@ class CookieCheck extends Condition
 {
 
     /**
-     * @var string
-     */
-    protected $cookieName;
-
-    /**
-     * @var string
-     */
-    protected $cookieValue;
-
-    /**
-     * @var string
-     */
-    protected $comparator;
-
-    /**
      * @return string[]
      */
-    protected static function getPossibleComparatorOperators() {
-        return [
-            'exists',
-            '=',
-            '!=',
-            'regex'
-        ];
-    }
-
-    /**
-     * @param array $parameters
-     * @return $this
-     * @throws RedirectorException
-     */
-    public function setParameters($parameters)
-    {
-        //validation
-        $comparator = $parameters['comparator'] ?: null;
-        if (!in_array($comparator, self::getPossibleComparatorOperators())) {
-            throw new RedirectorException(__METHOD__.': Invalid Operator: '.$comparator);
-        }
-
-        $this->comparator = $comparator;
-        $this->cookieName = $parameters['cookieName'];
-        $this->cookieValue = !empty($parameters['cookieValue']) ? $parameters['cookieValue'] : null;
-
-        return $this;
+    protected function getPossibleComparatorOperators() {
+        return array_merge(
+            [
+                self::COMPARATOR_EXISTS,
+                self::COMPARATOR_NOT_EXISTS
+            ],
+            parent::getPossibleComparatorOperators()
+        );
     }
 
     /**
      * @param RedirectorResult $redirectorResult
      * @param RedirectorRequestInterface $redirectorRequest
-     * @return bool
+     * @return array
      */
-    public function evaluate(RedirectorResult $redirectorResult, RedirectorRequestInterface $redirectorRequest)
+    protected function getParameterKeys() {
+        return [
+            'comparator',
+            'cookieName',
+            'cookieValue',
+        ];
+    }
+
+    /**
+     * @param RedirectorRequestInterface $request
+     * @param RedirectorResult $result
+     * @return bool
+     * @throws \Exception
+     */
+    public function evaluateFromRequest(RedirectorRequestInterface $request, RedirectorResult $result)
     {
 
-        return $this->check($redirectorRequest->getCookies());
+        return $this->check($request->getCookies());
     }
 
     /**
@@ -86,26 +66,23 @@ class CookieCheck extends Condition
             $cookieParameters[$cookie->getName()] = $cookie;
         } ;
 
+        $comparator = $this->parameters['comparator'];
+        $cookieName = $this->parameters['cookieName'];
+        $cookieValuePattern = !empty($this->parameters['cookieValue']) ? $this->parameters['cookieValue'] : '';
 
-        if ($this->comparator === 'exists') {
-            return array_key_exists($this->cookieName, $cookieParameters);
+
+        if ($comparator === self::COMPARATOR_EXISTS) {
+            return array_key_exists($cookieName, $cookieParameters);
+        }
+        if ($comparator === self::COMPARATOR_NOT_EXISTS) {
+            return ! array_key_exists($cookieName, $cookieParameters);
         }
 
-        $cookie = !empty($cookieParameters[$this->cookieName]) ? $cookieParameters[$this->cookieName] : null;
+        /** @var Cookie $cookie */
+        $cookie = !empty($cookieParameters[$cookieName]) ? $cookieParameters[$cookieName] : null;
 
-        if ($this->comparator === '=') {
-            return $this->cookieValue === $cookie->getValue();
-        }
+        return $this->compare($cookie->getValue(), $cookieValuePattern, $comparator);
 
-        if ($this->comparator === '!=') {
-            return $this->cookieValue !== $cookie->getValue();
-        }
-
-        if ($this->comparator === 'regex') {
-            return (bool) preg_match($this->cookieValue, $cookie->getValue());
-        }
-
-        throw new RedirectorException(__METHOD__.': Invalid Operator: '.$this->comparator);
     }
 
     /**

@@ -9,18 +9,19 @@ use Ixolit\Dislo\Redirector\Base\RedirectorResult;
  * Class UrlPathCheck
  * @package Ixolit\Dislo\Redirector\Rules\Conditions
  */
-class UrlPathCheck extends ComparisonCheck
+class UrlPathCheck extends Condition
 {
 
     /**
-     * @param RedirectorResult $result
      * @param RedirectorRequestInterface $request
+     * @param RedirectorResult $result
      * @return bool
+     * @throws \Exception
      */
-    public function evaluate(RedirectorResult $result, RedirectorRequestInterface $request)
+    public function evaluateFromRequest(RedirectorRequestInterface $request, RedirectorResult $result)
     {
 
-        return $this->compare($request->getPath(), $this->value, $this->comparator);
+        return $this->compare($request->getPath(), $this->parameters['value'], $this->parameters['comparator']);
     }
 
 

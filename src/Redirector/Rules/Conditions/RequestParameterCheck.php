@@ -9,79 +9,43 @@ use Ixolit\Dislo\Redirector\Base\RequestParameter;
 
 
 /**
- * Class UrlQueryCheck
+ * Class RequestParameterCheck
  * @package Ixolit\Dislo\Redirector\Rules\Conditions
  */
-class RequestParameterCheck extends ComparisonCheck
+class RequestParameterCheck extends Condition
 {
-    /**
-     * @var string
-     */
-    protected $comparator;
-
-    /**
-     * @var string
-     */
-    protected $requestParameterName;
-
-    /**
-     * @var string
-     */
-    protected $requestParameterValue;
 
     /**
      * @return string[]
      */
     protected function getPossibleComparatorOperators() {
+        return array_merge(
+            [
+                self::COMPARATOR_EXISTS,
+                self::COMPARATOR_NOT_EXISTS
+            ],
+            parent::getPossibleComparatorOperators()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    protected function getParameterKeys() {
         return [
-            '=',
-            '!=',
-            'exists'
+            'comparator',
+            'requestParameterName',
+            'requestParameterValue',
         ];
     }
 
     /**
-     * @param array $parameters
-     * @throws RedirectorException
-     */
-    protected function validateParameters($parameters) {
-
-        if (empty($parameters['requestParameterName'])) {
-            throw new RedirectorException(__METHOD__.': Missing parameter "requestParameterName"');
-        }
-        if (empty($parameters['comparator'])) {
-            throw new RedirectorException(__METHOD__.': Missing parameter "comparator"');
-        }
-        if (!in_array($parameters['comparator'], $this->getPossibleComparatorOperators())) {
-            throw new RedirectorException(__METHOD__.': Invalid value of parameter "comparator": '.$parameters['comparator']);
-        }
-        if ($parameters['comparator'] != 'exists' && empty($parameters['requestParameterValue'])) {
-            throw new RedirectorException(__METHOD__.': Missing parameter "requestParameterValue"');
-        }
-    }
-
-    /**
-     * @param array $parameters
-     * @return $this
-     */
-    public function setParameters($parameters)
-    {
-        $this->validateParameters($parameters);
-
-        $this->comparator = $parameters['comparator'];
-        $this->requestParameterName = $parameters['requestParameterName'];
-        $this->requestParameterValue = !empty($parameters['requestParameterValue']) ? $parameters['requestParameterValue'] : null;
-
-        return $this;
-    }
-
-    /**
-     * @param RedirectorResult $result
      * @param RedirectorRequestInterface $request
+     * @param RedirectorResult $result
      * @return bool
      * @throws RedirectorException
      */
-    public function evaluate(RedirectorResult $result, RedirectorRequestInterface $request)
+    public function evaluateFromRequest(RedirectorRequestInterface $request, RedirectorResult $result)
     {
 
         return $this->check($request->getRequestParameters());
@@ -96,21 +60,20 @@ class RequestParameterCheck extends ComparisonCheck
 
         $requestParameters = $this->sanitizeRequestParameters($requestParameters);
 
-        $requestParameterValue = !empty($requestParameters[$this->requestParameterName]) ? $requestParameters[$this->requestParameterName] : '';
+        $comparator = $this->parameters['comparator'];
+        $requestParameterName = $this->parameters['requestParameterName'];
+        $requestParameterValuePattern = !empty($this->parameters['requestParameterValue']) ? $this->parameters['requestParameterValue'] : '';
 
-        if ($this->comparator === '=') {
-            return $requestParameterValue === $this->requestParameterValue;
+        if ($comparator === self::COMPARATOR_EXISTS) {
+            return array_key_exists($requestParameterName, $requestParameters);
+        }
+        if ($comparator === self::COMPARATOR_NOT_EXISTS) {
+            return ! array_key_exists($requestParameterName, $requestParameters);
         }
 
-        if ($this->comparator === '!=') {
-            return $requestParameterValue !== $this->requestParameterValue;
-        }
+        $requestParameterValue = !empty($requestParameters[$requestParameterName]) ? $requestParameters[$requestParameterName] : '';
 
-        if ($this->comparator === 'exists') {
-            return array_key_exists($this->requestParameterName, $requestParameters);
-        }
-
-        throw new RedirectorException(__METHOD__.': Invalid value of parameter "comparator": '.$this->comparator);
+        return $this->compare($requestParameterValue, $requestParameterValuePattern, $comparator);
     }
 
     /**

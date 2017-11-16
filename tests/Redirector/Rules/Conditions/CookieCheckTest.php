@@ -19,7 +19,7 @@ class CookieCheckTest extends \PHPUnit_Framework_TestCase
 
         // build objects
         $cookies = [(new Cookie())->setName('cookieName1')->setValue(null)];
-        $cookieCheck = new CookieCheck(['cookieName' => $cookieName, 'comparator' => $comparator]);
+        $cookieCheck = new CookieCheck(['cookieName' => $cookieName, 'comparator' => $comparator, 'cookieValue' => '']);
 
         // test
         $result = $cookieCheck->check($cookies);
@@ -35,7 +35,7 @@ class CookieCheckTest extends \PHPUnit_Framework_TestCase
 
         // build objects
         $cookies = [(new Cookie())->setName('cookieName1')->setValue(null)];
-        $cookieCheck = new CookieCheck(['cookieName' => $cookieName, 'comparator' => $comparator]);
+        $cookieCheck = new CookieCheck(['cookieName' => $cookieName, 'comparator' => $comparator, 'cookieValue' => '']);
 
         // test
         $result = $cookieCheck->check($cookies);
@@ -46,7 +46,7 @@ class CookieCheckTest extends \PHPUnit_Framework_TestCase
 
         // test data
         $cookieName = 'cookieName1';
-        $comparator = '=';
+        $comparator = 'equals';
         $cookieValue = 'cookieValue1';
         $expectedResult = true;
 
@@ -63,7 +63,7 @@ class CookieCheckTest extends \PHPUnit_Framework_TestCase
 
         // test data
         $cookieName = 'cookieName1';
-        $comparator = '=';
+        $comparator = 'equals';
         $cookieValue = 'not_matching';
         $expectedResult = false;
 
@@ -80,7 +80,7 @@ class CookieCheckTest extends \PHPUnit_Framework_TestCase
 
         // test data
         $cookieName = 'cookieName1';
-        $comparator = '!=';
+        $comparator = 'not_equals';
         $cookieValue = 'cookieValue1';
         $expectedResult = false;
 
@@ -97,7 +97,7 @@ class CookieCheckTest extends \PHPUnit_Framework_TestCase
 
         // test data
         $cookieName = 'cookieName1';
-        $comparator = '!=';
+        $comparator = 'not_equals';
         $cookieValue = 'not_matching';
         $expectedResult = true;
 
@@ -144,6 +144,55 @@ class CookieCheckTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
+
+    public function testCookieCheck9() {
+
+        // test data
+        $cookieName = 'cookieName1';
+        $comparator = 'not_exists';
+        $expectedResult = false;
+
+        // build objects
+        $cookies = [(new Cookie())->setName('cookieName1')->setValue(null)];
+        $cookieCheck = new CookieCheck(['cookieName' => $cookieName, 'comparator' => $comparator, 'cookieValue' => '']);
+
+        // test
+        $result = $cookieCheck->check($cookies);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function testCookieCheck10() {
+
+        // test data
+        $cookieName = 'cookieName3';
+        $comparator = 'not_exists';
+        $expectedResult = true;
+
+        // build objects
+        $cookies = [(new Cookie())->setName('cookieName1')->setValue(null)];
+        $cookieCheck = new CookieCheck(['cookieName' => $cookieName, 'comparator' => $comparator, 'cookieValue' => '']);
+
+        // test
+        $result = $cookieCheck->check($cookies);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function testCookieCheck11() {
+
+        // test data
+        $cookieName = 'cookieName1';
+        $comparator = 'not_regex';
+        $cookieValue = '/kievalue1/';
+        $expectedResult = true;
+
+        // build objects
+        $cookies = [(new Cookie())->setName('cookieName1')->setValue('cookieValue1')];
+        $cookieCheck = new CookieCheck(['cookieName' => $cookieName, 'comparator' => $comparator, 'cookieValue' => $cookieValue]);
+
+        // test
+        $result = $cookieCheck->check($cookies);
+        $this->assertEquals($expectedResult, $result);
+    }
 
 
 }

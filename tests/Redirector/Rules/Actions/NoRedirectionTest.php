@@ -21,10 +21,7 @@ class NoRedirectionTest extends \PHPUnit_Framework_TestCase
         $redirectToUrl->process($redirectorResult, $redirectorRequest);
 
         $this->assertEquals(false, $redirectorResult->isRedirect());
-        $this->assertEquals(null, $redirectorResult->getResponse());
 
     }
-
-
 
 }

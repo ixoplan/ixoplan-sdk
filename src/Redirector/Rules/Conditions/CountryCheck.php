@@ -15,54 +15,34 @@ class CountryCheck extends Condition
 {
 
     /**
-     * @var string
-     */
-    protected $comparator;
-
-    /**
-     * @var string
-     */
-    protected $country;
-
-    /**
      * @return string[]
      */
-    protected static function getPossibleComparatorOperators() {
+    protected function getPossibleComparatorOperators() {
         return [
-            '=',
-            '!='
+            Condition::COMPARATOR_EQUALS,
+            Condition::COMPARATOR_NOT_EQUALS
         ];
     }
 
     /**
-     * @param array $parameters
-     * @return $this
-     * @throws RedirectorException
+     * @return array
      */
-    public function setParameters($parameters)
-    {
-        //validation
-        $comparator = $parameters['comparator'] ?: null;
-        if (!in_array($comparator, self::getPossibleComparatorOperators())) {
-            throw new RedirectorException(__METHOD__.': Invalid Operator: '.$comparator);
-        }
-
-        $this->comparator = $comparator;
-        $this->country = $parameters['country'];
-
-        return $this;
+    protected function getParameterKeys() {
+        return [
+            'comparator',
+            'country'
+        ];
     }
 
     /**
-     * @param RedirectorResult $redirectorResult
-     * @param RedirectorRequestInterface $redirectorRequest
+     * @param RedirectorRequestInterface $request
+     * @param RedirectorResult $result
      * @return bool
+     * @throws \Exception
      */
-    public function evaluate(RedirectorResult $redirectorResult, RedirectorRequestInterface $redirectorRequest)
+    public function evaluateFromRequest(RedirectorRequestInterface $request, RedirectorResult $result)
     {
-
-        return $this->check($redirectorRequest->getIpBasedCountryCode());
-
+        return $this->check($request->getIpBasedCountryCode());
     }
 
     /**
@@ -72,15 +52,9 @@ class CountryCheck extends Condition
      */
     public function check($countryCode) {
 
-        if ($this->comparator === '=') {
-            return $this->country === $countryCode;
-        }
 
-        if ($this->comparator === '!=') {
-            return $this->country !== $countryCode;
-        }
+        return $this->compare($this->parameters['country'], $countryCode, $this->parameters['comparator']);
 
-        throw new RedirectorException(__METHOD__.': Invalid Operator: '.$this->comparator);
     }
 
 }

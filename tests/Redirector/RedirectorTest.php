@@ -46,9 +46,7 @@ class RedirectorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('https://www.test.ixolit.com', $redirectorResult->getUrl());
 
-        $this->assertEquals(307, $redirectorResult->getResponse()->getStatusCode());
-
-        $this->assertInstanceOf(ResponseInterface::class, $redirectorResult->getResponse());
+        $this->assertEquals(307, $redirectorResult->getStatusCode());
 
     }
 

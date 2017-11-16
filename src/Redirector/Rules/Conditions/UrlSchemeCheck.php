@@ -13,22 +13,14 @@ use Ixolit\Dislo\Redirector\Base\RedirectorResult;
  */
 class UrlSchemeCheck extends Condition
 {
-    /**
-     * @var string
-     */
-    protected $comparator;
-
-    /**
-     * @var string
-     */
-    protected $value;
 
     /**
      * @return string[]
      */
-    protected static function getPossibleComparatorOperators() {
+    protected function getPossibleComparatorOperators() {
         return [
-            '='
+            self::COMPARATOR_EQUALS,
+            self::COMPARATOR_NOT_EQUALS
         ];
     }
 
@@ -40,6 +32,18 @@ class UrlSchemeCheck extends Condition
             'https',
             'http'
         ];
+    }
+
+    /**
+     * @param array $parameters
+     * @throws \Exception
+     */
+    protected function validateParameters($parameters) {
+        parent::validateParameters($parameters);
+
+        if (!in_array($parameters['value'], $this->getPossibleValues())) {
+            throw new \Exception(__METHOD__.': Invalid value of parameter "comparator": '.$parameters['comparator']);
+        }
     }
 
     /**
@@ -65,14 +69,15 @@ class UrlSchemeCheck extends Condition
     }
 
     /**
-     * @param RedirectorResult $result
      * @param RedirectorRequestInterface $request
+     * @param RedirectorResult $result
      * @return bool
+     * @throws \Exception
      */
-    public function evaluate(RedirectorResult $result, RedirectorRequestInterface $request)
+    public function evaluateFromRequest(RedirectorRequestInterface $request, RedirectorResult $result)
     {
 
-        return $request->getScheme() === $this->value;
+        return $this->compare($request->getScheme(), $this->parameters['value'], $this->parameters['comparator']);
     }
 
 

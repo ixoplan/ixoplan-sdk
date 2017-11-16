@@ -142,28 +142,28 @@ class RulesParserTest extends \PHPUnit_Framework_TestCase
                                 {
                                     "type": "UrlSchemeCheck",
                                     "data": {
-                                        "comparator": "=",
+                                        "comparator": "equals",
                                         "value": "https"
                                     }
                                 },
                                 {
                                     "type": "UrlHostCheck",
                                     "data": {
-                                        "comparator": "includes",
+                                        "comparator": "contains",
                                         "value": "host_example"
                                     }
                                 },
                                 {
                                     "type": "UrlPathCheck",
                                     "data": {
-                                        "comparator": "=",
+                                        "comparator": "equals",
                                         "value": "path_example"
                                     }
                                 },
                                 {
                                     "type": "CountryCheck",
                                     "data": {
-                                        "comparator": "=",
+                                        "comparator": "equals",
                                         "country": "AT"
                                     }
                                 },
@@ -178,21 +178,14 @@ class RulesParserTest extends \PHPUnit_Framework_TestCase
                                     "type": "RequestParameterCheck",
                                     "data": {
                                         "requestParameterName": "value1",
-                                        "comparator": "=",
+                                        "comparator": "equals",
                                         "requestParameterValue": "requestParametername1"
-                                    }
-                                },
-                                {
-                                    "type": "UserAgentCheck",
-                                    "data": {
-                                        "comparator": "regex",
-                                        "value": "\/Mozilla\/i"
                                     }
                                 },
                                 {
                                     "type": "CookieCheck",
                                     "data": {
-                                        "comparator": "=",
+                                        "comparator": "equals",
                                         "cookieName": "cookieName1",
                                         "cookieValue": "cookieValue1"
                                     }
@@ -233,13 +226,198 @@ class RulesParserTest extends \PHPUnit_Framework_TestCase
         /** @var RuleConditionNode $ruleConditionNode */
         $ruleConditionNode = $rule->getRootRuleNode();
 
-        $this->assertCount(9, $ruleConditionNode->getConditions());
+        $this->assertCount(8, $ruleConditionNode->getConditions());
 
         $this->assertInstanceOf(NoRedirection::class, $ruleConditionNode->getNext());
 
         $this->assertInstanceOf(SetCookie::class, $ruleConditionNode->getThen());
 
         $this->assertInstanceOf(RedirectToUrl::class, $ruleConditionNode->getThen()->getNext());
+
+    }
+
+
+    public function testRulesJson3() {
+
+        $jsonExample =
+            '{
+                "redirectorRules": [
+                    {
+                        "name": "TestRule",
+                        "ruleNodes": {
+                            "type": "condition",
+                            "next": {
+                                "type": "condition",
+                                "next": {
+                                    "type": "condition",
+                                    "next": {
+                                        "type": "condition",
+                                        "next": {
+                                            "type": "condition",
+                                            "next": {
+                                                "type": "condition",
+                                                "matching": "AND",
+                                                "conditions": [
+                                                    {
+                                                        "type": "CountryCheck",
+                                                        "data": {
+                                                            "comparator": "not_equals",
+                                                            "country": "AO"
+                                                        }
+                                                    }
+                                                ],
+                                                "then": null,
+                                                "else": null
+                                            },
+                                            "matching": "AND",
+                                            "conditions": [
+                                                {
+                                                    "type": "RandomLoadBalancer",
+                                                    "data": {
+                                                        "comparator": "lower_than",
+                                                        "value": "50"
+                                                    }
+                                                }
+                                            ],
+                                            "then": null,
+                                            "else": null
+                                        },
+                                        "matching": "AND",
+                                        "conditions": [
+                                            {
+                                                "type": "CountryCheck",
+                                                "data": {
+                                                    "comparator": "equals",
+                                                    "country": "AT"
+                                                }
+                                            }
+                                        ],
+                                        "then": null,
+                                        "else": null
+                                    },
+                                    "matching": "AND",
+                                    "conditions": [
+                                        {
+                                            "type": "UrlHostCheck",
+                                            "data": {
+                                                "comparator": "contains",
+                                                "value": "test"
+                                            }
+                                        }
+                                    ],
+                                    "then": null,
+                                    "else": null
+                                },
+                                "matching": "AND",
+                                "conditions": [
+                                    {
+                                        "type": "UrlSchemeCheck",
+                                        "data": {
+                                            "comparator": "equals",
+                                            "value": "https"
+                                        }
+                                    }
+                                ],
+                                "then": null,
+                                "else": null
+                            },
+                            "matching": "AND",
+                            "conditions": [
+                                {
+                                    "type": "UrlCheck",
+                                    "data": {
+                                        "comparator": "starts_with",
+                                        "value": "3"
+                                    }
+                                }
+                            ],
+                            "then": null,
+                            "else": null
+                        }
+                    },
+                    {
+                        "name": "TestRule2",
+                        "ruleNodes": {
+                            "type": "condition",
+                            "matching": "AND",
+                            "conditions": [
+                                {
+                                    "type": "UrlSchemeCheck",
+                                    "data": {
+                                        "comparator": "equals",
+                                        "value": "https"
+                                    }
+                                }
+                            ],
+                            "then": null,
+                            "else": null
+                        }
+                    }
+                ]
+            }';
+
+        $rulesParser = new RulesParser();
+        $rules = $rulesParser->buildRulesFromJson($jsonExample);
+
+        $this->assertCount(2, $rules);
+        $rule = $rules[0];
+
+        $this->assertInstanceOf(RuleConditionNode::class, $rule->getRootRuleNode());
+
+        /** @var RuleConditionNode $ruleConditionNode */
+        $ruleConditionNode = $rule->getRootRuleNode();
+
+        $this->assertCount(1, $ruleConditionNode->getConditions());
+
+    }
+
+    public function testRulesJson4() {
+
+        $jsonExample =
+            '{
+                "redirectorRules": [
+                    {
+                        "name": "TestRule",
+                        "ruleNodes": {
+                            "type": "condition",
+                            "matching": "AND",
+                            "conditions": [
+                                {
+                                    "type": "HeaderCheck",
+                                    "data": {
+                                        "comparator": "exists",
+                                        "headerName": "headerName1",
+                                        "headerValue": null
+                                    }
+                                },
+                                {
+                                    "type": "HeaderCheck",
+                                    "data": {
+                                        "comparator": "contains",
+                                        "headerName": "headerName2",
+                                        "headerValue": "testValue2"
+                                    }
+                                }
+                            ],
+                            "then": null,
+                            "else": null
+                        }
+                    }
+                ]
+            }';
+
+        $rulesParser = new RulesParser();
+        $rules = $rulesParser->buildRulesFromJson($jsonExample);
+
+        $this->assertCount(1, $rules);
+        $rule = $rules[0];
+
+        $this->assertInstanceOf(RuleConditionNode::class, $rule->getRootRuleNode());
+
+        /** @var RuleConditionNode $ruleConditionNode */
+        $ruleConditionNode = $rule->getRootRuleNode();
+
+        $this->assertCount(2, $ruleConditionNode->getConditions());
 
     }
 
