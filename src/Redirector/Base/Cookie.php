@@ -6,18 +6,7 @@ namespace Ixolit\Dislo\Redirector\Base;
  * Class Cookie
  * @package Ixolit\Dislo\Redirector\Base
  */
-class Cookie
-{
-
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var string
-     */
-    protected $value;
+class Cookie extends NameValue {
 
     /**
      * @var \DateTime
@@ -38,42 +27,6 @@ class Cookie
      * @var bool
      */
     protected $requireSSL;
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return $this
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-        return $this;
-    }
 
     /**
      * @return \DateTime
@@ -187,6 +140,5 @@ class Cookie
 
         return $setCookieValueString;
     }
-
 
 }
