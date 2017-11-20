@@ -8,8 +8,7 @@ use Psr\Http\Message\ResponseInterface;
  * Class RedirectorResult
  * @package Ixolit\Dislo\Redirector\Base
  */
-class RedirectorResult
-{
+class RedirectorResult {
 
     /**
      * @var bool
@@ -46,8 +45,7 @@ class RedirectorResult
     /**
      * @return bool
      */
-    public function isRedirect()
-    {
+    public function isRedirect() {
         return $this->redirect;
     }
 
@@ -55,8 +53,7 @@ class RedirectorResult
      * @param bool $redirect
      * @return RedirectorResult
      */
-    public function setRedirect($redirect)
-    {
+    public function setRedirect($redirect) {
         $this->redirect = $redirect;
         return $this;
     }
@@ -64,8 +61,7 @@ class RedirectorResult
     /**
      * @return int
      */
-    public function getStatusCode()
-    {
+    public function getStatusCode() {
         return $this->statusCode;
     }
 
@@ -73,8 +69,7 @@ class RedirectorResult
      * @param int $statusCode
      * @return RedirectorResult
      */
-    public function setStatusCode($statusCode)
-    {
+    public function setStatusCode($statusCode) {
         $this->statusCode = $statusCode;
         return $this;
     }
@@ -82,8 +77,7 @@ class RedirectorResult
     /**
      * @return null
      */
-    public function getUrl()
-    {
+    public function getUrl() {
         return $this->url;
     }
 
@@ -91,8 +85,7 @@ class RedirectorResult
      * @param null $url
      * @return RedirectorResult
      */
-    public function setUrl($url)
-    {
+    public function setUrl($url) {
         $this->url = $url;
         return $this;
     }
@@ -100,8 +93,7 @@ class RedirectorResult
     /**
      * @return Cookie[]
      */
-    public function getCookies()
-    {
+    public function getCookies() {
         return $this->cookies;
     }
 
@@ -109,8 +101,7 @@ class RedirectorResult
      * @param Cookie[] $cookies
      * @return RedirectorResult
      */
-    public function setCookies($cookies)
-    {
+    public function setCookies($cookies) {
         $this->cookies = $cookies;
         return $this;
     }
@@ -119,8 +110,7 @@ class RedirectorResult
      * @param Cookie $cookie
      * @return RedirectorResult
      */
-    public function addCookie($cookie)
-    {
+    public function addCookie($cookie) {
         array_push($this->cookies, $cookie);
         return $this;
     }
