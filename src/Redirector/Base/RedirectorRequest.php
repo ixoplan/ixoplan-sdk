@@ -50,6 +50,11 @@ class RedirectorRequest implements RedirectorRequestInterface
     protected $headers = [];
 
     /**
+     * @var SessionVariable[]
+     */
+    protected $sessionVariables = [];
+
+    /**
      * country code, e.g.: US, GB, DE, AT
      *
      * @var string
@@ -261,6 +266,24 @@ class RedirectorRequest implements RedirectorRequestInterface
      */
     public function getHeader($key) {
         return isset($this->headers[$key]) ? $this->headers[$key] : null;
+    }
+
+    /**
+     * @return SessionVariable[]
+     */
+    public function getSessionVariables()
+    {
+        return $this->sessionVariables;
+    }
+
+    /**
+     * @param SessionVariable[] $variables
+     * @return RedirectorRequest
+     */
+    public function setSessionVariables($variables)
+    {
+        $this->sessionVariables = $variables;
+        return $this;
     }
 
     /**

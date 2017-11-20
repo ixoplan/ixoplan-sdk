@@ -34,6 +34,11 @@ class RedirectorResult
     protected $cookies = [];
 
     /**
+     * @var SessionVariable[]
+     */
+    protected $sessionVariables = [];
+
+    /**
      * @return bool
      */
     public function isRedirect()
@@ -112,6 +117,23 @@ class RedirectorResult
     public function addCookie($cookie)
     {
         array_push($this->cookies, $cookie);
+        return $this;
+    }
+
+    /**
+    /**
+     * @return SessionVariable[]
+     */
+    public function getSessionVariables() {
+        return array_values($this->sessionVariables);
+    }
+
+    /**
+     * @param SessionVariable $variable
+     * @return RedirectorResult
+     */
+    public function setSessionVariable($variable) {
+        $this->sessionVariables[$variable->getName()] = $variable;
         return $this;
     }
 

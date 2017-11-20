@@ -57,6 +57,11 @@ interface RedirectorRequestInterface
     public function getHeader($key);
 
     /**
+     * @return SessionVariable[]
+     */
+    public function getSessionVariables();
+
+    /**
      * @return string
      */
     public function getIpBasedCountryCode();
