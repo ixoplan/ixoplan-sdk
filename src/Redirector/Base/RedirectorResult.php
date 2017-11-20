@@ -34,6 +34,11 @@ class RedirectorResult
     protected $cookies = [];
 
     /**
+     * @var Header[]
+     */
+    protected $headers = [];
+
+    /**
      * @var SessionVariable[]
      */
     protected $sessionVariables = [];
@@ -121,6 +126,21 @@ class RedirectorResult
     }
 
     /**
+     * @return Header[]
+     */
+    public function getHeaders() {
+        return $this->headers;
+    }
+
+    /**
+     * @param Header $header
+     * @return RedirectorResult
+     */
+    public function addHeader($header) {
+        array_push($this->headers, $header);
+        return $this;
+    }
+
     /**
      * @return SessionVariable[]
      */
