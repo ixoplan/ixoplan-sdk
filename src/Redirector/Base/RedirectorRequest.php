@@ -9,6 +9,8 @@ namespace Ixolit\Dislo\Redirector\Base;
 class RedirectorRequest implements RedirectorRequestInterface
 {
 
+    // TODO: ?
+
     /**
      * @var string
      */
@@ -45,7 +47,7 @@ class RedirectorRequest implements RedirectorRequestInterface
     protected $cookies = [];
 
     /**
-     * @var array
+     * @var Header[]
      */
     protected $headers = [];
 
@@ -226,7 +228,7 @@ class RedirectorRequest implements RedirectorRequestInterface
     }
 
     /**
-     * @return array
+     * @return Header[]
      */
     public function getHeaders()
     {
@@ -234,7 +236,7 @@ class RedirectorRequest implements RedirectorRequestInterface
     }
 
     /**
-     * @param array $headers
+     * @param Header[] $headers
      * @return RedirectorRequest
      */
     public function setHeaders($headers)
@@ -244,28 +246,13 @@ class RedirectorRequest implements RedirectorRequestInterface
     }
 
     /**
-     * @param string $headerName
-     * @param string $headerValue
+     * @param Header $header
      * @return RedirectorRequest
      */
-    public function setHeader($headerName, $headerValue)
+    public function addHeader($header)
     {
-        $headers = $this->getHeaders();
-        if (!is_array($headers)) {
-            $headers = [];
-        }
-        $headers[$headerName] = $headerValue;
-        $this->setHeaders($headers);
-
+        array_push($this->headers, $header);
         return $this;
-    }
-
-    /**
-     * @param string $key
-     * @return mixed|null
-     */
-    public function getHeader($key) {
-        return isset($this->headers[$key]) ? $this->headers[$key] : null;
     }
 
     /**

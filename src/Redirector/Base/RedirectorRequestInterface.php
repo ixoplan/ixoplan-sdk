@@ -46,15 +46,9 @@ interface RedirectorRequestInterface
     public function getQuery();
 
     /**
-     * @return array
+     * @return Header[]
      */
     public function getHeaders();
-
-    /**
-     * @param string $key
-     * @return mixed|null
-     */
-    public function getHeader($key);
 
     /**
      * @return SessionVariable[]
