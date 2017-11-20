@@ -1,6 +1,7 @@
 <?php
 
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
+
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResult;
 
@@ -62,8 +63,8 @@ abstract class Condition {
      */
     protected function getParameterKeys() {
         return [
-            'comparator',
-            'value'
+            'comparator' => 'comparator',
+            'paramValue' => 'value'
         ];
     }
 
