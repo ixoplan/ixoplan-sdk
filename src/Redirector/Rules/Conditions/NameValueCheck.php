@@ -93,28 +93,29 @@ abstract class NameValueCheck extends Condition {
      * @return bool
      */
     public function evaluateFromRequest(RedirectorRequestInterface $request, RedirectorResult $result) {
-        return $this->check($this->sanitizeNameValues($this->getNameValues($request)));
+        return $this->check($this->getNameValues($request));
     }
 
     /**
-     * @param string[] $keyValues
+     * @param NameValue[] $nameValues
      * @return bool
      */
-    public function check($keyValues) {
+    public function check($nameValues) {
 
         $parameterKeys = $this->getParameterKeys();
         $comparator = $this->getParameterByKey($parameterKeys, self::KEY_PARAM_COMP);
         $paramName = $this->sanitizeName($this->getParameterByKey($parameterKeys, self::KEY_PARAM_NAME));
         $paramValue = $this->getParameterByKey($parameterKeys, self::KEY_PARAM_VALUE, '');
+        $values = $this->sanitizeNameValues($nameValues);
 
         if ($comparator === self::COMPARATOR_EXISTS) {
-            return array_key_exists($paramName, $keyValues);
+            return array_key_exists($paramName, $values);
         }
         if ($comparator === self::COMPARATOR_NOT_EXISTS) {
-            return !array_key_exists($paramName, $keyValues);
+            return !array_key_exists($paramName, $values);
         }
 
-        $value = isset($keyValues[$paramName]) ? $keyValues[$paramName] : null;
+        $value = isset($values[$paramName]) ? $values[$paramName] : null;
 
         return $this->compare($value, $paramValue, $comparator);
     }
