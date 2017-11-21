@@ -2,6 +2,7 @@
 
 namespace Ixolit\Dislo\Redirector\Rules\Actions;
 
+use Ixolit\Dislo\Exceptions\RedirectorException;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResult;
 use Ixolit\Dislo\Redirector\Base\SessionVariable;
