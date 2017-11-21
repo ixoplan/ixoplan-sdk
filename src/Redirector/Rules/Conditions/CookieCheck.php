@@ -2,8 +2,8 @@
 
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 
+use Ixolit\Dislo\Redirector\Base\Cookie;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
-use Ixolit\Dislo\Redirector\Base\RedirectorResult;
 
 /**
  * Class CookieCheck
@@ -16,18 +16,17 @@ class CookieCheck extends NameValueCheck {
      */
     protected function getParameterKeys() {
         return [
-            'comparator' => 'comparator',
-            'paramName' => 'cookieName',
-            'paramValue' => 'cookieValue',
+            self::KEY_PARAM_COMP => 'comparator',
+            self::KEY_PARAM_NAME => 'cookieName',
+            self::KEY_PARAM_VALUE => 'cookieValue',
         ];
     }
 
     /**
      * @param RedirectorRequestInterface $request
-     * @param RedirectorResult $result
-     * @return bool
+     * @return Cookie[]
      */
-    public function evaluateFromRequest(RedirectorRequestInterface $request, RedirectorResult $result) {
-        return $this->check($this->sanitizeNameValues($request->getCookies()));
+    protected  function getNameValues(RedirectorRequestInterface $request) {
+        return $request->getCookies();
     }
 }

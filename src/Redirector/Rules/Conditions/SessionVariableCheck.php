@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
-use Ixolit\Dislo\Redirector\Base\RedirectorResult;
+use Ixolit\Dislo\Redirector\Base\SessionVariable;
 
 /**
  * Class SessionVariableCheck
@@ -16,18 +16,17 @@ class SessionVariableCheck extends NameValueCheck {
      */
     protected function getParameterKeys() {
         return [
-            'comparator' => 'comparator',
-            'paramName' => 'variableName',
-            'paramValue' => 'variableValue',
+            self::KEY_PARAM_COMP => 'comparator',
+            self::KEY_PARAM_NAME => 'variableName',
+            self::KEY_PARAM_VALUE => 'variableValue',
         ];
     }
 
     /**
      * @param RedirectorRequestInterface $request
-     * @param RedirectorResult $result
-     * @return bool
+     * @return SessionVariable[]
      */
-    public function evaluateFromRequest(RedirectorRequestInterface $request, RedirectorResult $result) {
-        return $this->check($this->sanitizeNameValues($request->getSessionVariables()));
+    protected  function getNameValues(RedirectorRequestInterface $request) {
+        return $request->getSessionVariables();
     }
 }

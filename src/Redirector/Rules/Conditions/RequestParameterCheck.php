@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
-use Ixolit\Dislo\Redirector\Base\RedirectorResult;
+use Ixolit\Dislo\Redirector\Base\RequestParameter;
 
 /**
  * Class RequestParameterCheck
@@ -16,18 +16,17 @@ class RequestParameterCheck extends NameValueCheck {
      */
     protected function getParameterKeys() {
         return [
-            'comparator' => 'comparator',
-            'paramName' => 'requestParameterName',
-            'paramValue' => 'requestParameterValue',
+            self::KEY_PARAM_COMP => 'comparator',
+            self::KEY_PARAM_NAME => 'requestParameterName',
+            self::KEY_PARAM_VALUE => 'requestParameterValue',
         ];
     }
 
     /**
      * @param RedirectorRequestInterface $request
-     * @param RedirectorResult $result
-     * @return bool
+     * @return RequestParameter[]
      */
-    public function evaluateFromRequest(RedirectorRequestInterface $request, RedirectorResult $result) {
-        return $this->check($this->sanitizeNameValues($request->getRequestParameters()));
+    protected  function getNameValues(RedirectorRequestInterface $request) {
+        return $request->getRequestParameters();
     }
 }

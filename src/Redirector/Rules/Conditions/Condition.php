@@ -11,6 +11,10 @@ use Ixolit\Dislo\Redirector\Base\RedirectorResult;
  */
 abstract class Condition {
 
+    const KEY_PARAM_COMP = 'comparator';
+    const KEY_PARAM_NAME = 'paramName';
+    const KEY_PARAM_VALUE = 'paramValue';
+
     const COMPARATOR_STARTS_WITH = 'starts_with';
     const COMPARATOR_NOT_STARTS_WITH = 'not_starts_with';
     const COMPARATOR_ENDS_WITH = 'ends_with';
@@ -63,8 +67,8 @@ abstract class Condition {
      */
     protected function getParameterKeys() {
         return [
-            'comparator' => 'comparator',
-            'paramValue' => 'value'
+            self::KEY_PARAM_COMP => 'comparator',
+            self::KEY_PARAM_VALUE => 'value'
         ];
     }
 
@@ -91,10 +95,8 @@ abstract class Condition {
      * @return $this
      * @throws \Exception
      */
-    public function setParameters($parameters)
-    {
+    public function setParameters($parameters) {
         $this->validateParameters($parameters);
-
         $this->parameters = array_intersect_key($parameters, array_flip($this->getParameterKeys()));
     }
 
