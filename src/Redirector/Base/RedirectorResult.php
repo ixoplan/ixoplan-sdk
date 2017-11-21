@@ -142,8 +142,8 @@ class RedirectorResult {
      * @param SessionVariable $variable
      * @return RedirectorResult
      */
-    public function setSessionVariable($variable) {
-        $this->sessionVariables[$variable->getName()] = $variable;
+    public function addSessionVariable($variable) {
+        array_push($this->sessionVariables, $variable);
         return $this;
     }
 

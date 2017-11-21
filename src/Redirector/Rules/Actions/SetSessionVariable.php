@@ -54,7 +54,7 @@ class SetSessionVariable extends Action {
      */
     public function process(RedirectorResult $redirectorResult, RedirectorRequestInterface $redirectorRequest) {
 
-        $redirectorResult->setSessionVariable(
+        $redirectorResult->addSessionVariable(
             (new SessionVariable())
                 ->setName($this->variableName)
                 ->setValue($this->variableValue)
