@@ -123,6 +123,15 @@ class RedirectorResult {
     }
 
     /**
+     * @param Header[] $headers
+     * @return RedirectorResult
+     */
+    public function setHeaders($headers) {
+        $this->headers = $headers;
+        return $this;
+    }
+
+    /**
      * @param Header $header
      * @return RedirectorResult
      */
@@ -136,6 +145,15 @@ class RedirectorResult {
      */
     public function getSessionVariables() {
         return array_values($this->sessionVariables);
+    }
+
+    /**
+     * @param SessionVariable[] $variables
+     * @return RedirectorResult
+     */
+    public function setSessionVariables($variables) {
+        $this->sessionVariables = $variables;
+        return $this;
     }
 
     /**
