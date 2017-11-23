@@ -255,7 +255,7 @@ class UserContext {
      * @return BillingEvent|null
      */
     public function getBillingEvent($billingEventId, $cached = true) {
-        $billingEvents = $this->getBillingEvents($cached);
+        $billingEvents = $this->getBillingEvents(10, 0, Client::ORDER_DIR_DESC, $cached);
 
         foreach ($billingEvents as $billingEvent) {
             if ($billingEvent->getBillingEventId() == $billingEventId) {
@@ -272,7 +272,7 @@ class UserContext {
      * @return $this
      */
     public function addBillingEvent(BillingEvent $billingEvent) {
-        $this->getBillingEvents(true);
+        $this->getBillingEvents();
 
         $this->billingEvents[] = $billingEvent;
 

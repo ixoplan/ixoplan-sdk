@@ -2,60 +2,38 @@
 
 namespace Ixolit\Dislo\Response;
 
+
 use Ixolit\Dislo\WorkingObjects\Price;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 
-class SubscriptionChangeResponse {
-	/**
-	 * @var Subscription
-	 */
-	private $subscription;
-	/**
-	 * @var bool
-	 */
-	private $needsBilling;
-	/**
-	 * @var Price
-	 */
-	private $price;
+/**
+ * Class SubscriptionChangeResponse
+ *
+ * @package Ixolit\Dislo\Response
+ */
+class SubscriptionChangeResponse extends SubscriptionResponse {
 
 	/**
 	 * @var bool
 	 */
 	private $appliedImmediately;
 
-	/**
-	 * @param Subscription $subscription
-	 * @param bool         $needsBilling
-	 * @param Price        $price
-	 * @param bool         $appliedImmediately
-	 */
-	public function __construct(Subscription $subscription, $needsBilling, Price $price, $appliedImmediately) {
-		$this->subscription       = $subscription;
-		$this->needsBilling       = $needsBilling;
-		$this->price              = $price;
-		$this->appliedImmediately = $appliedImmediately;
-	}
+    /**
+     * @param Subscription $subscription
+     * @param bool         $needsBilling
+     * @param Price        $price
+     * @param bool         $appliedImmediately
+     * @param bool         $requireFlexible
+     */
+	public function __construct(Subscription $subscription,
+                                $needsBilling,
+                                Price $price,
+                                $appliedImmediately,
+                                $requireFlexible = false
+    ) {
+        $this->appliedImmediately = $appliedImmediately;
 
-	/**
-	 * @return Subscription
-	 */
-	public function getSubscription() {
-		return $this->subscription;
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public function needsBilling() {
-		return $this->needsBilling;
-	}
-
-	/**
-	 * @return Price
-	 */
-	public function getPrice() {
-		return $this->price;
+        parent::__construct($subscription, $needsBilling, $price, $requireFlexible);
 	}
 
 	/**
@@ -75,7 +53,10 @@ class SubscriptionChangeResponse {
 			Subscription::fromResponse($response['subscription']),
 			$response['needsBilling'],
 			Price::fromResponse($response['price']),
-			$response['appliedImmediately']
+			$response['appliedImmediately'],
+            isset($response['requireFlexibleForFreeUpgrade'])
+                ? $response['requireFlexibleForFreeUpgrade']
+                : false
 		);
 	}
 }
