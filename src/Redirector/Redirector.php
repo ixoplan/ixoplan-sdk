@@ -37,10 +37,14 @@ class Redirector
     /**
      * @param RedirectorRequestInterface $request
      * @param RedirectorResultInterface $result
+     * @return RedirectorState
      */
     public function evaluate(RedirectorRequestInterface $request, RedirectorResultInterface $result) {
 
-        $this->evaluateRules(new RedirectorState(), $request, $result);
+        $state = new RedirectorState();
+        $this->evaluateRules($state, $request, $result);
+
+        return $state;
     }
 
     /**

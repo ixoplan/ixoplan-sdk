@@ -20,12 +20,12 @@ class RedirectorResult implements RedirectorResultInterface {
     /**
      * @var int
      */
-    protected $statusCode = 302;
+    protected $statusCode;
 
     /**
      * @var string
      */
-    protected $url = null;
+    protected $url;
 
     /**
      * Cookies to set / Set-Cookie

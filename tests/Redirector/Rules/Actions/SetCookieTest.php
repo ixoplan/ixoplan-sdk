@@ -1,9 +1,9 @@
 <?php
 
-use Ixolit\Dislo\Redirector\Redirector;
-use Ixolit\Dislo\Redirector\Rules\Actions\SetCookie;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequest;
 use Ixolit\Dislo\Redirector\Base\RedirectorResult;
+use Ixolit\Dislo\Redirector\Base\RedirectorState;
+use Ixolit\Dislo\Redirector\Rules\Actions\SetCookie;
 
 /**
  * Class SetCookieTest
@@ -23,11 +23,11 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
                 'requireSSL' => 'true'
             ]);
 
-        $redirector = new Redirector([]);
+        $redirectorState = new RedirectorState();
         $redirectorResult = new RedirectorResult();
         $redirectorRequest = new RedirectorRequest();
 
-        $redirectToUrl->process($redirector, $redirectorResult, $redirectorRequest);
+        $redirectToUrl->process($redirectorState, $redirectorResult, $redirectorRequest);
 
         $this->assertCount(1, $redirectorResult->getCookies());
         $this->assertEquals('cookieName', $redirectorResult->getCookies()[0]->getName());
