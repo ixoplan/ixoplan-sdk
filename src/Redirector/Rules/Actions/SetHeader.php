@@ -4,8 +4,10 @@ namespace Ixolit\Dislo\Redirector\Rules\Actions;
 
 use Ixolit\Dislo\Exceptions\RedirectorException;
 use Ixolit\Dislo\Redirector\Base\Header;
+use Ixolit\Dislo\Redirector\Base\RedirectorInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
-use Ixolit\Dislo\Redirector\Base\RedirectorResult;
+use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
+use Ixolit\Dislo\Redirector\Redirector;
 
 /**
  * Class SetHeader
@@ -50,12 +52,13 @@ class SetHeader extends Action {
     }
 
     /**
-     * @param RedirectorResult $redirectorResult
+     * @param RedirectorInterface $redirector
+     * @param RedirectorResultInterface $redirectorResult
      * @param RedirectorRequestInterface $redirectorRequest
      */
-    public function process(RedirectorResult $redirectorResult, RedirectorRequestInterface $redirectorRequest) {
+    public function process(RedirectorInterface $redirector, RedirectorResultInterface $redirectorResult, RedirectorRequestInterface $redirectorRequest) {
 
-        $redirectorResult->addHeader(
+        $redirectorResult->setHeader(
             (new Header())
                 ->setName($this->headerName)
                 ->setValue($this->headerValue)

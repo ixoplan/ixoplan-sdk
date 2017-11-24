@@ -9,7 +9,7 @@ namespace Ixolit\Dislo\Redirector\Base;
 class RedirectorRequest implements RedirectorRequestInterface
 {
 
-    // TODO: ?
+    // TODO: uses for tests only?
 
     /**
      * @var string

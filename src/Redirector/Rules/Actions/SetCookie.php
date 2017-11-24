@@ -4,8 +4,10 @@ namespace Ixolit\Dislo\Redirector\Rules\Actions;
 
 use Ixolit\Dislo\Exceptions\RedirectorException;
 use Ixolit\Dislo\Redirector\Base\Cookie;
+use Ixolit\Dislo\Redirector\Base\RedirectorInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
-use Ixolit\Dislo\Redirector\Base\RedirectorResult;
+use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
+use Ixolit\Dislo\Redirector\Redirector;
 
 /**
  * Class SetCookie
@@ -80,10 +82,11 @@ class SetCookie extends Action
     }
 
     /**
-     * @param RedirectorResult $redirectorResult
+     * @param RedirectorInterface $redirector
+     * @param RedirectorResultInterface $redirectorResult
      * @param RedirectorRequestInterface $redirectorRequest
      */
-    public function process(RedirectorResult $redirectorResult, RedirectorRequestInterface $redirectorRequest)
+    public function process(RedirectorInterface $redirector, RedirectorResultInterface $redirectorResult, RedirectorRequestInterface $redirectorRequest)
     {
 
         $cookie = new Cookie();
@@ -97,7 +100,7 @@ class SetCookie extends Action
             $cookie->setExpirationDateTimeFromMaxAge($this->maxAge);
         }
 
-        $redirectorResult->addCookie($cookie);
+        $redirectorResult->setCookie($cookie);
 
     }
 

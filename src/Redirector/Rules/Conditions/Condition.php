@@ -2,8 +2,9 @@
 
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 
+use Ixolit\Dislo\Redirector\Base\RedirectorInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
-use Ixolit\Dislo\Redirector\Base\RedirectorResult;
+use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
 
 /**
  * Class ComparisonCheck
@@ -98,6 +99,7 @@ abstract class Condition {
     public function setParameters($parameters) {
         $this->validateParameters($parameters);
         $this->parameters = array_intersect_key($parameters, array_flip($this->getParameterKeys()));
+        return $this;
     }
 
     /**
@@ -144,11 +146,11 @@ abstract class Condition {
     }
 
     /**
+     * @param RedirectorInterface $redirector
      * @param RedirectorRequestInterface $request
-     * @param RedirectorResult $result
+     * @param RedirectorResultInterface $result
      * @return bool
-     * @throws \Exception
      */
-    abstract public function evaluateFromRequest(RedirectorRequestInterface $request, RedirectorResult $result);
+    abstract public function evaluateFromRequest(RedirectorInterface $redirector, RedirectorRequestInterface $request, RedirectorResultInterface $result);
 
 }

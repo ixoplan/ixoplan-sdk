@@ -2,6 +2,7 @@
 
 use Ixolit\Dislo\Redirector\Base\RedirectorRequest;
 use Ixolit\Dislo\Redirector\Base\RedirectorResult;
+use Ixolit\Dislo\Redirector\Redirector;
 use Ixolit\Dislo\Redirector\Rules\Actions\NoRedirection;
 
 /**
@@ -15,12 +16,14 @@ class NoRedirectionTest extends \PHPUnit_Framework_TestCase
 
         $redirectToUrl = new NoRedirection();
 
+        $redirector = new Redirector([]);
         $redirectorResult = new RedirectorResult();
         $redirectorRequest = new RedirectorRequest();
 
-        $redirectToUrl->process($redirectorResult, $redirectorRequest);
+        $redirectToUrl->process($redirector, $redirectorResult, $redirectorRequest);
 
-        $this->assertEquals(false, $redirectorResult->isRedirect());
+        $this->assertEquals(null, $redirectorResult->isRedirect());
+        $this->assertEquals(true, $redirector->isBreak());
 
     }
 

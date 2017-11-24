@@ -8,7 +8,9 @@ use Psr\Http\Message\ResponseInterface;
  * Class RedirectorResult
  * @package Ixolit\Dislo\Redirector\Base
  */
-class RedirectorResult {
+class RedirectorResult implements RedirectorResultInterface {
+
+    // TODO: used for tests only?
 
     /**
      * @var bool
@@ -50,28 +52,10 @@ class RedirectorResult {
     }
 
     /**
-     * @param bool $redirect
-     * @return RedirectorResult
-     */
-    public function setRedirect($redirect) {
-        $this->redirect = $redirect;
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getStatusCode() {
         return $this->statusCode;
-    }
-
-    /**
-     * @param int $statusCode
-     * @return RedirectorResult
-     */
-    public function setStatusCode($statusCode) {
-        $this->statusCode = $statusCode;
-        return $this;
     }
 
     /**
@@ -81,13 +65,10 @@ class RedirectorResult {
         return $this->url;
     }
 
-    /**
-     * @param null $url
-     * @return RedirectorResult
-     */
-    public function setUrl($url) {
-        $this->url = $url;
-        return $this;
+    public function sendRedirect($statusCode, $location) {
+        $this->redirect = true;
+        $this->statusCode = $statusCode;
+        $this->url = $location;
     }
 
     /**
@@ -98,19 +79,10 @@ class RedirectorResult {
     }
 
     /**
-     * @param Cookie[] $cookies
-     * @return RedirectorResult
-     */
-    public function setCookies($cookies) {
-        $this->cookies = $cookies;
-        return $this;
-    }
-
-    /**
      * @param Cookie $cookie
      * @return RedirectorResult
      */
-    public function addCookie($cookie) {
+    public function setCookie($cookie) {
         array_push($this->cookies, $cookie);
         return $this;
     }
@@ -123,19 +95,10 @@ class RedirectorResult {
     }
 
     /**
-     * @param Header[] $headers
-     * @return RedirectorResult
-     */
-    public function setHeaders($headers) {
-        $this->headers = $headers;
-        return $this;
-    }
-
-    /**
      * @param Header $header
      * @return RedirectorResult
      */
-    public function addHeader($header) {
+    public function setHeader($header) {
         array_push($this->headers, $header);
         return $this;
     }
@@ -148,19 +111,10 @@ class RedirectorResult {
     }
 
     /**
-     * @param SessionVariable[] $variables
-     * @return RedirectorResult
-     */
-    public function setSessionVariables($variables) {
-        $this->sessionVariables = $variables;
-        return $this;
-    }
-
-    /**
      * @param SessionVariable $variable
      * @return RedirectorResult
      */
-    public function addSessionVariable($variable) {
+    public function setSessionVariable($variable) {
         array_push($this->sessionVariables, $variable);
         return $this;
     }

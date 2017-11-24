@@ -1,6 +1,7 @@
 <?php
 namespace abc;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequest;
+use Ixolit\Dislo\Redirector\Base\RedirectorResult;
 use Ixolit\Dislo\Redirector\Redirector;
 use Ixolit\Dislo\Redirector\Rules\Actions\NoRedirection;
 use Ixolit\Dislo\Redirector\Rules\Actions\RedirectToUrl;
@@ -40,7 +41,8 @@ class RedirectorTest extends \PHPUnit_Framework_TestCase
 
         $redirector = new Redirector($rules);
 
-        $redirectorResult = $redirector->evaluate($redirectorRequest);
+        $redirectorResult = new RedirectorResult();
+        $redirector->evaluate($redirectorRequest, $redirectorResult);
 
         $this->assertEquals(true, $redirectorResult->isRedirect());
 
@@ -78,7 +80,8 @@ class RedirectorTest extends \PHPUnit_Framework_TestCase
 
         $redirector = new Redirector($rules);
 
-        $redirectorResult = $redirector->evaluate($redirectorRequest);
+        $redirectorResult = new RedirectorResult();
+        $redirector->evaluate($redirectorRequest, $redirectorResult);
 
         $this->assertEquals(true, $redirectorResult->isRedirect());
 

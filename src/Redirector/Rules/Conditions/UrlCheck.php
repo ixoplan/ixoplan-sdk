@@ -2,8 +2,9 @@
 
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 
+use Ixolit\Dislo\Redirector\Base\RedirectorInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
-use Ixolit\Dislo\Redirector\Base\RedirectorResult;
+use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
 
 /**
  * Class UrlCheck
@@ -13,12 +14,12 @@ class UrlCheck extends Condition
 {
 
     /**
+     * @param RedirectorInterface $redirector
      * @param RedirectorRequestInterface $request
-     * @param RedirectorResult $result
+     * @param RedirectorResultInterface $result
      * @return bool
-     * @throws \Exception
      */
-    public function evaluateFromRequest(RedirectorRequestInterface $request, RedirectorResult $result)
+    public function evaluateFromRequest(RedirectorInterface $redirector, RedirectorRequestInterface $request, RedirectorResultInterface $result)
     {
         $url = $request->getScheme().'://'.$request->getHost().$request->getPath().$request->getQuery();
 
