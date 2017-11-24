@@ -2,7 +2,8 @@
 
 namespace Ixolit\Dislo\Redirector;
 
-use Ixolit\Dislo\Redirector\Base\RedirectorInterface;
+use Ixolit\Dislo\Redirector\Base\RedirectorState;
+use Ixolit\Dislo\Redirector\Base\RedirectorStateInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
 use Ixolit\Dislo\Redirector\Rules\Actions\Action;
@@ -15,18 +16,13 @@ use Ixolit\Dislo\Redirector\Rules\RuleNode;
  * Class Redirector
  * @package Ixolit\Dislo\Redirector
  */
-class Redirector implements RedirectorInterface
+class Redirector
 {
 
     /**
      * @var Rule[]
      */
     protected $rules;
-
-    /**
-     * @var bool
-     */
-    protected $break;
 
     /**
      * RulesEvaluator constructor.
@@ -38,72 +34,71 @@ class Redirector implements RedirectorInterface
 
     }
 
-    public function doBreak() {
-        $this->break = true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBreak() {
-        return $this->break;
-    }
-
     /**
      * @param RedirectorRequestInterface $request
      * @param RedirectorResultInterface $result
-     * @return $this
      */
     public function evaluate(RedirectorRequestInterface $request, RedirectorResultInterface $result) {
 
-        foreach ($this->rules as $rule) {
-
-            $this->evaluateRuleNode($request, $result, $rule->getRootRuleNode());
-
-            if ($this->isBreak()) {
-                break;
-            }
-        }
-        return $this;
+        $this->evaluateRules(new RedirectorState(), $request, $result);
     }
 
     /**
+     * @param RedirectorStateInterface $state
+     * @param RedirectorRequestInterface $request
+     * @param RedirectorResultInterface $result
+     */
+    protected function evaluateRules(RedirectorStateInterface $state, RedirectorRequestInterface $request, RedirectorResultInterface $result) {
+
+        foreach ($this->rules as $rule) {
+
+            $this->evaluateRuleNode($state, $request, $result, $rule->getRootRuleNode());
+
+            if ($state->isBreak()) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * @param RedirectorStateInterface $state
      * @param RedirectorRequestInterface $request
      * @param RedirectorResultInterface $result
      * @param RuleNode|null $ruleNode
      */
-    protected function evaluateRuleNode(RedirectorRequestInterface $request, RedirectorResultInterface $result, RuleNode $ruleNode = null) {
+    protected function evaluateRuleNode(RedirectorStateInterface $state, RedirectorRequestInterface $request, RedirectorResultInterface $result, RuleNode $ruleNode = null) {
         if (!$ruleNode) {
             return;
         }
         if ($ruleNode instanceof RuleConditionNode) {
             /** @var RuleConditionNode $ruleNode */
-            if ($this->evaluateConditions($request, $result, $ruleNode->getConditions(), $ruleNode->getMatching())) {
-                $this->evaluateRuleNode($request, $result, $ruleNode->getThen());
+            if ($this->evaluateConditions($state, $request, $result, $ruleNode->getConditions(), $ruleNode->getMatching())) {
+                $this->evaluateRuleNode($state, $request, $result, $ruleNode->getThen());
             } else {
-                $this->evaluateRuleNode($request, $result, $ruleNode->getElse());
+                $this->evaluateRuleNode($state, $request, $result, $ruleNode->getElse());
             }
         } else {
             /** @var Action $ruleNode */
-            $ruleNode->process($this, $result, $request);
+            $ruleNode->process($state, $result, $request);
         }
 
-        if (!$this->isBreak()) {
-            $this->evaluateRuleNode($request, $result, $ruleNode->getNext());
+        if (!$state->isBreak()) {
+            $this->evaluateRuleNode($state, $request, $result, $ruleNode->getNext());
         }
     }
 
     /**
+     * @param RedirectorStateInterface $state
      * @param RedirectorRequestInterface $request
      * @param RedirectorResultInterface $result
      * @param Condition[] $conditions
      * @param string $matching
      * @return bool
      */
-    protected function evaluateConditions($request, $result, $conditions, $matching) {
+    protected function evaluateConditions(RedirectorStateInterface $state, RedirectorRequestInterface $request, RedirectorResultInterface $result, $conditions, $matching) {
 
         foreach ($conditions as $condition) {
-            $singleConditionResult = $condition->evaluateFromRequest($this, $request, $result);
+            $singleConditionResult = $condition->evaluateFromRequest($state, $request, $result);
 
             // if matching == 'OR' return true if any condition is true
             if ($matching === RuleConditionNode::MATCHING_OR && $singleConditionResult) {

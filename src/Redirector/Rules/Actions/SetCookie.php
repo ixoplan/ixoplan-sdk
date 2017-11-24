@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\Redirector\Rules\Actions;
 
 use Ixolit\Dislo\Exceptions\RedirectorException;
 use Ixolit\Dislo\Redirector\Base\Cookie;
-use Ixolit\Dislo\Redirector\Base\RedirectorInterface;
+use Ixolit\Dislo\Redirector\Base\RedirectorStateInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
 use Ixolit\Dislo\Redirector\Redirector;
@@ -82,11 +82,11 @@ class SetCookie extends Action
     }
 
     /**
-     * @param RedirectorInterface $redirector
+     * @param RedirectorStateInterface $redirectorState
      * @param RedirectorResultInterface $redirectorResult
      * @param RedirectorRequestInterface $redirectorRequest
      */
-    public function process(RedirectorInterface $redirector, RedirectorResultInterface $redirectorResult, RedirectorRequestInterface $redirectorRequest)
+    public function process(RedirectorStateInterface $redirectorState, RedirectorResultInterface $redirectorResult, RedirectorRequestInterface $redirectorRequest)
     {
 
         $cookie = new Cookie();

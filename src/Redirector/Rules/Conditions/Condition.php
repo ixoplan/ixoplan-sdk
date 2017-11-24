@@ -2,7 +2,7 @@
 
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 
-use Ixolit\Dislo\Redirector\Base\RedirectorInterface;
+use Ixolit\Dislo\Redirector\Base\RedirectorStateInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
 
@@ -146,11 +146,11 @@ abstract class Condition {
     }
 
     /**
-     * @param RedirectorInterface $redirector
+     * @param RedirectorStateInterface $redirectorState
      * @param RedirectorRequestInterface $request
      * @param RedirectorResultInterface $result
      * @return bool
      */
-    abstract public function evaluateFromRequest(RedirectorInterface $redirector, RedirectorRequestInterface $request, RedirectorResultInterface $result);
+    abstract public function evaluateFromRequest(RedirectorStateInterface $redirectorState, RedirectorRequestInterface $request, RedirectorResultInterface $result);
 
 }

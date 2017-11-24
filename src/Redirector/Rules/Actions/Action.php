@@ -2,7 +2,7 @@
 
 namespace Ixolit\Dislo\Redirector\Rules\Actions;
 
-use Ixolit\Dislo\Redirector\Base\RedirectorInterface;
+use Ixolit\Dislo\Redirector\Base\RedirectorStateInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
 use Ixolit\Dislo\Redirector\Rules\RuleNode;
@@ -31,12 +31,12 @@ abstract class Action extends RuleNode
     abstract public function setParameters($parameters);
 
     /**
-     * @param RedirectorInterface $redirector
+     * @param RedirectorStateInterface $redirectorState
      * @param RedirectorResultInterface $redirectorResult
      * @param RedirectorRequestInterface $redirectorRequest
      */
     abstract public function process(
-        RedirectorInterface $redirector,
+        RedirectorStateInterface $redirectorState,
         RedirectorResultInterface $redirectorResult,
         RedirectorRequestInterface $redirectorRequest
     );

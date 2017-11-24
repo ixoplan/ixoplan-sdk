@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 
 use Ixolit\Dislo\Exceptions\RedirectorException;
-use Ixolit\Dislo\Redirector\Base\RedirectorInterface;
+use Ixolit\Dislo\Redirector\Base\RedirectorStateInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
 
@@ -36,12 +36,12 @@ class CountryCheck extends Condition
     }
 
     /**
-     * @param RedirectorInterface $redirector
+     * @param RedirectorStateInterface $redirectorState
      * @param RedirectorRequestInterface $request
      * @param RedirectorResultInterface $result
      * @return bool
      */
-    public function evaluateFromRequest(RedirectorInterface $redirector, RedirectorRequestInterface $request, RedirectorResultInterface $result)
+    public function evaluateFromRequest(RedirectorStateInterface $redirectorState, RedirectorRequestInterface $request, RedirectorResultInterface $result)
     {
         return $this->check($request->getIpBasedCountryCode());
     }
