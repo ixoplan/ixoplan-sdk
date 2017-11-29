@@ -33,7 +33,7 @@ class SetSessionVariable extends Action {
         if (empty($parameters['variableName'])) {
             throw new RedirectorException(__METHOD__.': Missing parameter "variableName"');
         }
-        if (empty($parameters['variableValue'])) {
+        if (!array_key_exists('variableValue', $parameters)) {
             throw new RedirectorException(__METHOD__.': Missing parameter "variableValue"');
         }
     }
