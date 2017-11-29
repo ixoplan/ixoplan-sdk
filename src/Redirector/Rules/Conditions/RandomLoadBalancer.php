@@ -43,6 +43,6 @@ class RandomLoadBalancer extends Condition
     }
 
     public function evaluate() {
-        return ((int) $this->parameters['value']) < rand(0, 99);
+        return rand(0, 99) < $this->parameters['value'];
     }
 }
