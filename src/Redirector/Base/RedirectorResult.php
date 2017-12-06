@@ -10,8 +10,6 @@ use Psr\Http\Message\ResponseInterface;
  */
 class RedirectorResult implements RedirectorResultInterface {
 
-    // TODO: used for tests only?
-
     /**
      * @var bool
      */
