@@ -126,7 +126,14 @@ class AuthToken implements WorkingObject {
 		);
 	}
 
-	/**
+    /**
+     * @return string
+     */
+	public function __toString() {
+        return $this->token;
+    }
+
+    /**
 	 * @return array
 	 */
 	public function toArray() {

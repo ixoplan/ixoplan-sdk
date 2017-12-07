@@ -78,6 +78,7 @@ use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
 use Ixolit\Dislo\Response\UserVerificationStartResponse;
+use Ixolit\Dislo\WorkingObjects\AuthToken;
 use Ixolit\Dislo\WorkingObjects\BillingEvent;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
@@ -128,7 +129,11 @@ class Client {
 
 	private function userToData($userTokenOrId, &$data = []) {
 		if ($this->forceTokenMode) {
-			$data['authToken'] = $userTokenOrId;
+		    if (is_object($userTokenOrId) && $userTokenOrId instanceof AuthToken) {
+		        $data['authToken'] = (string) $userTokenOrId;
+		    } else {
+		        $data['authToken'] = $userTokenOrId;
+		    }
 			return $data;
 		}
 		if ($userTokenOrId instanceof User) {
