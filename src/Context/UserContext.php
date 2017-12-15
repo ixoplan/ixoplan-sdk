@@ -5,8 +5,10 @@ namespace Ixolit\Dislo\Context;
 
 use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
+use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\WorkingObjects\AuthToken;
 use Ixolit\Dislo\WorkingObjects\BillingEvent;
+use Ixolit\Dislo\WorkingObjects\CachedObject;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Price;
 use Ixolit\Dislo\WorkingObjects\Subscription;
@@ -25,11 +27,11 @@ class UserContext {
     /** @var User */
     private $user;
 
-    /** @var Subscription[] */
-    private $subscriptions;
+    /** @var CachedObject|null */
+    private $subscriptionsCachedObject;
 
-    /** @var Flexible */
-    private $activeFlexible;
+    /** @var CachedObject|null */
+    private $activeFlexibleCachedObject;
 
     /** @var BillingEvent[] */
     private $billingEvents;
@@ -37,11 +39,11 @@ class UserContext {
     /** @var int */
     private $billingEventsTotalCount;
 
-    /** @var Price */
-    private $accountBalance;
+    /** @var CachedObject|null */
+    private $accountBalanceCachedObject;
 
-    /** @var AuthToken[] */
-    private $authTokens;
+    /** @var CachedObject|null*/
+    private $authTokensCachedObject;
 
     /**
      * @param Client $client
@@ -77,15 +79,24 @@ class UserContext {
      * @return Subscription[]
      */
     public function getAllSubscriptions($cached = true) {
-        if ($cached && isset($this->subscriptions)) {
-            return $this->subscriptions;
+        if ($cached && isset($this->subscriptionsCachedObject)) {
+            return $this->subscriptionsCachedObject->getObject();
         }
 
-        $this->subscriptions = $this->getClient()->subscriptionGetAll(
-            $this->getUserIdentifierForClient()
-        )->getSubscriptions();
+        $this->subscriptionsCachedObject = new CachedObject(
+            $this->getClient()->subscriptionGetAll($this->getUserIdentifierForClient())->getSubscriptions()
+        );
 
-        return $this->subscriptions;
+        return $this->subscriptionsCachedObject->getObject();
+    }
+
+    /**
+     * @return $this
+     */
+    public function removeSubscriptionsCache() {
+        $this->subscriptionsCachedObject = null;
+
+        return $this;
     }
 
     /**
@@ -183,9 +194,11 @@ class UserContext {
      * @return $this
      */
     public function addSubscription(Subscription $subscription) {
-        $this->getAllSubscriptions(true);
+        $subscriptions = $this->getAllSubscriptions(true);
 
-        $this->subscriptions[] = $subscription;
+        $subscriptions[] = $subscription;
+
+        $this->subscriptionsCachedObject = new CachedObject($subscriptions);
 
         return $this;
     }
@@ -194,17 +207,36 @@ class UserContext {
      * @param bool $cached
      *
      * @return Flexible
+     *
+     * @throws ObjectNotFoundException
      */
     public function getActiveFlexible($cached = true) {
-        if ($cached && isset($this->activeFlexible)) {
-            return $this->activeFlexible;
+        if (!$cached || !isset($this->activeFlexibleCachedObject)) {
+            try {
+                $this->activeFlexibleCachedObject = new CachedObject(
+                    $this->getClient()->billingGetFlexible($this->getUserIdentifierForClient())->getFlexible()
+                );
+            } catch (ObjectNotFoundException $e) {
+                $this->activeFlexibleCachedObject = new CachedObject(null);
+            }
         }
 
-        $this->activeFlexible = $this->getClient()->billingGetFlexible(
-            $this->getUserIdentifierForClient()
-        )->getFlexible();
+        if (empty($this->activeFlexibleCachedObject->getObject())) {
+            throw new ObjectNotFoundException(
+                'No active flexible for user #' . $this->getUser()->getUserId() . ' found.'
+            );
+        }
 
-        return $this->activeFlexible;
+        return $this->activeFlexibleCachedObject->getObject();
+    }
+
+    /**
+     * @return $this
+     */
+    public function removeActiveFlexibleCache() {
+        $this->activeFlexibleCachedObject = null;
+
+        return $this;
     }
 
     /**
@@ -213,7 +245,7 @@ class UserContext {
      * @return $this
      */
     public function setActiveFlexible(Flexible $activeFlexible) {
-        $this->activeFlexible = $activeFlexible;
+        $this->activeFlexibleCachedObject = new CachedObject($activeFlexible);
 
         return $this;
     }
@@ -225,6 +257,8 @@ class UserContext {
      * @param bool   $cached
      *
      * @return BillingEvent[]
+     *
+     * @deprecated
      */
     public function getBillingEvents($limit = 10,
                                      $offset = 0,
@@ -253,6 +287,8 @@ class UserContext {
      * @param bool $cached
      *
      * @return BillingEvent|null
+     *
+     * @deprecated
      */
     public function getBillingEvent($billingEventId, $cached = true) {
         $billingEvents = $this->getBillingEvents(10, 0, Client::ORDER_DIR_DESC, $cached);
@@ -286,6 +322,8 @@ class UserContext {
      * @param bool   $cached
      *
      * @return int
+     *
+     * @deprecated
      */
     public function getBillingEventsTotalCount($limit = 10,
                                                $offset = 0,
@@ -307,13 +345,15 @@ class UserContext {
      * @return Price
      */
     public function getAccountBalance($cached = true) {
-        if ($cached && isset($this->accountBalance)) {
-            return $this->accountBalance;
+        if ($cached && isset($this->accountBalanceCachedObject)) {
+            return $this->accountBalanceCachedObject->getObject();
         }
 
-        $this->accountBalance = $this->getClient()->userGetBalance($this->getUserIdentifierForClient())->getBalance();
+        $this->accountBalanceCachedObject = new CachedObject(
+            $this->getClient()->userGetBalance($this->getUserIdentifierForClient())->getBalance()
+        );
 
-        return $this->accountBalance;
+        return $this->accountBalanceCachedObject->getObject();
     }
 
     /**
@@ -322,13 +362,24 @@ class UserContext {
      * @return AuthToken[]
      */
     public function getAuthTokens($cached = true) {
-        if ($cached && isset($this->authTokens)) {
-            return $this->authTokens;
+        if ($cached && isset($this->authTokensCachedObject)) {
+            return $this->authTokensCachedObject->getObject();
         }
 
-        $this->authTokens = $this->getClient()->userGetTokens($this->getUserIdentifierForClient())->getTokens();
+        $this->authTokensCachedObject = new CachedObject(
+            $this->getClient()->userGetTokens($this->getUserIdentifierForClient())->getTokens()
+        );
 
-        return $this->authTokens;
+        return $this->authTokensCachedObject->getObject();
+    }
+
+    /**
+     * @return $this
+     */
+    public function removeAuthTokensCache() {
+        $this->authTokensCachedObject = null;
+
+        return $this;
     }
 
     /**
@@ -401,7 +452,7 @@ class UserContext {
     public function closeActiveFlexible() {
         $this->getClient()->billingCloseFlexible($this->getActiveFlexible(), $this->getUserIdentifierForClient());
 
-        $this->activeFlexible = null;
+        $this->activeFlexibleCachedObject = new CachedObject(null);
 
         return $this;
     }
