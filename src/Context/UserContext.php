@@ -306,6 +306,8 @@ class UserContext {
      * @param BillingEvent $billingEvent
      *
      * @return $this
+     *
+     * @deprecated
      */
     public function addBillingEvent(BillingEvent $billingEvent) {
         $this->getBillingEvents();
