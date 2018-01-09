@@ -37,6 +37,12 @@ class HTTPRequestClient implements RequestClient, RequestClientExtra {
 	 */
 	private $apiSecret;
 
+    /**
+     * Disable https e.g. for development purposes
+     * @var bool
+     */
+	private $https = true;
+
 	/**
 	 * @return HTTPClientAdapterExtra
 	 *
@@ -60,7 +66,7 @@ class HTTPRequestClient implements RequestClient, RequestClientExtra {
 	private function prepareRequest($path, array $params) {
 		$payload   = \json_encode($params);
 		$uri       = $this->httpClient->createUri()
-			->withScheme('https')
+			->withScheme($this->https ? 'https' : 'http')
 			->withHost($this->host)
 			->withPath($path)
 			->withQuery(
@@ -147,5 +153,14 @@ class HTTPRequestClient implements RequestClient, RequestClientExtra {
 		}
 
 		throw new InvalidResponseData($response->getReasonPhrase(), $response->getStatusCode());
+	}
+
+    /**
+     * @param bool $https
+     * @return $this
+     */
+	public function useHttps($https) {
+	    $this->https = (bool) $https;
+	    return $this;
 	}
 }
