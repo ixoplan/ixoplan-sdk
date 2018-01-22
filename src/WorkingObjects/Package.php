@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\WorkingObjects;
 
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 
+/**
+ * Class Package
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\Plan instead
+ */
 class Package implements WorkingObject {
 	/**
 	 * @var string

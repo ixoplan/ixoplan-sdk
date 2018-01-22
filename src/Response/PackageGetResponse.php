@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\Package;
 
+/**
+ * Class PackageGetResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\PlanGetResponse instead
+ */
 class PackageGetResponse {
 	/**
 	 * @var Package

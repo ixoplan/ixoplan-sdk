@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\WorkingObjects;
 
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 
+/**
+ * Class PackagePeriod
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\PlanPeriod instead
+ */
 class PackagePeriod implements WorkingObject {
 
 	/** @var int */

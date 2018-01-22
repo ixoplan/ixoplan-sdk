@@ -13,7 +13,7 @@ class UserVerificationStartResponse {
     /**
      * @param $response
      *
-     * @return UserVerificationStartResponse
+     * @return $this
      */
     public static function fromResponse($response) {
         return new self();
