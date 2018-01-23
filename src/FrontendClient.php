@@ -29,8 +29,8 @@ use Ixolit\Dislo\Response\BillingMethodsGetResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
 use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse;
-use Ixolit\Dislo\Response\PlanGetResponse;
-use Ixolit\Dislo\Response\PlanListResponse;
+use Ixolit\Dislo\Response\PackageGetResponse;
+use Ixolit\Dislo\Response\PackagesListResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponse;
 use Ixolit\Dislo\Response\SubscriptionCalculatePriceResponse;
@@ -115,10 +115,6 @@ final class FrontendClient {
      * @throws DisloException if the $requestClient parameter is missing
      */
     public function __construct(RequestClient $requestClient, $forceTokenMode = true) {
-        if (!($requestClient instanceof RequestClient)) {
-            throw new DisloException('A RequestClient parameter is required!');
-        }
-
         $this->requestClient  = $requestClient;
         $this->forceTokenMode = $forceTokenMode;
     }
@@ -132,9 +128,8 @@ final class FrontendClient {
         if ($this->requestClient instanceof RequestClientExtra) {
             return $this->requestClient;
         }
-        else {
-            throw new NotImplementedException();
-        }
+
+        throw new NotImplementedException();
     }
 
     /**
@@ -165,6 +160,7 @@ final class FrontendClient {
     private function request($uri, array $data = []) {
         try {
             $response = $this->getRequestClient()->request($uri, $data);
+
             if (isset($response['success']) && $response['success'] === false) {
                 switch ($response['errors'][0]['code']) {
                     case 404:
@@ -178,9 +174,9 @@ final class FrontendClient {
                             $response['errors'][0]['message'] . ' while trying to query ' . $uri,
                             $response['errors'][0]['code']);
                 }
-            } else {
-                return $response;
             }
+
+            return $response;
         } catch (ObjectNotFoundException $e) {
             throw $e;
         } catch (DisloException $e) {
@@ -198,37 +194,44 @@ final class FrontendClient {
      */
     private function userToData($userTokenOrId, array $data = []) {
         if ($this->forceTokenMode) {
-            if (\is_object($userTokenOrId) && $userTokenOrId instanceof AuthToken) {
-                $data['authToken'] = (string) $userTokenOrId;
-            } else {
-                $data['authToken'] = $userTokenOrId;
-            }
+            $data['authToken'] = (\is_object($userTokenOrId) && $userTokenOrId instanceof AuthToken)
+                ? (string)$userTokenOrId
+                : $userTokenOrId;
+
             return $data;
         }
+
         if ($userTokenOrId instanceof User) {
             $data['userId'] = $userTokenOrId->getUserId();
+
             return $data;
         }
+
         if (\is_null($userTokenOrId)) {
             return $data;
         }
-        if (\is_bool($userTokenOrId) || \is_float($userTokenOrId) || \is_resource($userTokenOrId) ||
-            \is_array($userTokenOrId)
+
+        if (
+            \is_bool($userTokenOrId)
+            || \is_float($userTokenOrId)
+            || \is_resource($userTokenOrId)
+            || \is_array($userTokenOrId)
         ) {
             throw new \InvalidArgumentException('Invalid user specification: ' . \var_export($userTokenOrId, true));
         }
+
         if (\is_object($userTokenOrId)) {
             if (!\method_exists($userTokenOrId, '__toString')) {
                 throw new \InvalidArgumentException('Invalid user specification: ' . \var_export($userTokenOrId, true));
             }
+
             $userTokenOrId = $userTokenOrId->__toString();
         }
 
-        if (\is_int($userTokenOrId) || \preg_match('/^[1-9][0-9]+$/D', $userTokenOrId)) {
-            $data['userId'] = (int)$userTokenOrId;
-        } else {
-            $data['authToken'] = $userTokenOrId;
-        }
+        $data['userId'] = (\is_int($userTokenOrId) || \preg_match('/^[1-9][0-9]+$/D', $userTokenOrId))
+            ? (int)$userTokenOrId
+            : $userTokenOrId;
+
         return $data;
     }
 
@@ -236,24 +239,23 @@ final class FrontendClient {
 
     /**
      * Retrieve the list of billing methods.
-     * If $planIdentifier is set, the list gets filtered by plan and country requirements.
+     * If $packageIdentifier is set, the list gets filtered by package and country requirements.
      *
-     * @param string|null $planIdentifier
+     * @param string|null $packageIdentifier
      * @param string|null $countryCode
      *
      * @return BillingMethodsGetResponse
      */
-    public function billingMethodsGet($planIdentifier = null, $countryCode = null) {
-        if (empty($planIdentifier)) {
+    public function billingMethodsGet($packageIdentifier = null, $countryCode = null) {
+        if (empty($packageIdentifier)) {
             $response = $this->request('/frontend/billing/getPaymentMethods', []);
         } else {
-            $response = $this->request(
-                '/frontend/billing/getPaymentMethodsForPackage',
-                [
-                    'packageIdentifier' => $planIdentifier,
-                    'countryCode'       => $countryCode,
-                ]
-            );
+            $data = [
+                'packageIdentifier' => $packageIdentifier,
+                'countryCode'       => $countryCode,
+            ];
+
+            $response = $this->request('/frontend/billing/getPaymentMethodsForPackage', $data);
         }
 
         return BillingMethodsGetResponse::fromResponse($response);
@@ -263,14 +265,14 @@ final class FrontendClient {
      * Retrieve the list of available billing methods.
      * Filter works like for billingMethodsGet function.
      *
-     * @param string|null $planIdentifier
+     * @param string|null $packageIdentifier
      * @param string|null $countryCode
      *
      * @return BillingMethodsGetAvailableResponse
      */
-    public function billingMethodsGetAvailable($planIdentifier = null, $countryCode = null) {
+    public function billingMethodsGetAvailable($packageIdentifier = null, $countryCode = null) {
         $availableBillingMethods = [];
-        foreach ($this->billingMethodsGet($planIdentifier, $countryCode)->getBillingMethods() as $billingMethod) {
+        foreach ($this->billingMethodsGet($packageIdentifier, $countryCode)->getBillingMethods() as $billingMethod) {
             if ($billingMethod->isAvailable()) {
                 $availableBillingMethods[] = $billingMethod;
             }
@@ -405,7 +407,7 @@ final class FrontendClient {
      * @param string               $currencyCode          currency code EUR, USD, ...
      * @param float                $amount                the amount of the charge
      * @param string               $externalTransactionId external unique id for the charge
-     * @param int|null             $planChangeId          the unique plan change  id to which the charge should be linked,
+     * @param int|null             $packageChangeId       the unique package change  id to which the charge should be linked,
      *                                                    you get this from the "subscription/externalChangePackage" or
      *                                                    "subscription/externalCreateAddonSubscription" call
      * @param array                $paymentDetails        additional data you want to save with the charge
@@ -425,7 +427,7 @@ final class FrontendClient {
         $currencyCode,
         $amount,
         $externalTransactionId,
-        $planChangeId = null,
+        $packageChangeId = null,
         $paymentDetails = [],
         $description = '',
         $status = BillingEvent::STATUS_SUCCESS,
@@ -437,7 +439,7 @@ final class FrontendClient {
             'currencyCode'          => $currencyCode,
             'amount'                => $amount,
             'externalTransactionId' => $externalTransactionId,
-            'planChangeId'          => $planChangeId,
+            'packageChangeId'       => $packageChangeId,
             'paymentDetails'        => $paymentDetails,
             'description'           => $description,
             'status'                => $status,
@@ -655,7 +657,7 @@ final class FrontendClient {
      * Get active recurring payment method for a subscription
      *
      * @param Subscription|int $subscription  ID for the subscription expected to have an external profile
-     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param User|int|string  $userTokenOrId User authentication token or user ID.
      *
      * @return BillingGetActiveRecurringResponse
      *
@@ -677,7 +679,7 @@ final class FrontendClient {
      * Close active recurring payment method for a subscription
      *
      * @param Subscription|int $subscription  ID for the subscription expected to have an external profile
-     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param User|int|string  $userTokenOrId User authentication token or user ID.
      *
      * @return BillingCloseActiveRecurringResponse
      *
@@ -705,7 +707,7 @@ final class FrontendClient {
      * @see https://docs.dislo.com/display/DIS/CalculateAddonPrice
      *
      * @param Subscription|int $subscription
-     * @param string|string[]  $planIdentifiers
+     * @param string|string[]  $packageIdentifiers
      * @param string|null      $couponCode
      * @param User|int|string  $userTokenOrId User authentication token or user ID.
      *
@@ -715,7 +717,7 @@ final class FrontendClient {
      */
     public function subscriptionCalculateAddonPrice(
         $subscription,
-        $planIdentifiers,
+        $packageIdentifiers,
         $couponCode = null,
         $userTokenOrId
     ) {
@@ -723,7 +725,7 @@ final class FrontendClient {
             'subscriptionId'     => ($subscription instanceof Subscription)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-            'packageIdentifiers' => $planIdentifiers,
+            'packageIdentifiers' => $packageIdentifiers,
             'couponCode'         => $couponCode,
         ]);
 
@@ -738,7 +740,7 @@ final class FrontendClient {
      * @see https://docs.dislo.com/display/DIS/CalculatePackageChange
      *
      * @param Subscription|int $subscription
-     * @param string           $newPlanIdentifier
+     * @param string           $newPackageIdentifier
      * @param string|null      $couponCode
      * @param User|string|int  $userTokenOrId User authentication token or user ID.
      * @param string[]         $addonPackageIdentifiers
@@ -747,7 +749,7 @@ final class FrontendClient {
      */
     public function subscriptionCalculatePackageChange(
         $subscription,
-        $newPlanIdentifier,
+        $newPackageIdentifier,
         $couponCode = null,
         $userTokenOrId = null,
         $addonPackageIdentifiers = []
@@ -756,7 +758,7 @@ final class FrontendClient {
             'subscriptionId'          => ($subscription instanceof Subscription)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-            'newPackageIdentifier'    => $newPlanIdentifier,
+            'newPackageIdentifier'    => $newPackageIdentifier,
             'couponCode'              => $couponCode,
             'addonPackageIdentifiers' => $addonPackageIdentifiers,
         ]);
@@ -774,7 +776,7 @@ final class FrontendClient {
      * @param string          $packageIdentifier    the package for the subscription
      * @param string          $currencyCode         currency which should be used for the user
      * @param string|null     $couponCode           optional - coupon which should be applied
-     * @param string|string[] $addonPlanIdentifiers optional - additional addon plans
+     * @param string|string[] $addonPackageIdentifiers optional - additional addon packages
      * @param User|int|string $userTokenOrId        User authentication token or user ID.
      *
      * @return SubscriptionCalculatePriceResponse
@@ -783,14 +785,14 @@ final class FrontendClient {
         $packageIdentifier,
         $currencyCode,
         $couponCode = null,
-        $addonPlanIdentifiers = [],
+        $addonPackageIdentifiers = [],
         $userTokenOrId
     ) {
         $data = $this->userToData($userTokenOrId, [
             'packageIdentifier'       => $packageIdentifier,
             'currencyCode'            => $currencyCode,
             'couponCode'              => $couponCode,
-            'addonPackageIdentifiers' => $addonPlanIdentifiers,
+            'addonPackageIdentifiers' => $addonPackageIdentifiers,
         ]);
 
         $response = $this->request('/frontend/subscription/calculateSubscriptionPrice', $data);
@@ -799,10 +801,10 @@ final class FrontendClient {
     }
 
     /**
-     * Cancel a future plan change
+     * Cancel a future package change
      *
-     * NOTE: this call only works for plan changes which are not applied immediately. In that case you need to call
-     * ChangePlan again.
+     * NOTE: this call only works for package changes which are not applied immediately. In that case you need to call
+     * ChangePackage again.
      *
      * @see https://docs.dislo.com/display/DIS/CancelPackageChange
      *
@@ -857,24 +859,24 @@ final class FrontendClient {
     }
 
     /**
-     * Change the plan for a subscription.
+     * Change the package for a subscription.
      *
      * @param Subscription|int $subscription                the unique subscription id to change
-     * @param string           $newPlanIdentifier           the identifier of the new plan
-     * @param string[]         $addonPlanIdentifiers        optional - plan identifiers of the addons
+     * @param string           $newPackageIdentifier        the identifier of the new package
+     * @param string[]         $addonPackageIdentifiers     optional - package identifiers of the addons
      * @param string           $couponCode                  optional - the coupon code to apply
      * @param array            $metaData                    optional - additional data (if supported by Dislo
      *                                                      installation)
      * @param bool             $useFlexible                 use the existing flexible payment method from the user to
-     *                                                      pay for the plan change immediately
+     *                                                      pay for the package change immediately
      * @param User|int|string  $userTokenOrId               User authentication token or user ID.
      *
      * @return SubscriptionChangeResponse
      */
     public function subscriptionChange(
         $subscription,
-        $newPlanIdentifier,
-        $addonPlanIdentifiers = [],
+        $newPackageIdentifier,
+        $addonPackageIdentifiers = [],
         $couponCode = '',
         $metaData = [],
         $useFlexible = false,
@@ -884,12 +886,12 @@ final class FrontendClient {
             'subscriptionId'       => ($subscription instanceof Subscription)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-            'newPackageIdentifier' => $newPlanIdentifier,
+            'newPackageIdentifier' => $newPackageIdentifier,
             'useFlexible'          => $useFlexible,
         ]);
 
-        if (!empty($addonPlanIdentifiers)) {
-            $data['addonPackageIdentifiers'] = $addonPlanIdentifiers;
+        if (!empty($addonPackageIdentifiers)) {
+            $data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
         }
         if (!empty($couponCode)) {
             $data['couponCode'] = $couponCode;
@@ -972,18 +974,18 @@ final class FrontendClient {
      * Create an addon subscription.
      *
      * @param Subscription|int $subscription
-     * @param string[]         $planIdentifiers
+     * @param string[]         $packageIdentifiers
      * @param string           $couponCode
      * @param User|int|string  $userTokenOrId User authentication token or user ID.
      *
      * @return SubscriptionCreateAddonResponse
      */
-    public function subscriptionCreateAddon($subscription, $planIdentifiers, $couponCode = '', $userTokenOrId) {
+    public function subscriptionCreateAddon($subscription, $packageIdentifiers, $couponCode = '', $userTokenOrId) {
         $data = $this->userToData($userTokenOrId, [
             'subscriptionId'     => ($subscription instanceof Subscription)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-            'packageIdentifiers' => $planIdentifiers,
+            'packageIdentifiers' => $packageIdentifiers,
         ]);
 
         if (!empty($couponCode)) {
@@ -1006,27 +1008,27 @@ final class FrontendClient {
      * it is false, you can use createFlexible to register a payment method without a payment. Don't mix up the two!
      *
      * @param User|int|string $userTokenOrId User authentication token or user ID.
-     * @param string          $planIdentifier
+     * @param string          $packageIdentifier
      * @param string          $currencyCode
      * @param string          $couponCode
-     * @param array           $addonPlanIdentifiers
+     * @param array           $addonPackageIdentifiers
      *
      * @return SubscriptionCreateResponse
      */
     public function subscriptionCreate(
         $userTokenOrId,
-        $planIdentifier,
+        $packageIdentifier,
         $currencyCode,
         $couponCode = '',
-        $addonPlanIdentifiers = []
+        $addonPackageIdentifiers = []
     ) {
         $data = $this->userToData($userTokenOrId, [
-            'packageIdentifier' => $planIdentifier,
+            'packageIdentifier' => $packageIdentifier,
             'currencyCode'      => $currencyCode,
         ]);
 
-        if (!empty($addonPlanIdentifiers)) {
-            $data['addonPackageIdentifiers'] = $addonPlanIdentifiers;
+        if (!empty($addonPackageIdentifiers)) {
+            $data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
         }
         if (!empty($couponCode)) {
             $data['couponCode'] = $couponCode;
@@ -1038,12 +1040,12 @@ final class FrontendClient {
     }
 
     /**
-     * Change the plan for an external subscription.
+     * Change the package for an external subscription.
      *
      * @param Subscription|int $subscription                the unique subscription id to change
-     * @param string           $newPlanIdentifier           the identifier for the new plan.
+     * @param string           $newPackageIdentifier        the identifier for the new package.
      * @param \DateTime        $newPeriodEnd                end date, has to be >= now.
-     * @param string[]         $addonPlanIdentifiers        optional - plan identifiers of the addons
+     * @param string[]         $addonPackageIdentifiers     optional - package identifiers of the addons
      * @param null             $newExternalId               if provided, a new external profile will be created for the
      *                                                      given subscription, the old one is invalidated
      * @param array            $extraData                   required when newExternalId is set, key value data for
@@ -1054,9 +1056,9 @@ final class FrontendClient {
      */
     public function subscriptionExternalChange(
         $subscription,
-        $newPlanIdentifier,
+        $newPackageIdentifier,
         \DateTime $newPeriodEnd,
-        $addonPlanIdentifiers = [],
+        $addonPackageIdentifiers = [],
         $newExternalId = null,
         $extraData = [],
         $userTokenOrId = null
@@ -1067,14 +1069,14 @@ final class FrontendClient {
             'subscriptionId'       => ($subscription instanceof Subscription)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-            'newPackageIdentifier' => $newPlanIdentifier,
+            'newPackageIdentifier' => $newPackageIdentifier,
             'newPeriodEnd'         => $newPeriodEnd
                 ->setTimezone(new \DateTimeZone('UTC'))
                 ->format('Y-m-d H:i:s'),
         ]);
 
-        if (!empty($addonPlanIdentifiers)) {
-            $data['addonPackageIdentifiers'] = $addonPlanIdentifiers;
+        if (!empty($addonPackageIdentifiers)) {
+            $data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
         }
         if (!empty($newExternalId)) {
             $data['newExternalId'] = $newExternalId;
@@ -1141,17 +1143,17 @@ final class FrontendClient {
      * Create an external addon subscription.
      *
      * @param Subscription|int $subscription
-     * @param string[]         $planIdentifiers
+     * @param string[]         $packageIdentifiers
      * @param User|int|string  $userTokenOrId User authentication token or user ID.
      *
      * @return SubscriptionExternalAddonCreateResponse
      */
-    public function subscriptionExternalAddonCreate($subscription, $planIdentifiers, $userTokenOrId) {
+    public function subscriptionExternalAddonCreate($subscription, $packageIdentifiers, $userTokenOrId) {
         $data = $this->userToData($userTokenOrId, [
             'subscriptionId'     => ($subscription instanceof Subscription)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-            'packageIdentifiers' => $planIdentifiers,
+            'packageIdentifiers' => $packageIdentifiers,
         ]);
 
         $response = $this->request('/frontend/subscription/externalCreateAddonSubscription', $data);
@@ -1162,14 +1164,14 @@ final class FrontendClient {
     /**
      * Create an external subscription.
      *
-     * @param string          $planIdentifier               the plan for the subscription
+     * @param string          $packageIdentifier            the package for the subscription
      * @param string          $externalId                   unique id for the external profile that is created for this
      *                                                      subscription
      * @param array           $extraData                    key/value array where you can save whatever you need with
      *                                                      the external profile, you can fetch this later on by
      *                                                      passing the externalId to "billing/externalGetProfile"
      * @param string          $currencyCode                 currency which should be used for the user
-     * @param array           $addonPlanIdentifiers         optional - additional addon plans
+     * @param array           $addonPackageIdentifiers      optional - additional addon packages
      * @param \DateTime|null  $periodEnd                    end of the first period, if omitted, dislo will calculate
      *                                                      the period end itself by using the package duration
      * @param User|int|string $userTokenOrId                User authentication token or user ID.
@@ -1177,20 +1179,20 @@ final class FrontendClient {
      * @return SubscriptionExternalCreateResponse
      */
     public function subscriptionExternalCreate(
-        $planIdentifier,
+        $packageIdentifier,
         $externalId,
         $extraData,
         $currencyCode,
-        $addonPlanIdentifiers = [],
+        $addonPackageIdentifiers = [],
         \DateTime $periodEnd = null,
         $userTokenOrId
     ) {
         $data = $this->userToData($userTokenOrId, [
-            'packageIdentifier'       => $planIdentifier,
+            'packageIdentifier'       => $packageIdentifier,
             'externalId'              => $externalId,
             'extraData'               => $extraData,
             'currencyCode'            => $currencyCode,
-            'addonPackageIdentifiers' => $addonPlanIdentifiers,
+            'addonPackageIdentifiers' => $addonPackageIdentifiers,
         ]);
 
         if (!empty($periodEnd)) {
@@ -1251,19 +1253,19 @@ final class FrontendClient {
             $data['type'] = $type;
         }
 
-        $response = $this->request('/frontend/subscription/getPossiblePlanChanges', $data);
+        $response = $this->request('/frontend/subscription/getPossiblePackageChanges', $data);
 
         return SubscriptionGetPossibleUpgradesResponse::fromResponse($response);
     }
 
     /**
-     * Retrieve a list of all plans registered in the system.
+     * Retrieve a list of all packages registered in the system.
      *
      * @param string|null $serviceIdentifier
      *
-     * @return PlanListResponse
+     * @return PackagesListResponse
      */
-    public function planList($serviceIdentifier = null) {
+    public function packageList($serviceIdentifier = null) {
         $data = [];
         if (!empty($serviceIdentifier)) {
             $data['serviceIdentifier'] = $serviceIdentifier;
@@ -1271,26 +1273,26 @@ final class FrontendClient {
 
         $response = $this->request('/frontend/subscription/getPackages', $data);
 
-        return PlanListResponse::fromResponse($response);
+        return PackagesListResponse::fromResponse($response);
     }
 
     /**
-     * @param string $planIdentifier
+     * @param string $packageIdentifier
      *
-     * @return PlanGetResponse
+     * @return PackageGetResponse
      *
      * @throws ObjectNotFoundException
      */
-    public function planGet($planIdentifier) {
-        $plans = $this->planList(null)->getPlans();
+    public function packageGet($packageIdentifier) {
+        $packages = $this->packageList(null)->getPackages();
 
-        foreach ($plans as $plan) {
-            if ($plan->getPlanIdentifier() == $planIdentifier) {
-                return new PlanGetResponse($plan);
+        foreach ($packages as $package) {
+            if ($package->getPackageIdentifier() == $packageIdentifier) {
+                return new PackageGetResponse($package);
             }
         }
 
-        throw new ObjectNotFoundException('Plan with ID ' . $planIdentifier);
+        throw new ObjectNotFoundException('Package with ID ' . $packageIdentifier);
     }
 
     /**
@@ -1357,21 +1359,21 @@ final class FrontendClient {
     }
 
     /**
-     * Check if a coupon is valid for the given context plan/addons/event/user/sub and calculates the discounted
+     * Check if a coupon is valid for the given context package/addons/event/user/sub and calculates the discounted
      * price, for new subscriptions.
      *
      * @param string $couponCode
-     * @param string $planIdentifier
-     * @param array  $addonPlanIdentifiers
+     * @param string $packageIdentifier
+     * @param array  $addonPackageIdentifiers
      * @param string $currencyCode
      *
      * @return CouponCodeValidateResponse
      */
-    public function couponCodeValidateNew($couponCode, $planIdentifier, $addonPlanIdentifiers = [], $currencyCode) {
+    public function couponCodeValidateNew($couponCode, $packageIdentifier, $addonPackageIdentifiers = [], $currencyCode) {
         $data = [
             'couponCode'              => $couponCode,
-            'packageIdentifier'       => $planIdentifier,
-            'addonPackageIdentifiers' => $addonPlanIdentifiers,
+            'packageIdentifier'       => $packageIdentifier,
+            'addonPackageIdentifiers' => $addonPackageIdentifiers,
             'event'                   => self::COUPON_EVENT_START,
             'currencyCode'            => $currencyCode,
         ];
@@ -1382,12 +1384,12 @@ final class FrontendClient {
     }
 
     /**
-     * Check if a coupon is valid for the given context plan/addons/event/user/sub and calculates the discounted
+     * Check if a coupon is valid for the given context package/addons/event/user/sub and calculates the discounted
      * price, for upgrades
      *
      * @param string           $couponCode
-     * @param string           $planIdentifier
-     * @param array            $addonPlanIdentifiers
+     * @param string           $packageIdentifier
+     * @param array            $addonPackageIdentifiers
      * @param string           $currencyCode
      * @param User|string|int  $userTokenOrId
      * @param Subscription|int $subscription
@@ -1396,16 +1398,16 @@ final class FrontendClient {
      */
     public function couponCodeValidateUpgrade(
         $couponCode,
-        $planIdentifier,
-        $addonPlanIdentifiers,
+        $packageIdentifier,
+        $addonPackageIdentifiers,
         $currencyCode,
         $subscription,
         $userTokenOrId = null
     ) {
         $data = $this->userToData($userTokenOrId, [
             'couponCode'              => $couponCode,
-            'packageIdentifier'       => $planIdentifier,
-            'addonPackageIdentifiers' => $addonPlanIdentifiers,
+            'packageIdentifier'       => $packageIdentifier,
+            'addonPackageIdentifiers' => $addonPackageIdentifiers,
             'event'                   => self::COUPON_EVENT_UPGRADE,
             'currencyCode'            => $currencyCode,
             'subscriptionId'          => ($subscription instanceof Subscription)
@@ -1425,12 +1427,12 @@ final class FrontendClient {
     /**
      * Authenticate a user. Returns an access token for subsequent API calls.
      *
-     * @param string      $username      Username.
-     * @param string      $password      User password.
-     * @param string      $ipAddress     IP address of the user attempting to authenticate.
-     * @param int         $tokenLifetime Authentication token lifetime in seconds. TokenLifeTime is renewed and extended
-     *                                   by API calls automatically, using the inital tokenlifetime.
-     * @param string      $metainfo      Meta information to store with token (4096 bytes)
+     * @param string      $username        Username.
+     * @param string      $password        User password.
+     * @param string      $ipAddress       IP address of the user attempting to authenticate.
+     * @param int         $tokenLifetime   Authentication token lifetime in seconds. TokenLifeTime is renewed and extended
+     *                                     by API calls automatically, using the inital tokenlifetime.
+     * @param string      $metainfo        Meta information to store with token (4096 bytes)
      * @param bool        $ignoreRateLimit
      * @param string|null $language
      *
