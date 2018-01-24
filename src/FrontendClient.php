@@ -90,6 +90,76 @@ use Psr\Http\Message\StreamInterface;
  */
 final class FrontendClient {
 
+    //region Frontend API URIs
+
+    const API_URI_BILLING_METHODS_GET = '/frontend/billing/getPaymentMethods';
+    const API_URI_BILLING_METHODS_GET_FOR_PACKAGE = '/frontend/billing/getPaymentMethodsForPackage';
+    const API_URI_BILLING_CLOSE_FLEXIBLE = '/frontend/billing/closeFlexible';
+    const API_URI_BILLING_CREATE_FLEXIBLE = '/frontend/billing/createFlexible';
+    const API_URI_BILLING_CREATE_PAYMENT = '/frontend/billing/createPayment';
+    const API_URI_BILLING_EXTERNAL_CREATE_CHARGE = '/frontend/billing/externalCreateCharge';
+    const API_URI_BILLING_EXTERNAL_CREATE_CHARGEBACK = '/frontend/billing/externalCreateChargeback';
+    const API_URI_BILLING_EXTERNAL_GET_PROFILE = '/frontend/billing/externalGetProfile';
+    const API_URI_BILLING_GET_EVENT = '/frontend/billing/getBillingEvent';
+    const API_URI_BILLING_GET_EVENTS_FOR_USER = '/frontend/billing/getBillingEventsForUser';
+    const API_URI_BILLING_GET_FLEXIBLE = '/frontend/billing/getFlexible';
+    const API_URI_BILLING_GET_FLEXIBLE_BY_ID = '/frontend/billing/getFlexibleById';
+    const API_URI_BILLING_GET_ACTIVE_RECURRING = '/frontend/billing/getActiveRecurring';
+    const API_URI_BILLING_CLOSE_ACTIVE_RECURRING = '/frontend/billing/closeActiveRecurring';
+
+    const API_URI_SUBSCRIPTION_CALCULATE_ADDON_PRICE = '/frontend/subscription/calculateAddonPrice';
+    const API_URI_SUBSCRIPTION_CALCULATE_PACKAGE_CHANGE = '/frontend/subscription/calculatePackageChange';
+    const API_URI_SUBSCRIPTION_CALCULATE_PRICE = '/frontend/subscription/calculateSubscriptionPrice';
+    const API_URI_SUBSCRIPTION_CANCEL_PACKAGE_CHANGE = '/frontend/subscription/cancelPackageChange';
+    const API_URI_SUBSCRIPTION_CANCEL = '/frontend/subscription/cancel';
+    const API_URI_SUBSCRIPTION_CHANGE = '/frontend/subscription/changePackage';
+    const API_URI_COUPON_CODE_CHECK = '/frontend/subscription/checkCouponCode';
+    const API_URI_SUBSCRIPTION_CLOSE = '/frontend/subscription/close';
+    const API_URI_SUBSCRIPTION_CONTINUE = '/frontend/subscription/continue';
+    const API_URI_SUBSCRIPTION_CREATE_ADDON = '/frontend/subscription/createAddonSubscription';
+    const API_URI_SUBSCRIPTION_CREATE = '/frontend/subscription/create';
+    const API_URI_SUBSCRIPTION_EXTERNAL_CHANGE = '/frontend/subscription/externalChangePackage';
+    const API_URI_SUBSCRIPTION_EXTERNAL_CHANGE_PERIOD = '/frontend/subscription/externalChangePeriod';
+    const API_URI_SUBSCRIPTION_EXTERNAL_CLOSE = '/frontend/subscription/externalCloseSubscription';
+    const API_URI_SUBSCRIPTION_EXTERNAL_CREATE_ADDON_SUBSCRIPTION = '/frontend/subscription/externalCreateAddonSubscription';
+    const API_URI_SUBSCRIPTION_EXTERNAL_CREATE = '/frontend/subscription/externalCreateSubscription';
+    const API_URI_SUBSCRIPTION_CALL_SPI = '/frontend/subscription/callSpi';
+    const API_URI_SUBSCRIPTION_GET_POSSIBLE_PACKAGE_CHANGES = '/frontend/subscription/getPossiblePackageChanges';
+    const API_URI_PACKAGE_LIST = '/frontend/subscription/getPackages';
+    const API_URI_SUBSCRIPTION_GET = '/frontend/subscription/get';
+    const API_URI_SUBSCRIPTION_GET_ALL = '/frontend/subscription/getSubscriptions';
+    const API_URI_SUBSCRIPTION_GET_PERIOD_EVENTS = '/frontend/subscription/getPeriodHistory';
+    const API_URI_COUPON_CODE_VALIDATE = '/frontend/subscription/validateCoupon';
+
+    const API_URI_USER_AUTHENTICATE = '/frontend/user/authenticate';
+    const API_URI_USER_DEAUTHENTICATE = '/frontend/user/deAuthToken';
+    const API_URI_USER_CHANGE = '/frontend/user/change';
+    const API_URI_USER_CHANGE_PASSWORD = '/frontend/user/changePassword';
+    const API_URI_USER_CREATE = '/frontend/user/create';
+    const API_URI_USER_DELETE = '/frontend/user/delete';
+    const API_URI_USER_DISABLE_LOGIN = '/frontend/user/disableLogin';
+    const API_URI_USER_ENABLE_LOGIN = '/frontend/user/enableLogin';
+    const API_URI_USER_GET_ACCOUNT_BALANCE = '/frontend/user/getBalance';
+    const API_URI_USER_GET_META_PROFILE = '/frontend/user/getMetaProfile';
+    const API_URI_USER_GET_AUTH_TOKENS = '/frontend/user/getTokens';
+    const API_URI_USER_GET = '/frontend/user/get';
+    const API_URI_USER_UPDATE_AUTH_TOKEN = '/frontend/user/updateToken';
+    const API_URI_USER_EXTEND_AUTH_TOKEN = '/frontend/user/extendTokenLifeTime';
+    const API_URI_USER_GET_AUTHENTICATED = '/frontend/user/getAuthenticated';
+    const API_URI_USER_FIND = '/frontend/user/findUser';
+    const API_URI_USER_RECOVERY_START = '/frontend/user/passwordRecovery/start';
+    const API_URI_USER_RECOVERY_CHECK = '/frontend/user/passwordRecovery/check';
+    const API_URI_USER_RECOVERY_FINISH = '/frontend/user/passwordRecovery/finalize';
+    const API_URI_USER_VERIFICATION_START = '/frontend/user/verification/start';
+    const API_URI_USER_VERIFICATION_FINISH = '/frontend/user/verification/finalize';
+
+    const API_URI_REDIRECTOR_GET_CONFIGURATION = '/frontend/misc/getRedirectorConfiguration';
+
+    const API_URI_EXPORT_STREAM_REPORT = '/export/v2/report/';
+    const API_URI_EXPORT_STREAM_QUERY = '/export/v2/query';
+
+    //endregion
+
     const COUPON_EVENT_START    = 'subscription_start';
     const COUPON_EVENT_UPGRADE  = 'subscription_upgrade';
 
@@ -130,6 +200,17 @@ final class FrontendClient {
         }
 
         throw new NotImplementedException();
+    }
+
+    /**
+     * @param RequestClient $requestClient
+     *
+     * @return $this
+     */
+    public function setRequestClient(RequestClient $requestClient) {
+        $this->requestClient = $requestClient;
+
+        return $this;
     }
 
     /**
@@ -248,14 +329,14 @@ final class FrontendClient {
      */
     public function billingMethodsGet($packageIdentifier = null, $countryCode = null) {
         if (empty($packageIdentifier)) {
-            $response = $this->request('/frontend/billing/getPaymentMethods', []);
+            $response = $this->request(self::API_URI_BILLING_METHODS_GET, []);
         } else {
             $data = [
                 'packageIdentifier' => $packageIdentifier,
                 'countryCode'       => $countryCode,
             ];
 
-            $response = $this->request('/frontend/billing/getPaymentMethodsForPackage', $data);
+            $response = $this->request(self::API_URI_BILLING_METHODS_GET_FOR_PACKAGE, $data);
         }
 
         return BillingMethodsGetResponse::fromResponse($response);
@@ -302,7 +383,7 @@ final class FrontendClient {
                 : (int)$flexible
         ]);
 
-        $response = $this->request('/frontend/billing/closeFlexible', $data);
+        $response = $this->request(self::API_URI_BILLING_CLOSE_FLEXIBLE, $data);
 
         return BillingCloseFlexibleResponse::fromResponse($response);
     }
@@ -344,7 +425,7 @@ final class FrontendClient {
             $data['currencyCode'] = $currencyCode;
         }
 
-        $response = $this->request('/frontend/billing/createFlexible', $data);
+        $response = $this->request(self::API_URI_BILLING_CREATE_FLEXIBLE, $data);
 
         return BillingCreateFlexibleResponse::fromResponse($response);
     }
@@ -386,7 +467,7 @@ final class FrontendClient {
             'countryCode'    => $countryCode,
         ]);
 
-        $response = $this->request('/frontend/billing/createPayment', $data);
+        $response = $this->request(self::API_URI_BILLING_CREATE_PAYMENT, $data);
         if (!$response['redirectUrl']) {
             $response['redirectUrl'] = $returnUrl;
         }
@@ -445,7 +526,7 @@ final class FrontendClient {
             'status'                => $status,
         ]);
 
-        $response = $this->request('/frontend/billing/externalCreateCharge', $data);
+        $response = $this->request(self::API_URI_BILLING_EXTERNAL_CREATE_CHARGE, $data);
 
         return BillingExternalCreateChargeResponse::fromResponse($response);
     }
@@ -477,7 +558,7 @@ final class FrontendClient {
             'description'           => $description,
         ]);
 
-        $response = $this->request('/frontend/billing/externalCreateChargeback', $data);
+        $response = $this->request(self::API_URI_BILLING_EXTERNAL_CREATE_CHARGEBACK, $data);
 
         return BillingExternalCreateChargebackResponse::fromResponse($response);
     }
@@ -509,7 +590,7 @@ final class FrontendClient {
             'description'       => $description,
         ]);
 
-        $response = $this->request('/frontend/billing/externalCreateChargeback', $data);
+        $response = $this->request(self::API_URI_BILLING_EXTERNAL_CREATE_CHARGEBACK, $data);
 
         return BillingExternalCreateChargebackResponse::fromResponse($response);
     }
@@ -532,7 +613,7 @@ final class FrontendClient {
             'externalId' => $externalId,
         ]);
 
-        $response = $this->request('/frontend/billing/externalGetProfile', $data);
+        $response = $this->request(self::API_URI_BILLING_EXTERNAL_GET_PROFILE, $data);
 
         return BillingExternalGetProfileResponse::fromResponse($response);
     }
@@ -557,7 +638,7 @@ final class FrontendClient {
                 : $subscription,
         ]);
 
-        $response = $this->request('/frontend/billing/externalGetProfile', $data);
+        $response = $this->request(self::API_URI_BILLING_EXTERNAL_GET_PROFILE, $data);
 
         return BillingExternalGetProfileResponse::fromResponse($response);
     }
@@ -579,7 +660,7 @@ final class FrontendClient {
             'billingEventId' => $billingEventId,
         ]);
 
-        $response = $this->request('/frontend/billing/getBillingEvent', $data);
+        $response = $this->request(self::API_URI_BILLING_GET_EVENT, $data);
 
         return BillingGetEventResponse::fromResponse($response);
     }
@@ -610,7 +691,7 @@ final class FrontendClient {
             'orderDir' => $orderDir,
         ]);
 
-        $response = $this->request('/frontend/billing/getBillingEventsForUser', $data);
+        $response = $this->request(self::API_URI_BILLING_GET_EVENTS_FOR_USER, $data);
 
         return BillingGetEventsForUserResponse::fromResponse($response);
     }
@@ -627,7 +708,7 @@ final class FrontendClient {
     public function billingGetFlexible($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
-        $response = $this->request('/frontend/billing/getFlexible', $data);
+        $response = $this->request(self::API_URI_BILLING_GET_FLEXIBLE, $data);
 
         return BillingGetFlexibleResponse::fromResponse($response);
     }
@@ -648,7 +729,7 @@ final class FrontendClient {
             'flexibleId' => $flexibleIdentifier
         ]);
 
-        $response = $this->request('/frontend/billing/getFlexibleById', $data);
+        $response = $this->request(self::API_URI_BILLING_GET_FLEXIBLE_BY_ID, $data);
 
         return BillingGetFlexibleByIdentifierResponse::fromResponse($response);
     }
@@ -670,7 +751,7 @@ final class FrontendClient {
                 : $subscription,
         ]);
 
-        $response = $this->request('/frontend/billing/getActiveRecurring', $data);
+        $response = $this->request(self::API_URI_BILLING_GET_ACTIVE_RECURRING, $data);
 
         return BillingGetActiveRecurringResponse::fromResponse($response);
     }
@@ -692,7 +773,7 @@ final class FrontendClient {
                 : $subscription,
         ]);
 
-        $response = $this->request('/frontend/billing/closeActiveRecurring', $data);
+        $response = $this->request(self::API_URI_BILLING_CLOSE_ACTIVE_RECURRING, $data);
 
         return BillingCloseActiveRecurringResponse::fromResponse($response);
     }
@@ -729,7 +810,7 @@ final class FrontendClient {
             'couponCode'         => $couponCode,
         ]);
 
-        $response = $this->request('/frontend/subscription/calculateAddonPrice', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_CALCULATE_ADDON_PRICE, $data);
 
         return SubscriptionCalculateAddonPriceResponse::fromResponse($response);
     }
@@ -763,7 +844,7 @@ final class FrontendClient {
             'addonPackageIdentifiers' => $addonPackageIdentifiers,
         ]);
 
-        $response = $this->request('/frontend/subscription/calculatePackageChange', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_CALCULATE_PACKAGE_CHANGE, $data);
 
         return SubscriptionCalculatePackageChangeResponse::fromResponse($response);
     }
@@ -795,7 +876,7 @@ final class FrontendClient {
             'addonPackageIdentifiers' => $addonPackageIdentifiers,
         ]);
 
-        $response = $this->request('/frontend/subscription/calculateSubscriptionPrice', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_CALCULATE_PRICE, $data);
 
         return SubscriptionCalculatePriceResponse::fromResponse($response);
     }
@@ -820,7 +901,7 @@ final class FrontendClient {
                 : $subscription,
         ]);
 
-        $response = $this->request('/frontend/subscription/cancelPackageChange', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_CANCEL_PACKAGE_CHANGE, $data);
 
         return SubscriptionCancelPackageChangeResponse::fromResponse($response);
     }
@@ -853,7 +934,7 @@ final class FrontendClient {
             'userComments'     => $userComments,
         ]);
 
-        $response = $this->request('/frontend/subscription/cancel', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_CANCEL, $data);
 
         return SubscriptionCancelResponse::fromResponse($response);
     }
@@ -900,7 +981,7 @@ final class FrontendClient {
             $data['metaData'] = $metaData;
         }
 
-        $response = $this->request('/frontend/subscription/changePackage', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_CHANGE, $data);
 
         return SubscriptionChangeResponse::fromResponse($response);
     }
@@ -922,7 +1003,7 @@ final class FrontendClient {
             $data['event'] = $event;
         }
 
-        $response = $this->request('/frontend/subscription/checkCouponCode', $data);
+        $response = $this->request(self::API_URI_COUPON_CODE_CHECK, $data);
 
         return CouponCodeCheckResponse::fromResponse($response, $couponCode, $event);
     }
@@ -945,7 +1026,7 @@ final class FrontendClient {
             'closeReason'    => $closeReason,
         ]);
 
-        $response = $this->request('/frontend/subscription/close', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_CLOSE, $data);
 
         return SubscriptionCloseResponse::fromResponse($response);
     }
@@ -965,7 +1046,7 @@ final class FrontendClient {
                 : $subscription,
         ]);
 
-        $response = $this->request('/frontend/subscription/continue', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_CONTINUE, $data);
 
         return SubscriptionContinueResponse::fromResponse($response);
     }
@@ -992,7 +1073,7 @@ final class FrontendClient {
             $data['couponCode'] = $couponCode;
         }
 
-        $response = $this->request('/frontend/subscription/createAddonSubscription', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_CREATE_ADDON, $data);
 
         return SubscriptionCreateAddonResponse::fromResponse($response);
     }
@@ -1034,7 +1115,7 @@ final class FrontendClient {
             $data['couponCode'] = $couponCode;
         }
 
-        $response = $this->request('/frontend/subscription/create', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_CREATE, $data);
 
         return SubscriptionCreateResponse::fromResponse($response);
     }
@@ -1083,7 +1164,7 @@ final class FrontendClient {
             $data['extraData']     = $extraData;
         }
 
-        $response = $this->request('/frontend/subscription/externalChangePackage', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_EXTERNAL_CHANGE, $data);
 
         return SubscriptionExternalChangeResponse::fromResponse($response);
     }
@@ -1109,7 +1190,7 @@ final class FrontendClient {
                 ->format('Y-m-d H:i:s'),
         ]);
 
-        $response = $this->request('/frontend/subscription/externalChangePeriod', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_EXTERNAL_CHANGE_PERIOD, $data);
 
         return SubscriptionExternalChangePeriodResponse::fromResponse($response);
     }
@@ -1134,7 +1215,7 @@ final class FrontendClient {
             $data['closeReason'] = $closeReason;
         }
 
-        $response = $this->request('/frontend/subscription/externalCloseSubscription', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_EXTERNAL_CLOSE, $data);
 
         return SubscriptionExternalCloseResponse::fromResponse($response);
     }
@@ -1156,7 +1237,7 @@ final class FrontendClient {
             'packageIdentifiers' => $packageIdentifiers,
         ]);
 
-        $response = $this->request('/frontend/subscription/externalCreateAddonSubscription', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_EXTERNAL_CREATE_ADDON_SUBSCRIPTION, $data);
 
         return SubscriptionExternalAddonCreateResponse::fromResponse($response);
     }
@@ -1203,7 +1284,7 @@ final class FrontendClient {
                 ->format('Y-m-d H:i:s');
         }
 
-        $response = $this->request('/frontend/subscription/externalCreateSubscription', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_EXTERNAL_CREATE, $data);
 
         return SubscriptionExternalCreateResponse::fromResponse($response);
     }
@@ -1230,7 +1311,7 @@ final class FrontendClient {
             'serviceId'      => $serviceId,
         ]);
 
-        $response = $this->request('/frontend/subscription/callSpi', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_CALL_SPI, $data);
 
         return SubscriptionCallSpiResponse::fromResponse($response);
     }
@@ -1242,7 +1323,7 @@ final class FrontendClient {
      *
      * @return SubscriptionGetPossibleUpgradesResponse
      */
-    public function subscriptionGetPossibleUpgrades($userTokenOrId, $subscriptionId, $type = '') {
+    public function subscriptionGetPossiblePackageChanges($userTokenOrId, $subscriptionId, $type = '') {
         $data = $this->userToData($userTokenOrId, [
             'subscriptionId' => ($subscriptionId instanceof Subscription )
                 ? $subscriptionId->getSubscriptionId()
@@ -1253,7 +1334,7 @@ final class FrontendClient {
             $data['type'] = $type;
         }
 
-        $response = $this->request('/frontend/subscription/getPossiblePackageChanges', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_GET_POSSIBLE_PACKAGE_CHANGES, $data);
 
         return SubscriptionGetPossibleUpgradesResponse::fromResponse($response);
     }
@@ -1271,7 +1352,7 @@ final class FrontendClient {
             $data['serviceIdentifier'] = $serviceIdentifier;
         }
 
-        $response = $this->request('/frontend/subscription/getPackages', $data);
+        $response = $this->request(self::API_URI_PACKAGE_LIST, $data);
 
         return PackagesListResponse::fromResponse($response);
     }
@@ -1310,7 +1391,7 @@ final class FrontendClient {
                 : $subscription,
         ]);
 
-        $response = $this->request('/frontend/subscription/get', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_GET, $data);
 
         return SubscriptionGetResponse::fromResponse($response);
     }
@@ -1325,7 +1406,7 @@ final class FrontendClient {
     public function subscriptionGetAll($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
-        $response = $this->request('/frontend/subscription/getSubscriptions', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_GET_ALL, $data);
 
         return SubscriptionGetAllResponse::fromResponse($response);
     }
@@ -1353,7 +1434,7 @@ final class FrontendClient {
             'orderDir'       => $orderDir,
         ]);
 
-        $response = $this->request('/frontend/subscription/getPeriodHistory', $data);
+        $response = $this->request(self::API_URI_SUBSCRIPTION_GET_PERIOD_EVENTS, $data);
 
         return SubscriptionGetPeriodEventsResponse::fromResponse($response);
     }
@@ -1378,7 +1459,7 @@ final class FrontendClient {
             'currencyCode'            => $currencyCode,
         ];
 
-        $response = $this->request('/frontend/subscription/validateCoupon', $data);
+        $response = $this->request(self::API_URI_COUPON_CODE_VALIDATE, $data);
 
         return CouponCodeValidateResponse::fromResponse($response, $couponCode, self::COUPON_EVENT_START);
     }
@@ -1415,7 +1496,7 @@ final class FrontendClient {
                 : $subscription,
         ]);
 
-        $response = $this->request('/frontend/subscription/validateCoupon', $data);
+        $response = $this->request(self::API_URI_COUPON_CODE_VALIDATE, $data);
 
         return CouponCodeValidateResponse::fromResponse($response, $couponCode, self::COUPON_EVENT_UPGRADE);
     }
@@ -1462,7 +1543,7 @@ final class FrontendClient {
             'ignoreRateLimit' => $ignoreRateLimit,
             'language'        => $language,
         ];
-        $response = $this->request('/frontend/user/authenticate', $data);
+        $response = $this->request(self::API_URI_USER_AUTHENTICATE, $data);
 
         if (!empty($response['error'])) {
             switch ($response['error']) {
@@ -1492,7 +1573,7 @@ final class FrontendClient {
             'authToken' => $authToken,
         ];
 
-        $response = $this->request('/frontend/user/deAuthToken', $data);
+        $response = $this->request(self::API_URI_USER_DEAUTHENTICATE, $data);
 
         return UserDeauthenticateResponse::fromResponse($response);
     }
@@ -1513,7 +1594,7 @@ final class FrontendClient {
             'metaData' => $metaData,
         ]);
 
-        $response = $this->request('/frontend/user/change', $data);
+        $response = $this->request(self::API_URI_USER_CHANGE, $data);
 
         return UserChangeResponse::fromResponse($response);
     }
@@ -1531,7 +1612,7 @@ final class FrontendClient {
             'plaintextPassword' => $newPassword,
         ]);
 
-        $response = $this->request('/frontend/user/changePassword', $data);
+        $response = $this->request(self::API_URI_USER_CHANGE_PASSWORD, $data);
 
         return UserChangeResponse::fromResponse($response);
     }
@@ -1553,7 +1634,7 @@ final class FrontendClient {
             'metaData'          => $metaData,
         ];
 
-        $response = $this->request('/frontend/user/create', $data);
+        $response = $this->request(self::API_URI_USER_CREATE, $data);
 
         return UserCreateResponse::fromResponse($response);
     }
@@ -1568,7 +1649,7 @@ final class FrontendClient {
     public function userDelete($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
-        $response = $this->request('/frontend/user/delete', $data);
+        $response = $this->request(self::API_URI_USER_DELETE, $data);
 
         return UserDeleteResponse::fromResponse($response);
     }
@@ -1583,7 +1664,7 @@ final class FrontendClient {
     public function userDisableLogin($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
-        $response = $this->request('/frontend/user/disableLogin', $data);
+        $response = $this->request(self::API_URI_USER_DISABLE_LOGIN, $data);
 
         return UserDisableLoginResponse::fromResponse($response);
     }
@@ -1598,7 +1679,7 @@ final class FrontendClient {
     public function userEnableLogin($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
-        $response = $this->request('/frontend/user/enableLogin', $data);
+        $response = $this->request(self::API_URI_USER_ENABLE_LOGIN, $data);
 
         return UserEnableLoginResponse::fromResponse($response);
     }
@@ -1610,10 +1691,10 @@ final class FrontendClient {
      *
      * @return UserGetBalanceResponse
      */
-    public function userGetBalance($userTokenOrId) {
+    public function userGetAccountBalance($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
-        $response = $this->request('/frontend/user/getBalance', $data);
+        $response = $this->request(self::API_URI_USER_GET_ACCOUNT_BALANCE, $data);
 
         return UserGetBalanceResponse::fromResponse($response);
     }
@@ -1624,7 +1705,7 @@ final class FrontendClient {
      * @return UserGetMetaProfileResponse
      */
     public function userGetMetaProfile() {
-        $response = $this->request('/frontend/user/getMetaProfile', []);
+        $response = $this->request(self::API_URI_USER_GET_META_PROFILE, []);
 
         return UserGetMetaProfileResponse::fromResponse($response);
     }
@@ -1639,7 +1720,7 @@ final class FrontendClient {
     public function userGetTokens($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
-        $response = $this->request('/frontend/user/getTokens', $data);
+        $response = $this->request(self::API_URI_USER_GET_AUTH_TOKENS, $data);
 
         return UserGetTokensResponse::fromResponse($response);
     }
@@ -1654,7 +1735,7 @@ final class FrontendClient {
     public function userGet($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
-        $response = $this->request('/frontend/user/get', $data);
+        $response = $this->request(self::API_URI_USER_GET, $data);
 
         return UserGetResponse::fromResponse($response);
     }
@@ -1678,7 +1759,7 @@ final class FrontendClient {
             $data['ipAddress'] = $ipAddress;
         }
 
-        $response = $this->request('/frontend/user/updateToken', $data);
+        $response = $this->request(self::API_URI_USER_UPDATE_AUTH_TOKEN, $data);
 
         return UserUpdateTokenResponse::fromResponse($response);
     }
@@ -1704,7 +1785,7 @@ final class FrontendClient {
             $data['tokenlifetime'] = \round($tokenLifetime / 60);
         }
 
-        $response = $this->request('/frontend/user/extendTokenLifeTime', $data);
+        $response = $this->request(self::API_URI_USER_EXTEND_AUTH_TOKEN, $data);
 
         return UserUpdateTokenResponse::fromResponse($response);
     }
@@ -1726,7 +1807,7 @@ final class FrontendClient {
             $data['ipAddress'] = $ipAddress;
         }
 
-        $response = $this->request('/frontend/user/getAuthenticated', $data);
+        $response = $this->request(self::API_URI_USER_GET_AUTHENTICATED, $data);
 
         return UserGetAuthenticatedResponse::fromResponse($response);
     }
@@ -1745,7 +1826,7 @@ final class FrontendClient {
             'searchTerm' => $searchTerm,
         ];
 
-        $response = $this->request('/frontend/user/findUser', $data);
+        $response = $this->request(self::API_URI_USER_FIND, $data);
 
         return UserFindResponse::fromResponse($response);
     }
@@ -1768,7 +1849,7 @@ final class FrontendClient {
             'resetLink'  => $resetLink,
         ];
 
-        $response = $this->request('/frontend/user/passwordRecovery/start', $data);
+        $response = $this->request(self::API_URI_USER_RECOVERY_START, $data);
 
         return UserRecoveryStartResponse::fromResponse($response);
     }
@@ -1787,7 +1868,7 @@ final class FrontendClient {
             'ipAddress'     => (string)$ipAddress,
         ];
 
-        $response = $this->request('/frontend/user/passwordRecovery/check', $data);
+        $response = $this->request(self::API_URI_USER_RECOVERY_CHECK, $data);
 
         return UserRecoveryCheckResponse::fromResponse($response);
     }
@@ -1810,7 +1891,7 @@ final class FrontendClient {
             'plaintextPassword' => $newPassword
         ];
 
-        $response = $this->request('/frontend/user/passwordRecovery/finalize', $data);
+        $response = $this->request(self::API_URI_USER_RECOVERY_FINISH, $data);
 
         return UserRecoveryFinishResponse::fromResponse($response);
     }
@@ -1834,7 +1915,7 @@ final class FrontendClient {
             'verificationType' => 'email',
         ]);
 
-        $response = $this->request('/frontend/user/verification/start', $data);
+        $response = $this->request(self::API_URI_USER_VERIFICATION_START, $data);
 
         return UserEmailVerificationStartResponse::fromResponse($response);
     }
@@ -1852,7 +1933,7 @@ final class FrontendClient {
             'verificationType'  => 'email',
         ];
 
-        $response = $this->request('/frontend/user/verification/finalize', $data);
+        $response = $this->request(self::API_URI_USER_VERIFICATION_FINISH, $data);
 
         return UserEmailVerificationFinishResponse::fromResponse($response);
     }
@@ -1873,7 +1954,7 @@ final class FrontendClient {
             ],
         ]);
 
-        $response = $this->request('/frontend/user/verification/start', $data);
+        $response = $this->request(self::API_URI_USER_VERIFICATION_START, $data);
 
         return UserPhoneVerificationStartResponse::fromResponse($response);
     }
@@ -1892,7 +1973,7 @@ final class FrontendClient {
             'phoneNumber'      => $phoneNumber,
         ]);
 
-        $response = $this->request('/frontend/user/verification/finalize', $data);
+        $response = $this->request(self::API_URI_USER_VERIFICATION_FINISH, $data);
 
         return UserPhoneVerificationFinishResponse::fromResponse($response);
     }
@@ -1913,7 +1994,7 @@ final class FrontendClient {
             ],
         ]);
 
-        $response = $this->request('/frontend/user/verification/start', $data);
+        $response = $this->request(self::API_URI_USER_VERIFICATION_START, $data);
 
         return UserSmsVerificationStartResponse::fromResponse($response);
     }
@@ -1932,7 +2013,7 @@ final class FrontendClient {
             'phoneNumber'      => $phoneNumber,
         ]);
 
-        $response = $this->request('/frontend/user/verification/finalize', $data);
+        $response = $this->request(self::API_URI_USER_VERIFICATION_FINISH, $data);
 
         return UserSmsVerificationFinishResponse::fromResponse($response);
     }
@@ -1947,7 +2028,7 @@ final class FrontendClient {
      * @return MiscGetRedirectorConfigurationResponse
      */
     public function miscGetRedirectorConfiguration() {
-        $response = $this->request('/frontend/misc/getRedirectorConfiguration', []);
+        $response = $this->request(self::API_URI_REDIRECTOR_GET_CONFIGURATION, []);
 
         return MiscGetRedirectorConfigurationResponse::fromResponse($response);
     }
@@ -1976,7 +2057,7 @@ final class FrontendClient {
             $stream = \fopen('php://stdout', 'w');
         }
 
-        return $this->getRequestClientExtra()->requestStream('/export/v2/report/' . $reportId, $data, $stream);
+        return $this->getRequestClientExtra()->requestStream(self::API_URI_EXPORT_STREAM_REPORT . $reportId, $data, $stream);
     }
 
     /**
@@ -2002,7 +2083,7 @@ final class FrontendClient {
             $stream = \fopen('php://stdout', 'w');
         }
 
-        return $this->getRequestClientExtra()->requestStream('/export/v2/query', $data, $stream);
+        return $this->getRequestClientExtra()->requestStream(self::API_URI_EXPORT_STREAM_QUERY, $data, $stream);
     }
 
     /**
