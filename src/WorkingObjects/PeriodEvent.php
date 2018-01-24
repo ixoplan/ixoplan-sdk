@@ -7,6 +7,8 @@ namespace Ixolit\Dislo\WorkingObjects;
  * Class PeriodEvent
  *
  * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\PeriodEventObjects instead
  */
 class PeriodEvent {
 

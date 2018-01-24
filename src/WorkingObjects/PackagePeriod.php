@@ -9,7 +9,7 @@ use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
  *
  * @package Ixolit\Dislo\WorkingObjects
  *
- * @deprecated use Ixolit\Dislo\WorkingObjects\PlanPeriod instead
+ * @deprecated use Ixolit\Dislo\WorkingObjects\PackagePeriodObject instead
  */
 class PackagePeriod implements WorkingObject {
 

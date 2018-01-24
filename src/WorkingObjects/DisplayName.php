@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+/**
+ * Class DisplayName
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\DisplayNameObject instead
+ */
 class DisplayName implements WorkingObject {
 
 	/**

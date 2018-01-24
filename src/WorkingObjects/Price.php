@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+/**
+ * Class Price
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects PriceObject instead
+ */
 class Price implements WorkingObject {
 	const TAG_BASEPRICE = 'baseprice';
 	const TAG_PRORATE_PRICE = 'prorate_price';

@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+/**
+ * Class MetaProfileElement
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\MetaProfileElementObject instead
+ */
 class MetaProfileElement implements WorkingObject {
 	/**
 	 * @var string

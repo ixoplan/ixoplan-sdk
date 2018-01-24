@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+/**
+ * Class NextPackage
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\NextPackageObject instead
+ */
 class NextPackage extends Package implements WorkingObject {
 
     /** @var bool */

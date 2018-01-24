@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+/**
+ * Class BillingMethod
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\BillingMethodObject instead
+ */
 class BillingMethod implements WorkingObject {
 	/**
 	 * @var int

@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+/**
+ * Class BillingEvent
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\BillingEventObject instead
+ */
 class BillingEvent implements WorkingObject {
 	const TYPE_AUTHORIZE = 'authorize';
 	const TYPE_CHARGE = 'charge';

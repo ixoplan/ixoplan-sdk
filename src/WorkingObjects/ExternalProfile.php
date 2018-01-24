@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+/**
+ * Class ExternalProfile
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\ExternalProfileObject instead
+ */
 class ExternalProfile implements WorkingObject {
 	/**
 	 * @var int

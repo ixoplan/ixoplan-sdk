@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+/**
+ * Class CouponUsage
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\CouponUsageObject instead
+ */
 class CouponUsage implements WorkingObject {
 
 	/** @var Coupon|null */

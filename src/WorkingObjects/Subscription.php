@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+/**
+ * Class Subscription
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\SubscriptionObject instead
+ */
 class Subscription implements WorkingObject {
 
 	const STATUS_PENDING = 'pending';

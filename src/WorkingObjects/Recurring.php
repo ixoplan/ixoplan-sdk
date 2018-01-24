@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+/**
+ * Class Recurring
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\RecurringObject instead
+ */
 class Recurring implements WorkingObject {
 
 	const STATUS_ACTIVE = 'active';

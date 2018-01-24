@@ -3,30 +3,27 @@
 namespace Ixolit\Dislo\Context;
 
 
-use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
+use Ixolit\Dislo\FrontendClient;
 use Ixolit\Dislo\WorkingObjects\AuthToken;
-use Ixolit\Dislo\WorkingObjects\BillingEvent;
 use Ixolit\Dislo\WorkingObjects\CachedObject;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Price;
 use Ixolit\Dislo\WorkingObjects\Subscription;
-use Ixolit\Dislo\WorkingObjects\User;
+use Ixolit\Dislo\WorkingObjects\User as UserObject;
 
 /**
- * Class UserContext
+ * Class User
  *
  * @package Ixolit\Dislo\Context
- *
- * @deprecated use Ixolit\Dislo\Context\User instead
  */
-class UserContext {
+final class User {
 
-    /** @var Client */
-    private $client;
+    /** @var FrontendClient */
+    private $frontendClient;
 
-    /** @var User */
+    /** @var UserObject */
     private $user;
 
     /** @var CachedObject|null */
@@ -35,12 +32,6 @@ class UserContext {
     /** @var CachedObject|null */
     private $activeFlexibleCachedObject;
 
-    /** @var BillingEvent[] */
-    private $billingEvents;
-
-    /** @var int */
-    private $billingEventsTotalCount;
-
     /** @var CachedObject|null */
     private $accountBalanceCachedObject;
 
@@ -48,22 +39,33 @@ class UserContext {
     private $authTokensCachedObject;
 
     /**
-     * @param Client $client
-     * @param User   $user
+     * User constructor.
+     *
+     * @param FrontendClient $frontendClient
+     * @param UserObject     $user
      *
      * @throws InvalidTokenException
      */
-    public function __construct(Client $client, User $user) {
-        $this->client = $client;
+    public function __construct(FrontendClient $frontendClient, UserObject $user) {
+        $this->frontendClient = $frontendClient;
         $this->user = $user;
 
-        if ($this->client->isForceTokenMode() && !$user->getAuthToken()) {
+        if ($this->frontendClient->isForceTokenMode() && !$user->getAuthToken()) {
             throw new InvalidTokenException();
         }
     }
 
     /**
-     * @return User
+     * @return FrontendClient
+     */
+    private function getFrontendClient() {
+        return $this->frontendClient;
+    }
+
+
+
+    /**
+     * @return UserObject
      *
      * @throws InvalidTokenException
      */
@@ -86,7 +88,7 @@ class UserContext {
         }
 
         $this->subscriptionsCachedObject = new CachedObject(
-            $this->getClient()->subscriptionGetAll($this->getUserIdentifierForClient())->getSubscriptions()
+            $this->getFrontendClient()->subscriptionGetAll($this->getUserIdentifierForClient())->getSubscriptions()
         );
 
         return $this->subscriptionsCachedObject->getObject();
@@ -112,10 +114,10 @@ class UserContext {
         $activeSubscriptions = [];
         foreach ($subscriptions as $subscription) {
             if (
-                \in_array($subscription->getStatus(), [
-                    Subscription::STATUS_CANCELED,
-                    Subscription::STATUS_RUNNING
-                ])
+            \in_array($subscription->getStatus(), [
+                Subscription::STATUS_CANCELED,
+                Subscription::STATUS_RUNNING
+            ])
             ) {
                 $activeSubscriptions[] = $subscription;
             }
@@ -216,7 +218,7 @@ class UserContext {
         if (!$cached || !isset($this->activeFlexibleCachedObject)) {
             try {
                 $this->activeFlexibleCachedObject = new CachedObject(
-                    $this->getClient()->billingGetFlexible($this->getUserIdentifierForClient())->getFlexible()
+                    $this->getFrontendClient()->billingGetFlexible($this->getUserIdentifierForClient())->getFlexible()
                 );
             } catch (ObjectNotFoundException $e) {
                 $this->activeFlexibleCachedObject = new CachedObject(null);
@@ -253,97 +255,6 @@ class UserContext {
     }
 
     /**
-     * @param int    $limit
-     * @param int    $offset
-     * @param string $orderDir
-     * @param bool   $cached
-     *
-     * @return BillingEvent[]
-     *
-     * @deprecated
-     */
-    public function getBillingEvents($limit = 10,
-                                     $offset = 0,
-                                     $orderDir = Client::ORDER_DIR_DESC,
-                                     $cached = true
-    ) {
-        if ($cached && isset($this->billingEvents)) {
-            return $this->billingEvents;
-        }
-
-        $billingEventsResponse = $this->getClient()->billingGetEventsForUser(
-            $this->getUserIdentifierForClient(),
-            $limit,
-            $offset,
-            $orderDir
-        );
-
-        $this->billingEvents = $billingEventsResponse->getBillingEvents();
-        $this->billingEventsTotalCount = $billingEventsResponse->getTotalCount();
-
-        return $this->billingEvents;
-    }
-
-    /**
-     * @param int  $billingEventId
-     * @param bool $cached
-     *
-     * @return BillingEvent|null
-     *
-     * @deprecated
-     */
-    public function getBillingEvent($billingEventId, $cached = true) {
-        $billingEvents = $this->getBillingEvents(10, 0, Client::ORDER_DIR_DESC, $cached);
-
-        foreach ($billingEvents as $billingEvent) {
-            if ($billingEvent->getBillingEventId() == $billingEventId) {
-                return $billingEvent;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param BillingEvent $billingEvent
-     *
-     * @return $this
-     *
-     * @deprecated
-     */
-    public function addBillingEvent(BillingEvent $billingEvent) {
-        $this->getBillingEvents();
-
-        $this->billingEvents[] = $billingEvent;
-
-        return $this;
-    }
-
-    /**
-     * @param int    $limit
-     * @param int    $offset
-     * @param string $orderDir
-     * @param bool   $cached
-     *
-     * @return int
-     *
-     * @deprecated
-     */
-    public function getBillingEventsTotalCount($limit = 10,
-                                               $offset = 0,
-                                               $orderDir = Client::ORDER_DIR_DESC,
-                                               $cached = true
-    ) {
-        if ($cached && isset($this->billingEventsTotalCount)) {
-            return $this->billingEventsTotalCount;
-        }
-
-        $this->getBillingEvents($limit, $offset, $orderDir, $cached);
-
-        return $this->billingEventsTotalCount;
-    }
-
-    /**
      * @param bool $cached
      *
      * @return Price
@@ -354,7 +265,7 @@ class UserContext {
         }
 
         $this->accountBalanceCachedObject = new CachedObject(
-            $this->getClient()->userGetBalance($this->getUserIdentifierForClient())->getBalance()
+            $this->getFrontendClient()->userGetAccountBalance($this->getUserIdentifierForClient())->getBalance()
         );
 
         return $this->accountBalanceCachedObject->getObject();
@@ -371,7 +282,7 @@ class UserContext {
         }
 
         $this->authTokensCachedObject = new CachedObject(
-            $this->getClient()->userGetTokens($this->getUserIdentifierForClient())->getTokens()
+            $this->getFrontendClient()->userGetTokens($this->getUserIdentifierForClient())->getTokens()
         );
 
         return $this->authTokensCachedObject->getObject();
@@ -401,7 +312,7 @@ class UserContext {
     public function changeUserMetaData($userMetaData = []) {
         $authToken = $this->getUser()->getAuthToken();
 
-        $changedUser = $this->getClient()->userChange(
+        $changedUser = $this->getFrontendClient()->userChange(
             $this->getUserIdentifierForClient(),
             $this->getUser()->getLanguage(),
             $userMetaData
@@ -420,7 +331,7 @@ class UserContext {
     public function changeUserPassword($newPassword) {
         $authToken = $this->getUser()->getAuthToken();
 
-        $changedUser = $this->getClient()->userChangePassword(
+        $changedUser = $this->getFrontendClient()->userChangePassword(
             $this->getUserIdentifierForClient(),
             $newPassword
         )->getUser();
@@ -434,7 +345,7 @@ class UserContext {
      * @return $this
      */
     public function deleteUser() {
-        $this->getClient()->userDelete($this->getUserIdentifierForClient());
+        $this->getFrontendClient()->userDelete($this->getUserIdentifierForClient());
 
         $this->user = null;
 
@@ -445,7 +356,7 @@ class UserContext {
      * @return $this
      */
     public function disableUserLogin() {
-        $this->user = $this->getClient()->userDisableLogin($this->getUserIdentifierForClient())->getUser();
+        $this->user = $this->getFrontendClient()->userDisableLogin($this->getUserIdentifierForClient())->getUser();
 
         return $this;
     }
@@ -454,32 +365,23 @@ class UserContext {
      * @return $this
      */
     public function closeActiveFlexible() {
-        $this->getClient()->billingCloseFlexible($this->getActiveFlexible(), $this->getUserIdentifierForClient());
+        $this->getFrontendClient()->billingCloseFlexible(
+            $this->getActiveFlexible(), $this->getUserIdentifierForClient()
+        );
 
         $this->activeFlexibleCachedObject = new CachedObject(null);
 
         return $this;
     }
 
-    /*
-     * Protected helper functions
-     */
-
     /**
-     * @return Client
-     */
-    protected function getClient() {
-        return $this->client;
-    }
-
-    /**
-     * @param User      $user
+     * @param UserObject      $user
      * @param AuthToken $authToken
      *
-     * @return User
+     * @return UserObject
      */
-    protected function convertFromUserWithAuthToken(User $user, AuthToken $authToken) {
-        $changedUser = new User(
+    protected function convertFromUserWithAuthToken(UserObject $user, AuthToken $authToken) {
+        $changedUser = new UserObject(
             $user->getUserId(),
             $user->getCreatedAt(),
             $user->isLoginDisabled(),
@@ -501,7 +403,7 @@ class UserContext {
      * @throws InvalidTokenException
      */
     protected function getUserIdentifierForClient() {
-        if ($this->getClient()->isForceTokenMode()) {
+        if ($this->getFrontendClient()->isForceTokenMode()) {
             if (!$this->getUser()->getAuthToken()) {
                 throw new InvalidTokenException();
             }

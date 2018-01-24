@@ -8,6 +8,8 @@ use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
  * Class Package
  *
  * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\PackageObject instead
  */
 class Package implements WorkingObject {
 	/**

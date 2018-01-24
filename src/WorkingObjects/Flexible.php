@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+/**
+ * Class Flexible
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ *
+ * @deprecated use Ixolit\Dislo\WorkingObjects\FlexibleObject instead
+ */
 class Flexible implements WorkingObject {
 
 	const STATUS_ACTIVE = 'active';
