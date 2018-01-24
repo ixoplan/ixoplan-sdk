@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\Price;
 
+/**
+ * Class CouponCodeValidateResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\CouponCodeValidateResponseObject instead
+ */
 class CouponCodeValidateResponse extends CouponCodeResponse {
 	/**
 	 * @var Price

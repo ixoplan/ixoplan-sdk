@@ -10,6 +10,8 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserGetAuthenticatedResponse
  *
  * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\UserGetAuthenticatedResponseObject instead
  */
 class UserGetAuthenticatedResponse {
 

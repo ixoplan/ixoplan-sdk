@@ -2,7 +2,16 @@
 
 namespace Ixolit\Dislo\Response;
 
+
+/**
+ * Class UserRecoveryStartResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\UserRecoveryStartResponseObject
+ */
 class UserRecoveryStartResponse {
+
 	public function __construct() {
 	}
 

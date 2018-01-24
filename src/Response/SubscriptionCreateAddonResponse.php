@@ -5,6 +5,13 @@ namespace Ixolit\Dislo\Response;
 use Ixolit\Dislo\WorkingObjects\Price;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 
+/**
+ * Class SubscriptionCreateAddonResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\SubscriptionCreateAddonResponseObject instead
+ */
 class SubscriptionCreateAddonResponse {
 	/**
 	 * @var Subscription

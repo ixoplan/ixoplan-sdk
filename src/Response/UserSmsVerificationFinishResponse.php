@@ -8,6 +8,8 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserSmsVerificationFinishResponse
  *
  * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\UserSmsVerificationFinishResponseObject instead
  */
 class UserSmsVerificationFinishResponse extends UserVerificationFinishResponse {
 

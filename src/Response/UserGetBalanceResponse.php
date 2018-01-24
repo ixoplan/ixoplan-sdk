@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\Price;
 
+/**
+ * Class UserGetBalanceResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\UserGetBalanceResponseObject
+ */
 class UserGetBalanceResponse {
 	/**
 	 * @var Price

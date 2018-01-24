@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\Subscription;
 
+/**
+ * Class SubscriptionCancelPackageChangeResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\SubscriptionCancelPackageChangeResponseObject instead
+ */
 class SubscriptionCancelPackageChangeResponse {
 	/**
 	 * @var Subscription[]

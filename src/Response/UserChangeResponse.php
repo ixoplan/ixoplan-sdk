@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\User;
 
+/**
+ * Class UserChangeResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\UserChangeResponseObject instead
+ */
 class UserChangeResponse {
 	/**
 	 * @var User

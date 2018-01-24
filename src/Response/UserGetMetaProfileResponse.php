@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\MetaProfileElement;
 
+/**
+ * Class UserGetMetaProfileResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\UserGetMetaProfileResponseObject instead
+ */
 class UserGetMetaProfileResponse {
 	/**
 	 * @var MetaProfileElement[]

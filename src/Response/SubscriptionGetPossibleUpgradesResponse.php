@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\Package;
 
+/**
+ * Class SubscriptionGetPossibleUpgradesResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\SubscriptionGetPossiblePackageChangesResponseObject instead
+ */
 class SubscriptionGetPossibleUpgradesResponse {
 	/**
 	 * @var Package[]

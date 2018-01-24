@@ -8,6 +8,8 @@ use Ixolit\Dislo\WorkingObjects\Package;
  * Class PackagesListResponse
  *
  * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\PackagesListResponseObject instead
  */
 class PackagesListResponse {
 	/**

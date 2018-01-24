@@ -9,6 +9,8 @@ use Ixolit\Dislo\WorkingObjects\Flexible;
  * Class BillingGetFlexibleByIdentifierResponse
  *
  * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\BillingGetFlexibleByIdentifierResponseObject instead
  */
 class BillingGetFlexibleByIdentifierResponse {
 

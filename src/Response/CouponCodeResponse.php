@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\Client;
 
+/**
+ * Class CouponCodeResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated
+ */
 abstract class CouponCodeResponse {
 	/**
 	 * Coupon code does not exist.

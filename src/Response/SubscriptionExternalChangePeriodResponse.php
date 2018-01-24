@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\Subscription;
 
+/**
+ * Class SubscriptionExternalChangePeriodResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\SubscriptionExternalChangePeriodResponseObject instead
+ */
 class SubscriptionExternalChangePeriodResponse {
 	/**
 	 * @var Subscription

@@ -12,73 +12,71 @@ use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\RequestClient;
 use Ixolit\Dislo\Request\RequestClientExtra;
-use Ixolit\Dislo\Response\BillingCloseActiveRecurringResponse;
-use Ixolit\Dislo\Response\BillingCloseFlexibleResponse;
-use Ixolit\Dislo\Response\BillingCreateFlexibleResponse;
-use Ixolit\Dislo\Response\BillingCreatePaymentResponse;
-use Ixolit\Dislo\Response\BillingExternalCreateChargebackResponse;
-use Ixolit\Dislo\Response\BillingExternalCreateChargeResponse;
-use Ixolit\Dislo\Response\BillingExternalGetProfileResponse;
-use Ixolit\Dislo\Response\BillingGetActiveRecurringResponse;
-use Ixolit\Dislo\Response\BillingGetEventResponse;
-use Ixolit\Dislo\Response\BillingGetEventsForUserResponse;
-use Ixolit\Dislo\Response\BillingGetFlexibleByIdentifierResponse;
-use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
-use Ixolit\Dislo\Response\BillingMethodsGetAvailableResponse;
-use Ixolit\Dislo\Response\BillingMethodsGetResponse;
-use Ixolit\Dislo\Response\CouponCodeCheckResponse;
-use Ixolit\Dislo\Response\CouponCodeValidateResponse;
-use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse;
-use Ixolit\Dislo\Response\PackageGetResponse;
-use Ixolit\Dislo\Response\PackagesListResponse;
-use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponse;
-use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponse;
-use Ixolit\Dislo\Response\SubscriptionCalculatePriceResponse;
-use Ixolit\Dislo\Response\SubscriptionCallSpiResponse;
-use Ixolit\Dislo\Response\SubscriptionCancelPackageChangeResponse;
-use Ixolit\Dislo\Response\SubscriptionCancelResponse;
-use Ixolit\Dislo\Response\SubscriptionChangeResponse;
-use Ixolit\Dislo\Response\SubscriptionCloseResponse;
-use Ixolit\Dislo\Response\SubscriptionContinueResponse;
-use Ixolit\Dislo\Response\SubscriptionCreateAddonResponse;
-use Ixolit\Dislo\Response\SubscriptionCreateResponse;
-use Ixolit\Dislo\Response\SubscriptionExternalAddonCreateResponse;
-use Ixolit\Dislo\Response\SubscriptionExternalChangePeriodResponse;
-use Ixolit\Dislo\Response\SubscriptionExternalChangeResponse;
-use Ixolit\Dislo\Response\SubscriptionExternalCloseResponse;
-use Ixolit\Dislo\Response\SubscriptionExternalCreateResponse;
-use Ixolit\Dislo\Response\SubscriptionGetAllResponse;
-use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponse;
-use Ixolit\Dislo\Response\SubscriptionGetPossibleUpgradesResponse;
-use Ixolit\Dislo\Response\SubscriptionGetResponse;
-use Ixolit\Dislo\Response\UserAuthenticateResponse;
-use Ixolit\Dislo\Response\UserChangeResponse;
-use Ixolit\Dislo\Response\UserCreateResponse;
-use Ixolit\Dislo\Response\UserDeauthenticateResponse;
-use Ixolit\Dislo\Response\UserDeleteResponse;
-use Ixolit\Dislo\Response\UserDisableLoginResponse;
-use Ixolit\Dislo\Response\UserEmailVerificationFinishResponse;
-use Ixolit\Dislo\Response\UserEmailVerificationStartResponse;
-use Ixolit\Dislo\Response\UserEnableLoginResponse;
-use Ixolit\Dislo\Response\UserFindResponse;
-use Ixolit\Dislo\Response\UserGetAuthenticatedResponse;
-use Ixolit\Dislo\Response\UserGetBalanceResponse;
-use Ixolit\Dislo\Response\UserGetMetaProfileResponse;
-use Ixolit\Dislo\Response\UserGetResponse;
-use Ixolit\Dislo\Response\UserGetTokensResponse;
-use Ixolit\Dislo\Response\UserPhoneVerificationFinishResponse;
-use Ixolit\Dislo\Response\UserPhoneVerificationStartResponse;
-use Ixolit\Dislo\Response\UserRecoveryCheckResponse;
-use Ixolit\Dislo\Response\UserRecoveryFinishResponse;
-use Ixolit\Dislo\Response\UserRecoveryStartResponse;
-use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
-use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
-use Ixolit\Dislo\Response\UserUpdateTokenResponse;
-use Ixolit\Dislo\WorkingObjects\AuthToken;
-use Ixolit\Dislo\WorkingObjects\BillingEvent;
-use Ixolit\Dislo\WorkingObjects\Flexible;
-use Ixolit\Dislo\WorkingObjects\Subscription;
-use Ixolit\Dislo\WorkingObjects\User;
+use Ixolit\Dislo\Response\BillingCloseActiveRecurringResponseObject;
+use Ixolit\Dislo\Response\BillingCloseFlexibleResponseObject;
+use Ixolit\Dislo\Response\BillingCreateFlexibleResponseObject;
+use Ixolit\Dislo\Response\BillingCreatePaymentResponseObject;
+use Ixolit\Dislo\Response\BillingExternalCreateChargebackResponseObject;
+use Ixolit\Dislo\Response\BillingExternalCreateChargeResponseObject;
+use Ixolit\Dislo\Response\BillingExternalGetProfileResponseObject;
+use Ixolit\Dislo\Response\BillingGetActiveRecurringResponseObject;
+use Ixolit\Dislo\Response\BillingGetEventResponseObject;
+use Ixolit\Dislo\Response\BillingGetEventsForUserResponseObject;
+use Ixolit\Dislo\Response\BillingGetFlexibleByIdentifierResponseObject;
+use Ixolit\Dislo\Response\BillingGetFlexibleResponseObject;
+use Ixolit\Dislo\Response\BillingMethodsGetAvailableResponseObject;
+use Ixolit\Dislo\Response\BillingMethodsGetResponseObject;
+use Ixolit\Dislo\Response\CouponCodeCheckResponseObject;
+use Ixolit\Dislo\Response\CouponCodeValidateResponseObject;
+use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponseObject;
+use Ixolit\Dislo\Response\PackageGetResponseObject;
+use Ixolit\Dislo\Response\PackagesListResponseObject;
+use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponseObject;
+use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponseObject;
+use Ixolit\Dislo\Response\SubscriptionCalculatePriceResponseObject;
+use Ixolit\Dislo\Response\SubscriptionCallSpiResponseObject;
+use Ixolit\Dislo\Response\SubscriptionCancelPackageChangeResponseObject;
+use Ixolit\Dislo\Response\SubscriptionCancelResponseObject;
+use Ixolit\Dislo\Response\SubscriptionChangeResponseObject;
+use Ixolit\Dislo\Response\SubscriptionCloseResponseObject;
+use Ixolit\Dislo\Response\SubscriptionContinueResponseObject;
+use Ixolit\Dislo\Response\SubscriptionCreateAddonResponseObject;
+use Ixolit\Dislo\Response\SubscriptionCreateResponseObject;
+use Ixolit\Dislo\Response\SubscriptionExternalAddonCreateResponseObject;
+use Ixolit\Dislo\Response\SubscriptionExternalChangePeriodResponseObject;
+use Ixolit\Dislo\Response\SubscriptionExternalChangeResponseObject;
+use Ixolit\Dislo\Response\SubscriptionExternalCloseResponseObject;
+use Ixolit\Dislo\Response\SubscriptionExternalCreateResponseObject;
+use Ixolit\Dislo\Response\SubscriptionGetAllResponseObject;
+use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponseObject;
+use Ixolit\Dislo\Response\SubscriptionGetPossiblePackageChangesResponseObject;
+use Ixolit\Dislo\Response\SubscriptionGetResponseObject;
+use Ixolit\Dislo\Response\UserAuthenticateResponseObject;
+use Ixolit\Dislo\Response\UserChangeResponseObject;
+use Ixolit\Dislo\Response\UserCreateResponseObject;
+use Ixolit\Dislo\Response\UserDeauthenticateResponseObject;
+use Ixolit\Dislo\Response\UserDeleteResponseObject;
+use Ixolit\Dislo\Response\UserDisableLoginResponseObject;
+use Ixolit\Dislo\Response\UserEnableLoginResponseObject;
+use Ixolit\Dislo\Response\UserFindResponseObject;
+use Ixolit\Dislo\Response\UserGetAuthenticatedResponseObject;
+use Ixolit\Dislo\Response\UserGetBalanceResponseObject;
+use Ixolit\Dislo\Response\UserGetMetaProfileResponseObject;
+use Ixolit\Dislo\Response\UserGetResponseObject;
+use Ixolit\Dislo\Response\UserGetTokensResponseObject;
+use Ixolit\Dislo\Response\UserPhoneVerificationFinishResponseObject;
+use Ixolit\Dislo\Response\UserRecoveryCheckResponseObject;
+use Ixolit\Dislo\Response\UserRecoveryFinishResponseObject;
+use Ixolit\Dislo\Response\UserRecoveryStartResponseObject;
+use Ixolit\Dislo\Response\UserSmsVerificationFinishResponseObject;
+use Ixolit\Dislo\Response\UserUpdateTokenResponseObject;
+use Ixolit\Dislo\Response\UserVerificationFinishResponseObject;
+use Ixolit\Dislo\Response\UserVerificationStartResponseObject;
+use Ixolit\Dislo\WorkingObjects\AuthTokenObject;
+use Ixolit\Dislo\WorkingObjects\BillingEventObject;
+use Ixolit\Dislo\WorkingObjects\FlexibleObject;
+use Ixolit\Dislo\WorkingObjects\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjects\UserObject;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -268,21 +266,21 @@ final class FrontendClient {
     }
 
     /**
-     * @param string|int|User|null $userTokenOrId
-     * @param array                $data
+     * @param string|int|UserObject|null $userTokenOrId
+     * @param array                      $data
      *
      * @return array
      */
     private function userToData($userTokenOrId, array $data = []) {
         if ($this->forceTokenMode) {
-            $data['authToken'] = (\is_object($userTokenOrId) && $userTokenOrId instanceof AuthToken)
+            $data['authToken'] = (\is_object($userTokenOrId) && $userTokenOrId instanceof AuthTokenObject)
                 ? (string)$userTokenOrId
                 : $userTokenOrId;
 
             return $data;
         }
 
-        if ($userTokenOrId instanceof User) {
+        if ($userTokenOrId instanceof UserObject) {
             $data['userId'] = $userTokenOrId->getUserId();
 
             return $data;
@@ -325,7 +323,7 @@ final class FrontendClient {
      * @param string|null $packageIdentifier
      * @param string|null $countryCode
      *
-     * @return BillingMethodsGetResponse
+     * @return BillingMethodsGetResponseObject
      */
     public function billingMethodsGet($packageIdentifier = null, $countryCode = null) {
         if (empty($packageIdentifier)) {
@@ -339,7 +337,7 @@ final class FrontendClient {
             $response = $this->request(self::API_URI_BILLING_METHODS_GET_FOR_PACKAGE, $data);
         }
 
-        return BillingMethodsGetResponse::fromResponse($response);
+        return BillingMethodsGetResponseObject::fromResponse($response);
     }
 
     /**
@@ -349,7 +347,7 @@ final class FrontendClient {
      * @param string|null $packageIdentifier
      * @param string|null $countryCode
      *
-     * @return BillingMethodsGetAvailableResponse
+     * @return BillingMethodsGetAvailableResponseObject
      */
     public function billingMethodsGetAvailable($packageIdentifier = null, $countryCode = null) {
         $availableBillingMethods = [];
@@ -359,7 +357,7 @@ final class FrontendClient {
             }
         }
 
-        return new BillingMethodsGetAvailableResponse($availableBillingMethods);
+        return new BillingMethodsGetAvailableResponseObject($availableBillingMethods);
     }
 
     /**
@@ -369,23 +367,23 @@ final class FrontendClient {
      *
      * @see https://docs.dislo.com/display/DIS/CloseFlexible
      *
-     * @param Flexible|int    $flexible
-     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param FlexibleObject|int    $flexible
+     * @param UserObject|int|string $userTokenOrId User authentication token or user ID.
      *
-     * @return BillingCloseFlexibleResponse
+     * @return BillingCloseFlexibleResponseObject
      *
      * @throws DisloException
      */
     public function billingCloseFlexible($flexible, $userTokenOrId) {
         $data = $this->userToData($userTokenOrId, [
-            'flexibleId' => ($flexible instanceof Flexible)
+            'flexibleId' => ($flexible instanceof FlexibleObject)
                 ? $flexible->getFlexibleId()
                 : (int)$flexible
         ]);
 
         $response = $this->request(self::API_URI_BILLING_CLOSE_FLEXIBLE, $data);
 
-        return BillingCloseFlexibleResponse::fromResponse($response);
+        return BillingCloseFlexibleResponseObject::fromResponse($response);
     }
 
     /**
@@ -396,15 +394,15 @@ final class FrontendClient {
      *
      * @see https://docs.dislo.com/display/DIS/CreateFlexible
      *
-     * @param User|int|string $userTokenOrId User authentication token or user ID.
-     * @param string          $billingMethod
-     * @param string          $returnUrl
-     * @param array           $paymentDetails
-     * @param string          $currencyCode
+     * @param UserObject|int|string $userTokenOrId User authentication token or user ID.
+     * @param string                $billingMethod
+     * @param string                $returnUrl
+     * @param array                 $paymentDetails
+     * @param string                $currencyCode
      *
-     * @param null            $subscriptionId
+     * @param null                  $subscriptionId
      *
-     * @return BillingCreateFlexibleResponse
+     * @return BillingCreateFlexibleResponseObject
      */
     public function billingCreateFlexible(
         $userTokenOrId,
@@ -427,7 +425,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_CREATE_FLEXIBLE, $data);
 
-        return BillingCreateFlexibleResponse::fromResponse($response);
+        return BillingCreateFlexibleResponseObject::fromResponse($response);
     }
 
     /**
@@ -440,14 +438,14 @@ final class FrontendClient {
      *
      * @see https://docs.dislo.com/display/DIS/CreatePayment
      *
-     * @param Subscription|int $subscription
-     * @param string           $billingMethod
-     * @param string           $returnUrl
-     * @param array            $paymentDetails
-     * @param User|int|string  $userTokenOrId user authentication token or id
-     * @param string|null      $countryCode
+     * @param SubscriptionObject|int $subscription
+     * @param string                 $billingMethod
+     * @param string                 $returnUrl
+     * @param array                  $paymentDetails
+     * @param UserObject|int|string  $userTokenOrId user authentication token or id
+     * @param string|null            $countryCode
      *
-     * @return BillingCreatePaymentResponse
+     * @return BillingCreatePaymentResponseObject
      */
     public function billingCreatePayment(
         $subscription,
@@ -460,7 +458,7 @@ final class FrontendClient {
         $data = $this->userToData($userTokenOrId, [
             'billingMethod'  => $billingMethod,
             'returnUrl'      => (string)$returnUrl,
-            'subscriptionId' => ($subscription instanceof Subscription)
+            'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'paymentDetails' => $paymentDetails,
@@ -472,7 +470,7 @@ final class FrontendClient {
             $response['redirectUrl'] = $returnUrl;
         }
 
-        return BillingCreatePaymentResponse::fromResponse($response);
+        return BillingCreatePaymentResponseObject::fromResponse($response);
     }
 
     /**
@@ -496,9 +494,9 @@ final class FrontendClient {
      * @param string               $status                status the charge should be created with, you might want to
      *                                                    log erroneous charges in dislo too, but you don't have to.
      *                                                    @see BillingEvent::STATUS_*
-     * @param User|int|string|null $userTokenOrId         User authentication token or user ID.
+     * @param UserObject|int|string|null $userTokenOrId   User authentication token or user ID.
      *
-     * @return BillingExternalCreateChargeResponse
+     * @return BillingExternalCreateChargeResponseObject
      *
      * @throws DisloException
      */
@@ -511,7 +509,7 @@ final class FrontendClient {
         $packageChangeId = null,
         $paymentDetails = [],
         $description = '',
-        $status = BillingEvent::STATUS_SUCCESS,
+        $status = BillingEventObject::STATUS_SUCCESS,
         $userTokenOrId = null
     ) {
         $data = $this->userToData($userTokenOrId, [
@@ -528,7 +526,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_CREATE_CHARGE, $data);
 
-        return BillingExternalCreateChargeResponse::fromResponse($response);
+        return BillingExternalCreateChargeResponseObject::fromResponse($response);
     }
 
     /**
@@ -537,12 +535,12 @@ final class FrontendClient {
      * @see https://docs.dislo.com/display/DIS/ExternalCreateChargeback
      * @see https://docs.dislo.com/display/DIS/External+payments+guide
      *
-     * @param string          $accountIdentifier     the billing account identifier, assigned by dislo staff
-     * @param string          $originalTransactionID external unique id of the original charge
-     * @param string          $description           textual description of the chargeback for support
-     * @param User|int|string $userTokenOrId         User authentication token or user ID.
+     * @param string                $accountIdentifier     the billing account identifier, assigned by dislo staff
+     * @param string                $originalTransactionID external unique id of the original charge
+     * @param string                $description           textual description of the chargeback for support
+     * @param UserObject|int|string $userTokenOrId         User authentication token or user ID.
      *
-     * @return BillingExternalCreateChargebackResponse
+     * @return BillingExternalCreateChargebackResponseObject
      *
      * @throws DisloException
      */
@@ -560,7 +558,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_CREATE_CHARGEBACK, $data);
 
-        return BillingExternalCreateChargebackResponse::fromResponse($response);
+        return BillingExternalCreateChargebackResponseObject::fromResponse($response);
     }
 
     /**
@@ -569,12 +567,12 @@ final class FrontendClient {
      * @see https://docs.dislo.com/display/DIS/ExternalCreateChargeback
      * @see https://docs.dislo.com/display/DIS/External+payments+guide
      *
-     * @param string          $accountIdentifier      the billing account identifier, assigned by dislo staff
-     * @param int             $originalBillingEventId ID of the original billing event.
-     * @param string          $description            textual description of the chargeback for support
-     * @param User|int|string $userTokenOrId          User authentication token or user ID.
+     * @param string                $accountIdentifier      the billing account identifier, assigned by dislo staff
+     * @param int                   $originalBillingEventId ID of the original billing event.
+     * @param string                $description            textual description of the chargeback for support
+     * @param UserObject|int|string $userTokenOrId          User authentication token or user ID.
      *
-     * @return BillingExternalCreateChargebackResponse
+     * @return BillingExternalCreateChargebackResponseObject
      *
      * @throws DisloException
      */
@@ -592,7 +590,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_CREATE_CHARGEBACK, $data);
 
-        return BillingExternalCreateChargebackResponse::fromResponse($response);
+        return BillingExternalCreateChargebackResponseObject::fromResponse($response);
     }
 
     /**
@@ -601,10 +599,10 @@ final class FrontendClient {
      * @see https://docs.dislo.com/display/DIS/ExternalGetProfile
      * @see https://docs.dislo.com/display/DIS/External+payments+guide
      *
-     * @param string          $externalId    ID for the external profile
-     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param string                $externalId    ID for the external profile
+     * @param UserObject|int|string $userTokenOrId User authentication token or user ID.
      *
-     * @return BillingExternalGetProfileResponse
+     * @return BillingExternalGetProfileResponseObject
      *
      * @throws DisloException
      */
@@ -615,7 +613,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_GET_PROFILE, $data);
 
-        return BillingExternalGetProfileResponse::fromResponse($response);
+        return BillingExternalGetProfileResponseObject::fromResponse($response);
     }
 
     /**
@@ -624,23 +622,23 @@ final class FrontendClient {
      * @see https://docs.dislo.com/display/DIS/ExternalGetProfile
      * @see https://docs.dislo.com/display/DIS/External+payments+guide
      *
-     * @param Subscription|int $subscription  ID for the subscription expected to have an external profile
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription  ID for the subscription expected to have an external profile
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return BillingExternalGetProfileResponse
+     * @return BillingExternalGetProfileResponseObject
      *
      * @throws DisloException
      */
     public function billingExternalGetProfileBySubscriptionId($subscription, $userTokenOrId = null) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId' => ($subscription instanceof Subscription)
+            'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
         ]);
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_GET_PROFILE, $data);
 
-        return BillingExternalGetProfileResponse::fromResponse($response);
+        return BillingExternalGetProfileResponseObject::fromResponse($response);
     }
 
     /**
@@ -648,10 +646,10 @@ final class FrontendClient {
      *
      * @see https://docs.dislo.com/display/DIS/GetBillingEvent
      *
-     * @param int             $billingEventId unique id of the billing event
-     * @param User|int|string $userTokenOrId  User authentication token or user ID.
+     * @param int                   $billingEventId unique id of the billing event
+     * @param UserObject|int|string $userTokenOrId  User authentication token or user ID.
      *
-     * @return BillingGetEventResponse
+     * @return BillingGetEventResponseObject
      *
      * @throws DisloException
      */
@@ -662,7 +660,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_GET_EVENT, $data);
 
-        return BillingGetEventResponse::fromResponse($response);
+        return BillingGetEventResponseObject::fromResponse($response);
     }
 
     /**
@@ -670,12 +668,12 @@ final class FrontendClient {
      *
      * @see https://docs.dislo.com/display/DIS/GetBillingEventsForUser
      *
-     * @param User|int|string $userTokenOrId User authentication token or user ID.
-     * @param int             $limit
-     * @param int             $offset
-     * @param string          $orderDir
+     * @param UserObject|int|string $userTokenOrId User authentication token or user ID.
+     * @param int                   $limit
+     * @param int                   $offset
+     * @param string                $orderDir
      *
-     * @return BillingGetEventsForUserResponse
+     * @return BillingGetEventsForUserResponseObject
      *
      * @throws DisloException
      */
@@ -693,15 +691,15 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_GET_EVENTS_FOR_USER, $data);
 
-        return BillingGetEventsForUserResponse::fromResponse($response);
+        return BillingGetEventsForUserResponseObject::fromResponse($response);
     }
 
     /**
      * Get flexible payment method for a user
      *
-     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param UserObject|int|string $userTokenOrId User authentication token or user ID.
      *
-     * @return BillingGetFlexibleResponse
+     * @return BillingGetFlexibleResponseObject
      *
      * @throws DisloException
      */
@@ -710,16 +708,16 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_GET_FLEXIBLE, $data);
 
-        return BillingGetFlexibleResponse::fromResponse($response);
+        return BillingGetFlexibleResponseObject::fromResponse($response);
     }
 
     /**
      * Get specific payment method for a user by its identifier
      *
-     * @param int             $flexibleIdentifier
-     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param int                   $flexibleIdentifier
+     * @param UserObject|int|string $userTokenOrId User authentication token or user ID.
      *
-     * @return BillingGetFlexibleByIdentifierResponse
+     * @return BillingGetFlexibleByIdentifierResponseObject
      *
      * @throws DisloException
      * @throws ObjectNotFoundException
@@ -731,51 +729,51 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_GET_FLEXIBLE_BY_ID, $data);
 
-        return BillingGetFlexibleByIdentifierResponse::fromResponse($response);
+        return BillingGetFlexibleByIdentifierResponseObject::fromResponse($response);
     }
 
     /**
      * Get active recurring payment method for a subscription
      *
-     * @param Subscription|int $subscription  ID for the subscription expected to have an external profile
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription  ID for the subscription expected to have an external profile
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return BillingGetActiveRecurringResponse
+     * @return BillingGetActiveRecurringResponseObject
      *
      * @throws DisloException
      */
     public function billingGetActiveRecurring($subscription, $userTokenOrId) {
         $data = $this->userToData($userTokenOrId, [
-            ($subscription instanceof Subscription)
+            ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
         ]);
 
         $response = $this->request(self::API_URI_BILLING_GET_ACTIVE_RECURRING, $data);
 
-        return BillingGetActiveRecurringResponse::fromResponse($response);
+        return BillingGetActiveRecurringResponseObject::fromResponse($response);
     }
 
     /**
      * Close active recurring payment method for a subscription
      *
-     * @param Subscription|int $subscription  ID for the subscription expected to have an external profile
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription  ID for the subscription expected to have an external profile
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return BillingCloseActiveRecurringResponse
+     * @return BillingCloseActiveRecurringResponseObject
      *
      * @throws DisloException
      */
     public function billingCloseActiveRecurring($subscription, $userTokenOrId) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId' => ($subscription instanceof Subscription)
+            'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
         ]);
 
         $response = $this->request(self::API_URI_BILLING_CLOSE_ACTIVE_RECURRING, $data);
 
-        return BillingCloseActiveRecurringResponse::fromResponse($response);
+        return BillingCloseActiveRecurringResponseObject::fromResponse($response);
     }
 
     //endregion
@@ -787,12 +785,12 @@ final class FrontendClient {
      *
      * @see https://docs.dislo.com/display/DIS/CalculateAddonPrice
      *
-     * @param Subscription|int $subscription
-     * @param string|string[]  $packageIdentifiers
-     * @param string|null      $couponCode
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription
+     * @param string|string[]        $packageIdentifiers
+     * @param string|null            $couponCode
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return SubscriptionCalculateAddonPriceResponse
+     * @return SubscriptionCalculateAddonPriceResponseObject
      *
      * @throws DisloException
      */
@@ -803,7 +801,7 @@ final class FrontendClient {
         $userTokenOrId
     ) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId'     => ($subscription instanceof Subscription)
+            'subscriptionId'     => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'packageIdentifiers' => $packageIdentifiers,
@@ -812,7 +810,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CALCULATE_ADDON_PRICE, $data);
 
-        return SubscriptionCalculateAddonPriceResponse::fromResponse($response);
+        return SubscriptionCalculateAddonPriceResponseObject::fromResponse($response);
     }
 
     /**
@@ -820,13 +818,13 @@ final class FrontendClient {
      *
      * @see https://docs.dislo.com/display/DIS/CalculatePackageChange
      *
-     * @param Subscription|int $subscription
-     * @param string           $newPackageIdentifier
-     * @param string|null      $couponCode
-     * @param User|string|int  $userTokenOrId User authentication token or user ID.
-     * @param string[]         $addonPackageIdentifiers
+     * @param SubscriptionObject|int $subscription
+     * @param string                 $newPackageIdentifier
+     * @param string|null            $couponCode
+     * @param UserObject|string|int  $userTokenOrId User authentication token or user ID.
+     * @param string[]               $addonPackageIdentifiers
      *
-     * @return SubscriptionCalculatePackageChangeResponse
+     * @return SubscriptionCalculatePackageChangeResponseObject
      */
     public function subscriptionCalculatePackageChange(
         $subscription,
@@ -836,7 +834,7 @@ final class FrontendClient {
         $addonPackageIdentifiers = []
     ) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId'          => ($subscription instanceof Subscription)
+            'subscriptionId'          => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'newPackageIdentifier'    => $newPackageIdentifier,
@@ -846,7 +844,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CALCULATE_PACKAGE_CHANGE, $data);
 
-        return SubscriptionCalculatePackageChangeResponse::fromResponse($response);
+        return SubscriptionCalculatePackageChangeResponseObject::fromResponse($response);
     }
 
     /**
@@ -854,13 +852,13 @@ final class FrontendClient {
      *
      * @see https://docs.dislo.com/display/DIS/CalculateSubscriptionPrice
      *
-     * @param string          $packageIdentifier    the package for the subscription
-     * @param string          $currencyCode         currency which should be used for the user
-     * @param string|null     $couponCode           optional - coupon which should be applied
-     * @param string|string[] $addonPackageIdentifiers optional - additional addon packages
-     * @param User|int|string $userTokenOrId        User authentication token or user ID.
+     * @param string                $packageIdentifier       the package for the subscription
+     * @param string                $currencyCode            currency which should be used for the user
+     * @param string|null           $couponCode              optional - coupon which should be applied
+     * @param string|string[]       $addonPackageIdentifiers optional - additional addon packages
+     * @param UserObject|int|string $userTokenOrId           User authentication token or user ID.
      *
-     * @return SubscriptionCalculatePriceResponse
+     * @return SubscriptionCalculatePriceResponseObject
      */
     public function subscriptionCalculatePrice(
         $packageIdentifier,
@@ -878,7 +876,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CALCULATE_PRICE, $data);
 
-        return SubscriptionCalculatePriceResponse::fromResponse($response);
+        return SubscriptionCalculatePriceResponseObject::fromResponse($response);
     }
 
     /**
@@ -889,34 +887,34 @@ final class FrontendClient {
      *
      * @see https://docs.dislo.com/display/DIS/CancelPackageChange
      *
-     * @param Subscription|int $subscription  the unique subscription id to change
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription  the unique subscription id to change
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return SubscriptionCancelPackageChangeResponse
+     * @return SubscriptionCancelPackageChangeResponseObject
      */
     public function subscriptionCancelPackageChange($subscription, $userTokenOrId = null) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId' => ($subscription instanceof Subscription)
+            'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
         ]);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CANCEL_PACKAGE_CHANGE, $data);
 
-        return SubscriptionCancelPackageChangeResponse::fromResponse($response);
+        return SubscriptionCancelPackageChangeResponseObject::fromResponse($response);
     }
 
     /**
      * Cancels a single subscription.
      *
-     * @param Subscription|int $subscription         the id of the subscription you want to cancel
-     * @param string           $cancelReason         optional - the reason why the user canceled (should be predefined
-     *                                               reasons by your frontend)
-     * @param string           $userCancelReason     optional - a user defined cancellation reason
-     * @param string           $userComments         optional - comments from the user
-     * @param User|int|string  $userTokenOrId        User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription     the id of the subscription you want to cancel
+     * @param string                 $cancelReason     optional - the reason why the user canceled (should be predefined
+     *                                                 reasons by your frontend)
+     * @param string                 $userCancelReason optional - a user defined cancellation reason
+     * @param string                 $userComments     optional - comments from the user
+     * @param UserObject|int|string  $userTokenOrId    User authentication token or user ID.
      *
-     * @return SubscriptionCancelResponse
+     * @return SubscriptionCancelResponseObject
      */
     public function subscriptionCancel(
         $subscription,
@@ -926,7 +924,7 @@ final class FrontendClient {
         $userTokenOrId = null
     ) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId'   => ($subscription instanceof Subscription)
+            'subscriptionId'   => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'cancelReason'     => $cancelReason,
@@ -936,23 +934,23 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CANCEL, $data);
 
-        return SubscriptionCancelResponse::fromResponse($response);
+        return SubscriptionCancelResponseObject::fromResponse($response);
     }
 
     /**
      * Change the package for a subscription.
      *
-     * @param Subscription|int $subscription                the unique subscription id to change
-     * @param string           $newPackageIdentifier        the identifier of the new package
-     * @param string[]         $addonPackageIdentifiers     optional - package identifiers of the addons
-     * @param string           $couponCode                  optional - the coupon code to apply
-     * @param array            $metaData                    optional - additional data (if supported by Dislo
-     *                                                      installation)
-     * @param bool             $useFlexible                 use the existing flexible payment method from the user to
-     *                                                      pay for the package change immediately
-     * @param User|int|string  $userTokenOrId               User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription            the unique subscription id to change
+     * @param string                 $newPackageIdentifier    the identifier of the new package
+     * @param string[]               $addonPackageIdentifiers optional - package identifiers of the addons
+     * @param string                 $couponCode              optional - the coupon code to apply
+     * @param array                  $metaData                optional - additional data (if supported by Dislo
+     *                                                        installation)
+     * @param bool                   $useFlexible             use the existing flexible payment method from the user to
+     *                                                        pay for the package change immediately
+     * @param UserObject|int|string  $userTokenOrId           User authentication token or user ID.
      *
-     * @return SubscriptionChangeResponse
+     * @return SubscriptionChangeResponseObject
      */
     public function subscriptionChange(
         $subscription,
@@ -964,7 +962,7 @@ final class FrontendClient {
         $userTokenOrId = null
     ) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId'       => ($subscription instanceof Subscription)
+            'subscriptionId'       => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'newPackageIdentifier' => $newPackageIdentifier,
@@ -983,7 +981,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CHANGE, $data);
 
-        return SubscriptionChangeResponse::fromResponse($response);
+        return SubscriptionChangeResponseObject::fromResponse($response);
     }
 
     /**
@@ -992,7 +990,7 @@ final class FrontendClient {
      * @param string      $couponCode
      * @param string|null $event @see self::COUPON_EVENT_*
      *
-     * @return CouponCodeCheckResponse
+     * @return CouponCodeCheckResponseObject
      */
     public function couponCodeCheck($couponCode, $event = null) {
         $data = [
@@ -1005,22 +1003,22 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_COUPON_CODE_CHECK, $data);
 
-        return CouponCodeCheckResponse::fromResponse($response, $couponCode, $event);
+        return CouponCodeCheckResponseObject::fromResponse($response, $couponCode, $event);
     }
 
     /**
      * Closes a subscription immediately
      *
-     * @param Subscription|int $subscription      the id of the subscription you want to close
-     * @param string           $closeReason       optional - the reason why the subscription was closed (should be
-     *                                            predefined reasons by your frontend)
-     * @param User|int|string  $userTokenOrId     User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription  the id of the subscription you want to close
+     * @param string                 $closeReason   optional - the reason why the subscription was closed (should be
+     *                                              predefined reasons by your frontend)
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return SubscriptionCloseResponse
+     * @return SubscriptionCloseResponseObject
      */
     public function subscriptionClose($subscription, $closeReason = '', $userTokenOrId = null) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId' => ($subscription instanceof Subscription)
+            'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'closeReason'    => $closeReason,
@@ -1028,42 +1026,42 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CLOSE, $data);
 
-        return SubscriptionCloseResponse::fromResponse($response);
+        return SubscriptionCloseResponseObject::fromResponse($response);
     }
 
     /**
      * Continues a previously cancelled subscription (undo cancellation).
      *
-     * @param Subscription|int $subscription  the id of the subscription you want to close
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription  the id of the subscription you want to close
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return SubscriptionContinueResponse
+     * @return SubscriptionContinueResponseObject
      */
     public function subscriptionContinue($subscription, $userTokenOrId = null) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId' => ($subscription instanceof Subscription)
+            'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
         ]);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CONTINUE, $data);
 
-        return SubscriptionContinueResponse::fromResponse($response);
+        return SubscriptionContinueResponseObject::fromResponse($response);
     }
 
     /**
      * Create an addon subscription.
      *
-     * @param Subscription|int $subscription
-     * @param string[]         $packageIdentifiers
-     * @param string           $couponCode
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription
+     * @param string[]               $packageIdentifiers
+     * @param string                 $couponCode
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return SubscriptionCreateAddonResponse
+     * @return SubscriptionCreateAddonResponseObject
      */
     public function subscriptionCreateAddon($subscription, $packageIdentifiers, $couponCode = '', $userTokenOrId) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId'     => ($subscription instanceof Subscription)
+            'subscriptionId'     => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'packageIdentifiers' => $packageIdentifiers,
@@ -1075,7 +1073,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CREATE_ADDON, $data);
 
-        return SubscriptionCreateAddonResponse::fromResponse($response);
+        return SubscriptionCreateAddonResponseObject::fromResponse($response);
     }
 
     /**
@@ -1088,13 +1086,13 @@ final class FrontendClient {
      * NOTE: Always observe the needsBilling flag in the response. If it is true, call createPayment afterwards. If
      * it is false, you can use createFlexible to register a payment method without a payment. Don't mix up the two!
      *
-     * @param User|int|string $userTokenOrId User authentication token or user ID.
-     * @param string          $packageIdentifier
-     * @param string          $currencyCode
-     * @param string          $couponCode
-     * @param array           $addonPackageIdentifiers
+     * @param UserObject|int|string $userTokenOrId User authentication token or user ID.
+     * @param string                $packageIdentifier
+     * @param string                $currencyCode
+     * @param string                $couponCode
+     * @param array                 $addonPackageIdentifiers
      *
-     * @return SubscriptionCreateResponse
+     * @return SubscriptionCreateResponseObject
      */
     public function subscriptionCreate(
         $userTokenOrId,
@@ -1117,23 +1115,23 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CREATE, $data);
 
-        return SubscriptionCreateResponse::fromResponse($response);
+        return SubscriptionCreateResponseObject::fromResponse($response);
     }
 
     /**
      * Change the package for an external subscription.
      *
-     * @param Subscription|int $subscription                the unique subscription id to change
-     * @param string           $newPackageIdentifier        the identifier for the new package.
-     * @param \DateTime        $newPeriodEnd                end date, has to be >= now.
-     * @param string[]         $addonPackageIdentifiers     optional - package identifiers of the addons
-     * @param null             $newExternalId               if provided, a new external profile will be created for the
-     *                                                      given subscription, the old one is invalidated
-     * @param array            $extraData                   required when newExternalId is set, key value data for
-     *                                                      external profile
-     * @param User|int|string  $userTokenOrId               User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription            the unique subscription id to change
+     * @param string                 $newPackageIdentifier    the identifier for the new package.
+     * @param \DateTime              $newPeriodEnd            end date, has to be >= now.
+     * @param string[]               $addonPackageIdentifiers optional - package identifiers of the addons
+     * @param null                   $newExternalId           if provided, a new external profile will be created for the
+     *                                                        given subscription, the old one is invalidated
+     * @param array                  $extraData               required when newExternalId is set, key value data for
+     *                                                        external profile
+     * @param UserObject|int|string  $userTokenOrId           User authentication token or user ID.
      *
-     * @return SubscriptionExternalChangeResponse
+     * @return SubscriptionExternalChangeResponseObject
      */
     public function subscriptionExternalChange(
         $subscription,
@@ -1147,7 +1145,7 @@ final class FrontendClient {
         $newPeriodEnd = clone $newPeriodEnd;
 
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId'       => ($subscription instanceof Subscription)
+            'subscriptionId'       => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'newPackageIdentifier' => $newPackageIdentifier,
@@ -1166,23 +1164,23 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_EXTERNAL_CHANGE, $data);
 
-        return SubscriptionExternalChangeResponse::fromResponse($response);
+        return SubscriptionExternalChangeResponseObject::fromResponse($response);
     }
 
     /**
      * Change the period end of an external subscription
      *
-     * @param Subscription|int $subscription
-     * @param \DateTime        $newPeriodEnd
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription
+     * @param \DateTime              $newPeriodEnd
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return SubscriptionExternalChangePeriodResponse
+     * @return SubscriptionExternalChangePeriodResponseObject
      */
     public function subscriptionExternalChangePeriod($subscription, \DateTime $newPeriodEnd, $userTokenOrId = null) {
         $newPeriodEnd = clone $newPeriodEnd;
 
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId' => ($subscription instanceof Subscription)
+            'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'newPeriodEnd'   => $newPeriodEnd
@@ -1192,21 +1190,21 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_EXTERNAL_CHANGE_PERIOD, $data);
 
-        return SubscriptionExternalChangePeriodResponse::fromResponse($response);
+        return SubscriptionExternalChangePeriodResponseObject::fromResponse($response);
     }
 
     /**
      * Closes an external subscription immediately.
      *
-     * @param Subscription|int $subscription
-     * @param string           $closeReason
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription
+     * @param string                 $closeReason
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return SubscriptionExternalCloseResponse
+     * @return SubscriptionExternalCloseResponseObject
      */
     public function subscriptionExternalClose($subscription, $closeReason = '', $userTokenOrId = null) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId' => ($subscription instanceof Subscription)
+            'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
         ]);
@@ -1217,21 +1215,21 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_EXTERNAL_CLOSE, $data);
 
-        return SubscriptionExternalCloseResponse::fromResponse($response);
+        return SubscriptionExternalCloseResponseObject::fromResponse($response);
     }
 
     /**
      * Create an external addon subscription.
      *
-     * @param Subscription|int $subscription
-     * @param string[]         $packageIdentifiers
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription
+     * @param string[]               $packageIdentifiers
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return SubscriptionExternalAddonCreateResponse
+     * @return SubscriptionExternalAddonCreateResponseObject
      */
     public function subscriptionExternalAddonCreate($subscription, $packageIdentifiers, $userTokenOrId) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId'     => ($subscription instanceof Subscription)
+            'subscriptionId'     => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'packageIdentifiers' => $packageIdentifiers,
@@ -1239,25 +1237,25 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_EXTERNAL_CREATE_ADDON_SUBSCRIPTION, $data);
 
-        return SubscriptionExternalAddonCreateResponse::fromResponse($response);
+        return SubscriptionExternalAddonCreateResponseObject::fromResponse($response);
     }
 
     /**
      * Create an external subscription.
      *
-     * @param string          $packageIdentifier            the package for the subscription
-     * @param string          $externalId                   unique id for the external profile that is created for this
-     *                                                      subscription
-     * @param array           $extraData                    key/value array where you can save whatever you need with
-     *                                                      the external profile, you can fetch this later on by
-     *                                                      passing the externalId to "billing/externalGetProfile"
-     * @param string          $currencyCode                 currency which should be used for the user
-     * @param array           $addonPackageIdentifiers      optional - additional addon packages
-     * @param \DateTime|null  $periodEnd                    end of the first period, if omitted, dislo will calculate
-     *                                                      the period end itself by using the package duration
-     * @param User|int|string $userTokenOrId                User authentication token or user ID.
+     * @param string                $packageIdentifier       the package for the subscription
+     * @param string                $externalId              unique id for the external profile that is created for this
+     *                                                       subscription
+     * @param array                 $extraData               key/value array where you can save whatever you need with
+     *                                                       the external profile, you can fetch this later on by
+     *                                                       passing the externalId to "billing/externalGetProfile"
+     * @param string                $currencyCode            currency which should be used for the user
+     * @param array                 $addonPackageIdentifiers optional - additional addon packages
+     * @param \DateTime|null        $periodEnd               end of the first period, if omitted, dislo will calculate
+     *                                                       the period end itself by using the package duration
+     * @param UserObject|int|string $userTokenOrId           User authentication token or user ID.
      *
-     * @return SubscriptionExternalCreateResponse
+     * @return SubscriptionExternalCreateResponseObject
      */
     public function subscriptionExternalCreate(
         $packageIdentifier,
@@ -1286,24 +1284,24 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_EXTERNAL_CREATE, $data);
 
-        return SubscriptionExternalCreateResponse::fromResponse($response);
+        return SubscriptionExternalCreateResponseObject::fromResponse($response);
     }
 
     /**
      * Call a service provider function related to the subscription. Specific calls depend on the SPI connected to
      * the service behind the subscription.
      *
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
-     * @param Subscription|int $subscriptionId
-     * @param string           $method
-     * @param array            $params
-     * @param int|null         $serviceId
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
+     * @param SubscriptionObject|int $subscriptionId
+     * @param string                 $method
+     * @param array                  $params
+     * @param int|null               $serviceId
      *
-     * @return SubscriptionCallSpiResponse
+     * @return SubscriptionCallSpiResponseObject
      */
     public function subscriptionCallSpi($userTokenOrId, $subscriptionId, $method, $params, $serviceId = null) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId' => ($subscriptionId instanceof Subscription)
+            'subscriptionId' => ($subscriptionId instanceof SubscriptionObject)
                 ? $subscriptionId->getSubscriptionId()
                 : $subscriptionId,
             'method'         => $method,
@@ -1313,19 +1311,19 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CALL_SPI, $data);
 
-        return SubscriptionCallSpiResponse::fromResponse($response);
+        return SubscriptionCallSpiResponseObject::fromResponse($response);
     }
 
     /**
-     * @param User|int|string  $userTokenOrId
-     * @param Subscription|int $subscriptionId
-     * @param string           $type           'queued' or 'immediate'
+     * @param UserObject|int|string  $userTokenOrId
+     * @param SubscriptionObject|int $subscriptionId
+     * @param string                 $type           'queued' or 'immediate'
      *
-     * @return SubscriptionGetPossibleUpgradesResponse
+     * @return SubscriptionGetPossiblePackageChangesResponseObject
      */
     public function subscriptionGetPossiblePackageChanges($userTokenOrId, $subscriptionId, $type = '') {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId' => ($subscriptionId instanceof Subscription )
+            'subscriptionId' => ($subscriptionId instanceof SubscriptionObject)
                 ? $subscriptionId->getSubscriptionId()
                 : $subscriptionId,
         ]);
@@ -1336,7 +1334,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_GET_POSSIBLE_PACKAGE_CHANGES, $data);
 
-        return SubscriptionGetPossibleUpgradesResponse::fromResponse($response);
+        return SubscriptionGetPossiblePackageChangesResponseObject::fromResponse($response);
     }
 
     /**
@@ -1344,7 +1342,7 @@ final class FrontendClient {
      *
      * @param string|null $serviceIdentifier
      *
-     * @return PackagesListResponse
+     * @return PackagesListResponseObject
      */
     public function packageList($serviceIdentifier = null) {
         $data = [];
@@ -1354,13 +1352,13 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_PACKAGE_LIST, $data);
 
-        return PackagesListResponse::fromResponse($response);
+        return PackagesListResponseObject::fromResponse($response);
     }
 
     /**
      * @param string $packageIdentifier
      *
-     * @return PackageGetResponse
+     * @return PackageGetResponseObject
      *
      * @throws ObjectNotFoundException
      */
@@ -1369,7 +1367,7 @@ final class FrontendClient {
 
         foreach ($packages as $package) {
             if ($package->getPackageIdentifier() == $packageIdentifier) {
-                return new PackageGetResponse($package);
+                return new PackageGetResponseObject($package);
             }
         }
 
@@ -1379,46 +1377,46 @@ final class FrontendClient {
     /**
      * Retrieves a single subscription by its id.
      *
-     * @param Subscription|int $subscription
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
+     * @param SubscriptionObject|int $subscription
+     * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return SubscriptionGetResponse
+     * @return SubscriptionGetResponseObject
      */
     public function subscriptionGet($subscription, $userTokenOrId = null) {
         $data = $this->userToData($userTokenOrId, [
-            'subscriptionId' => ($subscription instanceof Subscription)
+            'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
         ]);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_GET, $data);
 
-        return SubscriptionGetResponse::fromResponse($response);
+        return SubscriptionGetResponseObject::fromResponse($response);
     }
 
     /**
      * Retrieves all subscriptions for a user.
      *
-     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param UserObject|int|string $userTokenOrId User authentication token or user ID.
      *
-     * @return SubscriptionGetAllResponse
+     * @return SubscriptionGetAllResponseObject
      */
     public function subscriptionGetAll($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_GET_ALL, $data);
 
-        return SubscriptionGetAllResponse::fromResponse($response);
+        return SubscriptionGetAllResponseObject::fromResponse($response);
     }
 
     /**
-     * @param int                  $subscriptionId
-     * @param User|int|string|null $userTokenOrId
-     * @param int                  $limit
-     * @param int                  $offset
-     * @param string               $orderDir
+     * @param int                        $subscriptionId
+     * @param UserObject|int|string|null $userTokenOrId
+     * @param int                        $limit
+     * @param int                        $offset
+     * @param string                     $orderDir
      *
-     * @return SubscriptionGetPeriodEventsResponse
+     * @return SubscriptionGetPeriodEventsResponseObject
      */
     public function subscriptionGetPeriodEvents(
         $subscriptionId,
@@ -1436,7 +1434,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_GET_PERIOD_EVENTS, $data);
 
-        return SubscriptionGetPeriodEventsResponse::fromResponse($response);
+        return SubscriptionGetPeriodEventsResponseObject::fromResponse($response);
     }
 
     /**
@@ -1448,9 +1446,14 @@ final class FrontendClient {
      * @param array  $addonPackageIdentifiers
      * @param string $currencyCode
      *
-     * @return CouponCodeValidateResponse
+     * @return CouponCodeValidateResponseObject
      */
-    public function couponCodeValidateNew($couponCode, $packageIdentifier, $addonPackageIdentifiers = [], $currencyCode) {
+    public function couponCodeValidateNew(
+        $couponCode,
+        $packageIdentifier,
+        $addonPackageIdentifiers = [],
+        $currencyCode
+    ) {
         $data = [
             'couponCode'              => $couponCode,
             'packageIdentifier'       => $packageIdentifier,
@@ -1461,21 +1464,21 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_COUPON_CODE_VALIDATE, $data);
 
-        return CouponCodeValidateResponse::fromResponse($response, $couponCode, self::COUPON_EVENT_START);
+        return CouponCodeValidateResponseObject::fromResponse($response, $couponCode, self::COUPON_EVENT_START);
     }
 
     /**
      * Check if a coupon is valid for the given context package/addons/event/user/sub and calculates the discounted
      * price, for upgrades
      *
-     * @param string           $couponCode
-     * @param string           $packageIdentifier
-     * @param array            $addonPackageIdentifiers
-     * @param string           $currencyCode
-     * @param User|string|int  $userTokenOrId
-     * @param Subscription|int $subscription
+     * @param string                 $couponCode
+     * @param string                 $packageIdentifier
+     * @param array                  $addonPackageIdentifiers
+     * @param string                 $currencyCode
+     * @param UserObject|string|int  $userTokenOrId
+     * @param SubscriptionObject|int $subscription
      *
-     * @return CouponCodeValidateResponse
+     * @return CouponCodeValidateResponseObject
      */
     public function couponCodeValidateUpgrade(
         $couponCode,
@@ -1491,14 +1494,14 @@ final class FrontendClient {
             'addonPackageIdentifiers' => $addonPackageIdentifiers,
             'event'                   => self::COUPON_EVENT_UPGRADE,
             'currencyCode'            => $currencyCode,
-            'subscriptionId'          => ($subscription instanceof Subscription)
+            'subscriptionId'          => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
         ]);
 
         $response = $this->request(self::API_URI_COUPON_CODE_VALIDATE, $data);
 
-        return CouponCodeValidateResponse::fromResponse($response, $couponCode, self::COUPON_EVENT_UPGRADE);
+        return CouponCodeValidateResponseObject::fromResponse($response, $couponCode, self::COUPON_EVENT_UPGRADE);
     }
 
     //endregion
@@ -1517,7 +1520,8 @@ final class FrontendClient {
      * @param bool        $ignoreRateLimit
      * @param string|null $language
      *
-     * @return UserAuthenticateResponse
+     * @return UserAuthenticateResponseObject
+     *
      * @throws AuthenticationException
      * @throws AuthenticationInvalidCredentialsException
      * @throws AuthenticationRateLimitedException
@@ -1558,7 +1562,7 @@ final class FrontendClient {
             }
         }
 
-        return UserAuthenticateResponse::fromResponse($response);
+        return UserAuthenticateResponseObject::fromResponse($response);
     }
 
     /**
@@ -1566,7 +1570,7 @@ final class FrontendClient {
      *
      * @param string $authToken
      *
-     * @return UserDeauthenticateResponse
+     * @return UserDeauthenticateResponseObject
      */
     public function userDeauthenticate($authToken) {
         $data     = [
@@ -1575,18 +1579,18 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_DEAUTHENTICATE, $data);
 
-        return UserDeauthenticateResponse::fromResponse($response);
+        return UserDeauthenticateResponseObject::fromResponse($response);
     }
 
     /**
      * Change data of an existing user.
      *
-     * @param User|string|int $userTokenOrId the unique user id to change
-     * @param string          $language      iso-2-letter language key to use for this user
-     * @param string[]        $metaData      meta data for this user (such as first name, last names etc.). NOTE: these
-     *                                       meta data keys must exist in the meta data profile in Distribload
+     * @param UserObject|string|int $userTokenOrId the unique user id to change
+     * @param string                $language      iso-2-letter language key to use for this user
+     * @param string[]              $metaData      meta data for this user (such as first name, last names etc.). NOTE: these
+     *                                             meta data keys must exist in the meta data profile in Distribload
      *
-     * @return UserChangeResponse
+     * @return UserChangeResponseObject
      */
     public function userChange($userTokenOrId, $language, $metaData) {
         $data = $this->userToData($userTokenOrId, [
@@ -1596,16 +1600,16 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_CHANGE, $data);
 
-        return UserChangeResponse::fromResponse($response);
+        return UserChangeResponseObject::fromResponse($response);
     }
 
     /**
      * Change password of an existing user.
      *
-     * @param User|string|int $userTokenOrId the unique user id to change
-     * @param string          $newPassword   the new password
+     * @param UserObject|string|int $userTokenOrId the unique user id to change
+     * @param string                $newPassword   the new password
      *
-     * @return UserChangeResponse
+     * @return UserChangeResponseObject
      */
     public function userChangePassword($userTokenOrId, $newPassword) {
         $data = $this->userToData($userTokenOrId, [
@@ -1614,7 +1618,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_CHANGE_PASSWORD, $data);
 
-        return UserChangeResponse::fromResponse($response);
+        return UserChangeResponseObject::fromResponse($response);
     }
 
     /**
@@ -1625,7 +1629,7 @@ final class FrontendClient {
      * @param string[] $metaData          meta data for this user (such as first name, last names etc.). NOTE: these
      *                                    meta data keys must exist in the meta data profile in Distribload
      *
-     * @return UserCreateResponse
+     * @return UserCreateResponseObject
      */
     public function userCreate($language, $plaintextPassword, $metaData) {
         $data = [
@@ -1636,108 +1640,108 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_CREATE, $data);
 
-        return UserCreateResponse::fromResponse($response);
+        return UserCreateResponseObject::fromResponse($response);
     }
 
     /**
      * Soft-delete a user.
      *
-     * @param User|string|int $userTokenOrId
+     * @param UserObject|string|int $userTokenOrId
      *
-     * @return UserDeleteResponse
+     * @return UserDeleteResponseObject
      */
     public function userDelete($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
         $response = $this->request(self::API_URI_USER_DELETE, $data);
 
-        return UserDeleteResponse::fromResponse($response);
+        return UserDeleteResponseObject::fromResponse($response);
     }
 
     /**
      * Disable website login capability for user.
      *
-     * @param User|string|int $userTokenOrId
+     * @param UserObject|string|int $userTokenOrId
      *
-     * @return UserDisableLoginResponse
+     * @return UserDisableLoginResponseObject
      */
     public function userDisableLogin($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
         $response = $this->request(self::API_URI_USER_DISABLE_LOGIN, $data);
 
-        return UserDisableLoginResponse::fromResponse($response);
+        return UserDisableLoginResponseObject::fromResponse($response);
     }
 
     /**
      * Enable website login capability for user.
      *
-     * @param User|string|int $userTokenOrId
+     * @param UserObject|string|int $userTokenOrId
      *
-     * @return UserEnableLoginResponse
+     * @return UserEnableLoginResponseObject
      */
     public function userEnableLogin($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
         $response = $this->request(self::API_URI_USER_ENABLE_LOGIN, $data);
 
-        return UserEnableLoginResponse::fromResponse($response);
+        return UserEnableLoginResponseObject::fromResponse($response);
     }
 
     /**
      * Get a user's balance.
      *
-     * @param User|string|int $userTokenOrId
+     * @param UserObject|string|int $userTokenOrId
      *
-     * @return UserGetBalanceResponse
+     * @return UserGetBalanceResponseObject
      */
     public function userGetAccountBalance($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
         $response = $this->request(self::API_URI_USER_GET_ACCOUNT_BALANCE, $data);
 
-        return UserGetBalanceResponse::fromResponse($response);
+        return UserGetBalanceResponseObject::fromResponse($response);
     }
 
     /**
      * Retrieve a list of metadata elements.
      *
-     * @return UserGetMetaProfileResponse
+     * @return UserGetMetaProfileResponseObject
      */
     public function userGetMetaProfile() {
         $response = $this->request(self::API_URI_USER_GET_META_PROFILE, []);
 
-        return UserGetMetaProfileResponse::fromResponse($response);
+        return UserGetMetaProfileResponseObject::fromResponse($response);
     }
 
     /**
      * Retrieves the users authentication tokens.
      *
-     * @param User|string|int $userTokenOrId
+     * @param UserObject|string|int $userTokenOrId
      *
-     * @return UserGetTokensResponse
+     * @return UserGetTokensResponseObject
      */
     public function userGetTokens($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
         $response = $this->request(self::API_URI_USER_GET_AUTH_TOKENS, $data);
 
-        return UserGetTokensResponse::fromResponse($response);
+        return UserGetTokensResponseObject::fromResponse($response);
     }
 
     /**
      * Retrieves a user.
      *
-     * @param User|string|int $userTokenOrId
+     * @param UserObject|string|int $userTokenOrId
      *
-     * @return UserGetResponse
+     * @return UserGetResponseObject
      */
     public function userGet($userTokenOrId) {
         $data = $this->userToData($userTokenOrId, []);
 
         $response = $this->request(self::API_URI_USER_GET, $data);
 
-        return UserGetResponse::fromResponse($response);
+        return UserGetResponseObject::fromResponse($response);
     }
 
     /**
@@ -1747,7 +1751,7 @@ final class FrontendClient {
      * @param string $metaInfo
      * @param string $ipAddress
      *
-     * @return UserUpdateTokenResponse
+     * @return UserUpdateTokenResponseObject
      */
     public function userUpdateToken($authToken, $metaInfo, $ipAddress = '') {
         $data = [
@@ -1761,7 +1765,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_UPDATE_AUTH_TOKEN, $data);
 
-        return UserUpdateTokenResponse::fromResponse($response);
+        return UserUpdateTokenResponseObject::fromResponse($response);
     }
 
     /**
@@ -1771,7 +1775,7 @@ final class FrontendClient {
      * @param string   $ipAddress
      * @param int|null $tokenLifetime   Omit to use lifetime set initially
      *
-     * @return UserUpdateTokenResponse
+     * @return UserUpdateTokenResponseObject
      */
     public function userExtendToken($authToken, $ipAddress = '', $tokenLifetime = null) {
         $data = [
@@ -1787,7 +1791,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_EXTEND_AUTH_TOKEN, $data);
 
-        return UserUpdateTokenResponse::fromResponse($response);
+        return UserUpdateTokenResponseObject::fromResponse($response);
     }
 
     /**
@@ -1796,7 +1800,7 @@ final class FrontendClient {
      * @param string $authToken
      * @param string $ipAddress
      *
-     * @return UserGetAuthenticatedResponse
+     * @return UserGetAuthenticatedResponseObject
      */
     public function userGetAuthenticated($authToken, $ipAddress = '') {
         $data = [
@@ -1809,7 +1813,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_GET_AUTHENTICATED, $data);
 
-        return UserGetAuthenticatedResponse::fromResponse($response);
+        return UserGetAuthenticatedResponseObject::fromResponse($response);
     }
 
     /**
@@ -1817,7 +1821,7 @@ final class FrontendClient {
      *
      * @param string $searchTerm
      *
-     * @return UserFindResponse
+     * @return UserFindResponseObject
      *
      * @throws ObjectNotFoundException
      */
@@ -1828,7 +1832,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_FIND, $data);
 
-        return UserFindResponse::fromResponse($response);
+        return UserFindResponseObject::fromResponse($response);
     }
 
 
@@ -1840,7 +1844,7 @@ final class FrontendClient {
      * @param string $resetLink      Link the user can click to do password recovery. %s will be replaced with the
      *                               recovery code.
      *
-     * @return UserRecoveryStartResponse
+     * @return UserRecoveryStartResponseObject
      */
     public function userRecoveryStart($userIdentifier, $ipAddress, $resetLink) {
         $data = [
@@ -1851,7 +1855,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_RECOVERY_START, $data);
 
-        return UserRecoveryStartResponse::fromResponse($response);
+        return UserRecoveryStartResponseObject::fromResponse($response);
     }
 
     /**
@@ -1860,7 +1864,7 @@ final class FrontendClient {
      * @param string $recoveryToken
      * @param string $ipAddress
      *
-     * @return UserRecoveryCheckResponse
+     * @return UserRecoveryCheckResponseObject
      */
     public function userRecoveryCheck($recoveryToken, $ipAddress) {
         $data = [
@@ -1870,7 +1874,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_RECOVERY_CHECK, $data);
 
-        return UserRecoveryCheckResponse::fromResponse($response);
+        return UserRecoveryCheckResponseObject::fromResponse($response);
     }
 
     /**
@@ -1880,7 +1884,7 @@ final class FrontendClient {
      * @param string $ipAddress
      * @param string $newPassword
      *
-     * @return UserRecoveryFinishResponse
+     * @return UserRecoveryFinishResponseObject
      *
      * @throws ObjectNotFoundException
      */
@@ -1893,7 +1897,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_RECOVERY_FINISH, $data);
 
-        return UserRecoveryFinishResponse::fromResponse($response);
+        return UserRecoveryFinishResponseObject::fromResponse($response);
     }
 
     /**
@@ -1901,11 +1905,11 @@ final class FrontendClient {
      * address which gives instruction on how to verify. The email message must be configured by using the template
      * "token-verification".
      *
-     * @param string|int|User $userTokenOrId
-     * @param string          $ipAddress
-     * @param string          $verificationLink
+     * @param string|int|UserObject $userTokenOrId
+     * @param string                $ipAddress
+     * @param string                $verificationLink
      *
-     * @return UserEmailVerificationStartResponse
+     * @return UserVerificationStartResponseObject
      */
     public function userEmailVerificationStart($userTokenOrId, $ipAddress, $verificationLink
     ) {
@@ -1917,7 +1921,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_START, $data);
 
-        return UserEmailVerificationStartResponse::fromResponse($response);
+        return UserVerificationStartResponseObject::fromResponse($response);
     }
 
     /**
@@ -1925,7 +1929,7 @@ final class FrontendClient {
      *
      * @param $verificationToken
      *
-     * @return UserEmailVerificationFinishResponse
+     * @return UserVerificationFinishResponseObject
      */
     public function userEmailVerificationFinish($verificationToken) {
         $data = [
@@ -1935,15 +1939,15 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_FINISH, $data);
 
-        return UserEmailVerificationFinishResponse::fromResponse($response);
+        return UserVerificationFinishResponseObject::fromResponse($response);
     }
 
     /**
-     * @param string|int|User $userTokenOrId
-     * @param string          $ipAddress
-     * @param string          $phoneNumber
+     * @param string|int|UserObject $userTokenOrId
+     * @param string                $ipAddress
+     * @param string                $phoneNumber
      *
-     * @return UserPhoneVerificationStartResponse
+     * @return UserVerificationStartResponseObject
      */
     public function userPhoneVerificationStart($userTokenOrId, $ipAddress, $phoneNumber) {
         $data = $this->userToData($userTokenOrId, [
@@ -1956,15 +1960,15 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_START, $data);
 
-        return UserPhoneVerificationStartResponse::fromResponse($response);
+        return UserVerificationStartResponseObject::fromResponse($response);
     }
 
     /**
-     * @param string|int|User $userTokenOrId
-     * @param string          $verificationPin
-     * @param string|null     $phoneNumber
+     * @param string|int|UserObject $userTokenOrId
+     * @param string                $verificationPin
+     * @param string|null           $phoneNumber
      *
-     * @return UserPhoneVerificationFinishResponse
+     * @return UserPhoneVerificationFinishResponseObject
      */
     public function userPhoneVerificationFinish($userTokenOrId, $verificationPin, $phoneNumber = null) {
         $data = $this->userToData($userTokenOrId, [
@@ -1975,15 +1979,15 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_FINISH, $data);
 
-        return UserPhoneVerificationFinishResponse::fromResponse($response);
+        return UserPhoneVerificationFinishResponseObject::fromResponse($response);
     }
 
     /**
-     * @param string|int|User $userTokenOdId
-     * @param string          $ipAddress
-     * @param string          $phoneNumber
+     * @param string|int|UserObject $userTokenOdId
+     * @param string                $ipAddress
+     * @param string                $phoneNumber
      *
-     * @return UserSmsVerificationStartResponse
+     * @return UserVerificationStartResponseObject
      */
     public function userSmsVerificationStart($userTokenOdId, $ipAddress, $phoneNumber) {
         $data = $this->userToData($userTokenOdId, [
@@ -1996,15 +2000,15 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_START, $data);
 
-        return UserSmsVerificationStartResponse::fromResponse($response);
+        return UserVerificationStartResponseObject::fromResponse($response);
     }
 
     /**
-     * @param string|int|User $userTokenOrId
-     * @param string          $verificationPin
-     * @param string|null     $phoneNumber
+     * @param string|int|UserObject $userTokenOrId
+     * @param string                $verificationPin
+     * @param string|null           $phoneNumber
      *
-     * @return UserSmsVerificationFinishResponse
+     * @return UserSmsVerificationFinishResponseObject
      */
     public function userSmsVerificationFinish($userTokenOrId, $verificationPin, $phoneNumber = null) {
         $data = $this->userToData($userTokenOrId, [
@@ -2015,7 +2019,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_FINISH, $data);
 
-        return UserSmsVerificationFinishResponse::fromResponse($response);
+        return UserSmsVerificationFinishResponseObject::fromResponse($response);
     }
 
     //endregion
@@ -2025,12 +2029,12 @@ final class FrontendClient {
     /**
      * Retrieve Dislo's redirector configuration
      *
-     * @return MiscGetRedirectorConfigurationResponse
+     * @return MiscGetRedirectorConfigurationResponseObject
      */
     public function miscGetRedirectorConfiguration() {
         $response = $this->request(self::API_URI_REDIRECTOR_GET_CONFIGURATION, []);
 
-        return MiscGetRedirectorConfigurationResponse::fromResponse($response);
+        return MiscGetRedirectorConfigurationResponseObject::fromResponse($response);
     }
 
     //endregion

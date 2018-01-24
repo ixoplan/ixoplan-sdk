@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\User;
 
+/**
+ * Class UserRecoveryFinishResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\UserRecoveryFinishResponseObject instead
+ */
 class UserRecoveryFinishResponse {
 	/**
 	 * @var User

@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\Response;
 
+
+/**
+ * Class BillingExternalCreateChargebackResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\BillingExternalCreateChargebackResponseObject instead
+ */
 class BillingExternalCreateChargebackResponse {
 	/**
 	 * @var int

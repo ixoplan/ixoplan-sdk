@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\Flexible;
 
+/**
+ * Class BillingCloseFlexibleResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\BillingCloseFlexibleResponseObject instead
+ */
 class BillingCloseFlexibleResponse {
 	/**
 	 * @var Flexible

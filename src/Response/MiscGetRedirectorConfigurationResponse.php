@@ -5,6 +5,13 @@ namespace Ixolit\Dislo\Response;
 use Ixolit\Dislo\Redirector\Redirector;
 use Ixolit\Dislo\Redirector\RulesParser;
 
+/**
+ * Class MiscGetRedirectorConfigurationResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponseObject instead
+ */
 class MiscGetRedirectorConfigurationResponse {
 
 	/** @var Redirector */

@@ -9,6 +9,8 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserVerificationFinishResponse
  *
  * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\UserVerificationFinishResponseObject instead
  */
 class UserVerificationFinishResponse {
 

@@ -2,6 +2,14 @@
 
 namespace Ixolit\Dislo\Response;
 
+
+/**
+ * Class UserRecoveryCheckResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\UserRecoveryCheckResponseObject instead
+ */
 class UserRecoveryCheckResponse {
 	/**
 	 * @var bool

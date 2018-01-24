@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\AuthToken;
 
+/**
+ * Class UserUpdateTokenResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\UserUpdateTokenResponseObject instead
+ */
 class UserUpdateTokenResponse {
 	/**
 	 * @var AuthToken

@@ -10,6 +10,8 @@ use Ixolit\Dislo\WorkingObjects\PeriodEvent;
  * Class SubscriptionGetPeriodEventsResponse
  *
  * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponseObject instead
  */
 class SubscriptionGetPeriodEventsResponse {
 

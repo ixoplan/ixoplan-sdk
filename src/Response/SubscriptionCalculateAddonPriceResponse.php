@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\Price;
 
+/**
+ * Class SubscriptionCalculateAddonPriceResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponseObject instead
+ */
 class SubscriptionCalculateAddonPriceResponse {
 	/**
 	 * @var bool

@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\BillingEvent;
 
+/**
+ * Class BillingCreatePaymentResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\BillingCreatePaymentResponseObject instead
+ */
 class BillingCreatePaymentResponse {
 	private $redirectUrl;
 	private $metaData = [];

@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\ExternalProfile;
 
+/**
+ * Class BillingExternalGetProfileResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\BillingExternalGetProfileResponseObject
+ */
 class BillingExternalGetProfileResponse {
 	/**
 	 * @var ExternalProfile

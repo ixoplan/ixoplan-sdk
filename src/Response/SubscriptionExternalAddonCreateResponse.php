@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\Subscription;
 
+/**
+ * Class SubscriptionExternalAddonCreateResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\SubscriptionExternalAddonCreateResponseObject instead
+ */
 class SubscriptionExternalAddonCreateResponse {
 	/**
 	 * @var Subscription

@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\User;
 
+/**
+ * Class UserAuthenticateResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\UserAuthenticateResponseObject instead
+ */
 class UserAuthenticateResponse {
 	/**
 	 * @var User

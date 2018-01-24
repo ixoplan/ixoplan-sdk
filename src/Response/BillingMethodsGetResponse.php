@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\BillingMethod;
 
+/**
+ * Class BillingMethodsGetResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated use Ixolit\Dislo\Response\BillingMethodsGetResponseObject instead
+ */
 class BillingMethodsGetResponse {
 	private $billingMethods;
 
