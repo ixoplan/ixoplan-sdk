@@ -11,7 +11,6 @@ use Ixolit\Dislo\WorkingObjects\CachedObject;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Price;
 use Ixolit\Dislo\WorkingObjects\Subscription;
-use Ixolit\Dislo\WorkingObjects\User as UserObject;
 
 /**
  * Class User
@@ -20,22 +19,34 @@ use Ixolit\Dislo\WorkingObjects\User as UserObject;
  */
 final class User {
 
-    /** @var FrontendClient */
+    /**
+     * @var FrontendClient
+     */
     private $frontendClient;
 
-    /** @var UserObject */
+    /**
+     * @var UserObject
+     */
     private $user;
 
-    /** @var CachedObject|null */
+    /**
+     * @var CachedObject|null
+     */
     private $subscriptionsCachedObject;
 
-    /** @var CachedObject|null */
+    /**
+     * @var CachedObject|null
+     */
     private $activeFlexibleCachedObject;
 
-    /** @var CachedObject|null */
+    /**
+     * @var CachedObject|null
+     */
     private $accountBalanceCachedObject;
 
-    /** @var CachedObject|null*/
+    /**
+     * @var CachedObject|null
+     */
     private $authTokensCachedObject;
 
     /**
