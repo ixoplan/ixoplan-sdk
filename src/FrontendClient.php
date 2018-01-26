@@ -34,6 +34,7 @@ use Ixolit\Dislo\Response\CouponCodeValidateUpgradeResponseObject;
 use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponseObject;
 use Ixolit\Dislo\Response\PackageGetResponseObject;
 use Ixolit\Dislo\Response\PackagesListResponseObject;
+use Ixolit\Dislo\Response\SubscriptionAttachCouponResponseObject;
 use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponseObject;
 use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponseObject;
 use Ixolit\Dislo\Response\SubscriptionCalculatePriceResponseObject;
@@ -50,6 +51,7 @@ use Ixolit\Dislo\Response\SubscriptionExternalChangePeriodResponseObject;
 use Ixolit\Dislo\Response\SubscriptionExternalChangeResponseObject;
 use Ixolit\Dislo\Response\SubscriptionExternalCloseResponseObject;
 use Ixolit\Dislo\Response\SubscriptionExternalCreateResponseObject;
+use Ixolit\Dislo\Response\SubscriptionFireEventResponseObject;
 use Ixolit\Dislo\Response\SubscriptionGetAllResponseObject;
 use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponseObject;
 use Ixolit\Dislo\Response\SubscriptionGetPossiblePackageChangesResponseObject;
@@ -64,6 +66,7 @@ use Ixolit\Dislo\Response\UserDisableLoginResponseObject;
 use Ixolit\Dislo\Response\UserEnableLoginResponseObject;
 use Ixolit\Dislo\Response\UserExtendTokenResponseObject;
 use Ixolit\Dislo\Response\UserFindResponseObject;
+use Ixolit\Dislo\Response\UserFireEventResponseObject;
 use Ixolit\Dislo\Response\UserGetAuthenticatedResponseObject;
 use Ixolit\Dislo\Response\UserGetBalanceResponseObject;
 use Ixolit\Dislo\Response\UserGetMetaProfileResponseObject;
@@ -1453,6 +1456,69 @@ final class FrontendClient {
     }
 
     /**
+     * Attach a coupon to a Subscription.
+     *
+     * @param string $couponCode
+     * @param SubscriptionObject|int $subscription
+     * @param UserObject|int|string $userTokenOrId
+     *
+     * @return SubscriptionAttachCouponResponseObject
+     */
+    public function subscriptionAttachCoupon(
+        $couponCode,
+        $subscription,
+        $userTokenOrId = null
+    ) {
+        $data = $this->userToData($userTokenOrId, [
+            'couponCode'              => $couponCode,
+            'subscriptionId'          => ($subscription instanceof SubscriptionObject)
+                ? $subscription->getSubscriptionId()
+                : $subscription,
+        ]);
+
+        $response = $this->request('/frontend/subscription/attachCoupon', $data);
+
+        return SubscriptionAttachCouponResponseObject::fromResponse($response);
+    }
+
+    /**
+     * Fires a subscription custom frontend API event to be handled by Dislo's event engine.
+     *
+     * @param SubscriptionObject|int $subscription
+     * @param string                 $eventType            To be evaluated in "Compare Custom Event Type" conditions
+     * @param array|null             $notificationData     Custom data for notification actions
+     * @param array|null             $threadValueStoreData Key/value pairs for thread value store conditions and actions
+     * @param UserObject|int|string  $userTokenOrId        If given, verify that subscription belongs to this user
+     *
+     * @return SubscriptionFireEventResponseObject
+     */
+    public function subscriptionFireEvent(
+        $subscription,
+        $eventType,
+        $notificationData = null,
+        $threadValueStoreData = null,
+        $userTokenOrId = null
+    ) {
+        $data = $this->userToData($userTokenOrId, [
+            'subscriptionId' => ($subscription instanceof SubscriptionObject)
+                ? $subscription->getSubscriptionId()
+                : $subscription,
+            'eventType'      => $eventType,
+        ]);
+
+        if ($notificationData) {
+            $data['notificationData'] = $notificationData;
+        }
+        if ($threadValueStoreData) {
+            $data['threadValueStoreData'] = $threadValueStoreData;
+        }
+
+        $response = $this->request('/frontend/subscription/fireEvent', $data);
+
+        return SubscriptionFireEventResponseObject::fromResponse($response);
+    }
+
+    /**
      * Check if a coupon is valid for the given context package/addons/event/user/sub and calculates the discounted
      * price, for new subscriptions.
      *
@@ -2034,6 +2100,38 @@ final class FrontendClient {
         $response = $this->request(self::API_URI_USER_VERIFICATION_FINISH, $data);
 
         return UserSmsVerificationFinishResponseObject::fromResponse($response);
+    }
+
+    /**
+     * Fires an user custom frontend API event to be handled by Dislo's event engine.
+     *
+     * @param string|int|UserObject $userTokenOrId
+     * @param string                $eventType            To be evaluated in "Compare Custom Event Type" conditions
+     * @param array|null            $notificationData     Custom data for notification actions
+     * @param array|null            $threadValueStoreData Key/value pairs for thread value store conditions and actions
+     *
+     * @return UserFireEventResponseObject
+     */
+    public function userFireEvent(
+        $userTokenOrId,
+        $eventType,
+        $notificationData = null,
+        $threadValueStoreData = null
+    ) {
+        $data = $this->userToData($userTokenOrId, [
+            'eventType' => $eventType,
+        ]);
+
+        if ($notificationData) {
+            $data['notificationData'] = $notificationData;
+        }
+        if ($threadValueStoreData) {
+            $data['threadValueStoreData'] = $threadValueStoreData;
+        }
+
+        $response = $this->request('/frontend/user/fireEvent', $data);
+
+        return UserFireEventResponseObject::fromResponse($response);
     }
 
     //endregion
