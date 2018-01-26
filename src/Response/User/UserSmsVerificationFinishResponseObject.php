@@ -3,8 +3,6 @@
 namespace Ixolit\Dislo\Response\User;
 
 
-use Ixolit\Dislo\WorkingObjects\UserObject;
-
 
 /**
  * Class UserSmsVerificationFinishResponseObject

@@ -3,7 +3,8 @@
 namespace Ixolit\Dislo\Response\Billing;
 
 
-use Ixolit\Dislo\WorkingObjects\BillingEventObject;
+use Ixolit\Dislo\WorkingObjects\Billing\BillingEventObject;
+
 
 /**
  * Class BillingGetEventsForUserResponseObject

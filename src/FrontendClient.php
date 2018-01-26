@@ -82,10 +82,10 @@ use Ixolit\Dislo\Response\User\UserSmsVerificationStartResponseObject;
 use Ixolit\Dislo\Response\User\UserUpdateTokenResponseObject;
 use Ixolit\Dislo\Response\User\UserEmailVerificationFinishResponseObject;
 use Ixolit\Dislo\Response\User\UserEmailVerificationStartResponseObject;
-use Ixolit\Dislo\WorkingObjects\BillingEventObject;
-use Ixolit\Dislo\WorkingObjects\FlexibleObject;
-use Ixolit\Dislo\WorkingObjects\SubscriptionObject;
-use Ixolit\Dislo\WorkingObjects\UserObject;
+use Ixolit\Dislo\WorkingObjects\Billing\BillingEventObject;
+use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
+use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjects\User\UserObject;
 use Psr\Http\Message\StreamInterface;
 
 /**

@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Response\User;
 
 
-use Ixolit\Dislo\WorkingObjects\PriceObject;
+use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
 
 /**
  * Class UserGetBalanceResponseObject

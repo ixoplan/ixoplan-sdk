@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Response\Subscription;
 
 
-use Ixolit\Dislo\WorkingObjects\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
 
 
 /**

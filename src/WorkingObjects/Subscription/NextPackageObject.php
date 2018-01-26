@@ -1,22 +1,23 @@
 <?php
 
-namespace Ixolit\Dislo\WorkingObjects;
+namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
-
+use Ixolit\Dislo\WorkingObjects\WorkingObject;
 
 /**
- * Class PackageObject
+ * Class NextPackageObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class PackageObject implements WorkingObject {
+final class NextPackageObject implements WorkingObject {
 
     /**
      * @var string
      */
     private $packageIdentifier;
+
     /**
      * @var string
      */
@@ -26,22 +27,27 @@ final class PackageObject implements WorkingObject {
      * @var DisplayNameObject[]
      */
     private $displayNames;
+
     /**
      * @var bool
      */
     private $signupAvailable;
+
     /**
      * @var PackageObject[]
      */
     private $addonPackages;
+
     /**
      * @var string[]
      */
     private $metaData;
+
     /**
      * @var PackagePeriodObject
      */
     private $initialPeriod;
+
     /**
      * @var PackagePeriodObject|null
      */
@@ -50,17 +56,12 @@ final class PackageObject implements WorkingObject {
     /**
      * @var bool
      */
-    private $hasTrialPeriod;
+    private $paid;
 
     /**
-     * @var BillingMethodObject[]
+     * @var \DateTime
      */
-    private $billingMethods;
-
-    /**
-     * @var bool
-     */
-    private $requireFlexibleForFreeSignup;
+    private $effectiveAt;
 
     /**
      * @param string                   $packageIdentifier
@@ -71,9 +72,8 @@ final class PackageObject implements WorkingObject {
      * @param string[]                 $metaData
      * @param PackagePeriodObject|null $initialPeriod
      * @param PackagePeriodObject|null $recurringPeriod
-     * @param bool                     $hasTrialPeriod
-     * @param BillingMethodObject[]    $billingMethods
-     * @param bool                     $requireFlexibleForFreeSignup
+     * @param bool                     $paid
+     * @param \DateTime                $effectiveAt
      */
     public function __construct(
         $packageIdentifier,
@@ -84,21 +84,19 @@ final class PackageObject implements WorkingObject {
         $metaData,
         $initialPeriod,
         $recurringPeriod,
-        $hasTrialPeriod = false,
-        $billingMethods = null,
-        $requireFlexibleForFreeSignup = false
+        $paid,
+        \DateTime $effectiveAt
     ) {
-        $this->packageIdentifier            = $packageIdentifier;
-        $this->serviceIdentifier            = $serviceIdentifier;
-        $this->displayNames                 = $displayNames;
-        $this->signupAvailable              = $signupAvailable;
-        $this->addonPackages                = $addonPackages;
-        $this->metaData                     = $metaData;
-        $this->initialPeriod                = $initialPeriod;
-        $this->recurringPeriod              = $recurringPeriod;
-        $this->hasTrialPeriod               = $hasTrialPeriod;
-        $this->billingMethods               = $billingMethods;
-        $this->requireFlexibleForFreeSignup = $requireFlexibleForFreeSignup;
+        $this->packageIdentifier = $packageIdentifier;
+        $this->serviceIdentifier = $serviceIdentifier;
+        $this->displayNames      = $displayNames;
+        $this->signupAvailable   = $signupAvailable;
+        $this->addonPackages     = $addonPackages;
+        $this->metaData          = $metaData;
+        $this->initialPeriod     = $initialPeriod;
+        $this->recurringPeriod   = $recurringPeriod;
+        $this->paid              = $paid;
+        $this->effectiveAt       = $effectiveAt;
     }
 
     /**
@@ -188,28 +186,21 @@ final class PackageObject implements WorkingObject {
     /**
      * @return bool
      */
-    public function hasTrialPeriod() {
-        return $this->hasTrialPeriod;
+    public function isPaid() {
+        return $this->paid;
     }
 
     /**
-     * @return BillingMethodObject[]
+     * @return \DateTime
      */
-    public function getBillingMethods() {
-        return $this->billingMethods;
-    }
-
-    /**
-     * @return bool
-     */
-    public function requiresFlexibleForFreeSignup() {
-        return $this->requireFlexibleForFreeSignup;
+    public function getEffectiveAt() {
+        return $this->effectiveAt;
     }
 
     /**
      * @param array $response
      *
-     * @return PackageObject
+     * @return NextPackageObject
      */
     public static function fromResponse($response) {
         $displayNames = [];
@@ -223,13 +214,6 @@ final class PackageObject implements WorkingObject {
             }
         }
 
-        $billingMethods = [];
-        if(isset($response['billingMethods'])) {
-            foreach ($response['billingMethods'] as $billingMethod) {
-                $billingMethods[] = BillingMethodObject::fromResponse($billingMethod);
-            }
-        }
-
         return new self(
             $response['packageIdentifier'],
             $response['serviceIdentifier'],
@@ -238,20 +222,15 @@ final class PackageObject implements WorkingObject {
             $addonPackages,
             isset($response['metaData'])
                 ? $response['metaData']
-                : [],
+                : array(),
             isset($response['initialPeriod']) && $response['initialPeriod']
                 ? PackagePeriodObject::fromResponse($response['initialPeriod'])
                 : null,
             isset($response['recurringPeriod']) && $response['recurringPeriod']
                 ? PackagePeriodObject::fromResponse($response['recurringPeriod'])
                 : null,
-            isset($response['hasTrialPeriod'])
-                ? $response['hasTrialPeriod']
-                : false,
-            $billingMethods,
-            isset($response['requireFlexibleForFreeSignup'])
-                ? $response['requireFlexibleForFreeSignup']
-                : false
+            $response['paid'],
+            new \DateTime($response['effectiveAt'])
         );
     }
 
@@ -269,26 +248,20 @@ final class PackageObject implements WorkingObject {
             $addonPackages[] = $package->toArray();
         }
 
-        $billingMethods = [];
-        foreach ($this->billingMethods as $billingMethod) {
-            $billingMethods[] = $billingMethod->toArray();
-        }
-
         return [
-            '_type'                        => 'Package',
-            'packageIdentifier'            => $this->packageIdentifier,
-            'serviceIdentifier'            => $this->serviceIdentifier,
-            'displayNames'                 => $displayNames,
-            'signupAvailable'              => $this->signupAvailable,
-            'addonPackages'                => $addonPackages,
-            'metaData'                     => $this->metaData,
-            'initialPeriod'                => $this->initialPeriod->toArray(),
-            'recurringPeriod'              => $this->recurringPeriod
+            '_type'             => 'Package',
+            'packageIdentifier' => $this->packageIdentifier,
+            'serviceIdentifier' => $this->serviceIdentifier,
+            'displayNames'      => $displayNames,
+            'signupAvailable'   => $this->signupAvailable,
+            'addonPackages'     => $addonPackages,
+            'metaData'          => $this->metaData,
+            'initialPeriod'     => $this->initialPeriod->toArray(),
+            'recurringPeriod'   => $this->recurringPeriod
                 ? $this->recurringPeriod->toArray()
                 : null,
-            'hasTrialPeriod'               => $this->hasTrialPeriod,
-            'billingMethods'               => $billingMethods,
-            'requireFlexibleForFreeSignup' => $this->requireFlexibleForFreeSignup,
+            'paid'              => $this->paid,
+            'effectiveAt'       => $this->effectiveAt->format('Y-m-d H:i:s'),
         ];
     }
 

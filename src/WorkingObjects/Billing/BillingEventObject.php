@@ -1,7 +1,10 @@
 <?php
 
-namespace Ixolit\Dislo\WorkingObjects;
+namespace Ixolit\Dislo\WorkingObjects\Billing;
 
+
+use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjects\WorkingObject;
 
 /**
  * Class BillingEventObject

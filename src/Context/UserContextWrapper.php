@@ -6,18 +6,19 @@ namespace Ixolit\Dislo\Context;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\FrontendClient;
-use Ixolit\Dislo\WorkingObjects\AuthToken;
+use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
 use Ixolit\Dislo\WorkingObjects\CachedObject;
-use Ixolit\Dislo\WorkingObjects\Flexible;
-use Ixolit\Dislo\WorkingObjects\Price;
-use Ixolit\Dislo\WorkingObjects\Subscription;
+use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
+use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjects\User\AuthTokenObject;
+use Ixolit\Dislo\WorkingObjects\User\UserObject;
 
 /**
- * Class User
+ * Class UserContextWrapper
  *
  * @package Ixolit\Dislo\Context
  */
-final class User {
+final class UserContextWrapper {
 
     /**
      * @var FrontendClient
@@ -91,7 +92,7 @@ final class User {
     /**
      * @param bool $cached
      *
-     * @return Subscription[]
+     * @return SubscriptionObject[]
      */
     public function getAllSubscriptions($cached = true) {
         if ($cached && isset($this->subscriptionsCachedObject)) {
@@ -117,7 +118,7 @@ final class User {
     /**
      * @param bool $cached
      *
-     * @return Subscription[]
+     * @return SubscriptionObject[]
      */
     public function getActiveSubscriptions($cached = true) {
         $subscriptions = $this->getAllSubscriptions($cached);
@@ -126,8 +127,8 @@ final class User {
         foreach ($subscriptions as $subscription) {
             if (
             \in_array($subscription->getStatus(), [
-                Subscription::STATUS_CANCELED,
-                Subscription::STATUS_RUNNING
+                SubscriptionObject::STATUS_CANCELED,
+                SubscriptionObject::STATUS_RUNNING
             ])
             ) {
                 $activeSubscriptions[] = $subscription;
@@ -140,7 +141,7 @@ final class User {
     /**
      * @param bool $cached
      *
-     * @return Subscription|null
+     * @return SubscriptionObject|null
      */
     public function getFirstActiveSubscription($cached = true) {
         $activeSubscriptions = $this->getActiveSubscriptions($cached);
@@ -155,7 +156,7 @@ final class User {
     /**
      * @param bool $cached
      *
-     * @return Subscription[]
+     * @return SubscriptionObject[]
      */
     public function getStartedSubscriptions($cached = true) {
         $subscriptions = $this->getAllSubscriptions($cached);
@@ -173,7 +174,7 @@ final class User {
     /**
      * @param bool $cached
      *
-     * @return Subscription|null
+     * @return SubscriptionObject|null
      */
     public function getFirstStartedSubscription($cached = true) {
         $startedSubscriptions = $this->getStartedSubscriptions($cached);
@@ -189,7 +190,7 @@ final class User {
      * @param      $subscriptionId
      * @param bool $cached
      *
-     * @return Subscription|null
+     * @return SubscriptionObject|null
      */
     public function getSubscription($subscriptionId, $cached = true) {
         $subscriptions = $this->getAllSubscriptions($cached);
@@ -204,11 +205,11 @@ final class User {
     }
 
     /**
-     * @param Subscription $subscription
+     * @param SubscriptionObject $subscription
      *
      * @return $this
      */
-    public function addSubscription(Subscription $subscription) {
+    public function addSubscription(SubscriptionObject $subscription) {
         $subscriptions = $this->getAllSubscriptions(true);
 
         $subscriptions[] = $subscription;
@@ -221,7 +222,7 @@ final class User {
     /**
      * @param bool $cached
      *
-     * @return Flexible
+     * @return FlexibleObject
      *
      * @throws ObjectNotFoundException
      */
@@ -255,11 +256,11 @@ final class User {
     }
 
     /**
-     * @param Flexible $activeFlexible
+     * @param FlexibleObject $activeFlexible
      *
      * @return $this
      */
-    public function setActiveFlexible(Flexible $activeFlexible) {
+    public function setActiveFlexible(FlexibleObject $activeFlexible) {
         $this->activeFlexibleCachedObject = new CachedObject($activeFlexible);
 
         return $this;
@@ -268,7 +269,7 @@ final class User {
     /**
      * @param bool $cached
      *
-     * @return Price
+     * @return PriceObject
      */
     public function getAccountBalance($cached = true) {
         if ($cached && isset($this->accountBalanceCachedObject)) {
@@ -285,7 +286,7 @@ final class User {
     /**
      * @param bool $cached
      *
-     * @return AuthToken[]
+     * @return AuthTokenObject[]
      */
     public function getAuthTokens($cached = true) {
         if ($cached && isset($this->authTokensCachedObject)) {
@@ -387,11 +388,11 @@ final class User {
 
     /**
      * @param UserObject      $user
-     * @param AuthToken $authToken
+     * @param AuthTokenObject $authToken
      *
      * @return UserObject
      */
-    protected function convertFromUserWithAuthToken(UserObject $user, AuthToken $authToken) {
+    protected function convertFromUserWithAuthToken(UserObject $user, AuthTokenObject $authToken) {
         $changedUser = new UserObject(
             $user->getUserId(),
             $user->getCreatedAt(),

@@ -3,7 +3,8 @@
 namespace Ixolit\Dislo\Response\Billing;
 
 
-use Ixolit\Dislo\WorkingObjects\BillingMethodObject;
+use Ixolit\Dislo\WorkingObjects\Billing\BillingMethodObject;
+
 
 /**
  * Class BillingMethodsGetResponseObject

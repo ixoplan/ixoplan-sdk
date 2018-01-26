@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Response\User;
 
 
-use Ixolit\Dislo\WorkingObjects\MetaProfileElementObject;
+use Ixolit\Dislo\WorkingObjects\User\MetaProfileElementObject;
 
 /**
  * Class UserGetMetaProfileResponseObject

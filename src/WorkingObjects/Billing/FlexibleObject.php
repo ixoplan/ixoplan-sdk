@@ -1,7 +1,9 @@
 <?php
 
-namespace Ixolit\Dislo\WorkingObjects;
+namespace Ixolit\Dislo\WorkingObjects\Billing;
 
+
+use Ixolit\Dislo\WorkingObjects\WorkingObject;
 
 /**
  * Class FlexibleObject

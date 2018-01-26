@@ -26,7 +26,7 @@ class UserContext {
     /** @var Client */
     private $client;
 
-    /** @var User */
+    /** @var UserContextWrapper */
     private $user;
 
     /** @var CachedObject|null */
@@ -48,8 +48,8 @@ class UserContext {
     private $authTokensCachedObject;
 
     /**
-     * @param Client $client
-     * @param User   $user
+     * @param Client             $client
+     * @param UserContextWrapper $user
      *
      * @throws InvalidTokenException
      */
@@ -63,7 +63,7 @@ class UserContext {
     }
 
     /**
-     * @return User
+     * @return UserContextWrapper
      *
      * @throws InvalidTokenException
      */
@@ -473,10 +473,10 @@ class UserContext {
     }
 
     /**
-     * @param User      $user
-     * @param AuthToken $authToken
+     * @param UserContextWrapper $user
+     * @param AuthToken          $authToken
      *
-     * @return User
+     * @return UserContextWrapper
      */
     protected function convertFromUserWithAuthToken(User $user, AuthToken $authToken) {
         $changedUser = new User(

@@ -3,7 +3,8 @@
 namespace Ixolit\Dislo\Response\Subscription;
 
 
-use Ixolit\Dislo\WorkingObjects\PeriodEventObject;
+use Ixolit\Dislo\WorkingObjects\Subscription\PeriodEventObject;
+
 
 /**
  * Class SubscriptionGetPeriodEventsResponseObject

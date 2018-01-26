@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Response\Billing;
 
 
-use Ixolit\Dislo\WorkingObjects\RecurringObject;
+use Ixolit\Dislo\WorkingObjects\Billing\RecurringObject;
 
 /**
  * Class BillingCloseActiveRecurringResponseObject

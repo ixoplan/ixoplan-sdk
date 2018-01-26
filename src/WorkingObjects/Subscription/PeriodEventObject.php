@@ -1,6 +1,10 @@
 <?php
 
-namespace Ixolit\Dislo\WorkingObjects;
+namespace Ixolit\Dislo\WorkingObjects\Subscription;
+
+
+use Ixolit\Dislo\WorkingObjects\Billing\BillingEventObject;
+use Ixolit\Dislo\WorkingObjects\WorkingObject;
 
 
 /**

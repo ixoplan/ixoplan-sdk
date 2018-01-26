@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Response\User;
 
 
-use Ixolit\Dislo\WorkingObjects\UserObject;
+use Ixolit\Dislo\WorkingObjects\User\UserObject;
 
 /**
  * Class UserGetAuthenticatedResponseObject

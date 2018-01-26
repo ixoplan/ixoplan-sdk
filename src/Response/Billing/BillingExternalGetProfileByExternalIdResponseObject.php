@@ -3,7 +3,8 @@
 namespace Ixolit\Dislo\Response\Billing;
 
 
-use Ixolit\Dislo\WorkingObjects\ExternalProfileObject;
+use Ixolit\Dislo\WorkingObjects\Billing\ExternalProfileObject;
+
 
 /**
  * Class BillingExternalGetProfileByExternalIdResponseObject

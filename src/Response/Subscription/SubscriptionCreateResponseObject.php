@@ -3,8 +3,9 @@
 namespace Ixolit\Dislo\Response\Subscription;
 
 
-use Ixolit\Dislo\WorkingObjects\PriceObject;
-use Ixolit\Dislo\WorkingObjects\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
+use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
+
 
 /**
  * Class SubscriptionCreateResponseObject

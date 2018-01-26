@@ -1,9 +1,10 @@
 <?php
 
-namespace Ixolit\Dislo\WorkingObjects;
+namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
+use Ixolit\Dislo\WorkingObjects\WorkingObject;
 
 
 /**

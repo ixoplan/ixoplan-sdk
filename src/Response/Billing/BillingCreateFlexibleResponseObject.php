@@ -3,7 +3,8 @@
 namespace Ixolit\Dislo\Response\Billing;
 
 
-use Ixolit\Dislo\WorkingObjects\FlexibleObject;
+use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
+
 
 /**
  * Class BillingCreateFlexibleResponseObject

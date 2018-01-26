@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\Response\Subscription;
 
 
 use Ixolit\Dislo\FrontendClient;
-use Ixolit\Dislo\WorkingObjects\PriceObject;
+use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
 
 
 /**

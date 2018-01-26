@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Response\Subscription;
 
 
-use Ixolit\Dislo\WorkingObjects\PackageObject;
+use Ixolit\Dislo\WorkingObjects\Subscription\PackageObject;
 
 /**
  * Class SubscriptionGetPossiblePackageChangesResponseObject
