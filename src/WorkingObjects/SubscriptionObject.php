@@ -114,6 +114,11 @@ final class SubscriptionObject implements WorkingObject {
     private $currentPeriodEvent;
 
     /**
+     * @var float
+     */
+    private $nextBillingAmount;
+
+    /**
      * Subscription constructor.
      *
      * @param int                    $subscriptionId
@@ -135,6 +140,7 @@ final class SubscriptionObject implements WorkingObject {
      * @param bool                   $isExternal
      * @param CouponUsageObject|null $couponUsage
      * @param PeriodEventObject|null $currentPeriodEvent
+     * @param float|null             $nextBillingAmount
      */
     public function __construct(
         $subscriptionId,
@@ -155,7 +161,8 @@ final class SubscriptionObject implements WorkingObject {
         $minimumTermEndsAt = null,
         $isExternal = false,
         $couponUsage = null,
-        PeriodEventObject $currentPeriodEvent = null
+        PeriodEventObject $currentPeriodEvent = null,
+        $nextBillingAmount = null
     ) {
         $this->subscriptionId       = $subscriptionId;
         $this->currentPackage       = $currentPackage;
@@ -176,6 +183,7 @@ final class SubscriptionObject implements WorkingObject {
         $this->isExternal           = $isExternal;
         $this->couponUsage          = $couponUsage;
         $this->currentPeriodEvent   = $currentPeriodEvent;
+        $this->nextBillingAmount    = $nextBillingAmount;
     }
 
     /**
@@ -353,6 +361,13 @@ final class SubscriptionObject implements WorkingObject {
     }
 
     /**
+     * @return float|null
+     */
+    public function getNextBillingAmount() {
+        return $this->nextBillingAmount;
+    }
+
+    /**
      * @return bool
      */
     public function isActive() {
@@ -416,6 +431,9 @@ final class SubscriptionObject implements WorkingObject {
                 : null,
             isset($response['currentPeriodEvent'])
                 ? PeriodEventObject::fromResponse($response['currentPeriodEvent'])
+                : null,
+            isset($response['nextBillingAmount'])
+                ? $response['nextBillingAmount']
                 : null
         );
     }
@@ -469,6 +487,7 @@ final class SubscriptionObject implements WorkingObject {
             'currentPeriodEvent'   => $this->currentPeriodEvent
                 ? $this->currentPeriodEvent->toArray()
                 : null,
+            'nextBillingAmount'    => $this->nextBillingAmount,
         ];
     }
 

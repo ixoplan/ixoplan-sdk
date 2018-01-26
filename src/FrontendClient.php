@@ -282,9 +282,7 @@ final class FrontendClient {
      */
     private function userToData($userTokenOrId, array $data = []) {
         if ($this->forceTokenMode) {
-            $data['authToken'] = (\is_object($userTokenOrId) && $userTokenOrId instanceof AuthTokenObject)
-                ? (string)$userTokenOrId
-                : $userTokenOrId;
+            $data['authToken'] = (string)$userTokenOrId;
 
             return $data;
         }
@@ -316,9 +314,13 @@ final class FrontendClient {
             $userTokenOrId = $userTokenOrId->__toString();
         }
 
-        $data['userId'] = (\is_int($userTokenOrId) || \preg_match('/^[1-9][0-9]+$/D', $userTokenOrId))
-            ? (int)$userTokenOrId
-            : $userTokenOrId;
+        if (\is_int($userTokenOrId) || \preg_match('/^[0-9]+$/D', $userTokenOrId)) {
+            $data['userId'] = (int)$userTokenOrId;
+
+            return $data;
+        }
+
+        $data['authToken'] = $userTokenOrId;
 
         return $data;
     }
