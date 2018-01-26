@@ -8,7 +8,7 @@ namespace Ixolit\Dislo\Response;
  *
  * @package Ixolit\Dislo\Response
  *
- * @deprecated use Ixolit\Dislo\Response\UserVerificationFinishResponseObject instead
+ * @deprecated use Ixolit\Dislo\Response\UserEmailVerificationFinishResponseObject instead
  */
 class UserEmailVerificationFinishResponse extends UserVerificationFinishResponse {
 

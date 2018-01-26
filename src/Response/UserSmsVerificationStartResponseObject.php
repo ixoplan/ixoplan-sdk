@@ -4,16 +4,16 @@ namespace Ixolit\Dislo\Response;
 
 
 /**
- * Class UserVerificationStartResponseObject
+ * Class UserSmsVerificationStartResponseObject
  *
  * @package Ixolit\Dislo\Response
  */
-final class UserVerificationStartResponseObject {
+final class UserSmsVerificationStartResponseObject {
 
     /**
      * @param array $response
      *
-     * @return UserVerificationStartResponseObject
+     * @return UserSmsVerificationStartResponseObject
      */
     public static function fromResponse($response) {
         return new self();

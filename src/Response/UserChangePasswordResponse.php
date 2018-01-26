@@ -4,6 +4,13 @@ namespace Ixolit\Dislo\Response;
 
 use Ixolit\Dislo\WorkingObjects\User;
 
+/**
+ * Class UserChangePasswordResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated
+ */
 class UserChangePasswordResponse {
 	/**
 	 * @var User

@@ -6,11 +6,11 @@ namespace Ixolit\Dislo\Response;
 use Ixolit\Dislo\WorkingObjects\ExternalProfileObject;
 
 /**
- * Class BillingExternalGetProfileResponseObject
+ * Class BillingExternalGetProfileByExternalIdResponseObject
  *
  * @package Ixolit\Dislo\Response
  */
-final class BillingExternalGetProfileResponseObject {
+final class BillingExternalGetProfileByExternalIdResponseObject {
 
     /**
      * @var ExternalProfileObject
@@ -34,7 +34,7 @@ final class BillingExternalGetProfileResponseObject {
     /**
      * @param array $response
      *
-     * @return BillingExternalGetProfileResponseObject
+     * @return BillingExternalGetProfileByExternalIdResponseObject
      */
     public static function fromResponse($response) {
         return new self(ExternalProfileObject::fromResponse($response['externalProfile']));

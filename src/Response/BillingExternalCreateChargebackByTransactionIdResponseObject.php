@@ -4,11 +4,11 @@ namespace Ixolit\Dislo\Response;
 
 
 /**
- * Class BillingExternalCreateChargebackResponseObject
+ * Class BillingExternalCreateChargebackByTransactionIdResponseObject
  *
  * @package Ixolit\Dislo\Response
  */
-final class BillingExternalCreateChargebackResponseObject {
+final class BillingExternalCreateChargebackByTransactionIdResponseObject {
 
     /**
      * @var int
@@ -32,7 +32,7 @@ final class BillingExternalCreateChargebackResponseObject {
     /**
      * @param array $response
      *
-     * @return BillingExternalCreateChargebackResponseObject
+     * @return BillingExternalCreateChargebackByTransactionIdResponseObject
      */
     public static function fromResponse($response) {
         return new self($response['billingEventId']);

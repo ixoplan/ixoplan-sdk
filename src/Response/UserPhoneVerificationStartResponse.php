@@ -8,7 +8,7 @@ namespace Ixolit\Dislo\Response;
  *
  * @package Ixolit\Dislo\Response
  *
- * @deprecated use Ixolit\Dislo\Response\UserVerificationStartResponseObject instead
+ * @deprecated use Ixolit\Dislo\Response\UserPhoneVerificationStartResponseObject instead
  */
 class UserPhoneVerificationStartResponse extends UserVerificationStartResponse {
 

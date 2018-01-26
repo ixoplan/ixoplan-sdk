@@ -9,7 +9,7 @@ use Ixolit\Dislo\WorkingObjects\Price;
  *
  * @package Ixolit\Dislo\Response
  *
- * @deprecated use Ixolit\Dislo\Response\CouponCodeValidateResponseObject instead
+ * @deprecated
  */
 class CouponCodeValidateResponse extends CouponCodeResponse {
 	/**

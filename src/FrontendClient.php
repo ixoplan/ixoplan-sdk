@@ -16,9 +16,11 @@ use Ixolit\Dislo\Response\BillingCloseActiveRecurringResponseObject;
 use Ixolit\Dislo\Response\BillingCloseFlexibleResponseObject;
 use Ixolit\Dislo\Response\BillingCreateFlexibleResponseObject;
 use Ixolit\Dislo\Response\BillingCreatePaymentResponseObject;
-use Ixolit\Dislo\Response\BillingExternalCreateChargebackResponseObject;
+use Ixolit\Dislo\Response\BillingExternalCreateChargebackByEventIdResponseObject;
+use Ixolit\Dislo\Response\BillingExternalCreateChargebackByTransactionIdResponseObject;
 use Ixolit\Dislo\Response\BillingExternalCreateChargeResponseObject;
-use Ixolit\Dislo\Response\BillingExternalGetProfileResponseObject;
+use Ixolit\Dislo\Response\BillingExternalGetProfileByExternalIdResponseObject;
+use Ixolit\Dislo\Response\BillingExternalGetProfileBySubscriptionIdResponseObject;
 use Ixolit\Dislo\Response\BillingGetActiveRecurringResponseObject;
 use Ixolit\Dislo\Response\BillingGetEventResponseObject;
 use Ixolit\Dislo\Response\BillingGetEventsForUserResponseObject;
@@ -27,7 +29,8 @@ use Ixolit\Dislo\Response\BillingGetFlexibleResponseObject;
 use Ixolit\Dislo\Response\BillingMethodsGetAvailableResponseObject;
 use Ixolit\Dislo\Response\BillingMethodsGetResponseObject;
 use Ixolit\Dislo\Response\CouponCodeCheckResponseObject;
-use Ixolit\Dislo\Response\CouponCodeValidateResponseObject;
+use Ixolit\Dislo\Response\CouponCodeValidateNewResponseObject;
+use Ixolit\Dislo\Response\CouponCodeValidateUpgradeResponseObject;
 use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponseObject;
 use Ixolit\Dislo\Response\PackageGetResponseObject;
 use Ixolit\Dislo\Response\PackagesListResponseObject;
@@ -52,12 +55,14 @@ use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponseObject;
 use Ixolit\Dislo\Response\SubscriptionGetPossiblePackageChangesResponseObject;
 use Ixolit\Dislo\Response\SubscriptionGetResponseObject;
 use Ixolit\Dislo\Response\UserAuthenticateResponseObject;
+use Ixolit\Dislo\Response\UserChangePasswordResponseObject;
 use Ixolit\Dislo\Response\UserChangeResponseObject;
 use Ixolit\Dislo\Response\UserCreateResponseObject;
 use Ixolit\Dislo\Response\UserDeauthenticateResponseObject;
 use Ixolit\Dislo\Response\UserDeleteResponseObject;
 use Ixolit\Dislo\Response\UserDisableLoginResponseObject;
 use Ixolit\Dislo\Response\UserEnableLoginResponseObject;
+use Ixolit\Dislo\Response\UserExtendTokenResponseObject;
 use Ixolit\Dislo\Response\UserFindResponseObject;
 use Ixolit\Dislo\Response\UserGetAuthenticatedResponseObject;
 use Ixolit\Dislo\Response\UserGetBalanceResponseObject;
@@ -65,13 +70,15 @@ use Ixolit\Dislo\Response\UserGetMetaProfileResponseObject;
 use Ixolit\Dislo\Response\UserGetResponseObject;
 use Ixolit\Dislo\Response\UserGetTokensResponseObject;
 use Ixolit\Dislo\Response\UserPhoneVerificationFinishResponseObject;
+use Ixolit\Dislo\Response\UserPhoneVerificationStartResponseObject;
 use Ixolit\Dislo\Response\UserRecoveryCheckResponseObject;
 use Ixolit\Dislo\Response\UserRecoveryFinishResponseObject;
 use Ixolit\Dislo\Response\UserRecoveryStartResponseObject;
 use Ixolit\Dislo\Response\UserSmsVerificationFinishResponseObject;
+use Ixolit\Dislo\Response\UserSmsVerificationStartResponseObject;
 use Ixolit\Dislo\Response\UserUpdateTokenResponseObject;
-use Ixolit\Dislo\Response\UserVerificationFinishResponseObject;
-use Ixolit\Dislo\Response\UserVerificationStartResponseObject;
+use Ixolit\Dislo\Response\UserEmailVerificationFinishResponseObject;
+use Ixolit\Dislo\Response\UserEmailVerificationStartResponseObject;
 use Ixolit\Dislo\WorkingObjects\AuthTokenObject;
 use Ixolit\Dislo\WorkingObjects\BillingEventObject;
 use Ixolit\Dislo\WorkingObjects\FlexibleObject;
@@ -266,6 +273,8 @@ final class FrontendClient {
     }
 
     /**
+     * Sets user identification to request data.
+     *
      * @param string|int|UserObject|null $userTokenOrId
      * @param array                      $data
      *
@@ -540,7 +549,7 @@ final class FrontendClient {
      * @param string                $description           textual description of the chargeback for support
      * @param UserObject|int|string $userTokenOrId         User authentication token or user ID.
      *
-     * @return BillingExternalCreateChargebackResponseObject
+     * @return BillingExternalCreateChargebackByTransactionIdResponseObject
      *
      * @throws DisloException
      */
@@ -558,7 +567,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_CREATE_CHARGEBACK, $data);
 
-        return BillingExternalCreateChargebackResponseObject::fromResponse($response);
+        return BillingExternalCreateChargebackByTransactionIdResponseObject::fromResponse($response);
     }
 
     /**
@@ -572,7 +581,7 @@ final class FrontendClient {
      * @param string                $description            textual description of the chargeback for support
      * @param UserObject|int|string $userTokenOrId          User authentication token or user ID.
      *
-     * @return BillingExternalCreateChargebackResponseObject
+     * @return BillingExternalCreateChargebackByEventIdResponseObject
      *
      * @throws DisloException
      */
@@ -590,7 +599,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_CREATE_CHARGEBACK, $data);
 
-        return BillingExternalCreateChargebackResponseObject::fromResponse($response);
+        return BillingExternalCreateChargebackByEventIdResponseObject::fromResponse($response);
     }
 
     /**
@@ -602,7 +611,7 @@ final class FrontendClient {
      * @param string                $externalId    ID for the external profile
      * @param UserObject|int|string $userTokenOrId User authentication token or user ID.
      *
-     * @return BillingExternalGetProfileResponseObject
+     * @return BillingExternalGetProfileByExternalIdResponseObject
      *
      * @throws DisloException
      */
@@ -613,7 +622,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_GET_PROFILE, $data);
 
-        return BillingExternalGetProfileResponseObject::fromResponse($response);
+        return BillingExternalGetProfileByExternalIdResponseObject::fromResponse($response);
     }
 
     /**
@@ -625,7 +634,7 @@ final class FrontendClient {
      * @param SubscriptionObject|int $subscription  ID for the subscription expected to have an external profile
      * @param UserObject|int|string  $userTokenOrId User authentication token or user ID.
      *
-     * @return BillingExternalGetProfileResponseObject
+     * @return BillingExternalGetProfileBySubscriptionIdResponseObject
      *
      * @throws DisloException
      */
@@ -638,11 +647,11 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_GET_PROFILE, $data);
 
-        return BillingExternalGetProfileResponseObject::fromResponse($response);
+        return BillingExternalGetProfileBySubscriptionIdResponseObject::fromResponse($response);
     }
 
     /**
-     * Create a charge back for an external charge by using the original billing event ID.
+     * Get specific billing event.
      *
      * @see https://docs.dislo.com/display/DIS/GetBillingEvent
      *
@@ -664,7 +673,7 @@ final class FrontendClient {
     }
 
     /**
-     * Create a charge back for an external charge by using the original billing event ID.
+     * Get billing events for a user in paginated form.
      *
      * @see https://docs.dislo.com/display/DIS/GetBillingEventsForUser
      *
@@ -712,7 +721,7 @@ final class FrontendClient {
     }
 
     /**
-     * Get specific payment method for a user by its identifier
+     * Get specific flexible payment method for a user by its identifier
      *
      * @param int                   $flexibleIdentifier
      * @param UserObject|int|string $userTokenOrId User authentication token or user ID.
@@ -1315,6 +1324,8 @@ final class FrontendClient {
     }
 
     /**
+     * Get packages to which the given subscription is able to change to.
+     *
      * @param UserObject|int|string  $userTokenOrId
      * @param SubscriptionObject|int $subscriptionId
      * @param string                 $type           'queued' or 'immediate'
@@ -1410,6 +1421,8 @@ final class FrontendClient {
     }
 
     /**
+     * Get the subscription period events in paginated form.
+     *
      * @param int                        $subscriptionId
      * @param UserObject|int|string|null $userTokenOrId
      * @param int                        $limit
@@ -1446,7 +1459,7 @@ final class FrontendClient {
      * @param array  $addonPackageIdentifiers
      * @param string $currencyCode
      *
-     * @return CouponCodeValidateResponseObject
+     * @return CouponCodeValidateNewResponseObject
      */
     public function couponCodeValidateNew(
         $couponCode,
@@ -1464,7 +1477,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_COUPON_CODE_VALIDATE, $data);
 
-        return CouponCodeValidateResponseObject::fromResponse($response, $couponCode, self::COUPON_EVENT_START);
+        return CouponCodeValidateNewResponseObject::fromResponse($response, $couponCode, self::COUPON_EVENT_START);
     }
 
     /**
@@ -1478,7 +1491,7 @@ final class FrontendClient {
      * @param UserObject|string|int  $userTokenOrId
      * @param SubscriptionObject|int $subscription
      *
-     * @return CouponCodeValidateResponseObject
+     * @return CouponCodeValidateUpgradeResponseObject
      */
     public function couponCodeValidateUpgrade(
         $couponCode,
@@ -1501,7 +1514,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_COUPON_CODE_VALIDATE, $data);
 
-        return CouponCodeValidateResponseObject::fromResponse($response, $couponCode, self::COUPON_EVENT_UPGRADE);
+        return CouponCodeValidateUpgradeResponseObject::fromResponse($response, $couponCode, self::COUPON_EVENT_UPGRADE);
     }
 
     //endregion
@@ -1609,7 +1622,7 @@ final class FrontendClient {
      * @param UserObject|string|int $userTokenOrId the unique user id to change
      * @param string                $newPassword   the new password
      *
-     * @return UserChangeResponseObject
+     * @return UserChangePasswordResponseObject
      */
     public function userChangePassword($userTokenOrId, $newPassword) {
         $data = $this->userToData($userTokenOrId, [
@@ -1618,7 +1631,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_CHANGE_PASSWORD, $data);
 
-        return UserChangeResponseObject::fromResponse($response);
+        return UserChangePasswordResponseObject::fromResponse($response);
     }
 
     /**
@@ -1775,7 +1788,7 @@ final class FrontendClient {
      * @param string   $ipAddress
      * @param int|null $tokenLifetime   Omit to use lifetime set initially
      *
-     * @return UserUpdateTokenResponseObject
+     * @return UserExtendTokenResponseObject
      */
     public function userExtendToken($authToken, $ipAddress = '', $tokenLifetime = null) {
         $data = [
@@ -1791,7 +1804,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_EXTEND_AUTH_TOKEN, $data);
 
-        return UserUpdateTokenResponseObject::fromResponse($response);
+        return UserExtendTokenResponseObject::fromResponse($response);
     }
 
     /**
@@ -1890,9 +1903,9 @@ final class FrontendClient {
      */
     public function userRecoveryFinish($recoveryToken, $ipAddress, $newPassword) {
         $data = [
-            'recoveryToken' => $recoveryToken,
-            'ipAddress' => $ipAddress,
-            'plaintextPassword' => $newPassword
+            'recoveryToken'     => $recoveryToken,
+            'ipAddress'         => $ipAddress,
+            'plaintextPassword' => $newPassword,
         ];
 
         $response = $this->request(self::API_URI_USER_RECOVERY_FINISH, $data);
@@ -1909,10 +1922,9 @@ final class FrontendClient {
      * @param string                $ipAddress
      * @param string                $verificationLink
      *
-     * @return UserVerificationStartResponseObject
+     * @return UserEmailVerificationStartResponseObject
      */
-    public function userEmailVerificationStart($userTokenOrId, $ipAddress, $verificationLink
-    ) {
+    public function userEmailVerificationStart($userTokenOrId, $ipAddress, $verificationLink) {
         $data = $this->userToData($userTokenOrId, [
             'verificationLink' => $verificationLink,
             'ipAddress'        => (string)$ipAddress,
@@ -1921,7 +1933,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_START, $data);
 
-        return UserVerificationStartResponseObject::fromResponse($response);
+        return UserEmailVerificationStartResponseObject::fromResponse($response);
     }
 
     /**
@@ -1929,7 +1941,7 @@ final class FrontendClient {
      *
      * @param $verificationToken
      *
-     * @return UserVerificationFinishResponseObject
+     * @return UserEmailVerificationFinishResponseObject
      */
     public function userEmailVerificationFinish($verificationToken) {
         $data = [
@@ -1939,7 +1951,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_FINISH, $data);
 
-        return UserVerificationFinishResponseObject::fromResponse($response);
+        return UserEmailVerificationFinishResponseObject::fromResponse($response);
     }
 
     /**
@@ -1947,7 +1959,7 @@ final class FrontendClient {
      * @param string                $ipAddress
      * @param string                $phoneNumber
      *
-     * @return UserVerificationStartResponseObject
+     * @return UserPhoneVerificationStartResponseObject
      */
     public function userPhoneVerificationStart($userTokenOrId, $ipAddress, $phoneNumber) {
         $data = $this->userToData($userTokenOrId, [
@@ -1960,7 +1972,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_START, $data);
 
-        return UserVerificationStartResponseObject::fromResponse($response);
+        return UserPhoneVerificationStartResponseObject::fromResponse($response);
     }
 
     /**
@@ -1987,7 +1999,7 @@ final class FrontendClient {
      * @param string                $ipAddress
      * @param string                $phoneNumber
      *
-     * @return UserVerificationStartResponseObject
+     * @return UserSmsVerificationStartResponseObject
      */
     public function userSmsVerificationStart($userTokenOdId, $ipAddress, $phoneNumber) {
         $data = $this->userToData($userTokenOdId, [
@@ -2000,7 +2012,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_START, $data);
 
-        return UserVerificationStartResponseObject::fromResponse($response);
+        return UserSmsVerificationStartResponseObject::fromResponse($response);
     }
 
     /**

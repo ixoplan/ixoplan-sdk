@@ -8,11 +8,11 @@ use Ixolit\Dislo\WorkingObjects\PriceObject;
 
 
 /**
- * Class CouponCodeValidateResponseObject
+ * Class CouponCodeValidateUpgradeResponseObject
  *
  * @package Ixolit\Dislo\Response
  */
-final class CouponCodeValidateResponseObject {
+final class CouponCodeValidateUpgradeResponseObject {
 
     /**
      * Coupon code does not exist.
@@ -160,7 +160,7 @@ final class CouponCodeValidateResponseObject {
      * @param string $couponCode
      * @param string $event
      *
-     * @return CouponCodeValidateResponseObject
+     * @return CouponCodeValidateUpgradeResponseObject
      */
     public static function fromResponse($response, $couponCode, $event) {
         return new self(

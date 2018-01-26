@@ -6,11 +6,11 @@ namespace Ixolit\Dislo\Response;
 use Ixolit\Dislo\WorkingObjects\UserObject;
 
 /**
- * Class UserVerificationFinishResponseObject
+ * Class UserEmailVerificationFinishResponseObject
  *
  * @package Ixolit\Dislo\Response
  */
-final class UserVerificationFinishResponseObject {
+final class UserEmailVerificationFinishResponseObject {
 
     /**
      * @var UserObject|null
@@ -34,7 +34,7 @@ final class UserVerificationFinishResponseObject {
     /**
      * @param array $response
      *
-     * @return UserVerificationFinishResponseObject
+     * @return UserEmailVerificationFinishResponseObject
      */
     public static function fromResponse($response) {
         return new self(

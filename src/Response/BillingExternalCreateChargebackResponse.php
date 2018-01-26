@@ -8,7 +8,7 @@ namespace Ixolit\Dislo\Response;
  *
  * @package Ixolit\Dislo\Response
  *
- * @deprecated use Ixolit\Dislo\Response\BillingExternalCreateChargebackResponseObject instead
+ * @deprecated
  */
 class BillingExternalCreateChargebackResponse {
 	/**

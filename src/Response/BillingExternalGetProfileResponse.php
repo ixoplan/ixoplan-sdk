@@ -9,7 +9,7 @@ use Ixolit\Dislo\WorkingObjects\ExternalProfile;
  *
  * @package Ixolit\Dislo\Response
  *
- * @deprecated use Ixolit\Dislo\Response\BillingExternalGetProfileResponseObject
+ * @deprecated
  */
 class BillingExternalGetProfileResponse {
 	/**
