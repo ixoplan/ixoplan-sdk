@@ -50,7 +50,7 @@ class Package implements WorkingObject {
 	private $hasTrialPeriod;
 
 	/** @var BillingMethod[] */
-	private $billingMethods;
+	private $billingMethods = [];
 
 	/** @var bool */
 	private $requireFlexibleForFreeSignup;
