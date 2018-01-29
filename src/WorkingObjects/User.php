@@ -170,6 +170,15 @@ class User implements WorkingObject {
 	    return $this->authToken;
     }
 
+    /**
+     * @param AuthToken $authToken
+     * @return $this
+     */
+    public function setAuthToken(AuthToken $authToken){
+        $this->authToken = $authToken;
+        return $this;
+    }
+
 	/**
 	 * @param array $response
 	 *

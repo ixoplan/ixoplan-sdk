@@ -28,6 +28,7 @@ use Ixolit\Dislo\Response\BillingMethodsGetResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
 use Ixolit\Dislo\Response\MailTrackOpenedResponse;
+use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse;
 use Ixolit\Dislo\Response\PackageGetResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
 use Ixolit\Dislo\Response\SubscriptionAttachCouponResponse;
@@ -78,6 +79,7 @@ use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
 use Ixolit\Dislo\Response\UserVerificationStartResponse;
+use Ixolit\Dislo\WorkingObjects\AuthToken;
 use Ixolit\Dislo\WorkingObjects\BillingEvent;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
@@ -128,7 +130,11 @@ class Client {
 
 	private function userToData($userTokenOrId, &$data = []) {
 		if ($this->forceTokenMode) {
-			$data['authToken'] = $userTokenOrId;
+		    if (is_object($userTokenOrId) && $userTokenOrId instanceof AuthToken) {
+		        $data['authToken'] = (string) $userTokenOrId;
+		    } else {
+		        $data['authToken'] = $userTokenOrId;
+		    }
 			return $data;
 		}
 		if ($userTokenOrId instanceof User) {
@@ -293,36 +299,38 @@ class Client {
 		return BillingCloseFlexibleResponse::fromResponse($response);
 	}
 
-	/**
-	 * Create a new flexible for a user.
-	 *
-	 * Note: there can only be ONE active flexible per user. In case there is already an active one, and you
-	 * successfully create a new one, the old flexible will be closed automatically.
-	 *
-	 * @see https://docs.dislo.com/display/DIS/CreateFlexible
-	 *
-	 * @param User|int|string $userTokenOrId User authentication token or user ID.
-	 * @param string          $billingMethod
-	 * @param string          $returnUrl
-	 * @param array           $paymentDetails
-	 * @param string          $currencyCode
-	 *
-	 * @return BillingCreateFlexibleResponse
-	 *
-	 * @throws DisloException
-	 */
-	public function billingCreateFlexible(
-		$userTokenOrId,
-		$billingMethod,
-		$returnUrl,
-		$paymentDetails,
-		$currencyCode = ''
-	) {
+    /**
+     * Create a new flexible for a user.
+     *
+     * Note: there can only be ONE active flexible per user. In case there is already an active one, and you
+     * successfully create a new one, the old flexible will be closed automatically.
+     *
+     * @see https://docs.dislo.com/display/DIS/CreateFlexible
+     *
+     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param string          $billingMethod
+     * @param string          $returnUrl
+     * @param array           $paymentDetails
+     * @param string          $currencyCode
+     *
+     * @param null            $subscriptionId
+     *
+     * @return BillingCreateFlexibleResponse
+     */
+    public function billingCreateFlexible(
+        $userTokenOrId,
+        $billingMethod,
+        $returnUrl,
+        $paymentDetails,
+        $currencyCode = '',
+        $subscriptionId = null
+    ) {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
 		$data['billingMethod']  = $billingMethod;
 		$data['returnUrl']      = (string)$returnUrl;
 		$data['paymentDetails'] = $paymentDetails;
+		$data['subscriptionId'] = $subscriptionId;
 		if ($currencyCode) {
 			$data['currencyCode'] = $currencyCode;
 		}
@@ -2070,6 +2078,17 @@ class Client {
 		];
 		$response = $this->request('/frontend/misc/trackOpenedMail', $data);
 		return MailTrackOpenedResponse::fromResponse($response);
+	}
+
+	/**
+	 * Retrieve Dislo's redirector configuration
+	 *
+	 * @return MiscGetRedirectorConfigurationResponse
+	 */
+	public function miscGetRedirectorConfiguration() {
+		$data = [];
+		$response = $this->request('/frontend/misc/getRedirectorConfiguration', $data);
+		return MiscGetRedirectorConfigurationResponse::fromResponse($response);
 	}
 
 	/**
