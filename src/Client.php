@@ -156,7 +156,7 @@ class Client {
 			$userTokenOrId = $userTokenOrId->__toString();
 		}
 
-		if (\is_int($userTokenOrId) || \preg_match('/^[1-9][0-9]+$/D', $userTokenOrId)) {
+		if (\is_int($userTokenOrId) || \preg_match('/^[0-9]+$/D', $userTokenOrId)) {
 			$data['userId'] = (int)$userTokenOrId;
 		} else {
 			$data['authToken'] = $userTokenOrId;
