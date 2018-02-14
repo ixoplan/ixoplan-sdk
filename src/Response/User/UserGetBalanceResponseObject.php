@@ -13,19 +13,19 @@ use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
 final class UserGetBalanceResponseObject {
 
     /**
-     * @var PriceObject
+     * @var PriceObject|null
      */
     private $balance;
 
     /**
-     * @param PriceObject $balance
+     * @param PriceObject|null $balance
      */
-    public function __construct(PriceObject $balance) {
+    public function __construct(PriceObject $balance = null) {
         $this->balance = $balance;
     }
 
     /**
-     * @return PriceObject
+     * @return PriceObject|null
      */
     public function getBalance() {
         return $this->balance;
@@ -37,7 +37,11 @@ final class UserGetBalanceResponseObject {
      * @return UserGetBalanceResponseObject
      */
     public static function fromResponse($response) {
-        return new self(PriceObject::fromResponse($response['balance']));
+        return new self(
+            !empty($response['balance'])
+                ? PriceObject::fromResponse($response['balance'])
+                : null
+        );
     }
 
 }

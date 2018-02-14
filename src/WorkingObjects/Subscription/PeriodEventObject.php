@@ -188,7 +188,9 @@ final class PeriodEventObject implements WorkingObject {
             'originalEndsAt'        => $this->originalEndsAt
                 ? $this->originalEndsAt->format('Y-m-d H:i:s')
                 : null,
-            'billingEvent'          => $this->billingEvent->toArray(),
+            'billingEvent'          => $this->billingEvent
+                ? $this->billingEvent->toArray()
+                : null,
         ];
     }
 

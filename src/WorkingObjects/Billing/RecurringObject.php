@@ -222,6 +222,8 @@ final class RecurringObject implements WorkingObject {
             '_type'         => 'Recurring',
             'recurringId'   => $this->recurringId,
             'status'        => $this->status,
+            'providerToken' => $this->providerToken,
+            'subscription'  => $this->subscription->toArray(),
             'createdAt'     => $this->createdAt->format('Y-m-d H:i:s'),
             'canceledAt'    => $this->canceledAt
                 ? $this->canceledAt->format('Y-m-d H:i:s')
@@ -230,6 +232,8 @@ final class RecurringObject implements WorkingObject {
                 ? $this->closedAt->format('Y-m-d H:i:s')
                 : null,
             'parameters'    => $this->parameters,
+            'amount'        => $this->amount,
+            'currency'      => $this->currency,
             'billingMethod' => $this->billingMethod->toArray(),
         ];
     }

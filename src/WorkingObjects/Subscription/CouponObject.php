@@ -12,6 +12,9 @@ use Ixolit\Dislo\WorkingObjects\WorkingObject;
  */
 final class CouponObject implements WorkingObject {
 
+    const COUPON_EVENT_START = 'subscription_start';
+    const COUPON_EVENT_UPGRADE = 'subscription_upgrade';
+
     /**
      * @var string
      */

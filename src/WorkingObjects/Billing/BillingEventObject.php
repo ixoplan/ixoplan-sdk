@@ -109,7 +109,7 @@ final class BillingEventObject implements WorkingObject {
         $userId,
         $currencyCode,
         $amount,
-        $createdAt,
+        \DateTime $createdAt,
         $type,
         $status,
         $description,

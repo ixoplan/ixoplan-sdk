@@ -11,7 +11,7 @@ namespace Ixolit\Dislo\Response\Subscription;
 final class SubscriptionAttachCouponResponseObject {
 
     /**
-     * @var bool|null
+     * @var bool
      */
     private $attached;
 
@@ -23,8 +23,8 @@ final class SubscriptionAttachCouponResponseObject {
     /**
      * SubscriptionAttachCouponResponse constructor.
      *
-     * @param bool   $attached
-     * @param string $reason
+     * @param bool        $attached
+     * @param string|null $reason
      */
     public function __construct($attached, $reason) {
         $this->attached = $attached;
@@ -32,7 +32,7 @@ final class SubscriptionAttachCouponResponseObject {
     }
 
     /**
-     * @return bool|null
+     * @return bool
      */
     public function getAttached() {
         return $this->attached;
@@ -52,9 +52,7 @@ final class SubscriptionAttachCouponResponseObject {
      */
     public static function fromResponse($response) {
         return new self(
-            isset($response['attached'])
-                ? $response['attached']
-                : null,
+            $response['attached'],
             isset($response['reason'])
                 ? $response['reason']
                 : null

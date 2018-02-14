@@ -54,6 +54,13 @@ final class SubscriptionCalculatePackageChangeResponseObject {
     }
 
     /**
+     * @return PriceObject
+     */
+    public function getPrice() {
+        return $this->price;
+    }
+
+    /**
      * @return boolean
      */
     public function isNeedsBilling() {
@@ -65,6 +72,13 @@ final class SubscriptionCalculatePackageChangeResponseObject {
      */
     public function isAppliedImmediately() {
         return $this->appliedImmediately;
+    }
+
+    /**
+     * @return PriceObject|null
+     */
+    public function getRecurringPrice() {
+        return $this->recurringPrice;
     }
 
     /**

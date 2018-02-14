@@ -220,6 +220,7 @@ final class UserObject implements WorkingObject {
     public function toArray() {
         return [
             '_type'         => 'User',
+            'userId'        => $this->userId,
             'createdAt'     => $this->createdAt->format('Y-m-d H:i:s'),
             'loginDisabled' => $this->loginDisabled,
             'language'      => $this->language,

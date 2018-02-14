@@ -92,8 +92,8 @@ final class SubscriptionCreateResponseObject implements SubscriptionResponseInte
             SubscriptionObject::fromResponse($response['subscription']),
             $response['needsBilling'],
             PriceObject::fromResponse($response['price']),
-            isset($response['requireFlexibleForFreeUpgrade'])
-                ? $response['requireFlexibleForFreeUpgrade']
+            isset($response['requireFlexibleForFreeSignup'])
+                ? $response['requireFlexibleForFreeSignup']
                 : false
         );
     }

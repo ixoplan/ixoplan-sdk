@@ -84,6 +84,7 @@ use Ixolit\Dislo\Response\User\UserEmailVerificationFinishResponseObject;
 use Ixolit\Dislo\Response\User\UserEmailVerificationStartResponseObject;
 use Ixolit\Dislo\WorkingObjects\Billing\BillingEventObject;
 use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
+use Ixolit\Dislo\WorkingObjects\Subscription\CouponObject;
 use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
 use Ixolit\Dislo\WorkingObjects\User\UserObject;
 use Psr\Http\Message\StreamInterface;
@@ -166,12 +167,6 @@ final class FrontendClient {
     const API_URI_EXPORT_STREAM_QUERY = '/export/v2/query';
 
     //endregion
-
-    const COUPON_EVENT_START    = 'subscription_start';
-    const COUPON_EVENT_UPGRADE  = 'subscription_upgrade';
-
-    const PLAN_CHANGE_IMMEDIATE = 'immediate';
-    const PLAN_CHANGE_QUEUED    = 'queued';
 
     const ORDER_DIR_ASC = 'ASC';
     const ORDER_DIR_DESC = 'DESC';
@@ -1538,13 +1533,13 @@ final class FrontendClient {
             'couponCode'              => $couponCode,
             'packageIdentifier'       => $packageIdentifier,
             'addonPackageIdentifiers' => $addonPackageIdentifiers,
-            'event'                   => self::COUPON_EVENT_START,
+            'event'                   => CouponObject::COUPON_EVENT_START,
             'currencyCode'            => $currencyCode,
         ];
 
         $response = $this->request(self::API_URI_COUPON_CODE_VALIDATE, $data);
 
-        return CouponCodeValidateNewResponseObject::fromResponse($response, $couponCode, self::COUPON_EVENT_START);
+        return CouponCodeValidateNewResponseObject::fromResponse($response, $couponCode, CouponObject::COUPON_EVENT_START);
     }
 
     /**
@@ -1572,7 +1567,7 @@ final class FrontendClient {
             'couponCode'              => $couponCode,
             'packageIdentifier'       => $packageIdentifier,
             'addonPackageIdentifiers' => $addonPackageIdentifiers,
-            'event'                   => self::COUPON_EVENT_UPGRADE,
+            'event'                   => CouponObject::COUPON_EVENT_UPGRADE,
             'currencyCode'            => $currencyCode,
             'subscriptionId'          => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
@@ -1581,7 +1576,7 @@ final class FrontendClient {
 
         $response = $this->request(self::API_URI_COUPON_CODE_VALIDATE, $data);
 
-        return CouponCodeValidateUpgradeResponseObject::fromResponse($response, $couponCode, self::COUPON_EVENT_UPGRADE);
+        return CouponCodeValidateUpgradeResponseObject::fromResponse($response, $couponCode, CouponObject::COUPON_EVENT_UPGRADE);
     }
 
     //endregion

@@ -4,6 +4,7 @@ namespace Ixolit\Dislo\Response\Subscription;
 
 
 use Ixolit\Dislo\FrontendClient;
+use Ixolit\Dislo\WorkingObjects\Subscription\CouponObject;
 use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
 
 
@@ -33,6 +34,7 @@ final class CouponCodeValidateNewResponseObject {
      * Coupon max usages reached.
      */
     const REASON_MAX_USAGE_REACHED = 'INVALID_USAGE';
+
     /**
      * Coupon is not applicable for the given event
      */
@@ -57,20 +59,24 @@ final class CouponCodeValidateNewResponseObject {
      * @var string
      */
     private $reason;
+
     /**
-     * @var PriceObject
+     * @var PriceObject|null
      */
     private $discountedPrice;
 
-    /** @var PriceObject|null */
+
+    /**
+     * @var PriceObject|null
+     */
     private $recurringPrice;
 
     /**
-     * @param bool   	 $valid
-     * @param string 	 $reason
-     * @param string 	 $couponCode
-     * @param string 	 $event
-     * @param PriceObject 	 $discountedPrice
+     * @param bool             $valid
+     * @param string           $reason
+     * @param string           $couponCode
+     * @param string           $event
+     * @param PriceObject|null $discountedPrice
      * @param PriceObject|null $recurringPrice
      */
     public function __construct(
@@ -106,7 +112,7 @@ final class CouponCodeValidateNewResponseObject {
     }
 
     /**
-     * @return PriceObject
+     * @return PriceObject|null
      */
     public function getDiscountedPrice() {
         return $this->discountedPrice;
@@ -125,9 +131,9 @@ final class CouponCodeValidateNewResponseObject {
     public function getReasonAsText() {
         switch ($this->reason) {
             case self::REASON_INVALID_EVENT:
-                if ($this->event == FrontendClient::COUPON_EVENT_START) {
+                if ($this->event == CouponObject::COUPON_EVENT_START) {
                     return 'This coupon code is not valid for new subscriptions.';
-                } else if ($this->event == FrontendClient::COUPON_EVENT_UPGRADE) {
+                } else if ($this->event == CouponObject::COUPON_EVENT_UPGRADE) {
                     return 'This coupon code is not valid for upgrades.';
                 } else {
                     return 'This coupon code is not valid.';
@@ -168,8 +174,12 @@ final class CouponCodeValidateNewResponseObject {
             $response['reason'],
             $couponCode,
             $event,
-            PriceObject::fromResponse($response['discountedPrice']),
-            PriceObject::fromResponse($response['recurringPrice'])
+            isset($response['discountedPrice'])
+                ? PriceObject::fromResponse($response['discountedPrice'])
+                : null,
+            isset($response['recurringPrice'])
+                ? PriceObject::fromResponse($response['recurringPrice'])
+                : null
         );
     }
 

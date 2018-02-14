@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Response\Subscription;
 
 
-use Ixolit\Dislo\FrontendClient;
+use Ixolit\Dislo\WorkingObjects\Subscription\CouponObject;
 
 /**
  * Class CouponCodeCheckResponseObject
@@ -91,9 +91,9 @@ final class CouponCodeCheckResponseObject {
     public function getReasonAsText() {
         switch ($this->reason) {
             case self::REASON_INVALID_EVENT:
-                if ($this->event == FrontendClient::COUPON_EVENT_START) {
+                if ($this->event == CouponObject::COUPON_EVENT_START) {
                     return 'This coupon code is not valid for new subscriptions.';
-                } else if ($this->event == FrontendClient::COUPON_EVENT_UPGRADE) {
+                } else if ($this->event == CouponObject::COUPON_EVENT_UPGRADE) {
                     return 'This coupon code is not valid for upgrades.';
                 } else {
                     return 'This coupon code is not valid.';

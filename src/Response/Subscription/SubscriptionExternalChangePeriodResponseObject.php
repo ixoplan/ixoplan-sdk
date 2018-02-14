@@ -37,7 +37,7 @@ final class SubscriptionExternalChangePeriodResponseObject {
      * @return SubscriptionExternalChangePeriodResponseObject
      */
     public static function fromResponse($response) {
-        return new self(SubscriptionObject::fromResponse($response['subscription']));
+        return new self(SubscriptionObject::fromResponse(\reset($response)));
     }
 
 }
