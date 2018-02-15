@@ -19,7 +19,7 @@ class BillingMethodMock {
      */
     public static function create($available = null) {
         return new BillingMethodObject(
-            MockHelper::getFaker()->randomNumber(),
+            MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->word,
             \is_null($available)

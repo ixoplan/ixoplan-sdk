@@ -19,7 +19,7 @@ class PackagePeriodMock {
         $price = PriceMock::create((bool)\rand(0, 1));
 
         return new PackagePeriodObject(
-            MockHelper::getFaker()->randomNumber(),
+            MockHelper::getFaker()->uuid,
             'days',
             [
                 MockHelper::getFaker()->word => MockHelper::getFaker()->word,

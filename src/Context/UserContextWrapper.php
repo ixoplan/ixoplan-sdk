@@ -95,13 +95,11 @@ final class UserContextWrapper {
      * @return SubscriptionObject[]
      */
     public function getAllSubscriptions($cached = true) {
-        if ($cached && isset($this->subscriptionsCachedObject)) {
-            return $this->subscriptionsCachedObject->getObject();
+        if (!($cached && isset($this->subscriptionsCachedObject))) {
+            $this->subscriptionsCachedObject = new CachedObject(
+                $this->getFrontendClient()->subscriptionGetAll($this->getUserIdentifierForClient())->getSubscriptions()
+            );
         }
-
-        $this->subscriptionsCachedObject = new CachedObject(
-            $this->getFrontendClient()->subscriptionGetAll($this->getUserIdentifierForClient())->getSubscriptions()
-        );
 
         return $this->subscriptionsCachedObject->getObject();
     }
@@ -272,15 +270,22 @@ final class UserContextWrapper {
      * @return PriceObject
      */
     public function getAccountBalance($cached = true) {
-        if ($cached && isset($this->accountBalanceCachedObject)) {
-            return $this->accountBalanceCachedObject->getObject();
+        if (!($cached && isset($this->accountBalanceCachedObject))) {
+            $this->accountBalanceCachedObject = new CachedObject(
+                $this->getFrontendClient()->userGetAccountBalance($this->getUserIdentifierForClient())->getBalance()
+            );
         }
 
-        $this->accountBalanceCachedObject = new CachedObject(
-            $this->getFrontendClient()->userGetAccountBalance($this->getUserIdentifierForClient())->getBalance()
-        );
-
         return $this->accountBalanceCachedObject->getObject();
+    }
+
+    /**
+     * @return $this
+     */
+    public function removeAccountBalanceCache() {
+        $this->accountBalanceCachedObject = null;
+
+        return $this;
     }
 
     /**
@@ -289,13 +294,11 @@ final class UserContextWrapper {
      * @return AuthTokenObject[]
      */
     public function getAuthTokens($cached = true) {
-        if ($cached && isset($this->authTokensCachedObject)) {
-            return $this->authTokensCachedObject->getObject();
+        if (!($cached && isset($this->authTokensCachedObject))) {
+            $this->authTokensCachedObject = new CachedObject(
+                $this->getFrontendClient()->userGetTokens($this->getUserIdentifierForClient())->getTokens()
+            );
         }
-
-        $this->authTokensCachedObject = new CachedObject(
-            $this->getFrontendClient()->userGetTokens($this->getUserIdentifierForClient())->getTokens()
-        );
 
         return $this->authTokensCachedObject->getObject();
     }
@@ -310,27 +313,18 @@ final class UserContextWrapper {
     }
 
     /**
-     * @return $this
-     */
-    public function saveUserMetaData() {
-        return $this->changeUserMetaData($this->getUser()->getMetaData());
-    }
-
-    /**
      * @param array $userMetaData
      *
      * @return $this
      */
     public function changeUserMetaData($userMetaData = []) {
-        $authToken = $this->getUser()->getAuthToken();
-
         $changedUser = $this->getFrontendClient()->userChange(
             $this->getUserIdentifierForClient(),
             $this->getUser()->getLanguage(),
             $userMetaData
         )->getUser();
 
-        $this->user = $this->convertFromUserWithAuthToken($changedUser, $authToken);
+        $this->user = $this->convertFromUserWithAuthToken($changedUser);
 
         return $this;
     }
@@ -341,14 +335,13 @@ final class UserContextWrapper {
      * @return $this
      */
     public function changeUserPassword($newPassword) {
-        $authToken = $this->getUser()->getAuthToken();
 
         $changedUser = $this->getFrontendClient()->userChangePassword(
             $this->getUserIdentifierForClient(),
             $newPassword
         )->getUser();
 
-        $this->user = $this->convertFromUserWithAuthToken($changedUser, $authToken);
+        $this->user = $this->convertFromUserWithAuthToken($changedUser);
 
         return $this;
     }
@@ -368,7 +361,20 @@ final class UserContextWrapper {
      * @return $this
      */
     public function disableUserLogin() {
-        $this->user = $this->getFrontendClient()->userDisableLogin($this->getUserIdentifierForClient())->getUser();
+        $changedUser = $this->getFrontendClient()->userDisableLogin($this->getUserIdentifierForClient())->getUser();
+
+        $this->user = $this->convertFromUserWithAuthToken($changedUser);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function enableUserLogin() {
+        $changedUser = $this->getFrontendClient()->userEnableLogin($this->getUserIdentifierForClient())->getUser();
+
+        $this->user = $this->convertFromUserWithAuthToken($changedUser);
 
         return $this;
     }
@@ -378,7 +384,8 @@ final class UserContextWrapper {
      */
     public function closeActiveFlexible() {
         $this->getFrontendClient()->billingCloseFlexible(
-            $this->getActiveFlexible(), $this->getUserIdentifierForClient()
+            $this->getActiveFlexible(),
+            $this->getUserIdentifierForClient()
         );
 
         $this->activeFlexibleCachedObject = new CachedObject(null);
@@ -388,11 +395,10 @@ final class UserContextWrapper {
 
     /**
      * @param UserObject      $user
-     * @param AuthTokenObject $authToken
      *
      * @return UserObject
      */
-    protected function convertFromUserWithAuthToken(UserObject $user, AuthTokenObject $authToken) {
+    protected function convertFromUserWithAuthToken(UserObject $user) {
         $changedUser = new UserObject(
             $user->getUserId(),
             $user->getCreatedAt(),
@@ -403,7 +409,7 @@ final class UserContextWrapper {
             $user->getMetaData(),
             $user->getCurrencyCode(),
             $user->getVerifiedData(),
-            $authToken
+            $this->getUser()->getAuthToken()
         );
 
         return $changedUser;

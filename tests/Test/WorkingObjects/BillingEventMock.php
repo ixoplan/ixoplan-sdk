@@ -41,7 +41,7 @@ class BillingEventMock {
         $billingMethod = BillingMethodMock::create(true);
 
         return new BillingEventObject(
-            MockHelper::getFaker()->randomNumber(),
+            MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->randomNumber(),
             MockHelper::getFaker()->currencyCode,
             MockHelper::getFaker()->randomFloat(2),

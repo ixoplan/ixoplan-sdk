@@ -30,7 +30,7 @@ class FlexibleMock {
         $billingMethod = BillingMethodMock::create();
 
         return new FlexibleObject(
-            MockHelper::getFaker()->randomNumber(),
+            MockHelper::getFaker()->uuid,
             (
                     \is_null($status)
                     && \in_array($status, [

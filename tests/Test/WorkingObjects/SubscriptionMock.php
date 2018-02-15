@@ -46,7 +46,7 @@ class SubscriptionMock {
         }
 
         return new SubscriptionObject(
-            MockHelper::getFaker()->randomNumber(),
+            MockHelper::getFaker()->uuid,
             PackageMock::create(true),
             MockHelper::getFaker()->randomNumber(),
             \in_array($state, self::$states)

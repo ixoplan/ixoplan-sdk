@@ -28,7 +28,7 @@ class RecurringMock {
      */
     public static function create() {
         return new RecurringObject(
-            MockHelper::getFaker()->randomNumber(),
+            MockHelper::getFaker()->uuid,
             self::randomStatus(),
             MockHelper::getFaker()->uuid,
             SubscriptionMock::create(),

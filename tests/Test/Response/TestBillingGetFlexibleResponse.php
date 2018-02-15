@@ -4,6 +4,7 @@ namespace Ixolit\Dislo\Test\Response;
 
 
 use Ixolit\Dislo\Test\WorkingObjects\FlexibleMock;
+use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
 
 /**
@@ -14,19 +15,23 @@ use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
 class TestBillingGetFlexibleResponse implements TestResponseInterface {
 
     /**
-     * @var FlexibleObject
+     * @var FlexibleObject|null
      */
     private $flexible;
 
     /**
      * TestBillingGetFlexibleResponse constructor.
+     *
+     * @param bool $noFlexible
      */
-    public function __construct() {
-        $this->flexible = FlexibleMock::create();
+    public function __construct($noFlexible = false) {
+        $this->flexible = $noFlexible
+            ? null
+            : FlexibleMock::create();
     }
 
     /**
-     * @return FlexibleObject
+     * @return FlexibleObject|null
      */
     public function getFlexible() {
         return $this->flexible;
@@ -39,8 +44,20 @@ class TestBillingGetFlexibleResponse implements TestResponseInterface {
      * @return array
      */
     public function handleRequest($uri, array $data = []) {
+        if ($this->getFlexible()) {
+            return [
+                'flexible' => $this->getFlexible()->toArray(),
+            ];
+        }
+
         return [
-            'flexible' => $this->getFlexible()->toArray(),
+            'success' => false,
+            'errors'  => [
+                [
+                    'code'    => 404,
+                    'message' => MockHelper::getFaker()->word,
+                ],
+            ],
         ];
     }
 

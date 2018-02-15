@@ -223,6 +223,17 @@ final class FrontendClient {
     }
 
     /**
+     * @param bool $forceTokenMode
+     *
+     * @return $this
+     */
+    public function setForceTokenMode($forceTokenMode) {
+        $this->forceTokenMode = $forceTokenMode;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isForceTokenMode() {

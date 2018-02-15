@@ -12,35 +12,28 @@ use Ixolit\Dislo\WorkingObjects\User\UserObject;
  *
  * @package Ixolit\Dislo\Test\Response
  */
-class TestUserPhoneVerificationFinishResponse implements TestResponseInterface {
-
-    /**
-     * @var UserObject|null
-     */
-    private $user;
+class TestUserPhoneVerificationFinishResponse extends AbstractTestUserResponse implements TestResponseInterface {
 
     /**
      * @var \DateTime|null
      */
     private $verifiedAt;
 
+    /**
+     * TestUserPhoneVerificationFinishResponse constructor.
+     */
     public function __construct() {
         $withUser = MockHelper::getFaker()->boolean();
-
-        $this->user = $withUser
-            ? UserMock::create(false)
-            : null;
 
         $this->verifiedAt = $withUser
             ? null
             : MockHelper::getFaker()->dateTime();
-    }
 
-    /**
-     * @return UserObject|null
-     */
-    public function getUser() {
-        return $this->user;
+        parent::__construct(
+            $withUser
+                ? UserMock::create(false)
+                : null
+        );
     }
 
     /**
@@ -59,8 +52,10 @@ class TestUserPhoneVerificationFinishResponse implements TestResponseInterface {
     public function handleRequest($uri, array $data = []) {
         $response = [];
 
-        if ($this->getUser()) {
-            $response['user'] = $this->getUser()->toArray();
+        $user = $this->getResponseUser();
+
+        if ($user) {
+            $response['user'] = $user->toArray();
         }
         if ($this->getVerifiedAt()) {
             $response['verifiedAt'] = $this->getVerifiedAt()->format('Y-m-d H:i:s');

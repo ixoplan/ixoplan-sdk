@@ -76,7 +76,7 @@ use Ixolit\Dislo\Response\User\UserRecoveryStartResponseObject;
 use Ixolit\Dislo\Response\User\UserSmsVerificationFinishResponseObject;
 use Ixolit\Dislo\Response\User\UserSmsVerificationStartResponseObject;
 use Ixolit\Dislo\Response\User\UserUpdateTokenResponseObject;
-use Ixolit\Dislo\Test\Request\TestRequestClient;
+use Ixolit\Dislo\Test\AbstractTestCase;
 use Ixolit\Dislo\Test\Response\TestBillingCloseActiveRecurringResponse;
 use Ixolit\Dislo\Test\Response\TestBillingCloseFlexibleResponse;
 use Ixolit\Dislo\Test\Response\TestBillingCreateFlexibleResponse;
@@ -98,7 +98,6 @@ use Ixolit\Dislo\Test\Response\TestCouponCodeValidateNewResponse;
 use Ixolit\Dislo\Test\Response\TestCouponCodeValidateUpgradeResponse;
 use Ixolit\Dislo\Test\Response\TestPackageGetResponse;
 use Ixolit\Dislo\Test\Response\TestPackageListResponse;
-use Ixolit\Dislo\Test\Response\TestResponseInterface;
 use Ixolit\Dislo\Test\Response\TestSubscriptionAttachCouponResponse;
 use Ixolit\Dislo\Test\Response\TestSubscriptionCalculateAddonPriceResponse;
 use Ixolit\Dislo\Test\Response\TestSubscriptionCalculatePackageChange;
@@ -151,34 +150,12 @@ use Ixolit\Dislo\Test\WorkingObjects\CouponMock;
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\Test\WorkingObjects\SubscriptionMock;
 use Ixolit\Dislo\Test\WorkingObjects\UserMock;
-use Ixolit\Dislo\WorkingObjects\Billing\BillingEventObject;
-use Ixolit\Dislo\WorkingObjects\Billing\BillingMethodObject;
-use Ixolit\Dislo\WorkingObjects\Billing\ExternalProfileObject;
-use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
-use Ixolit\Dislo\WorkingObjects\Billing\RecurringObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\CouponObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\CouponUsageObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\DisplayNameObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\NextPackageObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\PackageObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\PackagePeriodObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\PeriodEventObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
 use Ixolit\Dislo\WorkingObjects\User\AuthTokenObject;
-use Ixolit\Dislo\WorkingObjects\User\MetaProfileElementObject;
-use Ixolit\Dislo\WorkingObjects\User\UserObject;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Class FrontendClientTest
  */
-final class FrontendClientTest extends TestCase{
-
-    /**
-     * @var \Faker\Generator
-     */
-    private $faker;
+final class FrontendClientTest extends AbstractTestCase {
 
     /**
      * @return void
@@ -188,7 +165,7 @@ final class FrontendClientTest extends TestCase{
         //test the userToData function with a FrontendClient in forceTokenMode
         $frontendClientWithForceTokenMode = $this->createFrontendClient();
 
-        $userToDataMethod = $this->getAccessibleMethod('userToData');
+        $userToDataMethod = $this->getAccessibleMethod('userToData', FrontendClient::class);
 
         $authToken = MockHelper::getFaker()->uuid;
 
@@ -273,7 +250,7 @@ final class FrontendClientTest extends TestCase{
     public function testRequest() {
         $frontendClient = $this->createFrontendClient([]);
 
-        $requestMethod = $this->getAccessibleMethod('request');
+        $requestMethod = $this->getAccessibleMethod('request', FrontendClient::class);
 
         //test correct response
         $frontendClient->setRequestClient($this->createTestRequestClient([
@@ -1447,20 +1424,24 @@ final class FrontendClientTest extends TestCase{
      * @return void
      */
     public function testUserChange() {
-        $testResoonse = new TestUserChangeResponse();
+        $testResponse = new TestUserChangeResponse();
 
-        $frontendClient = $this->createFrontendClient($testResoonse);
+        $frontendClient = $this->createFrontendClient($testResponse);
+
+        $newMetaData = [
+            MockHelper::getFaker()->word => MockHelper::getFaker()->word,
+        ];
 
         $response = $frontendClient->userChange(
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->languageCode,
-            [
-                MockHelper::getFaker()->word => MockHelper::getFaker()->word,
-            ]
+            $newMetaData
         );
 
+        $testUser = UserMock::changeUserMetaData($testResponse->getUser(), $newMetaData);
+
         $this->assertTrue($response instanceof UserChangeResponseObject);
-        $this->compareUser($response->getUser(), $testResoonse->getUser());
+        $this->compareUser($response->getUser(), $testUser);
     }
 
     /**
@@ -1527,8 +1508,10 @@ final class FrontendClientTest extends TestCase{
             MockHelper::getFaker()->uuid
         );
 
+        $testUser = UserMock::changeUserIsLoginDisabled($testResponse->getUser(), true);
+
         $this->assertTrue($response instanceof UserDisableLoginResponseObject);
-        $this->compareUser($response->getUser(), $testResponse->getUser());
+        $this->compareUser($response->getUser(), $testUser);
     }
 
     /**
@@ -1881,611 +1864,6 @@ final class FrontendClientTest extends TestCase{
         );
 
         $this->assertTrue($response instanceof UserFireEventResponseObject);
-    }
-
-    /**
-     * @param BillingMethodObject|null $billingMethod
-     * @param BillingMethodObject|null $testBillingMethod
-     *
-     * @return $this
-     */
-    private function compareBillingMethod(
-        BillingMethodObject $billingMethod = null,
-        BillingMethodObject $testBillingMethod = null
-    ) {
-        if ($this->compareNonObject($billingMethod, $testBillingMethod, BillingMethodObject::class)) {
-            return $this;
-        }
-
-        $this->assertEquals($billingMethod->getBillingMethodId(), $testBillingMethod->getBillingMethodId());
-        $this->assertEquals($billingMethod->getName(), $testBillingMethod->getName());
-        $this->assertEquals($billingMethod->getDisplayName(), $testBillingMethod->getDisplayName());
-        $this->assertEquals($billingMethod->isAvailable(), $testBillingMethod->isAvailable());
-        $this->assertEquals($billingMethod->isCheckout(), $testBillingMethod->isCheckout());
-        $this->assertEquals($billingMethod->isFlexible(), $testBillingMethod->isFlexible());
-        $this->assertEquals($billingMethod->isRecurring(), $testBillingMethod->isRecurring());
-        $this->assertEquals($billingMethod->isReplaceable(), $testBillingMethod->isReplaceable());
-
-        return $this;
-    }
-
-    /**
-     * @param FlexibleObject|null $flexible
-     * @param FlexibleObject|null $testFlexible
-     *
-     * @return $this
-     */
-    private function compareFlexible(
-        FlexibleObject $flexible = null,
-        FlexibleObject $testFlexible = null
-    ) {
-        if ($this->compareNonObject($flexible, $testFlexible, FlexibleObject::class)) {
-            return $this;
-        }
-
-        $this->assertEquals($flexible->getFlexibleId(), $testFlexible->getFlexibleId());
-        $this->assertEquals($flexible->getStatus(), $testFlexible->getStatus());
-        $this->assertEmpty(\array_diff($flexible->getMetaData(), $testFlexible->getMetaData()));
-        $this->assertEquals($flexible->getCreatedAt(), $testFlexible->getCreatedAt());
-        $this->assertEquals($flexible->getBillingMethod(), $testFlexible->getBillingMethod());
-        $this->compareBillingMethod($flexible->getBillingMethodObject(), $testFlexible->getBillingMethodObject());
-
-        return $this;
-    }
-
-    /**
-     * @param BillingEventObject|null $billingEvent
-     * @param BillingEventObject|null $testBillingEvent
-     *
-     * @return $this
-     */
-    private function compareBillingEvent(
-        BillingEventObject $billingEvent = null,
-        BillingEventObject $testBillingEvent = null
-    ) {
-        if ($this->compareNonObject($billingEvent, $testBillingEvent, BillingEventObject::class)) {
-            return $this;
-        }
-
-        $this->assertEquals($billingEvent->getBillingEventId(), $testBillingEvent->getBillingEventId());
-        $this->assertEquals($billingEvent->getUserId(), $testBillingEvent->getUserId());
-        $this->assertEquals($billingEvent->getCurrencyCode(), $testBillingEvent->getCurrencyCode());
-        $this->assertEquals($billingEvent->getCreatedAt(), $testBillingEvent->getCreatedAt());
-        $this->assertEquals($billingEvent->getType(), $testBillingEvent->getType());
-        $this->assertEquals($billingEvent->getStatus(), $testBillingEvent->getStatus());
-        $this->assertEquals($billingEvent->getDescription(), $testBillingEvent->getDescription());
-        $this->assertEquals($billingEvent->getTechinfo(), $testBillingEvent->getTechinfo());
-        $this->assertEquals($billingEvent->getBillingMethod(), $testBillingEvent->getBillingMethod());
-        $this->compareSubscription($billingEvent->getSubscription(), $testBillingEvent->getSubscription());
-        $this->assertEquals($billingEvent->getModifiedAt(), $testBillingEvent->getModifiedAt());
-        $this->compareBillingMethod($billingEvent->getBillingMethodObject(), $testBillingEvent->getBillingMethodObject());
-
-        return $this;
-    }
-
-    /**
-     * @param SubscriptionObject|null $subscription
-     * @param SubscriptionObject|null $testSubscription
-     *
-     * @return $this
-     */
-    private function compareSubscription(
-        SubscriptionObject $subscription = null,
-        SubscriptionObject $testSubscription = null
-    ) {
-        if ($this->compareNonObject($subscription, $testSubscription, SubscriptionObject::class)) {
-            return $this;
-        }
-
-        $this->assertEquals($subscription->getSubscriptionId(), $testSubscription->getSubscriptionId());
-        $this->comparePackage($subscription->getCurrentPackage(), $testSubscription->getCurrentPackage());
-        $this->assertEquals($subscription->getUserId(), $testSubscription->getUserId());
-        $this->assertEquals($subscription->getStatus(), $testSubscription->getStatus());
-        $this->assertEquals($subscription->getStartedAt(), $testSubscription->getStartedAt());
-        $this->assertEquals($subscription->getCanceledAt(), $testSubscription->getCanceledAt());
-        $this->assertEquals($subscription->getClosedAt(), $testSubscription->getClosedAt());
-        $this->assertEquals($subscription->getExpiresAt(), $testSubscription->getExpiresAt());
-        $this->assertEquals($subscription->getNextBillingAt(), $testSubscription->getNextBillingAt());
-        $this->assertEquals($subscription->isInitialPeriod(), $testSubscription->isInitialPeriod());
-        $this->assertEquals($subscription->isProvisioned(), $testSubscription->isProvisioned());
-        $this->assertEmpty(\array_diff($subscription->getProvisioningMetaData(), $testSubscription->getProvisioningMetaData()));
-        $this->compareNextPackage($subscription->getNextPackage(), $testSubscription->getNextPackage());
-
-        $testAddonSubscriptions = $testSubscription->getAddonSubscriptions();
-
-        $this->assertEquals(\count($subscription->getAddonSubscriptions()), \count($testAddonSubscriptions));
-
-        foreach ($subscription->getAddonSubscriptions() as $addonSubscription) {
-            if (!isset($testAddonSubscriptions[$addonSubscription->getSubscriptionId()])) {
-                $this->assertTrue(false);
-
-                continue;
-            }
-
-            $this->compareSubscription($addonSubscription, $testAddonSubscriptions[$addonSubscription->getSubscriptionId()]);
-        }
-
-        $this->assertEquals($subscription->getMinimumTermEndsAt(), $testSubscription->getMinimumTermEndsAt());
-        $this->assertEquals($subscription->isExternal(), $testSubscription->isExternal());
-        $this->compareCouponUsage($subscription->getCouponUsage(), $testSubscription->getCouponUsage());
-        $this->comparePeriodEvent($subscription->getCurrentPeriodEvent(), $testSubscription->getCurrentPeriodEvent());
-        $this->assertEquals($subscription->getNextBillingAmount(), $testSubscription->getNextBillingAmount());
-
-        return $this;
-    }
-
-    /**
-     * @param PackageObject|null $package
-     * @param PackageObject|null $testPackage
-     *
-     * @return $this
-     */
-    private function comparePackage(PackageObject $package = null, PackageObject $testPackage = null) {
-        if ($this->compareNonObject($package, $testPackage, PackageObject::class)) {
-            return $this;
-        }
-
-        $this->assertEquals($package->getPackageIdentifier(), $testPackage->getPackageIdentifier());
-        $this->assertEquals($package->getServiceIdentifier(), $testPackage->getServiceIdentifier());
-        $this->assertEquals($package->getServiceIdentifier(), $testPackage->getServiceIdentifier());
-
-        $testDisplayNames = $testPackage->getDisplayNames();
-
-        $this->assertEquals(\count($package->getDisplayNames()), \count($testDisplayNames));
-
-        foreach ($package->getDisplayNames() as $displayName) {
-            if (!isset($testDisplayNames[$displayName->getName()])) {
-                $this->assertTrue(false);
-
-                continue;
-            }
-
-            $this->compareDisplayName($displayName, $testDisplayNames[$displayName->getName()]);
-        }
-
-        $this->assertEquals($package->isSignupAvailable(), $testPackage->isSignupAvailable());
-
-        $testAddonPackages = $testPackage->getAddonPackages();
-
-        $this->assertEquals(\count($package->getAddonPackages()), \count($testAddonPackages));
-
-        foreach ($package->getAddonPackages() as $addonPackage) {
-            if (!isset($testAddonPackages[$addonPackage->getPackageIdentifier()])) {
-                $this->assertTrue(false);
-
-                continue;
-            }
-
-            $this->comparePackage($addonPackage, $testAddonPackages[$addonPackage->getPackageIdentifier()]);
-        }
-
-        $this->assertEmpty(\array_diff($package->getMetaData(), $testPackage->getMetaData()));
-        $this->comparePackagePeriod($package->getInitialPeriod(), $testPackage->getInitialPeriod());
-        $this->comparePackagePeriod($package->getRecurringPeriod(), $testPackage->getRecurringPeriod());
-        $this->assertEquals($package->hasTrialPeriod(), $testPackage->hasTrialPeriod());
-
-        $testBillingMethods = $testPackage->getBillingMethods();
-
-        $this->assertEquals(\count($package->getBillingMethods()), \count($testBillingMethods));
-
-        foreach ($package->getBillingMethods() as $billingMethod) {
-            if (!isset($testBillingMethods[$billingMethod->getBillingMethodId()])) {
-                $this->assertTrue(false);
-
-                continue;
-            }
-
-            $this->compareBillingMethod($billingMethod, $testBillingMethods[$billingMethod->getBillingMethodId()]);
-        }
-
-        $this->assertEquals($package->requiresFlexibleForFreeSignup(), $testPackage->requiresFlexibleForFreeSignup());
-
-        return $this;
-    }
-
-    /**
-     * @param NextPackageObject|null $nextPackage
-     * @param NextPackageObject|null $testNextPackage
-     *
-     * @return $this
-     */
-    private function compareNextPackage(
-        NextPackageObject $nextPackage = null,
-        NextPackageObject $testNextPackage = null
-    ) {
-        if ($this->compareNonObject($nextPackage, $testNextPackage, NextPackageObject::class)) {
-            return $this;
-        }
-
-        $this->assertEquals($nextPackage->getPackageIdentifier(), $testNextPackage->getPackageIdentifier());
-        $this->assertEquals($nextPackage->getServiceIdentifier(), $testNextPackage->getServiceIdentifier());
-        $this->assertEquals($nextPackage->getServiceIdentifier(), $testNextPackage->getServiceIdentifier());
-
-        $testDisplayNames = $testNextPackage->getDisplayNames();
-
-        $this->assertEquals(\count($nextPackage->getDisplayNames()), \count($testDisplayNames));
-
-        foreach ($nextPackage->getDisplayNames() as $displayName) {
-            if (!isset($testDisplayNames[$displayName->getName()])) {
-                $this->assertTrue(false);
-
-                continue;
-            }
-
-            $this->compareDisplayName($displayName, $testDisplayNames[$displayName->getName()]);
-        }
-
-        $testAddonPackages = $testNextPackage->getAddonPackages();
-
-        $this->assertEquals($nextPackage->isSignupAvailable(), $testNextPackage->isSignupAvailable());
-
-        foreach ($nextPackage->getAddonPackages() as $addonPackage) {
-            if (!isset($testAddonPackages[$addonPackage->getPackageIdentifier()])) {
-                $this->assertTrue(false);
-
-                continue;
-            }
-
-            $this->comparePackage($addonPackage, $testAddonPackages[$addonPackage->getPackageIdentifier()]);
-        }
-
-        $this->assertEmpty(\array_diff($nextPackage->getMetaData(), $testNextPackage->getMetaData()));
-
-        $this->comparePackagePeriod($nextPackage->getInitialPeriod(), $testNextPackage->getInitialPeriod());
-        $this->comparePackagePeriod($nextPackage->getRecurringPeriod(), $testNextPackage->getRecurringPeriod());
-        $this->assertEquals($nextPackage->isPaid(), $testNextPackage->isPaid());
-        $this->assertEquals($nextPackage->getEffectiveAt(), $testNextPackage->getEffectiveAt());
-
-        return $this;
-    }
-
-    /**
-     * @param PackagePeriodObject|null $packagePeriod
-     * @param PackagePeriodObject|null $testPackagePeriod
-     *
-     * @return $this
-     */
-    private function comparePackagePeriod(
-        PackagePeriodObject $packagePeriod = null,
-        PackagePeriodObject $testPackagePeriod = null
-    ) {
-        if (!(($packagePeriod instanceof PackagePeriodObject) && ($testPackagePeriod instanceof PackagePeriodObject))) {
-            $this->assertTrue($packagePeriod === $testPackagePeriod);
-
-            return $this;
-        }
-
-        $this->assertTrue($packagePeriod->getLength() === $testPackagePeriod->getLength());
-        $this->assertTrue($packagePeriod->getLengthUnit() === $testPackagePeriod->getLengthUnit());
-        $this->assertEmpty(\array_diff($packagePeriod->getMetaData(), $testPackagePeriod->getMetaData()));
-
-        $testPrices = $testPackagePeriod->getBasePrice();
-        foreach ($packagePeriod->getBasePrice() as $price) {
-            if (!isset($testPrices[$price->getTag()])) {
-                $this->assertTrue(false);
-
-                continue;
-            }
-
-            $this->comparePrice($price, $testPrices[$price->getTag()]);
-        }
-
-        $this->assertTrue($packagePeriod->getMinimumTermLength() === $testPackagePeriod->getMinimumTermLength());
-
-        return $this;
-    }
-
-    /**
-     * @param PriceObject|null $price
-     * @param PriceObject|null $testPrice
-     *
-     * @return $this
-     */
-    private function comparePrice(PriceObject $price = null, PriceObject $testPrice = null) {
-        if (!(($price instanceof PriceObject) && ($testPrice instanceof PriceObject))) {
-            $this->assertTrue($price === $testPrice);
-
-            return $this;
-        }
-
-        $this->assertTrue($price->getAmount() === $testPrice->getAmount());
-        $this->assertTrue($price->getCurrencyCode() === $testPrice->getCurrencyCode());
-        $this->assertTrue($price->getGroup() === $testPrice->getGroup());
-        $this->assertTrue($price->getTag() === $testPrice->getTag());
-
-        $testCompositePrices = $testPrice->getCompositePrices();
-        foreach ($price->getCompositePrices() as $compositePrice) {
-            if (!isset($testCompositePrices[$compositePrice->getTag()])) {
-                $this->assertTrue(false);
-
-                continue;
-            }
-
-            $this->comparePrice($compositePrice, $testCompositePrices[$compositePrice->getTag()]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param CouponUsageObject|null $couponUsage
-     * @param CouponUsageObject|null $testCouponUsage
-     *
-     * @return $this
-     */
-    private function compareCouponUsage(
-        CouponUsageObject $couponUsage = null,
-        CouponUsageObject $testCouponUsage = null
-    ) {
-        if (!(($couponUsage instanceof CouponUsageObject) && ($testCouponUsage instanceof CouponUsageObject))) {
-            $this->assertTrue($couponUsage === $testCouponUsage);
-
-            return $this;
-        }
-
-        $this->compareCoupon($couponUsage->getCoupon(), $testCouponUsage->getCoupon());
-        $this->assertTrue($couponUsage->getNumPeriods() === $testCouponUsage->getNumPeriods());
-        $this->compareDateTime($couponUsage->getCreatedAt(), $testCouponUsage->getCreatedAt());
-        $this->compareDateTime($couponUsage->getModifiedAt(), $testCouponUsage->getModifiedAt());
-
-        return $this;
-    }
-
-    /**
-     * @param CouponObject|null $coupon
-     * @param CouponObject|null $testCoupon
-     *
-     * @return $this
-     */
-    private function compareCoupon(CouponObject $coupon = null, CouponObject $testCoupon = null) {
-        if (!(($coupon instanceof CouponObject) && ($testCoupon instanceof CouponObject))) {
-            $this->assertTrue($coupon === $testCoupon);
-
-            return $this;
-        }
-
-        $this->assertTrue($coupon->getCode() === $testCoupon->getCode());
-        $this->assertTrue($coupon->getDescription() === $testCoupon->getDescription());
-
-        return $this;
-    }
-
-    /**
-     * @param PeriodEventObject|null $periodEvent
-     * @param PeriodEventObject|null $testPeriodEvent
-     *
-     * @return $this
-     */
-    private function comparePeriodEvent(
-        PeriodEventObject $periodEvent = null,
-        PeriodEventObject $testPeriodEvent = null
-    ) {
-        if (!(($periodEvent instanceof PeriodEventObject) && ($testPeriodEvent instanceof PeriodEventObject))) {
-            $this->assertTrue($periodEvent === $testPeriodEvent);
-
-            return $this;
-        }
-
-        $this->assertTrue($periodEvent->getPeriodEventId() === $testPeriodEvent->getPeriodEventId());
-        $this->assertTrue($periodEvent->getPeriodId() === $testPeriodEvent->getPeriodId());
-        $this->assertTrue($periodEvent->getSubscriptionHistoryId() === $testPeriodEvent->getSubscriptionHistoryId());
-        $this->compareDateTime($periodEvent->getStartedAt(), $testPeriodEvent->getStartedAt());
-        $this->compareDateTime($periodEvent->getEndsAt(), $testPeriodEvent->getEndsAt());
-        $this->assertTrue($periodEvent->getParentPeriodEventId() === $testPeriodEvent->getParentPeriodEventId());
-        $this->compareDateTime($periodEvent->getOriginalEndsAt(), $testPeriodEvent->getOriginalEndsAt());
-
-        return $this;
-    }
-
-    /**
-     * @param DisplayNameObject|null $displayName
-     * @param DisplayNameObject|null $testDisplayName
-     *
-     * @return $this
-     */
-    private function compareDisplayName(
-        DisplayNameObject $displayName = null,
-        DisplayNameObject $testDisplayName = null
-    ) {
-        if (!(($displayName instanceof DisplayNameObject) && ($testDisplayName instanceof DisplayNameObject))) {
-            $this->assertTrue($displayName === $testDisplayName);
-
-            return $this;
-        }
-
-        $this->assertTrue($displayName->getLanguage() === $testDisplayName->getLanguage());
-        $this->assertTrue($displayName->getName() === $testDisplayName->getName());
-
-        return $this;
-    }
-
-    /**
-     * @param ExternalProfileObject|null $externalProfile
-     * @param ExternalProfileObject|null $testExternalProfile
-     *
-     * @return $this
-     */
-    private function compareExternalProfile(
-        ExternalProfileObject $externalProfile = null,
-        ExternalProfileObject $testExternalProfile = null
-    ) {
-        if (!(($externalProfile instanceof ExternalProfileObject) && ($testExternalProfile instanceof ExternalProfileObject))) {
-            $this->assertTrue($externalProfile === $testExternalProfile);
-
-            return $this;
-        }
-
-        $this->assertTrue($externalProfile->getUserId() === $testExternalProfile->getUserId());
-        $this->assertTrue($externalProfile->getSubscriptionId() === $testExternalProfile->getSubscriptionId());
-        $this->assertEmpty(\array_diff($externalProfile->getExtraData(), $testExternalProfile->getExtraData()));
-        $this->assertTrue($externalProfile->getExternalId() === $testExternalProfile->getExternalId());
-
-        return $this;
-    }
-
-    /**
-     * @param RecurringObject|null $recurring
-     * @param RecurringObject|null $testRecurring
-     *
-     * @return $this
-     */
-    private function compareRecurring(RecurringObject $recurring = null, RecurringObject $testRecurring = null) {
-        if ($this->compareNonObject($recurring, $testRecurring, RecurringObject::class)) {
-            return $this;
-        }
-
-        $this->assertTrue($recurring->getRecurringId() === $testRecurring->getRecurringId());
-        $this->assertTrue($recurring->getStatus() === $testRecurring->getStatus());
-        $this->assertTrue($recurring->getProviderToken() === $testRecurring->getProviderToken());
-        $this->compareDateTime($recurring->getCreatedAt(), $testRecurring->getCreatedAt());
-        $this->compareDateTime($recurring->getCanceledAt(), $testRecurring->getCanceledAt());
-        $this->compareDateTime($recurring->getClosedAt(), $testRecurring->getClosedAt());
-        $this->assertEmpty(\array_diff($recurring->getParameters(), $testRecurring->getParameters()));
-        $this->assertTrue($recurring->getAmount() === $testRecurring->getAmount());
-        $this->assertTrue($recurring->getCurrency() === $testRecurring->getCurrency());
-
-        return $this;
-    }
-
-    /**
-     * @param UserObject|null $user
-     * @param UserObject|null $testUser
-     *
-     * @return $this
-     */
-    private function compareUser(UserObject $user = null, UserObject $testUser = null) {
-        if ($this->compareNonObject($user, $testUser, UserObject::class)) {
-            return $this;
-        }
-
-        $this->assertEquals($user->getUserId(), $testUser->getUserId());
-        $this->compareDateTime($user->getCreatedAt(), $testUser->getCreatedAt());
-        $this->assertEquals($user->isLoginDisabled(), $testUser->isLoginDisabled());
-        $this->assertEquals($user->getLanguage(), $testUser->getLanguage());
-        $this->compareDateTime($user->getLastLoginDate(), $testUser->getLastLoginDate());
-        $this->assertEquals($user->getLastLoginIp(), $testUser->getLastLoginIp());
-        $this->assertEmpty(\array_diff($user->getMetaData(), $testUser->getMetaData()));
-        $this->assertEquals($user->getCurrencyCode(), $testUser->getCurrencyCode());
-        $this->assertEmpty(\array_diff($user->getVerifiedData(), $testUser->getVerifiedData()));
-        $this->compareAuthToken($user->getAuthToken(), $testUser->getAuthToken());
-
-        return $this;
-    }
-
-    /**
-     * @param AuthTokenObject|null $authToken
-     * @param AuthTokenObject|null $testAuthToken
-     *
-     * @return $this
-     */
-    private function compareAuthToken(AuthTokenObject $authToken = null, AuthTokenObject $testAuthToken = null) {
-        if ($this->compareNonObject($authToken, $testAuthToken, AuthTokenObject::class)) {
-            return $this;
-        }
-
-        $this->assertEquals($authToken->getId(), $testAuthToken->getId());
-        $this->assertEquals($authToken->getUserId(), $testAuthToken->getUserId());
-        $this->assertEquals($authToken->getToken(), $testAuthToken->getToken());
-        $this->compareDateTime($authToken->getCreatedAt(), $testAuthToken->getCreatedAt());
-        $this->compareDateTime($authToken->getModifiedAt(), $testAuthToken->getModifiedAt());
-        $this->compareDateTime($authToken->getValidUntil(), $testAuthToken->getValidUntil());
-        $this->assertEquals($authToken->getMetaInfo(), $testAuthToken->getMetaInfo());
-
-        return $this;
-    }
-
-    /**
-     * @param MetaProfileElementObject|null $metaProfileElement
-     * @param MetaProfileElementObject|null $testMetaProfileElement
-     *
-     * @return $this
-     */
-    public function compareMetaProfileElement(
-        MetaProfileElementObject $metaProfileElement = null,
-        MetaProfileElementObject $testMetaProfileElement = null
-    ) {
-        if (
-            $this->compareNonObject($metaProfileElement, $testMetaProfileElement, MetaProfileElementObject::class)
-        ) {
-            return $this;
-        }
-
-        $this->assertEquals($metaProfileElement->getName(), $testMetaProfileElement->getName());
-        $this->assertEquals($metaProfileElement->isRequired(), $testMetaProfileElement->isRequired());
-        $this->assertEquals($metaProfileElement->isUnique(), $testMetaProfileElement->isUnique());
-
-        return $this;
-    }
-
-    /**
-     * @param mixed  $response
-     * @param mixed  $testResponse
-     * @param string $class
-     *
-     * @return bool
-     */
-    private function compareNonObject($response, $testResponse, $class) {
-        if (!(($response instanceof $class) && ($testResponse instanceof $class))) {
-            $this->assertTrue($response === $testResponse);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param DateTime|null $dateTime
-     * @param DateTime|null $testDateTime
-     *
-     * @return $this
-     */
-    private function compareDateTime(\DateTime $dateTime = null, \DateTime $testDateTime = null) {
-        if (($dateTime instanceof \DateTime) && ($testDateTime instanceof \DateTime)) {
-            $this->assertTrue($dateTime->format('U') === $testDateTime->format('U'));
-
-            return $this;
-        }
-
-        $this->assertTrue($dateTime === $testDateTime);
-
-        return $this;
-    }
-
-    /**
-     * @param string $methodName
-     *
-     * @return ReflectionMethod
-     */
-    private function getAccessibleMethod($methodName) {
-        $frontendClientClass = new ReflectionClass(FrontendClient::class);
-
-        $method = $frontendClientClass->getMethod($methodName);
-        $method->setAccessible(true);
-
-        return $method;
-    }
-
-    /**
-     * @param array|TestResponseInterface $response
-     * @param bool                        $forceTokenMode
-     *
-     * @return FrontendClient
-     */
-    private function createFrontendClient($response = [], $forceTokenMode = true) {
-        return new FrontendClient(
-            $this->createTestRequestClient($response),
-            $forceTokenMode
-        );
-    }
-
-    /**
-     * @param  array|TestResponseInterface $response
-     *
-     * @return TestRequestClient
-     */
-    private function createTestRequestClient($response) {
-        return new TestRequestClient($response);
     }
 
 }

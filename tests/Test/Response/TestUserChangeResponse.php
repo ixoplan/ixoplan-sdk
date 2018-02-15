@@ -11,25 +11,19 @@ use Ixolit\Dislo\WorkingObjects\User\UserObject;
  *
  * @package Ixolit\Dislo\Test\Response
  */
-class TestUserChangeResponse implements TestResponseInterface {
+class TestUserChangeResponse extends AbstractTestUserResponse implements TestResponseInterface {
 
     /**
-     * @var UserObject
+     * TestUserChangeResponseExtends constructor.
+     *
+     * @param UserObject|null $user
      */
-    private $user;
-
-    /**
-     * TestUserChangeResponse constructor.
-     */
-    public function __construct() {
-        $this->user = UserMock::create();
-    }
-
-    /**
-     * @return UserObject
-     */
-    public function getUser() {
-        return $this->user;
+    public function __construct(UserObject $user = null) {
+        parent::__construct(
+            $user
+                ? $user
+                : UserMock::create(false)
+        );
     }
 
     /**
@@ -40,7 +34,7 @@ class TestUserChangeResponse implements TestResponseInterface {
      */
     public function handleRequest($uri, array $data = []) {
         return [
-            'user' => $this->getUser()->toArray(),
+            'user' => UserMock::changeUserMetaData($this->getResponseUser(), $data['metaData'])->toArray(),
         ];
     }
 }

@@ -18,7 +18,7 @@ class DisplayNameMock {
     public static function create() {
         return new DisplayNameObject(
             MockHelper::getFaker()->languageCode,
-            MockHelper::getFaker()->word
+            MockHelper::getFaker()->uuid
         );
     }
 

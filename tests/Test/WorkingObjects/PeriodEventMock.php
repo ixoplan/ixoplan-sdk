@@ -17,7 +17,7 @@ class PeriodEventMock {
      */
     public static function create() {
         return new PeriodEventObject(
-            MockHelper::getFaker()->randomNumber(),
+            MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->randomNumber(),
             MockHelper::getFaker()->randomNumber(),
             MockHelper::getFaker()->dateTime(),

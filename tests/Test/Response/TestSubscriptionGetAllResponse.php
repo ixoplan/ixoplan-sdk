@@ -21,14 +21,18 @@ class TestSubscriptionGetAllResponse implements TestResponseInterface {
 
     /**
      * TestSubscriptionGetAllResponse constructor.
+     *
+     * @param string|null $minimumOneState
      */
-    public function __construct() {
-        $subscriptionsCount = MockHelper::getFaker()->numberBetween(1, 5);
+    public function __construct($minimumOneState = null) {
+        $subscriptionsCount = MockHelper::getFaker()->numberBetween(1, 10);
 
         for ($i = 0; $i < $subscriptionsCount; $i++) {
-            $subscription = SubscriptionMock::create();
+            $subscription = SubscriptionMock::create($minimumOneState);
 
             $this->subscriptions[$subscription->getSubscriptionId()] = $subscription;
+
+            $minimumOneState = null;
         }
     }
 
@@ -37,6 +41,36 @@ class TestSubscriptionGetAllResponse implements TestResponseInterface {
      */
     public function getSubscriptions() {
         return $this->subscriptions;
+    }
+
+    /**
+     * @return SubscriptionObject[]
+     */
+    public function getActiveSubscriptions() {
+        return \array_filter(
+            $this->getSubscriptions(),
+            function(SubscriptionObject $subscription) {
+                return \in_array(
+                    $subscription->getStatus(),
+                    [
+                        SubscriptionObject::STATUS_CANCELED,
+                        SubscriptionObject::STATUS_RUNNING,
+                    ]
+                );
+            }
+        );
+    }
+
+    /**
+     * @return SubscriptionObject[]
+     */
+    public function getStartedSubscriptions() {
+        return \array_filter(
+            $this->getSubscriptions(),
+            function (SubscriptionObject $subscription) {
+                return !empty($subscription->getStartedAt());
+            }
+        );
     }
 
     /**

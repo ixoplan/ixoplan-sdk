@@ -12,15 +12,10 @@ use Ixolit\Dislo\WorkingObjects\User\UserObject;
  *
  * @package Ixolit\Dislo\Test\Response
  */
-class TestUserAuthenticateResponse implements TestResponseInterface {
+class TestUserAuthenticateResponse extends AbstractTestUserResponse implements TestResponseInterface {
 
     const ERROR_RATE_LIMIT = 'rate_limit';
     const ERROR_INVALID_CREDENTIALS = 'invalid_credentials';
-
-    /**
-     * @var UserObject
-     */
-    private $user;
 
     /**
      * @var string
@@ -40,10 +35,17 @@ class TestUserAuthenticateResponse implements TestResponseInterface {
     /**
      * TestUserAuthenticateResponse constructor.
      *
-     * @param null $error
+     * @param string|null     $error
+     * @param UserObject|null $user
      */
-    public function __construct($error = null) {
-        $this->user = UserMock::create();
+    public function __construct($error = null, UserObject $user = null) {
+        parent::__construct(
+            $user
+                ? $user
+                : UserMock::create(false),
+            true
+        );
+
         $this->authToken = MockHelper::getFaker()->uuid;
         $this->error = $error;
 
@@ -59,13 +61,6 @@ class TestUserAuthenticateResponse implements TestResponseInterface {
             default:
                 $this->errorCode = null;
         }
-    }
-
-    /**
-     * @return UserObject
-     */
-    public function getUser() {
-        return $this->user;
     }
 
     /**
@@ -105,7 +100,7 @@ class TestUserAuthenticateResponse implements TestResponseInterface {
         }
 
         return [
-            'user'      => $this->getUser()->toArray(),
+            'user'      => $this->getResponseUser()->toArray(),
             'authToken' => $this->getAuthToken(),
         ];
     }

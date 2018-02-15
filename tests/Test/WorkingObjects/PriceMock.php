@@ -28,7 +28,7 @@ class PriceMock {
         return new PriceObject(
             MockHelper::getFaker()->randomFloat(),
             MockHelper::getFaker()->currencyCode,
-            MockHelper::getFaker()->word,
+            MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->uuid,
             $compositePrices
         );
