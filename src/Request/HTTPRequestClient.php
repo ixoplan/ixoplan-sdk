@@ -13,6 +13,8 @@ use Psr\Http\Message\StreamInterface;
  * This client uses a PSR-7 client to talk to Dislo.
  *
  * @package Dislo
+ *
+ * @deprecated use Ixolit\Dislo\Request\HTTPDisloRequestClient instead
  */
 class HTTPRequestClient implements RequestClient, RequestClientExtra {
 

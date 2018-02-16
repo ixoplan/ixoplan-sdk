@@ -419,7 +419,9 @@ final class SubscriptionObject implements WorkingObject {
                 ? new \DateTime($response['nextBillingAt'])
                 : null,
             $response['currencyCode'],
-            $response['isInitialPeriod'],
+            isset($response['isInitialPeriod'])
+                ? $response['isInitialPeriod']
+                : null,
             $response['isProvisioned'],
             isset($response['provisioningMetaData'])
                 ? $response['provisioningMetaData']
