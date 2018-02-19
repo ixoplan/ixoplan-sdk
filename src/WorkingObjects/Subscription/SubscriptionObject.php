@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 
 /**
@@ -11,7 +11,7 @@ use Ixolit\Dislo\WorkingObjects\WorkingObject;
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class SubscriptionObject implements WorkingObject {
+final class SubscriptionObject extends AbstractWorkingObject {
 
     const STATUS_PENDING = 'pending';
     const STATUS_RUNNING = 'running';
@@ -391,56 +391,42 @@ final class SubscriptionObject implements WorkingObject {
      * @return SubscriptionObject
      */
     public static function fromResponse($response) {
-        $addonSubscriptions = [];
-        if(isset($response['addonSubscriptions'])) {
-            foreach ($response['addonSubscriptions'] as $addonSubscription) {
-                $addonSubscriptions[] = SubscriptionObject::fromResponse($addonSubscription);
-            }
-        }
 
         return new self(
             $response['subscriptionId'],
-            PackageObject::fromResponse($response['currentPackage']),
+            static::getValue($response, 'currentPackage', null, function ($value) {
+                return PackageObject::fromResponse($value);
+            }),
             $response['userId'],
-            $response['status'],
-            (isset($response['startedAt']) && $response['startedAt'])
-                ? new \DateTime($response['startedAt'])
-                : null,
-            (isset($response['canceledAt']) && $response['canceledAt'])
-                ? new \DateTime($response['canceledAt'])
-                : null,
-            (isset($response['closedAt']) && $response['closedAt'])
-                ? new \DateTime($response['closedAt'])
-                : null,
-            (isset($response['expiresAt']) && $response['expiresAt'])
-                ? new \DateTime($response['expiresAt'])
-                : null,
-            (isset($response['nextBillingAt']) && $response['nextBillingAt'])
-                ? new \DateTime($response['nextBillingAt'])
-                : null,
-            $response['currencyCode'],
-            $response['isInitialPeriod'],
-            $response['isProvisioned'],
-            isset($response['provisioningMetaData'])
-                ? $response['provisioningMetaData']
-                : [],
-            (isset($response['nextPackage']) && $response['nextPackage'])
-                ? NextPackageObject::fromResponse($response['nextPackage'])
-                : null,
-            $addonSubscriptions,
-            isset($response['minimumTermEndsAt'])
-                ? new \DateTime($response['minimumTermEndsAt'])
-                : null,
-            $response['isExternal'],
-            isset($response['couponUsage'])
-                ? CouponUsageObject::fromResponse($response['couponUsage'])
-                : null,
-            isset($response['currentPeriodEvent'])
-                ? PeriodEventObject::fromResponse($response['currentPeriodEvent'])
-                : null,
-            isset($response['nextBillingAmount'])
-                ? $response['nextBillingAmount']
-                : null
+            static::getValue($response, 'status'),
+            static::getValueAsDateTime($response, 'startedAt'),
+            static::getValueAsDateTime($response, 'canceledAt'),
+            static::getValueAsDateTime($response, 'closedAt'),
+            static::getValueAsDateTime($response, 'expiresAt'),
+            static::getValueAsDateTime($response, 'nextBillingAt'),
+            static::getValue($response, 'currencyCode'),
+            static::getValue($response, 'isInitialPeriod'),
+            static::getValue($response, 'isProvisioned'),
+            static::getValue($response, 'provisioningMetaData', []),
+            static::getValue($response, 'nextPackage', null, function ($value) {
+                return NextPackageObject::fromResponse($value);
+            }),
+            static::getValue($response, 'addonSubscriptions', [], function ($value) {
+                $addonSubscriptions = [];
+                foreach ($value as $addonSubscription) {
+                    $addonSubscriptions[] = SubscriptionObject::fromResponse($addonSubscription);
+                }
+                return $addonSubscriptions;
+            }),
+            static::getValueAsDateTime($response, 'minimumTermEndsAt'),
+            static::getValue($response, 'isExternal'),
+            static::getValue($response, 'couponUsage', null, function ($value) {
+                return CouponUsageObject::fromResponse($value);
+            }),
+            static::getValue($response, 'currentPeriodEvent', null, function ($value) {
+                return PeriodEventObject::fromResponse($value);
+            }),
+            static::getValue($response, 'nextBillingAmount')
         );
     }
 
