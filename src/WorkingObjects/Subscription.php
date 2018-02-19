@@ -86,6 +86,11 @@ class Subscription implements WorkingObject {
 	private $currentPeriodEvent;
 
     /**
+     * @var float
+     */
+	private $nextBillingAmount;
+
+    /**
      * Subscription constructor.
      *
      * @param int              $subscriptionId
@@ -107,26 +112,29 @@ class Subscription implements WorkingObject {
      * @param bool             $isExternal
      * @param CouponUsage|null $couponUsage
      * @param PeriodEvent|null $currentPeriodEvent
+     * @param float|null       $nextBillingAmount
      */
-	public function __construct($subscriptionId,
-                                Package $currentPackage,
-                                $userId,
-                                $status,
-                                $startedAt,
-                                $canceledAt,
-                                $closedAt,
-                                $expiresAt,
-                                $nextBillingAt,
-                                $currencyCode,
-                                $isInitialPeriod,
-                                $isProvisioned,
-                                $provisioningMetaData,
-                                $nextPackage,
-                                $addonSubscriptions,
-                                $minimumTermEndsAt = null,
-		                    	$isExternal = false,
-                                $couponUsage = null,
-                                PeriodEvent $currentPeriodEvent = null
+	public function __construct(
+        $subscriptionId,
+        Package $currentPackage,
+        $userId,
+        $status,
+        $startedAt,
+        $canceledAt,
+        $closedAt,
+        $expiresAt,
+        $nextBillingAt,
+        $currencyCode,
+        $isInitialPeriod,
+        $isProvisioned,
+        $provisioningMetaData,
+        $nextPackage,
+        $addonSubscriptions,
+        $minimumTermEndsAt = null,
+        $isExternal = false,
+        $couponUsage = null,
+        PeriodEvent $currentPeriodEvent = null,
+        $nextBillingAmount = null
     ) {
 		$this->subscriptionId       = $subscriptionId;
 		$this->currentPackage       = $currentPackage;
@@ -147,6 +155,7 @@ class Subscription implements WorkingObject {
 		$this->isExternal           = $isExternal;
 		$this->couponUsage          = $couponUsage;
 		$this->currentPeriodEvent   = $currentPeriodEvent;
+		$this->nextBillingAmount    = $nextBillingAmount;
 	}
 
 	/**
@@ -323,6 +332,13 @@ class Subscription implements WorkingObject {
 	    return $this->currentPeriodEvent;
     }
 
+    /**
+     * @return float|null
+     */
+    public function getNextBillingAmount() {
+	    return $this->nextBillingAmount;
+    }
+
 	/**
 	 * @param array $response
 	 *
@@ -357,6 +373,9 @@ class Subscription implements WorkingObject {
 			(isset($response['couponUsage']) ? CouponUsage::fromResponse($response['couponUsage']) : null),
             isset($response['currentPeriodEvent'])
                 ? PeriodEvent::fromResponse($response['currentPeriodEvent'])
+                : null,
+            isset($response['nextBillingAmount'])
+                ? $response['nextBillingAmount']
                 : null
 		);
 	}
@@ -389,6 +408,7 @@ class Subscription implements WorkingObject {
 			'isExternal' => $this->isExternal,
 			'couponUsage' => ($this->couponUsage ? $this->couponUsage->toArray() : null),
             'currentPeriodEvent' => $this->currentPeriodEvent ? $this->currentPeriodEvent->toArray() : null,
+            'nextBillingAmount' => $this->nextBillingAmount,
 		];
 	}
 

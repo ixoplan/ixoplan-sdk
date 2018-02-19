@@ -27,6 +27,8 @@ use Ixolit\Dislo\Response\BillingMethodsGetAvailableResponse;
 use Ixolit\Dislo\Response\BillingMethodsGetResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
+use Ixolit\Dislo\Response\MailTrackOpenedResponse;
+use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse;
 use Ixolit\Dislo\Response\PackageGetResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
 use Ixolit\Dislo\Response\SubscriptionAttachCouponResponse;
@@ -77,6 +79,7 @@ use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
 use Ixolit\Dislo\Response\UserVerificationStartResponse;
+use Ixolit\Dislo\WorkingObjects\AuthToken;
 use Ixolit\Dislo\WorkingObjects\BillingEvent;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
@@ -127,7 +130,11 @@ class Client {
 
 	private function userToData($userTokenOrId, &$data = []) {
 		if ($this->forceTokenMode) {
-			$data['authToken'] = $userTokenOrId;
+		    if (is_object($userTokenOrId) && $userTokenOrId instanceof AuthToken) {
+		        $data['authToken'] = (string) $userTokenOrId;
+		    } else {
+		        $data['authToken'] = $userTokenOrId;
+		    }
 			return $data;
 		}
 		if ($userTokenOrId instanceof User) {
@@ -149,7 +156,7 @@ class Client {
 			$userTokenOrId = $userTokenOrId->__toString();
 		}
 
-		if (\is_int($userTokenOrId) || \preg_match('/^[1-9][0-9]+$/D', $userTokenOrId)) {
+		if (\is_int($userTokenOrId) || \preg_match('/^[0-9]+$/D', $userTokenOrId)) {
 			$data['userId'] = (int)$userTokenOrId;
 		} else {
 			$data['authToken'] = $userTokenOrId;
@@ -2051,6 +2058,37 @@ class Client {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/user/fireEvent', $data);
 		return UserFireEventResponse::fromResponse($response);
+	}
+
+	/**
+	 * Flags an email as opened
+	 *
+	 * @param int $emailId The identifier from the email beacon
+	 * @param string $checksum The checksum from the email beacon
+	 *
+	 * @return MailTrackOpenedResponse
+	 */
+	public function mailTrackOpened(
+		$emailId,
+		$checksum
+	) {
+		$data = [
+			'emailId' => $emailId,
+			'checksum' => $checksum,
+		];
+		$response = $this->request('/frontend/misc/trackOpenedMail', $data);
+		return MailTrackOpenedResponse::fromResponse($response);
+	}
+
+	/**
+	 * Retrieve Dislo's redirector configuration
+	 *
+	 * @return MiscGetRedirectorConfigurationResponse
+	 */
+	public function miscGetRedirectorConfiguration() {
+		$data = [];
+		$response = $this->request('/frontend/misc/getRedirectorConfiguration', $data);
+		return MiscGetRedirectorConfigurationResponse::fromResponse($response);
 	}
 
 	/**
