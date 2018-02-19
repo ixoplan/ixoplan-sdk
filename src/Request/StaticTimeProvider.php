@@ -6,6 +6,8 @@ namespace Ixolit\Dislo\Request;
  * Provides a static timestamp value.
  *
  * @package Dislo
+ *
+ * @deprecated
  */
 class StaticTimeProvider implements TimeProvider {
 	/**

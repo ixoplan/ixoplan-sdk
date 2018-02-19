@@ -33,26 +33,16 @@ final class MiscGetRedirectorConfigurationResponseObject {
     }
 
     /**
-     * @param mixed $data
-     *
-     * @return MiscGetRedirectorConfigurationResponseObject
-     */
-    public static function fromData($data) {
-
-        $parser = new RulesParser();
-        $rules = $parser->buildRulesFromData($data);
-        $redirector = new Redirector($rules);
-
-        return new self($redirector);
-    }
-
-    /**
      * @param array $response
      *
      * @return self
      */
     public static function fromResponse($response) {
-        return self::fromData($response);
+        $parser = new RulesParser();
+        $rules = $parser->buildRulesFromData($response);
+        $redirector = new Redirector($rules);
+
+        return new self($redirector);
     }
 
 
