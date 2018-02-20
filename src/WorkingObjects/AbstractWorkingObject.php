@@ -28,10 +28,20 @@ abstract class AbstractWorkingObject implements WorkingObject {
     /**
      * @param array $data
      * @param string $key
+     * @param bool $default
+     * @return bool
+     */
+    protected static function getValueAsBool($data, $key, $default = false) {
+        return static::getValue($data, $key, $default, '\boolval');
+    }
+
+    /**
+     * @param array $data
+     * @param string $key
      * @param int $default
      * @return int
      */
-    protected static function getValueAsInt($data, $key, $default = null) {
+    protected static function getValueAsInt($data, $key, $default = 0) {
         return static::getValue($data, $key, $default, '\intval');
     }
 
