@@ -3,14 +3,14 @@
 namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 /**
  * Class CouponObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class CouponObject implements WorkingObject {
+final class CouponObject extends AbstractWorkingObject {
 
     const COUPON_EVENT_START = 'subscription_start';
     const COUPON_EVENT_UPGRADE = 'subscription_upgrade';
@@ -57,8 +57,8 @@ final class CouponObject implements WorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            $response['code'],
-            $response['description']
+            static::getValue($response, 'code'),
+            static::getValue($response, 'description')
         );
     }
 
