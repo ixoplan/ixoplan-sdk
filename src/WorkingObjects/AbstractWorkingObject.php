@@ -20,7 +20,28 @@ abstract class AbstractWorkingObject implements WorkingObject {
             else {
                 return $data[$key];
             }
-        };
+        }
+
+        return $default;
+    }
+
+    /**
+     * @param array $data
+     * @param string $key
+     * @param mixed $default
+     * @param callable $convert
+     * @return mixed
+     */
+    protected static function getValueNotEmpty($data, $key, $default = null, $convert = null) {
+
+        if (!empty($data[$key])) {
+
+            if (is_callable($convert)) {
+                return $convert($data[$key]);
+            }
+
+            return $data[$key];
+        }
 
         return $default;
     }
@@ -52,7 +73,7 @@ abstract class AbstractWorkingObject implements WorkingObject {
      * @return \DateTime
      */
     protected static function getValueAsDateTime($data, $key, \DateTime $default = null) {
-        return static::getValue($data, $key, $default, function ($value) {
+        return static::getValueNotEmpty($data, $key, $default, function ($value) {
             return new \DateTime($value);
         });
     }
