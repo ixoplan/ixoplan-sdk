@@ -393,11 +393,11 @@ final class SubscriptionObject extends AbstractWorkingObject {
     public static function fromResponse($response) {
 
         return new self(
-            $response['subscriptionId'],
+            static::getValue($response, 'subscriptionId'),
             static::getValue($response, 'currentPackage', null, function ($value) {
                 return PackageObject::fromResponse($value);
             }),
-            $response['userId'],
+            static::getValue($response, 'userId'),
             static::getValue($response, 'status'),
             static::getValueAsDateTime($response, 'startedAt'),
             static::getValueAsDateTime($response, 'canceledAt'),
