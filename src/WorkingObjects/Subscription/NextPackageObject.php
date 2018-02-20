@@ -4,14 +4,14 @@ namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 /**
  * Class NextPackageObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class NextPackageObject implements WorkingObject {
+final class NextPackageObject extends AbstractWorkingObject {
 
     /**
      * @var string
@@ -203,34 +203,33 @@ final class NextPackageObject implements WorkingObject {
      * @return NextPackageObject
      */
     public static function fromResponse($response) {
-        $displayNames = [];
-        foreach ($response['displayNames'] as $displayName) {
-            $displayNames[] = DisplayNameObject::fromResponse($displayName);
-        }
-        $addonPackages = [];
-        if(isset($response['addonPackages'])) {
-            foreach ($response['addonPackages'] as $addonPackage) {
-                $addonPackages[] = PackageObject::fromResponse($addonPackage);
-            }
-        }
-
         return new self(
-            $response['packageIdentifier'],
-            $response['serviceIdentifier'],
-            $displayNames,
-            $response['signupAvailable'],
-            $addonPackages,
-            isset($response['metaData'])
-                ? $response['metaData']
-                : array(),
-            isset($response['initialPeriod']) && $response['initialPeriod']
-                ? PackagePeriodObject::fromResponse($response['initialPeriod'])
-                : null,
-            isset($response['recurringPeriod']) && $response['recurringPeriod']
-                ? PackagePeriodObject::fromResponse($response['recurringPeriod'])
-                : null,
-            $response['paid'],
-            new \DateTime($response['effectiveAt'])
+            static::getValue($response, 'packageIdentifier'),
+            static::getValue($response, 'serviceIdentifier'),
+            static::getValue($response, 'displayNames', [], function ($value) {
+                $displayNames = [];
+                foreach ($value as $displayName) {
+                    $displayNames[] = DisplayNameObject::fromResponse($displayName);
+                }
+                return $displayNames;
+            }),
+            static::getValue($response, 'signupAvailable'),
+            static::getValue($response, 'addonPackages', [], function ($value) {
+                $addonPackages = [];
+                foreach ($value as $addonPackage) {
+                    $addonPackages[] = PackageObject::fromResponse($addonPackage);
+                }
+                return $addonPackages;
+            }),
+            static::getValue($response, 'metaData', array()),
+            static::getValue($response, 'initialPeriod', null, function ($value) {
+                return PackagePeriodObject::fromResponse($value);
+            }),
+            static::getValue($response, 'recurringPeriod', null, function ($value) {
+                return PackagePeriodObject::fromResponse($value);
+            }),
+            static::getValue($response, 'paid'),
+            static::getValueAsDateTime($response, 'effectiveAt')
         );
     }
 

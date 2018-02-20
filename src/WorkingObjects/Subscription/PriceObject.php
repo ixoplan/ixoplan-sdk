@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 
 /**
@@ -11,7 +11,7 @@ use Ixolit\Dislo\WorkingObjects\WorkingObject;
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class PriceObject implements WorkingObject {
+final class PriceObject extends AbstractWorkingObject {
 
     const TAG_BASEPRICE = 'baseprice';
     const TAG_PRORATE_PRICE = 'prorate_price';
@@ -111,21 +111,18 @@ final class PriceObject implements WorkingObject {
      * @return PriceObject
      */
     public static function fromResponse($response) {
-        $compositePrices = [];
-        if (isset($response['compositePrices'])) {
-            foreach ($response['compositePrices'] as $compositePrice) {
-                $compositePrices[] = PriceObject::fromResponse($compositePrice);
-            }
-        }
-
         return new self(
-            $response['amount'],
-            $response['currencyCode'],
-            $response['tag'],
-            isset($response['group'])
-                ? $response['group']
-                : '',
-            $compositePrices
+            static::getValue($response, 'amount'),
+            static::getValue($response, 'currencyCode'),
+            static::getValue($response, 'tag'),
+            static::getValue($response, 'group', ''),
+            static::getValue($response, 'compositePrices', [], function ($value) {
+                $compositePrices = [];
+                foreach ($value as $compositePrice) {
+                    $compositePrices[] = PriceObject::fromResponse($compositePrice);
+                }
+                return $compositePrices;
+            })
         );
     }
 

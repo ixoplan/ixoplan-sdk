@@ -3,8 +3,8 @@
 namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 use Ixolit\Dislo\WorkingObjects\Billing\BillingEventObject;
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
 
 
 /**
@@ -12,7 +12,7 @@ use Ixolit\Dislo\WorkingObjects\WorkingObject;
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class PeriodEventObject implements WorkingObject {
+final class PeriodEventObject extends AbstractWorkingObject {
 
     /**
      * @var int
@@ -149,24 +149,16 @@ final class PeriodEventObject implements WorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            $response['id'],
-            $response['periodId'],
-            $response['subscriptionHistoryId'],
-            isset($response['startedAt'])
-                ? new \DateTime($response['startedAt'])
-                : null,
-            isset($response['endsAt'])
-                ? new \DateTime($response['endsAt'])
-                : null,
-            isset($response['parentPeriodEventId'])
-                ? $response['parentPeriodEventId']
-                : null,
-            isset($response['originalEndsAt'])
-                ? new \DateTime($response['originalEndsAt'])
-                : null,
-            isset($response['billingEvent'])
-                ? BillingEventObject::fromResponse($response['billingEvent'])
-                : null
+            static::getValue($response, 'id'),
+            static::getValue($response, 'periodId'),
+            static::getValue($response, 'subscriptionHistoryId'),
+            static::getValueAsDateTime($response, 'startedAt'),
+            static::getValueAsDateTime($response, 'endsAt'),
+            static::getValue($response, 'parentPeriodEventId'),
+            static::getValueAsDateTime($response, 'originalEndsAt'),
+            static::getValue($response, 'billingEvent', null, function ($value) {
+                return BillingEventObject::fromResponse($value);
+            })
         );
     }
 

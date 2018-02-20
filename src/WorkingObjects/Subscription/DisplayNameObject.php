@@ -3,14 +3,14 @@
 namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 /**
  * Class DisplayNameObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class DisplayNameObject implements WorkingObject {
+final class DisplayNameObject extends AbstractWorkingObject {
 
     /**
      * @var string
@@ -59,8 +59,8 @@ final class DisplayNameObject implements WorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            $response['language'],
-            $response['name']
+            static::getValue($response, 'language'),
+            static::getValue($response, 'name')
         );
     }
 

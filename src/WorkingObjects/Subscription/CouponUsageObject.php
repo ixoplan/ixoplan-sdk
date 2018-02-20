@@ -3,14 +3,14 @@
 namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 /**
  * Class CouponUsageObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class CouponUsageObject implements WorkingObject {
+final class CouponUsageObject extends AbstractWorkingObject {
 
     /**
      * @var CouponObject|null
@@ -82,16 +82,12 @@ final class CouponUsageObject implements WorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            isset($response['coupon'])
-                ? CouponObject::fromResponse($response['coupon'])
-                : null,
-            $response['numPeriods'],
-            isset($response['createdAt'])
-                ? new \DateTime($response['createdAt'])
-                : null,
-            isset($response['modifiedAt'])
-                ? new \DateTime($response['modifiedAt'])
-                : null
+            static::getValue($response, 'coupon', null, function ($value) {
+                return CouponObject::fromResponse($value);
+            }),
+            static::getValue($response, 'numPeriods'),
+            static::getValueAsDateTime($response, 'createdAt'),
+            static::getValueAsDateTime($response, 'modifiedAt')
         );
     }
 

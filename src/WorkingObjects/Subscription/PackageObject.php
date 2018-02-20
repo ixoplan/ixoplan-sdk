@@ -4,15 +4,15 @@ namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 use Ixolit\Dislo\WorkingObjects\Billing\BillingMethodObject;
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
 
 /**
  * Class PackageObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class PackageObject implements WorkingObject {
+final class PackageObject extends AbstractWorkingObject {
 
     /**
      * @var string
@@ -213,46 +213,40 @@ final class PackageObject implements WorkingObject {
      * @return PackageObject
      */
     public static function fromResponse($response) {
-        $displayNames = [];
-        foreach ($response['displayNames'] as $displayName) {
-            $displayNames[] = DisplayNameObject::fromResponse($displayName);
-        }
-        $addonPackages = [];
-        if(isset($response['addonPackages'])) {
-            foreach ($response['addonPackages'] as $addonPackage) {
-                $addonPackages[] = PackageObject::fromResponse($addonPackage);
-            }
-        }
-
-        $billingMethods = [];
-        if(isset($response['billingMethods'])) {
-            foreach ($response['billingMethods'] as $billingMethod) {
-                $billingMethods[] = BillingMethodObject::fromResponse($billingMethod);
-            }
-        }
-
         return new self(
-            $response['packageIdentifier'],
-            $response['serviceIdentifier'],
-            $displayNames,
-            $response['signupAvailable'],
-            $addonPackages,
-            isset($response['metaData'])
-                ? $response['metaData']
-                : [],
-            isset($response['initialPeriod']) && $response['initialPeriod']
-                ? PackagePeriodObject::fromResponse($response['initialPeriod'])
-                : null,
-            isset($response['recurringPeriod']) && $response['recurringPeriod']
-                ? PackagePeriodObject::fromResponse($response['recurringPeriod'])
-                : null,
-            isset($response['hasTrialPeriod'])
-                ? $response['hasTrialPeriod']
-                : false,
-            $billingMethods,
-            isset($response['requireFlexibleForFreeSignup'])
-                ? $response['requireFlexibleForFreeSignup']
-                : false
+            static::getValue($response, 'packageIdentifier'),
+            static::getValue($response, 'serviceIdentifier'),
+            static::getValue($response, 'displayNames', [], function ($value) {
+                $displayNames = [];
+                foreach ($value as $displayName) {
+                    $displayNames[] = DisplayNameObject::fromResponse($displayName);
+                }
+                return $displayNames;
+            }),
+            static::getValue($response, 'signupAvailable'),
+            static::getValue($response, 'addonPackages', [], function ($value) {
+                $addonPackages = [];
+                foreach ($value as $addonPackage) {
+                    $addonPackages[] = PackageObject::fromResponse($addonPackage);
+                }
+                return $addonPackages;
+            }),
+            static::getValue($response, 'metaData', []),
+            static::getValue($response, 'initialPeriod', null, function ($value) {
+                return PackagePeriodObject::fromResponse($value);
+            }),
+            static::getValue($response, 'recurringPeriod', null, function ($value) {
+                return PackagePeriodObject::fromResponse($value);
+            }),
+            static::getValue($response, 'hasTrialPeriod', false),
+            static::getValue($response, 'billingMethods', [], function ($value) {
+                $billingMethods = [];
+                foreach ($value as $billingMethod) {
+                    $billingMethods[] = BillingMethodObject::fromResponse($billingMethod);
+                }
+                return $billingMethods;
+            }),
+            static::getValue($response, 'requireFlexibleForFreeSignup', false)
         );
     }
 

@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 
 /**
@@ -12,7 +12,7 @@ use Ixolit\Dislo\WorkingObjects\WorkingObject;
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class PackagePeriodObject implements WorkingObject {
+final class PackagePeriodObject extends AbstractWorkingObject {
 
     /**
      * @var int
@@ -123,21 +123,18 @@ final class PackagePeriodObject implements WorkingObject {
      * @return PackagePeriodObject
      */
     public static function fromResponse($response) {
-        $prices = [];
-        foreach ($response['basePrice'] as $price) {
-            $prices[] = PriceObject::fromResponse($price);
-        }
-
         return new self(
-            $response['length'],
-            $response['lengthUnit'],
-            isset($response['metaData'])
-                ? $response['metaData']
-                : [],
-            $prices,
-            isset($response['minimumTermLength'])
-                ? $response['minimumTermLength']
-                : null
+            static::getValue($response, 'length'),
+            static::getValue($response, 'lengthUnit'),
+            static::getValue($response, 'metaData', []),
+            static::getValue($response, 'basePrice', [], function ($value) {
+                $prices = [];
+                foreach ($value as $price) {
+                    $prices[] = PriceObject::fromResponse($price);
+                }
+                return $prices;
+            }),
+            static::getValue($response, 'minimumTermLength')
         );
     }
 
