@@ -145,14 +145,14 @@ final class BillingMethodObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'billingMethodId'),
-            static::getValue($response, 'name'),
-            static::getValue($response, 'displayName'),
-            static::getValue($response, 'available'),
-            static::getValue($response, 'checkout'),
-            static::getValue($response, 'flexible'),
-            static::getValue($response, 'recurring'),
-            static::getValue($response, 'replaceable')
+            static::getValueIsSet($response, 'billingMethodId'),
+            static::getValueIsSet($response, 'name'),
+            static::getValueIsSet($response, 'displayName'),
+            static::getValueIsSet($response, 'available'),
+            static::getValueIsSet($response, 'checkout'),
+            static::getValueIsSet($response, 'flexible'),
+            static::getValueIsSet($response, 'recurring'),
+            static::getValueIsSet($response, 'replaceable')
         );
     }
 

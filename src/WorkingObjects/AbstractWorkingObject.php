@@ -11,15 +11,15 @@ abstract class AbstractWorkingObject implements WorkingObject {
      * @param callable $convert
      * @return mixed
      */
-    protected static function getValue($data, $key, $default = null, $convert = null) {
+    protected static function getValueIsSet($data, $key, $default = null, $convert = null) {
 
         if (isset($data[$key])) {
+
             if (is_callable($convert)) {
                 return $convert($data[$key]);
             }
-            else {
-                return $data[$key];
-            }
+
+            return $data[$key];
         }
 
         return $default;
@@ -53,7 +53,7 @@ abstract class AbstractWorkingObject implements WorkingObject {
      * @return bool
      */
     protected static function getValueAsBool($data, $key, $default = false) {
-        return static::getValue($data, $key, $default, '\boolval');
+        return static::getValueIsSet($data, $key, $default, '\boolval');
     }
 
     /**
@@ -63,7 +63,7 @@ abstract class AbstractWorkingObject implements WorkingObject {
      * @return int
      */
     protected static function getValueAsInt($data, $key, $default = 0) {
-        return static::getValue($data, $key, $default, '\intval');
+        return static::getValueIsSet($data, $key, $default, '\intval');
     }
 
     /**

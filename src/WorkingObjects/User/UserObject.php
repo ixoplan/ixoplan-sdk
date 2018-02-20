@@ -193,16 +193,16 @@ final class UserObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'userId'),
+            static::getValueIsSet($response, 'userId'),
             static::getValueAsDateTime($response, 'createdAt'),
-            static::getValue($response, 'loginDisabled'),
-            static::getValue($response, 'language'),
+            static::getValueIsSet($response, 'loginDisabled'),
+            static::getValueIsSet($response, 'language'),
             static::getValueAsDateTime($response, 'lastLoginDate'),
-            static::getValue($response, 'lastLoginIp'),
-            static::getValue($response, 'metaData'),
-            static::getValue($response, 'currencyCode'),
-            static::getValue($response, 'verifiedData'),
-            static::getValue($response, 'authToken', null, function ($value) {
+            static::getValueIsSet($response, 'lastLoginIp'),
+            static::getValueIsSet($response, 'metaData'),
+            static::getValueIsSet($response, 'currencyCode'),
+            static::getValueIsSet($response, 'verifiedData'),
+            static::getValueIsSet($response, 'authToken', null, function ($value) {
                 return AuthTokenObject::fromResponse($value);
             })
         );

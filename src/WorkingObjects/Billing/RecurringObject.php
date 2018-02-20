@@ -196,19 +196,19 @@ final class RecurringObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'recurringId'),
-            static::getValue($response, 'status'),
-            static::getValue($response, 'providerToken'),
-            static::getValue($response, 'providerToken', null, function ($value) {
+            static::getValueIsSet($response, 'recurringId'),
+            static::getValueIsSet($response, 'status'),
+            static::getValueIsSet($response, 'providerToken'),
+            static::getValueIsSet($response, 'providerToken', null, function ($value) {
                 return SubscriptionObject::fromResponse($value);
             }),
             static::getValueAsDateTime($response, 'createdAt'),
             static::getValueAsDateTime($response, 'canceledAt'),
             static::getValueAsDateTime($response, 'closedAt'),
-            static::getValue($response, 'parameters'),
-            static::getValue($response, 'amount'),
-            static::getValue($response, 'currency'),
-            static::getValue($response, 'providerToken', null, function ($value) {
+            static::getValueIsSet($response, 'parameters'),
+            static::getValueIsSet($response, 'amount'),
+            static::getValueIsSet($response, 'currency'),
+            static::getValueIsSet($response, 'providerToken', null, function ($value) {
                 return BillingMethodObject::fromResponse($value);
             })
         );

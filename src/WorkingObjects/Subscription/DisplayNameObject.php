@@ -59,8 +59,8 @@ final class DisplayNameObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'language'),
-            static::getValue($response, 'name')
+            static::getValueIsSet($response, 'language'),
+            static::getValueIsSet($response, 'name')
         );
     }
 

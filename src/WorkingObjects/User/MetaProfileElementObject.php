@@ -66,7 +66,7 @@ final class MetaProfileElementObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'name'),
+            static::getValueIsSet($response, 'name'),
             static::getValueAsBool($response, 'required'),
             static::getValueAsBool($response, 'unique')
         );

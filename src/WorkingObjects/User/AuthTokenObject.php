@@ -116,13 +116,13 @@ final class AuthTokenObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'id'),
-            static::getValue($response, 'userId'),
-            static::getValue($response, 'loginToken'),
+            static::getValueIsSet($response, 'id'),
+            static::getValueIsSet($response, 'userId'),
+            static::getValueIsSet($response, 'loginToken'),
             static::getValueAsDateTime($response, 'createdAt'),
             static::getValueAsDateTime($response, 'modifiedAt'),
             static::getValueAsDateTime($response, 'validUntil'),
-            static::getValue($response, 'metaInfo')
+            static::getValueIsSet($response, 'metaInfo')
         );
     }
 

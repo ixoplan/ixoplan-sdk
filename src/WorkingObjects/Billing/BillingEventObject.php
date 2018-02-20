@@ -232,16 +232,16 @@ final class BillingEventObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'billingEventId'),
-            static::getValue($response, 'userId'),
-            static::getValue($response, 'currencyCode'),
-            static::getValue($response, 'amount'),
+            static::getValueIsSet($response, 'billingEventId'),
+            static::getValueIsSet($response, 'userId'),
+            static::getValueIsSet($response, 'currencyCode'),
+            static::getValueIsSet($response, 'amount'),
             static::getValueAsDateTime($response, 'createdAt'),
-            static::getValue($response, 'type'),
-            static::getValue($response, 'status'),
-            static::getValue($response, 'description'),
-            static::getValue($response, 'techinfo'),
-            static::getValue($response, 'billingMethod'),
+            static::getValueIsSet($response, 'type'),
+            static::getValueIsSet($response, 'status'),
+            static::getValueIsSet($response, 'description'),
+            static::getValueIsSet($response, 'techinfo'),
+            static::getValueIsSet($response, 'billingMethod'),
             static::getValueNotEmpty($response, 'subscription', null, function ($value) {
                 return SubscriptionObject::fromResponse($value);
             }),

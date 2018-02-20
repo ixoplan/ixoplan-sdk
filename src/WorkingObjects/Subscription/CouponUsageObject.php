@@ -82,10 +82,10 @@ final class CouponUsageObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'coupon', null, function ($value) {
+            static::getValueIsSet($response, 'coupon', null, function ($value) {
                 return CouponObject::fromResponse($value);
             }),
-            static::getValue($response, 'numPeriods'),
+            static::getValueIsSet($response, 'numPeriods'),
             static::getValueAsDateTime($response, 'createdAt'),
             static::getValueAsDateTime($response, 'modifiedAt')
         );

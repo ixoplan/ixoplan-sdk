@@ -214,39 +214,39 @@ final class PackageObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'packageIdentifier'),
-            static::getValue($response, 'serviceIdentifier'),
-            static::getValue($response, 'displayNames', [], function ($value) {
+            static::getValueIsSet($response, 'packageIdentifier'),
+            static::getValueIsSet($response, 'serviceIdentifier'),
+            static::getValueIsSet($response, 'displayNames', [], function ($value) {
                 $displayNames = [];
                 foreach ($value as $displayName) {
                     $displayNames[] = DisplayNameObject::fromResponse($displayName);
                 }
                 return $displayNames;
             }),
-            static::getValue($response, 'signupAvailable'),
-            static::getValue($response, 'addonPackages', [], function ($value) {
+            static::getValueIsSet($response, 'signupAvailable'),
+            static::getValueIsSet($response, 'addonPackages', [], function ($value) {
                 $addonPackages = [];
                 foreach ($value as $addonPackage) {
                     $addonPackages[] = PackageObject::fromResponse($addonPackage);
                 }
                 return $addonPackages;
             }),
-            static::getValue($response, 'metaData', []),
-            static::getValue($response, 'initialPeriod', null, function ($value) {
+            static::getValueIsSet($response, 'metaData', []),
+            static::getValueIsSet($response, 'initialPeriod', null, function ($value) {
                 return PackagePeriodObject::fromResponse($value);
             }),
-            static::getValue($response, 'recurringPeriod', null, function ($value) {
+            static::getValueIsSet($response, 'recurringPeriod', null, function ($value) {
                 return PackagePeriodObject::fromResponse($value);
             }),
-            static::getValue($response, 'hasTrialPeriod', false),
-            static::getValue($response, 'billingMethods', [], function ($value) {
+            static::getValueIsSet($response, 'hasTrialPeriod', false),
+            static::getValueIsSet($response, 'billingMethods', [], function ($value) {
                 $billingMethods = [];
                 foreach ($value as $billingMethod) {
                     $billingMethods[] = BillingMethodObject::fromResponse($billingMethod);
                 }
                 return $billingMethods;
             }),
-            static::getValue($response, 'requireFlexibleForFreeSignup', false)
+            static::getValueIsSet($response, 'requireFlexibleForFreeSignup', false)
         );
     }
 

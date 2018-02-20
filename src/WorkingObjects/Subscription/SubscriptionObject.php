@@ -392,25 +392,25 @@ final class SubscriptionObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'subscriptionId'),
-            static::getValue($response, 'currentPackage', null, function ($value) {
+            static::getValueIsSet($response, 'subscriptionId'),
+            static::getValueIsSet($response, 'currentPackage', null, function ($value) {
                 return PackageObject::fromResponse($value);
             }),
-            static::getValue($response, 'userId'),
-            static::getValue($response, 'status'),
+            static::getValueIsSet($response, 'userId'),
+            static::getValueIsSet($response, 'status'),
             static::getValueAsDateTime($response, 'startedAt'),
             static::getValueAsDateTime($response, 'canceledAt'),
             static::getValueAsDateTime($response, 'closedAt'),
             static::getValueAsDateTime($response, 'expiresAt'),
             static::getValueAsDateTime($response, 'nextBillingAt'),
-            static::getValue($response, 'currencyCode'),
-            static::getValue($response, 'isInitialPeriod'),
-            static::getValue($response, 'isProvisioned'),
-            static::getValue($response, 'provisioningMetaData', []),
-            static::getValue($response, 'nextPackage', null, function ($value) {
+            static::getValueIsSet($response, 'currencyCode'),
+            static::getValueIsSet($response, 'isInitialPeriod'),
+            static::getValueIsSet($response, 'isProvisioned'),
+            static::getValueIsSet($response, 'provisioningMetaData', []),
+            static::getValueIsSet($response, 'nextPackage', null, function ($value) {
                 return NextPackageObject::fromResponse($value);
             }),
-            static::getValue($response, 'addonSubscriptions', [], function ($value) {
+            static::getValueIsSet($response, 'addonSubscriptions', [], function ($value) {
                 $addonSubscriptions = [];
                 foreach ($value as $addonSubscription) {
                     $addonSubscriptions[] = SubscriptionObject::fromResponse($addonSubscription);
@@ -418,14 +418,14 @@ final class SubscriptionObject extends AbstractWorkingObject {
                 return $addonSubscriptions;
             }),
             static::getValueAsDateTime($response, 'minimumTermEndsAt'),
-            static::getValue($response, 'isExternal'),
-            static::getValue($response, 'couponUsage', null, function ($value) {
+            static::getValueIsSet($response, 'isExternal'),
+            static::getValueIsSet($response, 'couponUsage', null, function ($value) {
                 return CouponUsageObject::fromResponse($value);
             }),
-            static::getValue($response, 'currentPeriodEvent', null, function ($value) {
+            static::getValueIsSet($response, 'currentPeriodEvent', null, function ($value) {
                 return PeriodEventObject::fromResponse($value);
             }),
-            static::getValue($response, 'nextBillingAmount')
+            static::getValueIsSet($response, 'nextBillingAmount')
         );
     }
 

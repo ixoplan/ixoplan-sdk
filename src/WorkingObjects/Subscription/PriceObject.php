@@ -112,11 +112,11 @@ final class PriceObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'amount'),
-            static::getValue($response, 'currencyCode'),
-            static::getValue($response, 'tag'),
-            static::getValue($response, 'group', ''),
-            static::getValue($response, 'compositePrices', [], function ($value) {
+            static::getValueIsSet($response, 'amount'),
+            static::getValueIsSet($response, 'currencyCode'),
+            static::getValueIsSet($response, 'tag'),
+            static::getValueIsSet($response, 'group', ''),
+            static::getValueIsSet($response, 'compositePrices', [], function ($value) {
                 $compositePrices = [];
                 foreach ($value as $compositePrice) {
                     $compositePrices[] = PriceObject::fromResponse($compositePrice);

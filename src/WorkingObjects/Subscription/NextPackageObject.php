@@ -204,31 +204,31 @@ final class NextPackageObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'packageIdentifier'),
-            static::getValue($response, 'serviceIdentifier'),
-            static::getValue($response, 'displayNames', [], function ($value) {
+            static::getValueIsSet($response, 'packageIdentifier'),
+            static::getValueIsSet($response, 'serviceIdentifier'),
+            static::getValueIsSet($response, 'displayNames', [], function ($value) {
                 $displayNames = [];
                 foreach ($value as $displayName) {
                     $displayNames[] = DisplayNameObject::fromResponse($displayName);
                 }
                 return $displayNames;
             }),
-            static::getValue($response, 'signupAvailable'),
-            static::getValue($response, 'addonPackages', [], function ($value) {
+            static::getValueIsSet($response, 'signupAvailable'),
+            static::getValueIsSet($response, 'addonPackages', [], function ($value) {
                 $addonPackages = [];
                 foreach ($value as $addonPackage) {
                     $addonPackages[] = PackageObject::fromResponse($addonPackage);
                 }
                 return $addonPackages;
             }),
-            static::getValue($response, 'metaData', array()),
-            static::getValue($response, 'initialPeriod', null, function ($value) {
+            static::getValueIsSet($response, 'metaData', array()),
+            static::getValueIsSet($response, 'initialPeriod', null, function ($value) {
                 return PackagePeriodObject::fromResponse($value);
             }),
-            static::getValue($response, 'recurringPeriod', null, function ($value) {
+            static::getValueIsSet($response, 'recurringPeriod', null, function ($value) {
                 return PackagePeriodObject::fromResponse($value);
             }),
-            static::getValue($response, 'paid'),
+            static::getValueIsSet($response, 'paid'),
             static::getValueAsDateTime($response, 'effectiveAt')
         );
     }

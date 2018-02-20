@@ -118,12 +118,12 @@ final class FlexibleObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'flexibleId'),
-            static::getValue($response, 'status'),
-            static::getValue($response, 'metaData'),
+            static::getValueIsSet($response, 'flexibleId'),
+            static::getValueIsSet($response, 'status'),
+            static::getValueIsSet($response, 'metaData'),
             static::getValueAsDateTime($response, 'createdAt'),
-            static::getValue($response, 'billingMethod'),
-            static::getValue($response, 'billingMethodObject', null, function ($value) {
+            static::getValueIsSet($response, 'billingMethod'),
+            static::getValueIsSet($response, 'billingMethodObject', null, function ($value) {
                 return BillingMethodObject::fromResponse($value);
             })
         );

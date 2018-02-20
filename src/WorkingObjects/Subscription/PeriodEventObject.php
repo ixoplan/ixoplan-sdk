@@ -149,14 +149,14 @@ final class PeriodEventObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'id'),
-            static::getValue($response, 'periodId'),
-            static::getValue($response, 'subscriptionHistoryId'),
+            static::getValueIsSet($response, 'id'),
+            static::getValueIsSet($response, 'periodId'),
+            static::getValueIsSet($response, 'subscriptionHistoryId'),
             static::getValueAsDateTime($response, 'startedAt'),
             static::getValueAsDateTime($response, 'endsAt'),
-            static::getValue($response, 'parentPeriodEventId'),
+            static::getValueIsSet($response, 'parentPeriodEventId'),
             static::getValueAsDateTime($response, 'originalEndsAt'),
-            static::getValue($response, 'billingEvent', null, function ($value) {
+            static::getValueIsSet($response, 'billingEvent', null, function ($value) {
                 return BillingEventObject::fromResponse($value);
             })
         );

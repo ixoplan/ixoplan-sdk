@@ -82,10 +82,10 @@ final class ExternalProfileObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'userId'),
-            static::getValue($response, 'subscriptionId'),
-            static::getValue($response, 'extraData'),
-            static::getValue($response, 'externalId')
+            static::getValueIsSet($response, 'userId'),
+            static::getValueIsSet($response, 'subscriptionId'),
+            static::getValueIsSet($response, 'extraData'),
+            static::getValueIsSet($response, 'externalId')
         );
     }
 

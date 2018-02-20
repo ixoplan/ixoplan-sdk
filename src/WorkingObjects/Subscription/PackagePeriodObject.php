@@ -124,17 +124,17 @@ final class PackagePeriodObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'length'),
-            static::getValue($response, 'lengthUnit'),
-            static::getValue($response, 'metaData', []),
-            static::getValue($response, 'basePrice', [], function ($value) {
+            static::getValueIsSet($response, 'length'),
+            static::getValueIsSet($response, 'lengthUnit'),
+            static::getValueIsSet($response, 'metaData', []),
+            static::getValueIsSet($response, 'basePrice', [], function ($value) {
                 $prices = [];
                 foreach ($value as $price) {
                     $prices[] = PriceObject::fromResponse($price);
                 }
                 return $prices;
             }),
-            static::getValue($response, 'minimumTermLength')
+            static::getValueIsSet($response, 'minimumTermLength')
         );
     }
 

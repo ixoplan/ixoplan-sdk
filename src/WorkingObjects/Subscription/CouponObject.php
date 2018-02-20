@@ -57,8 +57,8 @@ final class CouponObject extends AbstractWorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            static::getValue($response, 'code'),
-            static::getValue($response, 'description')
+            static::getValueIsSet($response, 'code'),
+            static::getValueIsSet($response, 'description')
         );
     }
 
