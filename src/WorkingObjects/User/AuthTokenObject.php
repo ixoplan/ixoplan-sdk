@@ -3,14 +3,14 @@
 namespace Ixolit\Dislo\WorkingObjects\User;
 
 
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 /**
  * Class AuthTokenObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class AuthTokenObject implements WorkingObject {
+final class AuthTokenObject extends AbstractWorkingObject {
 
     /** @var int */
     private $id;
@@ -116,13 +116,13 @@ final class AuthTokenObject implements WorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            $response['id'],
-            $response['userId'],
-            $response['loginToken'],
-            new \DateTime($response['createdAt']),
-            new \DateTime($response['modifiedAt']),
-            new \DateTime($response['validUntil']),
-            $response['metaInfo']
+            static::getValue($response, 'id'),
+            static::getValue($response, 'userId'),
+            static::getValue($response, 'loginToken'),
+            static::getValueAsDateTime($response, 'createdAt'),
+            static::getValueAsDateTime($response, 'modifiedAt'),
+            static::getValueAsDateTime($response, 'validUntil'),
+            static::getValue($response, 'metaInfo')
         );
     }
 

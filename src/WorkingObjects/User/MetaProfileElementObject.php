@@ -3,14 +3,14 @@
 namespace Ixolit\Dislo\WorkingObjects\User;
 
 
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 /**
  * Class MetaProfileElementObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class MetaProfileElementObject implements WorkingObject {
+final class MetaProfileElementObject extends AbstractWorkingObject {
 
     /**
      * @var string
@@ -66,9 +66,9 @@ final class MetaProfileElementObject implements WorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            $response['name'],
-            (bool)$response['required'],
-            (bool)$response['unique']
+            static::getValue($response, 'name'),
+            static::getValueAsBool($response, 'required'),
+            static::getValueAsBool($response, 'unique')
         );
     }
 

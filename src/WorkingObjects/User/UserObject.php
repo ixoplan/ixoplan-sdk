@@ -3,14 +3,14 @@
 namespace Ixolit\Dislo\WorkingObjects\User;
 
 
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 /**
  * Class UserObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class UserObject implements WorkingObject {
+final class UserObject extends AbstractWorkingObject {
 
     /**
      * @var int
@@ -193,24 +193,18 @@ final class UserObject implements WorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            $response['userId'],
-            new \DateTime($response['createdAt']),
-            $response['loginDisabled'],
-            $response['language'],
-            $response['lastLoginDate']
-                ? new \DateTime($response['lastLoginDate'])
-                : null,
-            $response['lastLoginIp'],
-            $response['metaData'],
-            isset($response['currencyCode'])
-                ? $response['currencyCode']
-                : null,
-            isset($response['verifiedData'])
-                ? $response['verifiedData']
-                : [],
-            isset($response['authToken'])
-                ? AuthTokenObject::fromResponse($response['authToken'])
-                : null
+            static::getValue($response, 'userId'),
+            static::getValueAsDateTime($response, 'createdAt'),
+            static::getValue($response, 'loginDisabled'),
+            static::getValue($response, 'language'),
+            static::getValueAsDateTime($response, 'lastLoginDate'),
+            static::getValue($response, 'lastLoginIp'),
+            static::getValue($response, 'metaData'),
+            static::getValue($response, 'currencyCode'),
+            static::getValue($response, 'verifiedData'),
+            static::getValue($response, 'authToken', null, function ($value) {
+                return AuthTokenObject::fromResponse($value);
+            })
         );
     }
 
