@@ -3,15 +3,15 @@
 namespace Ixolit\Dislo\WorkingObjects\Billing;
 
 
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
 
 /**
  * Class RecurringObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class RecurringObject implements WorkingObject {
+final class RecurringObject extends AbstractWorkingObject {
 
     const STATUS_ACTIVE = 'active';
     const STATUS_CANCELED = 'canceled';
@@ -196,21 +196,21 @@ final class RecurringObject implements WorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            $response['recurringId'],
-            $response['status'],
-            $response['providerToken'],
-            SubscriptionObject::fromResponse($response['subscription']),
-            new \DateTime($response['createdAt']),
-            empty($response['canceledAt'])
-                ? null
-                : new \DateTime($response['canceledAt']),
-            empty($response['closedAt'])
-                ? null
-                : new \DateTime($response['closedAt']),
-            $response['parameters'],
-            $response['amount'],
-            $response['currency'],
-            BillingMethodObject::fromResponse($response['billingMethod'])
+            static::getValue($response, 'recurringId'),
+            static::getValue($response, 'status'),
+            static::getValue($response, 'providerToken'),
+            static::getValue($response, 'providerToken', null, function ($value) {
+                return SubscriptionObject::fromResponse($value);
+            }),
+            static::getValueAsDateTime($response, 'createdAt'),
+            static::getValueAsDateTime($response, 'canceledAt'),
+            static::getValueAsDateTime($response, 'closedAt'),
+            static::getValue($response, 'parameters'),
+            static::getValue($response, 'amount'),
+            static::getValue($response, 'currency'),
+            static::getValue($response, 'providerToken', null, function ($value) {
+                return BillingMethodObject::fromResponse($value);
+            })
         );
     }
 

@@ -3,14 +3,14 @@
 namespace Ixolit\Dislo\WorkingObjects\Billing;
 
 
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 /**
  * Class FlexibleObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class FlexibleObject implements WorkingObject {
+final class FlexibleObject extends AbstractWorkingObject {
 
     const STATUS_ACTIVE = 'active';
     const STATUS_CLOSED = 'closed';
@@ -118,14 +118,14 @@ final class FlexibleObject implements WorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            $response['flexibleId'],
-            $response['status'],
-            $response['metaData'],
-            new \DateTime($response['createdAt']),
-            $response['billingMethod'],
-            isset($response['billingMethodObject'])
-                ? BillingMethodObject::fromResponse($response['billingMethodObject'])
-                : null
+            static::getValue($response, 'flexibleId'),
+            static::getValue($response, 'status'),
+            static::getValue($response, 'metaData'),
+            static::getValueAsDateTime($response, 'createdAt'),
+            static::getValue($response, 'billingMethod'),
+            static::getValue($response, 'billingMethodObject', null, function ($value) {
+                return BillingMethodObject::fromResponse($value);
+            })
         );
     }
 

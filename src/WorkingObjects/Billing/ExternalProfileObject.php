@@ -3,14 +3,14 @@
 namespace Ixolit\Dislo\WorkingObjects\Billing;
 
 
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 /**
  * Class ExternalProfileObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class ExternalProfileObject implements WorkingObject {
+final class ExternalProfileObject extends AbstractWorkingObject {
 
     /**
      * @var int
@@ -82,10 +82,10 @@ final class ExternalProfileObject implements WorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            $response['userId'],
-            $response['subscriptionId'],
-            $response['extraData'],
-            $response['externalId']
+            static::getValue($response, 'userId'),
+            static::getValue($response, 'subscriptionId'),
+            static::getValue($response, 'extraData'),
+            static::getValue($response, 'externalId')
         );
     }
 

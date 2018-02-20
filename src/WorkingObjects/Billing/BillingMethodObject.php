@@ -3,14 +3,14 @@
 namespace Ixolit\Dislo\WorkingObjects\Billing;
 
 
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 
 /**
  * Class BillingMethodObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class BillingMethodObject implements WorkingObject {
+final class BillingMethodObject extends AbstractWorkingObject {
 
     /**
      * @var int
@@ -145,24 +145,14 @@ final class BillingMethodObject implements WorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            $response['billingMethodId'],
-            $response['name'],
-            $response['displayName'],
-            isset($response['available'])
-                ? $response['available']
-                : null,
-            isset($response['checkout'])
-                ? $response['checkout']
-                : null,
-            isset($response['flexible'])
-                ? $response['flexible']
-                : null,
-            isset($response['recurring'])
-                ? $response['recurring']
-                : null,
-            isset($response['replaceable'])
-                ? $response['replaceable']
-                : null
+            static::getValue($response, 'billingMethodId'),
+            static::getValue($response, 'name'),
+            static::getValue($response, 'displayName'),
+            static::getValue($response, 'available'),
+            static::getValue($response, 'checkout'),
+            static::getValue($response, 'flexible'),
+            static::getValue($response, 'recurring'),
+            static::getValue($response, 'replaceable')
         );
     }
 

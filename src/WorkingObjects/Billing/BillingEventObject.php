@@ -3,15 +3,15 @@
 namespace Ixolit\Dislo\WorkingObjects\Billing;
 
 
+use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
-use Ixolit\Dislo\WorkingObjects\WorkingObject;
 
 /**
  * Class BillingEventObject
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-final class BillingEventObject implements WorkingObject {
+final class BillingEventObject extends AbstractWorkingObject {
 
     const TYPE_AUTHORIZE = 'authorize';
     const TYPE_CHARGE = 'charge';
@@ -232,25 +232,23 @@ final class BillingEventObject implements WorkingObject {
      */
     public static function fromResponse($response) {
         return new self(
-            $response['billingEventId'],
-            $response['userId'],
-            $response['currencyCode'],
-            $response['amount'],
-            new \DateTime($response['createdAt']),
-            $response['type'],
-            $response['status'],
-            $response['description'],
-            $response['techinfo'],
-            $response['billingMethod'],
-            !empty($response['subscription'])
-                ? SubscriptionObject::fromResponse($response['subscription'])
-                : null,
-            !empty($response['modifiedAt'])
-                ? new \DateTime($response['modifiedAt'])
-                : null,
-            !empty($response['billingMethodObject'])
-                ? BillingMethodObject::fromResponse($response['billingMethodObject'])
-                : null
+            static::getValue($response, 'billingEventId'),
+            static::getValue($response, 'userId'),
+            static::getValue($response, 'currencyCode'),
+            static::getValue($response, 'amount'),
+            static::getValueAsDateTime($response, 'createdAt'),
+            static::getValue($response, 'type'),
+            static::getValue($response, 'status'),
+            static::getValue($response, 'description'),
+            static::getValue($response, 'techinfo'),
+            static::getValue($response, 'billingMethod'),
+            static::getValueNotEmpty($response, 'subscription', null, function ($value) {
+                return SubscriptionObject::fromResponse($value);
+            }),
+            static::getValueAsDateTime($response, 'modifiedAt'),
+            static::getValueNotEmpty($response, 'billingMethodObject', null, function ($value) {
+                return BillingMethodObject::fromResponse($value);
+            })
         );
     }
 
