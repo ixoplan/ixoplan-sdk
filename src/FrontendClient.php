@@ -28,10 +28,10 @@ use Ixolit\Dislo\Response\Billing\BillingGetFlexibleByIdentifierResponseObject;
 use Ixolit\Dislo\Response\Billing\BillingGetFlexibleResponseObject;
 use Ixolit\Dislo\Response\Billing\BillingMethodsGetAvailableResponseObject;
 use Ixolit\Dislo\Response\Billing\BillingMethodsGetResponseObject;
+use Ixolit\Dislo\Response\Misc\MiscGetRedirectorConfigurationResponseObject;
 use Ixolit\Dislo\Response\Subscription\CouponCodeCheckResponseObject;
 use Ixolit\Dislo\Response\Subscription\CouponCodeValidateNewResponseObject;
 use Ixolit\Dislo\Response\Subscription\CouponCodeValidateUpgradeResponseObject;
-use Ixolit\Dislo\Response\Redirector\MiscGetRedirectorConfigurationResponseObject;
 use Ixolit\Dislo\Response\Subscription\PackageGetResponseObject;
 use Ixolit\Dislo\Response\Subscription\PackagesListResponseObject;
 use Ixolit\Dislo\Response\Subscription\SubscriptionAttachCouponResponseObject;
@@ -96,7 +96,7 @@ use Psr\Http\Message\StreamInterface;
  *
  * @package Ixolit\Dislo
  */
-final class FrontendClient {
+final class FrontendClient extends AbstractClient {
 
     //region Frontend API URIs
 
@@ -168,42 +168,6 @@ final class FrontendClient {
 
     //endregion
 
-    const ORDER_DIR_ASC = 'ASC';
-    const ORDER_DIR_DESC = 'DESC';
-
-    /** @var RequestClient */
-    private $requestClient;
-
-    /** @var bool */
-    private $forceTokenMode;
-
-    /**
-     * Initialize the client with a RequestClient, the class that is responsible for transporting messages to and
-     * from the Dislo API.
-     *
-     * @param RequestClient $requestClient
-     * @param bool          $forceTokenMode Force using tokens. Does not allow passing a user Id.
-     *
-     * @throws DisloException if the $requestClient parameter is missing
-     */
-    public function __construct(RequestClient $requestClient, $forceTokenMode = true) {
-        $this->requestClient  = $requestClient;
-        $this->forceTokenMode = $forceTokenMode;
-    }
-
-    /**
-     * @return RequestClientExtra
-     *
-     * @throws NotImplementedException
-     */
-    private function getRequestClientExtra() {
-        if ($this->requestClient instanceof RequestClientExtra) {
-            return $this->requestClient;
-        }
-
-        throw new NotImplementedException();
-    }
-
     /**
      * @param RequestClient $requestClient
      *
@@ -216,13 +180,6 @@ final class FrontendClient {
     }
 
     /**
-     * @return RequestClient
-     */
-    private function getRequestClient() {
-        return $this->requestClient;
-    }
-
-    /**
      * @param bool $forceTokenMode
      *
      * @return $this
@@ -231,106 +188,6 @@ final class FrontendClient {
         $this->forceTokenMode = $forceTokenMode;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isForceTokenMode() {
-        return $this->forceTokenMode;
-    }
-
-    /**
-     * Performs request and handles response.
-     *
-     * @param string $uri
-     * @param array  $data
-     *
-     * @return array
-     *
-     * @throws DisloException
-     * @throws ObjectNotFoundException
-     */
-    private function request($uri, array $data = []) {
-        try {
-            $response = $this->getRequestClient()->request($uri, $data);
-
-            if (isset($response['success']) && $response['success'] === false) {
-                switch ($response['errors'][0]['code']) {
-                    case 404:
-                        throw new ObjectNotFoundException(
-                            $response['errors'][0]['message'] . ' while trying to query ' . $uri,
-                            $response['errors'][0]['code']);
-                    case 9002:
-                        throw new InvalidTokenException();
-                    default:
-                        throw new DisloException(
-                            $response['errors'][0]['message'] . ' while trying to query ' . $uri,
-                            $response['errors'][0]['code']);
-                }
-            }
-
-            return $response;
-        } catch (ObjectNotFoundException $e) {
-            throw $e;
-        } catch (DisloException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            throw new DisloException($e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-    /**
-     * Sets user identification to request data.
-     *
-     * @param string|int|UserObject|null $userTokenOrId
-     * @param array                      $data
-     *
-     * @return array
-     */
-    private function userToData($userTokenOrId, array $data = []) {
-        if ($this->forceTokenMode) {
-            $data['authToken'] = (string)$userTokenOrId;
-
-            return $data;
-        }
-
-        if ($userTokenOrId instanceof UserObject) {
-            $data['userId'] = $userTokenOrId->getUserId();
-
-            return $data;
-        }
-
-        if (\is_null($userTokenOrId)) {
-            return $data;
-        }
-
-        if (
-            \is_bool($userTokenOrId)
-            || \is_float($userTokenOrId)
-            || \is_resource($userTokenOrId)
-            || \is_array($userTokenOrId)
-        ) {
-            throw new \InvalidArgumentException('Invalid user specification: ' . \var_export($userTokenOrId, true));
-        }
-
-        if (\is_object($userTokenOrId)) {
-            if (!\method_exists($userTokenOrId, '__toString')) {
-                throw new \InvalidArgumentException('Invalid user specification: ' . \var_export($userTokenOrId, true));
-            }
-
-            $userTokenOrId = $userTokenOrId->__toString();
-        }
-
-        if (\is_int($userTokenOrId) || \preg_match('/^[0-9]+$/D', $userTokenOrId)) {
-            $data['userId'] = (int)$userTokenOrId;
-
-            return $data;
-        }
-
-        $data['authToken'] = $userTokenOrId;
-
-        return $data;
     }
 
     //region Billing API calls

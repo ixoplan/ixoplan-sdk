@@ -1,6 +1,6 @@
 <?php
 
-namespace Ixolit\Dislo\Response\Redirector;
+namespace Ixolit\Dislo\Response\Misc;
 
 
 use Ixolit\Dislo\Redirector\Redirector;
@@ -9,7 +9,7 @@ use Ixolit\Dislo\Redirector\RulesParser;
 /**
  * Class MiscGetRedirectorConfigurationResponseObject
  *
- * @package Ixolit\Dislo\Response
+ * @package Ixolit\Dislo\Response\Misc
  */
 final class MiscGetRedirectorConfigurationResponseObject {
 
