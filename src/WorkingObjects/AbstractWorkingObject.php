@@ -53,7 +53,7 @@ abstract class AbstractWorkingObject implements WorkingObject {
      * @return bool
      */
     protected static function getValueAsBool($data, $key, $default = false) {
-        return static::getValueIsSet($data, $key, $default, '\boolval');
+        return static::getValueIsSet($data, $key, $default, '\\boolval');
     }
 
     /**
@@ -63,7 +63,7 @@ abstract class AbstractWorkingObject implements WorkingObject {
      * @return int
      */
     protected static function getValueAsInt($data, $key, $default = 0) {
-        return static::getValueIsSet($data, $key, $default, '\intval');
+        return static::getValueIsSet($data, $key, $default, '\\intval');
     }
 
     /**
