@@ -4,6 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\User;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
+use Ixolit\Dislo\WorkingObjectsCustom\User\UserObjectCustom;
 
 /**
  * Class UserObject
@@ -96,6 +97,15 @@ final class UserObject extends AbstractWorkingObject {
         $this->currencyCode  = $currencyCode;
         $this->verifiedData  = $verifiedData;
         $this->authToken     = $authToken;
+
+        $this->newCustom();
+    }
+
+    /**
+     * @return UserObjectCustom|null
+     */
+    public function getCustomUser() {
+        return ($this->getCustom() instanceof UserObjectCustom) ? $this->getCustom() : null;
     }
 
     /**
