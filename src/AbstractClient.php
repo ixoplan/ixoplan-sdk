@@ -14,6 +14,7 @@ use Ixolit\Dislo\WorkingObjects\AuthToken;
 use Ixolit\Dislo\WorkingObjects\User;
 
 abstract class AbstractClient {
+
     const ORDER_DIR_ASC = 'ASC';
     const ORDER_DIR_DESC = 'DESC';
 
@@ -21,10 +22,28 @@ abstract class AbstractClient {
      * @var RequestClient
      */
     protected $requestClient;
+
     /**
      * @var bool
      */
     protected $forceTokenMode;
+
+    /**
+     * Initialize the client with a RequestClient, the class that is responsible for transporting messages to and
+     * from the Dislo API.
+     *
+     * @param RequestClient $requestClient
+     * @param bool          $forceTokenMode Force using tokens. Does not allow passing a user Id.
+     *
+     * @throws DisloException if the $requestClient parameter is missing
+     */
+    public function __construct(RequestClient $requestClient, $forceTokenMode = true) {
+        if (!($requestClient instanceof RequestClient)) {
+            throw new DisloException('A RequestClient parameter is required!');
+        }
+        $this->requestClient  = $requestClient;
+        $this->forceTokenMode = $forceTokenMode;
+    }
 
     /**
      * @return RequestClientExtra
@@ -32,7 +51,7 @@ abstract class AbstractClient {
      * @throws NotImplementedException
      */
     protected function getRequestClientExtra() {
-        if ($this->requestClient instanceof RequestClientExtra) {
+        if ($this->getRequestClient() instanceof RequestClientExtra) {
             return $this->requestClient;
         }
         else {
@@ -40,13 +59,26 @@ abstract class AbstractClient {
         }
     }
 
+    /**
+     * @return RequestClient
+     */
+    private function getRequestClient() {
+        return $this->requestClient;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isForceTokenMode() {
+        return $this->forceTokenMode;
+    }
+
     protected function userToData($userTokenOrId, &$data = []) {
+
+        // TODO: cleanup!
+
         if ($this->forceTokenMode) {
-            if (is_object($userTokenOrId) && $userTokenOrId instanceof AuthToken) {
-                $data['authToken'] = (string) $userTokenOrId;
-            } else {
-                $data['authToken'] = $userTokenOrId;
-            }
+            $data['authToken'] = (string) $userTokenOrId;
             return $data;
         }
         if ($userTokenOrId instanceof User) {
@@ -68,7 +100,7 @@ abstract class AbstractClient {
             $userTokenOrId = $userTokenOrId->__toString();
         }
 
-        if (\is_int($userTokenOrId) || \preg_match('/^[1-9][0-9]+$/D', $userTokenOrId)) {
+        if (\is_int($userTokenOrId) || \preg_match('/^[0-9]+$/D', $userTokenOrId)) {
             $data['userId'] = (int)$userTokenOrId;
         } else {
             $data['authToken'] = $userTokenOrId;
@@ -89,7 +121,7 @@ abstract class AbstractClient {
      */
     protected function request($uri, $data) {
         try {
-            $response = $this->requestClient->request($uri, $data);
+            $response = $this->getRequestClient()->request($uri, $data);
             if (isset($response['success']) && $response['success'] === false) {
                 switch ($response['errors'][0]['code']) {
                     case 404:
@@ -113,29 +145,5 @@ abstract class AbstractClient {
         } catch (\Exception $e) {
             throw new DisloException($e->getMessage(), $e->getCode(), $e);
         }
-    }
-
-    /**
-     * Initialize the client with a RequestClient, the class that is responsible for transporting messages to and
-     * from the Dislo API.
-     *
-     * @param RequestClient $requestClient
-     * @param bool          $forceTokenMode Force using tokens. Does not allow passing a user Id.
-     *
-     * @throws DisloException if the $requestClient parameter is missing
-     */
-    public function __construct(RequestClient $requestClient, $forceTokenMode = true) {
-        if (!($requestClient instanceof RequestClient)) {
-            throw new DisloException('A RequestClient parameter is required!');
-        }
-        $this->requestClient  = $requestClient;
-        $this->forceTokenMode = $forceTokenMode;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isForceTokenMode() {
-        return $this->forceTokenMode;
     }
 }
