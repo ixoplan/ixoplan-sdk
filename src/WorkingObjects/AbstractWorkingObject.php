@@ -5,16 +5,16 @@ namespace Ixolit\Dislo\WorkingObjects;
 abstract class AbstractWorkingObject implements WorkingObject {
 
     /** @var WorkingObjectCustomInterface */
-    private $custom;
+    private $customObject;
 
-    protected function newCustom() {
+    protected function addCustomObject() {
 
         $class = str_replace('\\WorkingObjects\\', '\\WorkingObjectsCustom\\', get_class($this)) . 'Custom';
         if (class_exists($class)) {
-            $custom = new $class;
-            if ($custom instanceof WorkingObjectCustomInterface) {
-                $custom->setWorkingObject($this);
-                $this->custom = $custom;
+            $object = new $class;
+            if ($object instanceof WorkingObjectCustomInterface) {
+                $object->setWorkingObject($this);
+                $this->customObject = $object;
             }
         }
     }
@@ -22,8 +22,8 @@ abstract class AbstractWorkingObject implements WorkingObject {
     /**
      * @return WorkingObjectCustomInterface
      */
-    public function getCustom() {
-        return $this->custom;
+    public function getCustomObject() {
+        return $this->customObject;
     }
 
     /**

@@ -98,14 +98,14 @@ final class UserObject extends AbstractWorkingObject {
         $this->verifiedData  = $verifiedData;
         $this->authToken     = $authToken;
 
-        $this->newCustom();
+        $this->addCustomObject();
     }
 
     /**
      * @return UserObjectCustom|null
      */
-    public function getCustomUser() {
-        return ($this->getCustom() instanceof UserObjectCustom) ? $this->getCustom() : null;
+    public function getCustom() {
+        return ($this->getCustomObject() instanceof UserObjectCustom) ? $this->getCustomObject() : null;
     }
 
     /**
