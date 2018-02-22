@@ -5,6 +5,7 @@ namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\PackagePeriodObjectCustom;
 
 
 /**
@@ -52,6 +53,16 @@ final class PackagePeriodObject extends AbstractWorkingObject {
         $this->metaData   		 = $metaData;
         $this->basePrice  		 = $basePrice;
         $this->minimumTermLength = $minimumTermLength;
+        $this->addCustomObject();
+    }
+
+    /**
+     * @return PackagePeriodObjectCustom|null
+     */
+    public function getCustom() {
+        /** @var PackagePeriodObjectCustom $custom */
+        $custom = ($this->getCustomObject() instanceof PackagePeriodObjectCustom) ? $this->getCustomObject() : null;
+        return $custom;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\PriceObjectCustom;
 
 
 /**
@@ -68,6 +69,16 @@ final class PriceObject extends AbstractWorkingObject {
         $this->group           = $group;
         $this->tag             = $tag;
         $this->compositePrices = $compositePrices;
+        $this->addCustomObject();
+    }
+
+    /**
+     * @return PriceObjectCustom|null
+     */
+    public function getCustom() {
+        /** @var PriceObjectCustom $custom */
+        $custom = ($this->getCustomObject() instanceof PriceObjectCustom) ? $this->getCustomObject() : null;
+        return $custom;
     }
 
     /**

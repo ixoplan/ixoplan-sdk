@@ -5,6 +5,7 @@ namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 use Ixolit\Dislo\WorkingObjects\Billing\BillingEventObject;
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\PeriodEventObjectCustom;
 
 
 /**
@@ -84,6 +85,16 @@ final class PeriodEventObject extends AbstractWorkingObject {
         $this->parentPeriodEventId   = $parentPeriodEventId;
         $this->originalEndsAt        = $originalEndsAt;
         $this->billingEvent          = $billingEvent;
+        $this->addCustomObject();
+    }
+
+    /**
+     * @return PeriodEventObjectCustom|null
+     */
+    public function getCustom() {
+        /** @var PeriodEventObjectCustom $custom */
+        $custom = ($this->getCustomObject() instanceof PeriodEventObjectCustom) ? $this->getCustomObject() : null;
+        return $custom;
     }
 
     /**

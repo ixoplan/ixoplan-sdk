@@ -4,6 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\CouponUsageObjectCustom;
 
 /**
  * Class CouponUsageObject
@@ -45,6 +46,16 @@ final class CouponUsageObject extends AbstractWorkingObject {
         $this->numPeriods = $numPeriods;
         $this->createdAt = $createdAt;
         $this->modifiedAt = $modifiedAt;
+        $this->addCustomObject();
+    }
+
+    /**
+     * @return CouponUsageObjectCustom|null
+     */
+    public function getCustom() {
+        /** @var CouponUsageObjectCustom $custom */
+        $custom = ($this->getCustomObject() instanceof CouponUsageObjectCustom) ? $this->getCustomObject() : null;
+        return $custom;
     }
 
     /**
