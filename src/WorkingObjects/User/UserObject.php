@@ -97,7 +97,6 @@ final class UserObject extends AbstractWorkingObject {
         $this->currencyCode  = $currencyCode;
         $this->verifiedData  = $verifiedData;
         $this->authToken     = $authToken;
-
         $this->addCustomObject();
     }
 

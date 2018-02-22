@@ -4,6 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\User;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
+use Ixolit\Dislo\WorkingObjectsCustom\User\MetaProfileElementObjectCustom;
 
 /**
  * Class MetaProfileElementObject
@@ -36,6 +37,16 @@ final class MetaProfileElementObject extends AbstractWorkingObject {
         $this->name     = $name;
         $this->required = $required;
         $this->unique   = $unique;
+        $this->addCustomObject();
+    }
+
+    /**
+     * @return MetaProfileElementObjectCustom|null
+     */
+    public function getCustom() {
+        /** @var MetaProfileElementObjectCustom $custom */
+        $custom = ($this->getCustomObject() instanceof MetaProfileElementObjectCustom) ? $this->getCustomObject() : null;
+        return $custom;
     }
 
     /**
