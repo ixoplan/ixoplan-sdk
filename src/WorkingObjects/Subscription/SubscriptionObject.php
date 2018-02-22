@@ -162,7 +162,7 @@ final class SubscriptionObject extends AbstractWorkingObject {
         $isInitialPeriod,
         $isProvisioned,
         $provisioningMetaData,
-        NextPackageObject $nextPackage,
+        NextPackageObject $nextPackage = null,
         $addonSubscriptions,
         $minimumTermEndsAt = null,
         $isExternal = false,
