@@ -5,6 +5,7 @@ namespace Ixolit\Dislo\WorkingObjects\Billing;
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjectsCustom\Billing\BillingEventObjectCustom;
 
 /**
  * Class BillingEventObject
@@ -132,6 +133,16 @@ final class BillingEventObject extends AbstractWorkingObject {
         $this->subscription        = $subscription;
         $this->modifiedAt          = $modifiedAt;
         $this->billingMethodObject = $billingMethodObject;
+        $this->addCustomObject();
+    }
+
+    /**
+     * @return BillingEventObjectCustom|null
+     */
+    public function getCustom() {
+        /** @var BillingEventObjectCustom $custom */
+        $custom = ($this->getCustomObject() instanceof BillingEventObjectCustom) ? $this->getCustomObject() : null;
+        return $custom;
     }
 
     /**

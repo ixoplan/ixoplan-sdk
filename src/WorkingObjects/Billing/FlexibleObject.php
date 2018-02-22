@@ -4,6 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\Billing;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
+use Ixolit\Dislo\WorkingObjectsCustom\Billing\FlexibleObjectCustom;
 
 /**
  * Class FlexibleObject
@@ -67,6 +68,16 @@ final class FlexibleObject extends AbstractWorkingObject {
         $this->createdAt     = $createdAt;
         $this->billingMethod = $billingMethod;
         $this->billingMethodObject = $billingMethodObject;
+        $this->addCustomObject();
+    }
+
+    /**
+     * @return FlexibleObjectCustom|null
+     */
+    public function getCustom() {
+        /** @var FlexibleObjectCustom $custom */
+        $custom = ($this->getCustomObject() instanceof FlexibleObjectCustom) ? $this->getCustomObject() : null;
+        return $custom;
     }
 
     /**

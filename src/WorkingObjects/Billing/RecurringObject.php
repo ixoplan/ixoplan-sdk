@@ -5,6 +5,7 @@ namespace Ixolit\Dislo\WorkingObjects\Billing;
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjectsCustom\Billing\RecurringObjectCustom;
 
 /**
  * Class RecurringObject
@@ -110,6 +111,16 @@ final class RecurringObject extends AbstractWorkingObject {
         $this->amount        = $amount;
         $this->currency      = $currency;
         $this->billingMethod = $billingMethod;
+        $this->addCustomObject();
+    }
+
+    /**
+     * @return RecurringObjectCustom|null
+     */
+    public function getCustom() {
+        /** @var RecurringObjectCustom $custom */
+        $custom = ($this->getCustomObject() instanceof RecurringObjectCustom) ? $this->getCustomObject() : null;
+        return $custom;
     }
 
     /**
