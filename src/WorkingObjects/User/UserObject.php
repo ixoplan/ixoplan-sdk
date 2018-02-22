@@ -105,7 +105,9 @@ final class UserObject extends AbstractWorkingObject {
      * @return UserObjectCustom|null
      */
     public function getCustom() {
-        return ($this->getCustomObject() instanceof UserObjectCustom) ? $this->getCustomObject() : null;
+        /** @var UserObjectCustom $custom */
+        $custom = ($this->getCustomObject() instanceof UserObjectCustom) ? $this->getCustomObject() : null;
+        return $custom;
     }
 
     /**
