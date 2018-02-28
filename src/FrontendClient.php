@@ -251,11 +251,12 @@ final class FrontendClient extends AbstractClient {
      * @throws DisloException
      */
     public function billingCloseFlexible($flexible, $userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'flexibleId' => ($flexible instanceof FlexibleObject)
                 ? $flexible->getFlexibleId()
                 : (int)$flexible
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_CLOSE_FLEXIBLE, $data);
 
@@ -288,12 +289,13 @@ final class FrontendClient extends AbstractClient {
         $currencyCode = '',
         $subscriptionId = null
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'billingMethod'  => $billingMethod,
             'returnUrl'      => (string)$returnUrl,
             'paymentDetails' => $paymentDetails,
             'subscriptionId' => $subscriptionId,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         if (!empty($currencyCode)) {
             $data['currencyCode'] = $currencyCode;
@@ -331,7 +333,7 @@ final class FrontendClient extends AbstractClient {
         $userTokenOrId,
         $countryCode = null
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'billingMethod'  => $billingMethod,
             'returnUrl'      => (string)$returnUrl,
             'subscriptionId' => ($subscription instanceof SubscriptionObject)
@@ -339,7 +341,8 @@ final class FrontendClient extends AbstractClient {
                 : $subscription,
             'paymentDetails' => $paymentDetails,
             'countryCode'    => $countryCode,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_CREATE_PAYMENT, $data);
         if (!$response['redirectUrl']) {
@@ -388,7 +391,7 @@ final class FrontendClient extends AbstractClient {
         $status = BillingEventObject::STATUS_SUCCESS,
         $userTokenOrId = null
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'externalProfileId'     => $externalProfileId,
             'accountIdentifier'     => $accountIdentifier,
             'currencyCode'          => $currencyCode,
@@ -398,7 +401,8 @@ final class FrontendClient extends AbstractClient {
             'paymentDetails'        => $paymentDetails,
             'description'           => $description,
             'status'                => $status,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_CREATE_CHARGE, $data);
 
@@ -426,11 +430,12 @@ final class FrontendClient extends AbstractClient {
         $description = '',
         $userTokenOrId = null
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'accountIdentifier'     => $accountIdentifier,
             'externalTransactionId' => $originalTransactionID,
             'description'           => $description,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_CREATE_CHARGEBACK, $data);
 
@@ -458,11 +463,12 @@ final class FrontendClient extends AbstractClient {
         $description = '',
         $userTokenOrId = null
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'accountIdentifier' => $accountIdentifier,
             'billingEventId'    => $originalBillingEventId,
             'description'       => $description,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_CREATE_CHARGEBACK, $data);
 
@@ -483,9 +489,10 @@ final class FrontendClient extends AbstractClient {
      * @throws DisloException
      */
     public function billingExternalGetProfileByExternalId($externalId, $userTokenOrId = null) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'externalId' => $externalId,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_GET_PROFILE, $data);
 
@@ -506,11 +513,12 @@ final class FrontendClient extends AbstractClient {
      * @throws DisloException
      */
     public function billingExternalGetProfileBySubscriptionId($subscription, $userTokenOrId = null) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_EXTERNAL_GET_PROFILE, $data);
 
@@ -530,9 +538,10 @@ final class FrontendClient extends AbstractClient {
      * @throws DisloException
      */
     public function billingGetEvent($billingEventId, $userTokenOrId = null) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'billingEventId' => $billingEventId,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_GET_EVENT, $data);
 
@@ -559,11 +568,12 @@ final class FrontendClient extends AbstractClient {
         $offset = 0,
         $orderDir = self::ORDER_DIR_ASC
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'limit'    => $limit,
             'offset'   => $offset,
             'orderDir' => $orderDir,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_GET_EVENTS_FOR_USER, $data);
 
@@ -580,7 +590,8 @@ final class FrontendClient extends AbstractClient {
      * @throws DisloException
      */
     public function billingGetFlexible($userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, []);
+        $data = [];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_GET_FLEXIBLE, $data);
 
@@ -599,9 +610,10 @@ final class FrontendClient extends AbstractClient {
      * @throws ObjectNotFoundException
      */
     public function billingGetFlexibleByIdentifier($flexibleIdentifier, $userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'flexibleId' => $flexibleIdentifier
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_GET_FLEXIBLE_BY_ID, $data);
 
@@ -619,11 +631,12 @@ final class FrontendClient extends AbstractClient {
      * @throws DisloException
      */
     public function billingGetActiveRecurring($subscription, $userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_GET_ACTIVE_RECURRING, $data);
 
@@ -641,11 +654,12 @@ final class FrontendClient extends AbstractClient {
      * @throws DisloException
      */
     public function billingCloseActiveRecurring($subscription, $userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_BILLING_CLOSE_ACTIVE_RECURRING, $data);
 
@@ -676,13 +690,14 @@ final class FrontendClient extends AbstractClient {
         $couponCode = null,
         $userTokenOrId
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId'     => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'packageIdentifiers' => $packageIdentifiers,
             'couponCode'         => $couponCode,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CALCULATE_ADDON_PRICE, $data);
 
@@ -709,14 +724,15 @@ final class FrontendClient extends AbstractClient {
         $userTokenOrId = null,
         $addonPackageIdentifiers = []
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId'          => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'newPackageIdentifier'    => $newPackageIdentifier,
             'couponCode'              => $couponCode,
             'addonPackageIdentifiers' => $addonPackageIdentifiers,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CALCULATE_PACKAGE_CHANGE, $data);
 
@@ -743,12 +759,13 @@ final class FrontendClient extends AbstractClient {
         $addonPackageIdentifiers = [],
         $userTokenOrId
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'packageIdentifier'       => $packageIdentifier,
             'currencyCode'            => $currencyCode,
             'couponCode'              => $couponCode,
             'addonPackageIdentifiers' => $addonPackageIdentifiers,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CALCULATE_PRICE, $data);
 
@@ -769,11 +786,12 @@ final class FrontendClient extends AbstractClient {
      * @return SubscriptionCancelPackageChangeResponseObject
      */
     public function subscriptionCancelPackageChange($subscription, $userTokenOrId = null) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CANCEL_PACKAGE_CHANGE, $data);
 
@@ -799,14 +817,15 @@ final class FrontendClient extends AbstractClient {
         $userComments = '',
         $userTokenOrId = null
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId'   => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'cancelReason'     => $cancelReason,
             'userCancelReason' => $userCancelReason,
             'userComments'     => $userComments,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CANCEL, $data);
 
@@ -837,13 +856,14 @@ final class FrontendClient extends AbstractClient {
         $useFlexible = false,
         $userTokenOrId = null
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId'       => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'newPackageIdentifier' => $newPackageIdentifier,
             'useFlexible'          => $useFlexible,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         if (!empty($addonPackageIdentifiers)) {
             $data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
@@ -893,12 +913,13 @@ final class FrontendClient extends AbstractClient {
      * @return SubscriptionCloseResponseObject
      */
     public function subscriptionClose($subscription, $closeReason = '', $userTokenOrId = null) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'closeReason'    => $closeReason,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CLOSE, $data);
 
@@ -914,11 +935,12 @@ final class FrontendClient extends AbstractClient {
      * @return SubscriptionContinueResponseObject
      */
     public function subscriptionContinue($subscription, $userTokenOrId = null) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CONTINUE, $data);
 
@@ -936,12 +958,13 @@ final class FrontendClient extends AbstractClient {
      * @return SubscriptionCreateAddonResponseObject
      */
     public function subscriptionCreateAddon($subscription, $packageIdentifiers, $couponCode = '', $userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId'     => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'packageIdentifiers' => $packageIdentifiers,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         if (!empty($couponCode)) {
             $data['couponCode'] = $couponCode;
@@ -977,10 +1000,11 @@ final class FrontendClient extends AbstractClient {
         $couponCode = '',
         $addonPackageIdentifiers = []
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'packageIdentifier' => $packageIdentifier,
             'currencyCode'      => $currencyCode,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         if (!empty($addonPackageIdentifiers)) {
             $data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
@@ -1020,7 +1044,7 @@ final class FrontendClient extends AbstractClient {
     ) {
         $newPeriodEnd = clone $newPeriodEnd;
 
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId'       => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
@@ -1028,7 +1052,8 @@ final class FrontendClient extends AbstractClient {
             'newPeriodEnd'         => $newPeriodEnd
                 ->setTimezone(new \DateTimeZone('UTC'))
                 ->format('Y-m-d H:i:s'),
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         if (!empty($addonPackageIdentifiers)) {
             $data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
@@ -1055,14 +1080,15 @@ final class FrontendClient extends AbstractClient {
     public function subscriptionExternalChangePeriod($subscription, \DateTime $newPeriodEnd, $userTokenOrId = null) {
         $newPeriodEnd = clone $newPeriodEnd;
 
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'newPeriodEnd'   => $newPeriodEnd
                 ->setTimezone(new \DateTimeZone('UTC'))
                 ->format('Y-m-d H:i:s'),
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_EXTERNAL_CHANGE_PERIOD, $data);
 
@@ -1079,11 +1105,12 @@ final class FrontendClient extends AbstractClient {
      * @return SubscriptionExternalCloseResponseObject
      */
     public function subscriptionExternalClose($subscription, $closeReason = '', $userTokenOrId = null) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         if (!empty($closeReason)) {
             $data['closeReason'] = $closeReason;
@@ -1104,12 +1131,13 @@ final class FrontendClient extends AbstractClient {
      * @return SubscriptionExternalAddonCreateResponseObject
      */
     public function subscriptionExternalAddonCreate($subscription, $packageIdentifiers, $userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId'     => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'packageIdentifiers' => $packageIdentifiers,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_EXTERNAL_CREATE_ADDON_SUBSCRIPTION, $data);
 
@@ -1142,13 +1170,14 @@ final class FrontendClient extends AbstractClient {
         \DateTime $periodEnd = null,
         $userTokenOrId
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'packageIdentifier'       => $packageIdentifier,
             'externalId'              => $externalId,
             'extraData'               => $extraData,
             'currencyCode'            => $currencyCode,
             'addonPackageIdentifiers' => $addonPackageIdentifiers,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         if (!empty($periodEnd)) {
             $periodEnd = clone $periodEnd;
@@ -1176,14 +1205,15 @@ final class FrontendClient extends AbstractClient {
      * @return SubscriptionCallSpiResponseObject
      */
     public function subscriptionCallSpi($userTokenOrId, $subscriptionId, $method, $params, $serviceId = null) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId' => ($subscriptionId instanceof SubscriptionObject)
                 ? $subscriptionId->getSubscriptionId()
                 : $subscriptionId,
             'method'         => $method,
             'params'         => $params,
             'serviceId'      => $serviceId,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_CALL_SPI, $data);
 
@@ -1200,11 +1230,12 @@ final class FrontendClient extends AbstractClient {
      * @return SubscriptionGetPossiblePackageChangesResponseObject
      */
     public function subscriptionGetPossiblePackageChanges($userTokenOrId, $subscriptionId, $type = '') {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId' => ($subscriptionId instanceof SubscriptionObject)
                 ? $subscriptionId->getSubscriptionId()
                 : $subscriptionId,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         if (!empty($type)) {
             $data['type'] = $type;
@@ -1261,11 +1292,12 @@ final class FrontendClient extends AbstractClient {
      * @return SubscriptionGetResponseObject
      */
     public function subscriptionGet($subscription, $userTokenOrId = null) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_GET, $data);
 
@@ -1280,7 +1312,8 @@ final class FrontendClient extends AbstractClient {
      * @return SubscriptionGetAllResponseObject
      */
     public function subscriptionGetAll($userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, []);
+        $data = [];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_GET_ALL, $data);
 
@@ -1305,12 +1338,13 @@ final class FrontendClient extends AbstractClient {
         $offset = 0,
         $orderDir = self::ORDER_DIR_ASC
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId' => $subscriptionId,
             'limit'          => $limit,
             'offset'         => $offset,
             'orderDir'       => $orderDir,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_SUBSCRIPTION_GET_PERIOD_EVENTS, $data);
 
@@ -1331,12 +1365,13 @@ final class FrontendClient extends AbstractClient {
         $subscription,
         $userTokenOrId = null
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'couponCode'              => $couponCode,
             'subscriptionId'          => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request('/frontend/subscription/attachCoupon', $data);
 
@@ -1361,12 +1396,13 @@ final class FrontendClient extends AbstractClient {
         $threadValueStoreData = null,
         $userTokenOrId = null
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'subscriptionId' => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
             'eventType'      => $eventType,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         if ($notificationData) {
             $data['notificationData'] = $notificationData;
@@ -1431,7 +1467,7 @@ final class FrontendClient extends AbstractClient {
         $subscription,
         $userTokenOrId = null
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'couponCode'              => $couponCode,
             'packageIdentifier'       => $packageIdentifier,
             'addonPackageIdentifiers' => $addonPackageIdentifiers,
@@ -1440,7 +1476,8 @@ final class FrontendClient extends AbstractClient {
             'subscriptionId'          => ($subscription instanceof SubscriptionObject)
                 ? $subscription->getSubscriptionId()
                 : $subscription,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_COUPON_CODE_VALIDATE, $data);
 
@@ -1536,10 +1573,11 @@ final class FrontendClient extends AbstractClient {
      * @return UserChangeResponseObject
      */
     public function userChange($userTokenOrId, $language, $metaData) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'language' => $language,
             'metaData' => $metaData,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_CHANGE, $data);
 
@@ -1555,9 +1593,10 @@ final class FrontendClient extends AbstractClient {
      * @return UserChangePasswordResponseObject
      */
     public function userChangePassword($userTokenOrId, $newPassword) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'plaintextPassword' => $newPassword,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_CHANGE_PASSWORD, $data);
 
@@ -1594,7 +1633,8 @@ final class FrontendClient extends AbstractClient {
      * @return UserDeleteResponseObject
      */
     public function userDelete($userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, []);
+        $data = [];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_DELETE, $data);
 
@@ -1609,7 +1649,8 @@ final class FrontendClient extends AbstractClient {
      * @return UserDisableLoginResponseObject
      */
     public function userDisableLogin($userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, []);
+        $data = [];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_DISABLE_LOGIN, $data);
 
@@ -1624,7 +1665,8 @@ final class FrontendClient extends AbstractClient {
      * @return UserEnableLoginResponseObject
      */
     public function userEnableLogin($userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, []);
+        $data = [];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_ENABLE_LOGIN, $data);
 
@@ -1639,7 +1681,8 @@ final class FrontendClient extends AbstractClient {
      * @return UserGetBalanceResponseObject
      */
     public function userGetAccountBalance($userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, []);
+        $data = [];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_GET_ACCOUNT_BALANCE, $data);
 
@@ -1665,7 +1708,8 @@ final class FrontendClient extends AbstractClient {
      * @return UserGetTokensResponseObject
      */
     public function userGetTokens($userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, []);
+        $data = [];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_GET_AUTH_TOKENS, $data);
 
@@ -1680,7 +1724,8 @@ final class FrontendClient extends AbstractClient {
      * @return UserGetResponseObject
      */
     public function userGet($userTokenOrId) {
-        $data = $this->userToData($userTokenOrId, []);
+        $data = [];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_GET, $data);
 
@@ -1855,11 +1900,12 @@ final class FrontendClient extends AbstractClient {
      * @return UserEmailVerificationStartResponseObject
      */
     public function userEmailVerificationStart($userTokenOrId, $ipAddress, $verificationLink) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'verificationLink' => $verificationLink,
             'ipAddress'        => (string)$ipAddress,
             'verificationType' => 'email',
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_START, $data);
 
@@ -1892,13 +1938,14 @@ final class FrontendClient extends AbstractClient {
      * @return UserPhoneVerificationStartResponseObject
      */
     public function userPhoneVerificationStart($userTokenOrId, $ipAddress, $phoneNumber) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'verificationType' => 'phone',
             'ipAddress'        => (string)$ipAddress,
             'extraData'        => [
                 'phoneNumber' => $phoneNumber,
             ],
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_START, $data);
 
@@ -1913,11 +1960,12 @@ final class FrontendClient extends AbstractClient {
      * @return UserPhoneVerificationFinishResponseObject
      */
     public function userPhoneVerificationFinish($userTokenOrId, $verificationPin, $phoneNumber = null) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'verificationType' => 'phone',
             'verificationPin'  => $verificationPin,
             'phoneNumber'      => $phoneNumber,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_FINISH, $data);
 
@@ -1925,20 +1973,21 @@ final class FrontendClient extends AbstractClient {
     }
 
     /**
-     * @param string|int|UserObject $userTokenOdId
+     * @param string|int|UserObject $userTokenOrId
      * @param string                $ipAddress
      * @param string                $phoneNumber
      *
      * @return UserSmsVerificationStartResponseObject
      */
-    public function userSmsVerificationStart($userTokenOdId, $ipAddress, $phoneNumber) {
-        $data = $this->userToData($userTokenOdId, [
+    public function userSmsVerificationStart($userTokenOrId, $ipAddress, $phoneNumber) {
+        $data = [
             'verificationType' => 'sms',
             'ipAddress'        => (string)$ipAddress,
             'extraData'        => [
                 'phoneNumber' => $phoneNumber,
             ],
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_START, $data);
 
@@ -1953,11 +2002,12 @@ final class FrontendClient extends AbstractClient {
      * @return UserSmsVerificationFinishResponseObject
      */
     public function userSmsVerificationFinish($userTokenOrId, $verificationPin, $phoneNumber = null) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'verificationType' => 'sms',
             'verificationPin'  => $verificationPin,
             'phoneNumber'      => $phoneNumber,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         $response = $this->request(self::API_URI_USER_VERIFICATION_FINISH, $data);
 
@@ -1980,9 +2030,10 @@ final class FrontendClient extends AbstractClient {
         $notificationData = null,
         $threadValueStoreData = null
     ) {
-        $data = $this->userToData($userTokenOrId, [
+        $data = [
             'eventType' => $eventType,
-        ]);
+        ];
+        $this->userToData($userTokenOrId, $data);
 
         if ($notificationData) {
             $data['notificationData'] = $notificationData;

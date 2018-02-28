@@ -9,7 +9,7 @@ abstract class AbstractWorkingObject implements WorkingObject {
 
     protected function addCustomObject() {
 
-    	// TODO: improve class name mapping?
+        // TODO: improve class name mapping?
         $class = str_replace('\\WorkingObjects\\', '\\WorkingObjectsCustom\\', get_class($this)) . 'Custom';
         if (class_exists($class)) {
             $object = new $class;
