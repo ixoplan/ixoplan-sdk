@@ -3,12 +3,15 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
+use Ixolit\Dislo\WorkingObjectsCustom\Billing\RecurringCustom;
+
+
 /**
  * Class Recurring
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class Recurring implements WorkingObject {
+class Recurring extends AbstractWorkingObject {
 
 	const STATUS_ACTIVE = 'active';
 	const STATUS_CANCELED = 'canceled';
@@ -107,6 +110,20 @@ class Recurring implements WorkingObject {
         $this->amount        = $amount;
         $this->currency      = $currency;
         $this->billingMethod = $billingMethod;
+
+        $this->addCustomObject();
+    }
+
+    /**
+     * @return RecurringCustom|null
+     */
+    public function getCustom() {
+        /** @var RecurringCustom $custom */
+        $custom = ($this->getCustomObject() instanceof RecurringCustom)
+            ? $this->getCustomObject()
+            : null;
+
+        return $custom;
     }
 
     /**
@@ -192,18 +209,22 @@ class Recurring implements WorkingObject {
      * @return self
      */
     public static function fromResponse($response) {
-        return new Recurring(
-            $response['recurringId'],
-            $response['status'],
-            $response['providerToken'],
-            Subscription::fromResponse($response['subscription']),
-            new \DateTime($response['createdAt']),
-            empty($response['canceledAt']) ? null : new \DateTime($response['canceledAt']),
-            empty($response['closedAt']) ? null : new \DateTime($response['closedAt']),
-            $response['parameters'],
-            $response['amount'],
-            $response['currency'],
-            BillingMethod::fromResponse($response['billingMethod'])
+        return new self(
+            static::getValueIsSet($response, 'recurringId'),
+            static::getValueIsSet($response, 'status'),
+            static::getValueIsSet($response, 'providerToken'),
+            static::getValueIsSet($response, 'providerToken', null, function ($value) {
+                return Subscription::fromResponse($value);
+            }),
+            static::getValueAsDateTime($response, 'createdAt'),
+            static::getValueAsDateTime($response, 'canceledAt'),
+            static::getValueAsDateTime($response, 'closedAt'),
+            static::getValueIsSet($response, 'parameters'),
+            static::getValueIsSet($response, 'amount'),
+            static::getValueIsSet($response, 'currency'),
+            static::getValueIsSet($response, 'providerToken', null, function ($value) {
+                return BillingMethod::fromResponse($value);
+            })
         );
     }
 

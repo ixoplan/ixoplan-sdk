@@ -3,13 +3,14 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\PackagePeriodCustom;
 
 /**
  * Class PackagePeriod
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class PackagePeriod implements WorkingObject {
+class PackagePeriod extends AbstractWorkingObject {
 
     /**
      * @var int
@@ -55,7 +56,18 @@ class PackagePeriod implements WorkingObject {
 		$this->metaData   		 = $metaData;
 		$this->basePrice  		 = $basePrice;
 		$this->minimumTermLength = $minimumTermLength;
+
+		$this->addCustomObject();
 	}
+
+    /**
+     * @return PackagePeriodCustom|null
+     */
+    public function getCustom() {
+        /** @var PackagePeriodCustom $custom */
+        $custom = ($this->getCustomObject() instanceof PackagePeriodCustom) ? $this->getCustomObject() : null;
+        return $custom;
+    }
 
     /**
 	 * @return int

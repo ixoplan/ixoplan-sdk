@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\User;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
-use Ixolit\Dislo\WorkingObjectsCustom\User\AuthTokenObjectCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\User\AuthTokenCustom;
 
 /**
  * Class AuthTokenObject
@@ -63,11 +63,11 @@ final class AuthTokenObject extends AbstractWorkingObject {
     }
 
     /**
-     * @return AuthTokenObjectCustom|null
+     * @return AuthTokenCustom|null
      */
     public function getCustom() {
-        /** @var AuthTokenObjectCustom $custom */
-        $custom = ($this->getCustomObject() instanceof AuthTokenObjectCustom) ? $this->getCustomObject() : null;
+        /** @var AuthTokenCustom $custom */
+        $custom = ($this->getCustomObject() instanceof AuthTokenCustom) ? $this->getCustomObject() : null;
         return $custom;
     }
 

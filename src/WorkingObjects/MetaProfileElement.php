@@ -3,12 +3,15 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
+use Ixolit\Dislo\WorkingObjectsCustom\User\MetaProfileElementCustom;
+
+
 /**
  * Class MetaProfileElement
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class MetaProfileElement implements WorkingObject {
+class MetaProfileElement extends AbstractWorkingObject {
 
 	/**
 	 * @var string
@@ -34,7 +37,21 @@ class MetaProfileElement implements WorkingObject {
 		$this->name     = $name;
 		$this->required = $required;
 		$this->unique   = $unique;
+
+		$this->addCustomObject();
 	}
+
+    /**
+     * @return MetaProfileElementCustom|null
+     */
+    public function getCustom() {
+        /** @var MetaProfileElementCustom $custom */
+        $custom = ($this->getCustomObject() instanceof MetaProfileElementCustom)
+            ? $this->getCustomObject()
+            : null;
+
+        return $custom;
+    }
 
 	/**
 	 * @return string
@@ -63,11 +80,11 @@ class MetaProfileElement implements WorkingObject {
 	 * @return self
 	 */
 	public static function fromResponse($response) {
-		return new MetaProfileElement(
-			$response['name'],
-			(bool)$response['required'],
-			(bool)$response['unique']
-		);
+        return new self(
+            static::getValueIsSet($response, 'name'),
+            static::getValueAsBool($response, 'required'),
+            static::getValueAsBool($response, 'unique')
+        );
 	}
 
 	/**

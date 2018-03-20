@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
-use Ixolit\Dislo\WorkingObjectsCustom\Subscription\CouponUsageObjectCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\CouponUsageCustom;
 
 /**
  * Class CouponUsageObject
@@ -50,11 +50,11 @@ final class CouponUsageObject extends AbstractWorkingObject {
     }
 
     /**
-     * @return CouponUsageObjectCustom|null
+     * @return CouponUsageCustom|null
      */
     public function getCustom() {
-        /** @var CouponUsageObjectCustom $custom */
-        $custom = ($this->getCustomObject() instanceof CouponUsageObjectCustom) ? $this->getCustomObject() : null;
+        /** @var CouponUsageCustom $custom */
+        $custom = ($this->getCustomObject() instanceof CouponUsageCustom) ? $this->getCustomObject() : null;
         return $custom;
     }
 

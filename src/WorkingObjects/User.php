@@ -2,12 +2,15 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+use Ixolit\Dislo\WorkingObjectsCustom\User\UserCustom;
+
 /**
  * Class User
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class User implements WorkingObject {
+class User extends AbstractWorkingObject {
 
 	/**
 	 * @var int
@@ -93,7 +96,21 @@ class User implements WorkingObject {
 		$this->currencyCode  = $currencyCode;
 		$this->verifiedData  = $verifiedData;
 		$this->authToken     = $authToken;
+
+		$this->addCustomObject();
 	}
+
+    /**
+     * @return UserCustom|null
+     */
+    public function getCustom() {
+        /** @var UserCustom $custom */
+        $custom = ($this->getCustomObject() instanceof UserCustom)
+            ? $this->getCustomObject()
+            : null;
+
+        return $custom;
+    }
 
 	/**
 	 * @return int
@@ -198,18 +215,20 @@ class User implements WorkingObject {
 	 * @return self
 	 */
 	public static function fromResponse($response) {
-		return new User(
-			$response['userId'],
-            new \DateTime($response['createdAt']),
-            $response['loginDisabled'],
-            $response['language'],
-            ($response['lastLoginDate'] ? new \DateTime($response['lastLoginDate']) : null),
-            $response['lastLoginIp'],
-            $response['metaData'],
-            (isset($response['currencyCode']) ? $response['currencyCode'] : null),
-            (isset($response['verifiedData']) ? $response['verifiedData'] : []),
-            (isset($response['authToken']) ? AuthToken::fromResponse($response['authToken']) : null)
-		);
+        return new self(
+            static::getValueIsSet($response, 'userId'),
+            static::getValueAsDateTime($response, 'createdAt'),
+            static::getValueIsSet($response, 'loginDisabled'),
+            static::getValueIsSet($response, 'language'),
+            static::getValueAsDateTime($response, 'lastLoginDate'),
+            static::getValueIsSet($response, 'lastLoginIp'),
+            static::getValueIsSet($response, 'metaData'),
+            static::getValueIsSet($response, 'currencyCode'),
+            static::getValueIsSet($response, 'verifiedData'),
+            static::getValueIsSet($response, 'authToken', null, function ($value) {
+                return AuthToken::fromResponse($value);
+            })
+        );
 	}
 
 	/**

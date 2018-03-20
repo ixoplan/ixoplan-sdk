@@ -2,12 +2,15 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\PeriodEventCustom;
+
 /**
  * Class PeriodEvent
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class PeriodEvent {
+class PeriodEvent extends AbstractWorkingObject {
 
     /**
      * @var int
@@ -79,6 +82,20 @@ class PeriodEvent {
         $this->parentPeriodEventId   = $parentPeriodEventId;
         $this->originalEndsAt        = $originalEndsAt;
         $this->billingEvent          = $billingEvent;
+
+        $this->addCustomObject();
+    }
+
+    /**
+     * @return PeriodEventCustom|null
+     */
+    public function getCustom() {
+        /** @var PeriodEventCustom $custom */
+        $custom = ($this->getCustomObject() instanceof PeriodEventCustom)
+            ? $this->getCustomObject()
+            : null;
+
+        return $custom;
     }
 
     /**
@@ -144,14 +161,16 @@ class PeriodEvent {
      */
     public static function fromResponse($response) {
         return new self(
-            $response['id'],
-            $response['periodId'],
-            $response['subscriptionHistoryId'],
-            isset($response['startedAt']) ? new \DateTime($response['startedAt']) : null,
-            isset($response['endsAt']) ? new \DateTime($response['endsAt']) : null,
-            isset($response['parentPeriodEventId']) ? $response['parentPeriodEventId'] : null,
-            isset($response['originalEndsAt']) ? new \DateTime($response['originalEndsAt']) : null,
-            isset($response['billingEvent']) ? BillingEvent::fromResponse($response['billingEvent']) : null
+            static::getValueIsSet($response, 'id'),
+            static::getValueIsSet($response, 'periodId'),
+            static::getValueIsSet($response, 'subscriptionHistoryId'),
+            static::getValueAsDateTime($response, 'startedAt'),
+            static::getValueAsDateTime($response, 'endsAt'),
+            static::getValueIsSet($response, 'parentPeriodEventId'),
+            static::getValueAsDateTime($response, 'originalEndsAt'),
+            static::getValueIsSet($response, 'billingEvent', null, function ($value) {
+                return BillingEvent::fromResponse($value);
+            })
         );
     }
 

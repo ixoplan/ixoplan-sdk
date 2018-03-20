@@ -2,12 +2,15 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\PriceCustom;
+
 /**
  * Class Price
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class Price implements WorkingObject {
+class Price extends AbstractWorkingObject {
 
 	const TAG_BASEPRICE = 'baseprice';
 	const TAG_PRORATE_PRICE = 'prorate_price';
@@ -64,9 +67,23 @@ class Price implements WorkingObject {
 		$this->group           = $group;
 		$this->tag             = $tag;
 		$this->compositePrices = $compositePrices;
+
+		$this->addCustomObject();
 	}
 
-	/**
+    /**
+     * @return PriceCustom|null
+     */
+    public function getCustom() {
+        /** @var PriceCustom $custom */
+        $custom = ($this->getCustomObject() instanceof PriceCustom)
+            ? $this->getCustomObject()
+            : null;
+
+        return $custom;
+    }
+
+    /**
 	 * @return float
 	 */
 	public function getAmount() {
@@ -107,20 +124,19 @@ class Price implements WorkingObject {
 	 * @return self
 	 */
 	public static function fromResponse($response) {
-		$compositePrices = [];
-		if (isset($response['compositePrices'])) {
-			foreach ($response['compositePrices'] as $compositePrice) {
-				$compositePrices[] = Price::fromResponse($compositePrice);
-			}
-		}
-
-		return new Price(
-			$response['amount'],
-			$response['currencyCode'],
-			$response['tag'],
-			(isset($response['group'])?$response['group']:''),
-			$compositePrices
-		);
+        return new self(
+            static::getValueIsSet($response, 'amount'),
+            static::getValueIsSet($response, 'currencyCode'),
+            static::getValueIsSet($response, 'tag'),
+            static::getValueIsSet($response, 'group', ''),
+            static::getValueIsSet($response, 'compositePrices', [], function ($value) {
+                $compositePrices = [];
+                foreach ($value as $compositePrice) {
+                    $compositePrices[] = Price::fromResponse($compositePrice);
+                }
+                return $compositePrices;
+            })
+        );
 	}
 
 	/**

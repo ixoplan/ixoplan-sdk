@@ -3,12 +3,15 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
+use Ixolit\Dislo\WorkingObjectsCustom\Billing\BillingEventCustom;
+
+
 /**
  * Class BillingEvent
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class BillingEvent implements WorkingObject {
+class BillingEvent extends AbstractWorkingObject {
 
 	const TYPE_AUTHORIZE = 'authorize';
 	const TYPE_CHARGE = 'charge';
@@ -119,6 +122,20 @@ class BillingEvent implements WorkingObject {
         $this->subscription        = $subscription;
         $this->modifiedAt          = $modifiedAt;
         $this->billingMethodObject = $billingMethodObject;
+
+        $this->addCustomObject();
+    }
+
+    /**
+     * @return BillingEventCustom|null
+     */
+    public function getCustom() {
+        /** @var BillingEventCustom $custom */
+        $custom = ($this->getCustomObject() instanceof BillingEventCustom)
+            ? $this->getCustomObject()
+            : null;
+
+        return $custom;
     }
 
     /**
@@ -218,26 +235,24 @@ class BillingEvent implements WorkingObject {
      * @return self
      */
     public static function fromResponse($response) {
-        if (isset($response['subscription']) && $response['subscription']) {
-            $subscription = Subscription::fromResponse($response['subscription']);
-        } else {
-            $subscription = null;
-        }
-
-        return new BillingEvent(
-            $response['billingEventId'],
-            $response['userId'],
-            $response['currencyCode'],
-            $response['amount'],
-            new \DateTime($response['createdAt']),
-            $response['type'],
-            $response['status'],
-            $response['description'],
-            $response['techinfo'],
-            $response['billingMethod'],
-            $subscription,
-            isset($response['modifiedAt']) ? new \DateTime($response['modifiedAt']) : null,
-            isset($response['billingMethodObject']) ? BillingMethod::fromResponse($response['billingMethodObject']) : null
+        return new self(
+            self::getValueIsSet($response, 'billingEventId'),
+            static::getValueIsSet($response, 'userId'),
+            static::getValueIsSet($response, 'currencyCode'),
+            static::getValueIsSet($response, 'amount'),
+            static::getValueAsDateTime($response, 'createdAt'),
+            static::getValueIsSet($response, 'type'),
+            static::getValueIsSet($response, 'status'),
+            static::getValueIsSet($response, 'description'),
+            static::getValueIsSet($response, 'techinfo'),
+            static::getValueIsSet($response, 'billingMethod'),
+            static::getValueNotEmpty($response, 'subscription', null, function ($value) {
+                return Subscription::fromResponse($value);
+            }),
+            static::getValueAsDateTime($response, 'modifiedAt'),
+            static::getValueNotEmpty($response, 'billingMethodObject', null, function ($value) {
+                return BillingMethod::fromResponse($value);
+            })
         );
     }
 
@@ -245,21 +260,21 @@ class BillingEvent implements WorkingObject {
 	 * @return array
 	 */
 	public function toArray() {
-		return array(
-			'_type'          => 'BillingEvent',
-			'billingEventId' => $this->getBillingEventId(),
-			'userId'         => $this->getUserId(),
-			'currencyCode'   => $this->currencyCode,
-			'amount'         => $this->getAmount(),
-			'createdAt'      => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-			'type'           => $this->getType(),
-			'status'         => $this->getStatus(),
-			'description'    => $this->getDescription(),
-			'techinfo'       => $this->getDescription(),
-			'billingMethod'  => $this->getBillingMethod(),
-			'subscription'   => ($this->getSubscription() ? $this->getSubscription()->toArray() : null),
-			'modifiedAt'	 => ($this->getModifiedAt() ? $this->getModifiedAt()->format('Y-m-d H:i:s') : null),
-			'billingMethodObject' => ($this->getBillingMethodObject() ? $this->getBillingMethodObject()->toArray() : null),
-		);
-	}
+        return [
+            '_type'               => 'BillingEvent',
+            'billingEventId'      => $this->getBillingEventId(),
+            'userId'              => $this->getUserId(),
+            'currencyCode'        => $this->currencyCode,
+            'amount'              => $this->getAmount(),
+            'createdAt'           => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'type'                => $this->getType(),
+            'status'              => $this->getStatus(),
+            'description'         => $this->getDescription(),
+            'techinfo'            => $this->getDescription(),
+            'billingMethod'       => $this->getBillingMethod(),
+            'subscription'        => ($this->getSubscription() ? $this->getSubscription()->toArray() : null),
+            'modifiedAt'          => ($this->getModifiedAt() ? $this->getModifiedAt()->format('Y-m-d H:i:s') : null),
+            'billingMethodObject' => ($this->getBillingMethodObject() ? $this->getBillingMethodObject()->toArray() : null),
+        ];
+    }
 }

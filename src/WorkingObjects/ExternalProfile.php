@@ -3,12 +3,15 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
+use Ixolit\Dislo\WorkingObjectsCustom\Billing\ExternalProfileCustom;
+
+
 /**
  * Class ExternalProfile
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class ExternalProfile implements WorkingObject {
+class ExternalProfile extends AbstractWorkingObject {
 
 	/**
 	 * @var int
@@ -41,7 +44,21 @@ class ExternalProfile implements WorkingObject {
 		$this->subscriptionId = $subscriptionId;
 		$this->extraData      = $extraData;
 		$this->externalId     = $externalId;
+
+		$this->addCustomObject();
 	}
+
+    /**
+     * @return ExternalProfileCustom|null
+     */
+    public function getCustom() {
+        /** @var ExternalProfileCustom $custom */
+        $custom = ($this->getCustomObject() instanceof ExternalProfileCustom)
+            ? $this->getCustomObject()
+            : null;
+
+        return $custom;
+    }
 
 
 	/**
@@ -79,12 +96,12 @@ class ExternalProfile implements WorkingObject {
 	 * @return self
 	 */
 	public static function fromResponse($response) {
-		return new ExternalProfile(
-			$response['userId'],
-			$response['subscriptionId'],
-			$response['extraData'],
-			$response['externalId']
-		);
+        return new self(
+            static::getValueIsSet($response, 'userId'),
+            static::getValueIsSet($response, 'subscriptionId'),
+            static::getValueIsSet($response, 'extraData'),
+            static::getValueIsSet($response, 'externalId')
+        );
 	}
 
 	/**

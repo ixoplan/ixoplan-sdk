@@ -2,12 +2,15 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\CouponUsageCustom;
+
 /**
  * Class CouponUsage
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class CouponUsage implements WorkingObject {
+class CouponUsage extends AbstractWorkingObject {
 
     /**
      * @var Coupon|null
@@ -42,7 +45,21 @@ class CouponUsage implements WorkingObject {
         $this->numPeriods = $numPeriods;
         $this->createdAt  = $createdAt;
         $this->modifiedAt = $modifiedAt;
+
+        $this->addCustomObject();
 	}
+
+    /**
+     * @return CouponUsageCustom|null
+     */
+    public function getCustom() {
+        /** @var CouponUsageCustom $custom */
+        $custom = ($this->getCustomObject() instanceof CouponUsageCustom)
+            ? $this->getCustomObject()
+            : null;
+
+        return $custom;
+    }
 
 	/**
 	 * @return Coupon|null
@@ -78,11 +95,13 @@ class CouponUsage implements WorkingObject {
 	 * @return self
 	 */
 	public static function fromResponse($response) {
-		return new CouponUsage(
-			(isset($response['coupon']) ? Coupon::fromResponse($response['coupon']) : null),
-			$response['numPeriods'],
-			(isset($response['createdAt']) ? new \DateTime($response['createdAt']) : null),
-			(isset($response['modifiedAt']) ? new \DateTime($response['modifiedAt']) : null)
+		return new self(
+            static::getValueIsSet($response, 'coupon', null, function ($value) {
+                return Coupon::fromResponse($value);
+            }),
+            static::getValueIsSet($response, 'numPeriods'),
+            static::getValueAsDateTime($response, 'createdAt'),
+            static::getValueAsDateTime($response, 'modifiedAt')
 		);
 	}
 

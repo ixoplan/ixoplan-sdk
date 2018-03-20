@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\User;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
-use Ixolit\Dislo\WorkingObjectsCustom\User\UserObjectCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\User\UserCustom;
 
 /**
  * Class UserObject
@@ -101,11 +101,11 @@ final class UserObject extends AbstractWorkingObject {
     }
 
     /**
-     * @return UserObjectCustom|null
+     * @return UserCustom|null
      */
     public function getCustom() {
-        /** @var UserObjectCustom $custom */
-        $custom = ($this->getCustomObject() instanceof UserObjectCustom) ? $this->getCustomObject() : null;
+        /** @var UserCustom $custom */
+        $custom = ($this->getCustomObject() instanceof UserCustom) ? $this->getCustomObject() : null;
         return $custom;
     }
 

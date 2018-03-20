@@ -3,12 +3,15 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\DisplayNameCustom;
+
+
 /**
  * Class DisplayName
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class DisplayName implements WorkingObject {
+class DisplayName extends AbstractWorkingObject {
 
 	/**
 	 * @var string
@@ -27,7 +30,21 @@ class DisplayName implements WorkingObject {
 	public function __construct($language, $name) {
 		$this->language = $language;
 		$this->name     = $name;
+
+		$this->addCustomObject();
 	}
+
+    /**
+     * @return DisplayNameCustom|null
+     */
+    public function getCustom() {
+        /** @var DisplayNameCustom $custom */
+        $custom = ($this->getCustomObject() instanceof DisplayNameCustom)
+            ? $this->getCustomObject()
+            : null;
+
+        return $custom;
+    }
 
     /**
 	 * @return string
@@ -49,9 +66,9 @@ class DisplayName implements WorkingObject {
      * @return self
      */
     public static function fromResponse($response) {
-        return new DisplayName(
-            $response['language'],
-            $response['name']
+        return new self(
+            static::getValueIsSet($response, 'language'),
+            static::getValueIsSet($response, 'name')
         );
     }
 

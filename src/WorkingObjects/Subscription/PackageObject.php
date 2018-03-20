@@ -6,7 +6,7 @@ namespace Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
 use Ixolit\Dislo\WorkingObjects\Billing\BillingMethodObject;
-use Ixolit\Dislo\WorkingObjectsCustom\Subscription\PackageObjectCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\PackageCustom;
 
 /**
  * Class PackageObject
@@ -105,11 +105,11 @@ final class PackageObject extends AbstractWorkingObject {
     }
 
     /**
-     * @return PackageObjectCustom|null
+     * @return PackageCustom|null
      */
     public function getCustom() {
-        /** @var PackageObjectCustom $custom */
-        $custom = ($this->getCustomObject() instanceof PackageObjectCustom) ? $this->getCustomObject() : null;
+        /** @var PackageCustom $custom */
+        $custom = ($this->getCustomObject() instanceof PackageCustom) ? $this->getCustomObject() : null;
         return $custom;
     }
 

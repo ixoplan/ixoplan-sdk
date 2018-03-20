@@ -3,12 +3,15 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
+use Ixolit\Dislo\WorkingObjectsCustom\User\AuthTokenCustom;
+
+
 /**
  * Class AuthToken
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class AuthToken implements WorkingObject {
+class AuthToken extends AbstractWorkingObject {
 
 	/**
 	 * @var int
@@ -70,7 +73,21 @@ class AuthToken implements WorkingObject {
 		$this->modifiedAt = $modifiedAt;
 		$this->validUntil = $validUntil;
 		$this->metaInfo   = $metaInfo;
+
+		$this->addCustomObject();
 	}
+
+    /**
+     * @return AuthTokenCustom|null
+     */
+    public function getCustom() {
+        /** @var AuthTokenCustom $custom */
+        $custom = ($this->getCustomObject() instanceof AuthTokenCustom)
+            ? $this->getCustomObject()
+            : null;
+
+        return $custom;
+    }
 
 	/**
 	 * @return int
@@ -122,14 +139,14 @@ class AuthToken implements WorkingObject {
 	}
 
 	public static function fromResponse($response) {
-		return new AuthToken(
-			$response['id'],
-			$response['userId'],
-			$response['loginToken'],
-			new \DateTime($response['createdAt']),
-			new \DateTime($response['modifiedAt']),
-			new \DateTime($response['validUntil']),
-			$response['metaInfo']
+		return new self(
+            static::getValueIsSet($response, 'id'),
+            static::getValueIsSet($response, 'userId'),
+            static::getValueIsSet($response, 'loginToken'),
+            static::getValueAsDateTime($response, 'createdAt'),
+            static::getValueAsDateTime($response, 'modifiedAt'),
+            static::getValueAsDateTime($response, 'validUntil'),
+            static::getValueIsSet($response, 'metaInfo')
 		);
 	}
 

@@ -2,11 +2,22 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+/**
+ * Class AbstractWorkingObject
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ */
 abstract class AbstractWorkingObject implements WorkingObject {
 
-    /** @var WorkingObjectCustomInterface */
+    /**
+     * @var WorkingObjectCustomInterface
+     */
     private $customObject;
 
+    /**
+     * @return $this
+     */
     protected function addCustomObject() {
 
         // TODO: improve class name mapping?
@@ -18,6 +29,8 @@ abstract class AbstractWorkingObject implements WorkingObject {
                 $this->customObject = $object;
             }
         }
+
+        return $this;
     }
 
     /**
@@ -32,6 +45,7 @@ abstract class AbstractWorkingObject implements WorkingObject {
      * @param string $key
      * @param mixed $default
      * @param callable $convert
+     *
      * @return mixed
      */
     protected static function getValueIsSet($data, $key, $default = null, $convert = null) {
@@ -53,6 +67,7 @@ abstract class AbstractWorkingObject implements WorkingObject {
      * @param string $key
      * @param mixed $default
      * @param callable $convert
+     *
      * @return mixed
      */
     protected static function getValueNotEmpty($data, $key, $default = null, $convert = null) {
@@ -73,6 +88,7 @@ abstract class AbstractWorkingObject implements WorkingObject {
      * @param array $data
      * @param string $key
      * @param bool $default
+     *
      * @return bool
      */
     protected static function getValueAsBool($data, $key, $default = false) {
@@ -83,6 +99,7 @@ abstract class AbstractWorkingObject implements WorkingObject {
      * @param array $data
      * @param string $key
      * @param int $default
+     *
      * @return int
      */
     protected static function getValueAsInt($data, $key, $default = 0) {
@@ -93,6 +110,7 @@ abstract class AbstractWorkingObject implements WorkingObject {
      * @param array $data
      * @param string $key
      * @param \DateTime $default
+     * 
      * @return \DateTime
      */
     protected static function getValueAsDateTime($data, $key, \DateTime $default = null) {

@@ -3,12 +3,15 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
+use Ixolit\Dislo\WorkingObjectsCustom\Billing\FlexibleCustom;
+
+
 /**
  * Class Flexible
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class Flexible implements WorkingObject {
+class Flexible extends AbstractWorkingObject {
 
 	const STATUS_ACTIVE = 'active';
 	const STATUS_CLOSED = 'closed';
@@ -65,7 +68,21 @@ class Flexible implements WorkingObject {
 		$this->createdAt     = $createdAt;
 		$this->billingMethod = $billingMethod;
 		$this->billingMethodObject = $billingMethodObject;
+
+		$this->addCustomObject();
 	}
+
+    /**
+     * @return FlexibleCustom|null
+     */
+    public function getCustom() {
+        /** @var FlexibleCustom $custom */
+        $custom = ($this->getCustomObject() instanceof FlexibleCustom)
+            ? $this->getCustomObject()
+            : null;
+
+        return $custom;
+    }
 
     /**
 	 * @return int
@@ -115,13 +132,15 @@ class Flexible implements WorkingObject {
      * @return self
      */
     public static function fromResponse($response) {
-        return new Flexible(
-            $response['flexibleId'],
-            $response['status'],
-            $response['metaData'],
-            new \DateTime($response['createdAt']),
-            $response['billingMethod'],
-            isset($response['billingMethodObject']) ? BillingMethod::fromResponse($response['billingMethodObject']) : null
+        return new self(
+            static::getValueIsSet($response, 'flexibleId'),
+            static::getValueIsSet($response, 'status'),
+            static::getValueIsSet($response, 'metaData'),
+            static::getValueAsDateTime($response, 'createdAt'),
+            static::getValueIsSet($response, 'billingMethod'),
+            static::getValueIsSet($response, 'billingMethodObject', null, function ($value) {
+                return BillingMethod::fromResponse($value);
+            })
         );
     }
 

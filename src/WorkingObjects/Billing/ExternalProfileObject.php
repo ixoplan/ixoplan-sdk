@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\Billing;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
-use Ixolit\Dislo\WorkingObjectsCustom\Billing\ExternalProfileObjectCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\Billing\ExternalProfileCustom;
 
 /**
  * Class ExternalProfileObject
@@ -48,11 +48,11 @@ final class ExternalProfileObject extends AbstractWorkingObject {
     }
 
     /**
-     * @return ExternalProfileObjectCustom|null
+     * @return ExternalProfileCustom|null
      */
     public function getCustom() {
-        /** @var ExternalProfileObjectCustom $custom */
-        $custom = ($this->getCustomObject() instanceof ExternalProfileObjectCustom) ? $this->getCustomObject() : null;
+        /** @var ExternalProfileCustom $custom */
+        $custom = ($this->getCustomObject() instanceof ExternalProfileCustom) ? $this->getCustomObject() : null;
         return $custom;
     }
 

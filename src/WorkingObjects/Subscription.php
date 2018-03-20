@@ -2,12 +2,15 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\SubscriptionCustom;
+
 /**
  * Class Subscription
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class Subscription implements WorkingObject {
+class Subscription extends AbstractWorkingObject {
 
 	const STATUS_PENDING = 'pending';
 	const STATUS_RUNNING = 'running';
@@ -183,7 +186,21 @@ class Subscription implements WorkingObject {
 		$this->couponUsage          = $couponUsage;
 		$this->currentPeriodEvent   = $currentPeriodEvent;
 		$this->nextBillingAmount    = $nextBillingAmount;
+
+		$this->addCustomObject();
 	}
+
+    /**
+     * @return SubscriptionCustom|null
+     */
+    public function getCustom() {
+        /** @var SubscriptionCustom $custom */
+        $custom = ($this->getCustomObject() instanceof SubscriptionCustom)
+            ? $this->getCustomObject()
+            : null;
+
+        return $custom;
+    }
 
 	/**
 	 * @return int
@@ -384,39 +401,42 @@ class Subscription implements WorkingObject {
 	 * @return self
 	 */
 	public static function fromResponse($response) {
-		$addonSubscriptions = [];
-		if(isset($response['addonSubscriptions'])) {
-			foreach ($response['addonSubscriptions'] as $addonSubscription) {
-				$addonSubscriptions[] = Subscription::fromResponse($addonSubscription);
-			}
-		}
-
-		return new Subscription(
-			$response['subscriptionId'],
-			Package::fromResponse($response['currentPackage']),
-			$response['userId'],
-			$response['status'],
-			(isset($response['startedAt']) && $response['startedAt'] ?new \DateTime($response['startedAt']):null),
-			(isset($response['canceledAt']) && $response['canceledAt'] ?new \DateTime($response['canceledAt']):null),
-			(isset($response['closedAt']) && $response['closedAt'] ?new \DateTime($response['closedAt']):null),
-			(isset($response['expiresAt']) && $response['expiresAt'] ?new \DateTime($response['expiresAt']):null),
-			(isset($response['nextBillingAt']) && $response['nextBillingAt'] ?new \DateTime($response['nextBillingAt']):null),
-			$response['currencyCode'],
-			$response['isInitialPeriod'],
-			$response['isProvisioned'],
-			isset($response['provisioningMetaData']) ? $response['provisioningMetaData'] : array(),
-			(isset($response['nextPackage']) && $response['nextPackage'] ? NextPackage::fromResponse($response['nextPackage']):null),
-			$addonSubscriptions,
-			(isset($response['minimumTermEndsAt']) ? new \DateTime($response['minimumTermEndsAt']) : null),
-			$response['isExternal'],
-			(isset($response['couponUsage']) ? CouponUsage::fromResponse($response['couponUsage']) : null),
-            isset($response['currentPeriodEvent'])
-                ? PeriodEvent::fromResponse($response['currentPeriodEvent'])
-                : null,
-            isset($response['nextBillingAmount'])
-                ? $response['nextBillingAmount']
-                : null
-		);
+        return new self(
+            static::getValueIsSet($response, 'subscriptionId'),
+            static::getValueIsSet($response, 'currentPackage', null, function ($value) {
+                return Package::fromResponse($value);
+            }),
+            static::getValueIsSet($response, 'userId'),
+            static::getValueIsSet($response, 'status'),
+            static::getValueAsDateTime($response, 'startedAt'),
+            static::getValueAsDateTime($response, 'canceledAt'),
+            static::getValueAsDateTime($response, 'closedAt'),
+            static::getValueAsDateTime($response, 'expiresAt'),
+            static::getValueAsDateTime($response, 'nextBillingAt'),
+            static::getValueIsSet($response, 'currencyCode'),
+            static::getValueIsSet($response, 'isInitialPeriod'),
+            static::getValueIsSet($response, 'isProvisioned'),
+            static::getValueIsSet($response, 'provisioningMetaData', []),
+            static::getValueIsSet($response, 'nextPackage', null, function ($value) {
+                return NextPackage::fromResponse($value);
+            }),
+            static::getValueIsSet($response, 'addonSubscriptions', [], function ($value) {
+                $addonSubscriptions = [];
+                foreach ($value as $addonSubscription) {
+                    $addonSubscriptions[] = Subscription::fromResponse($addonSubscription);
+                }
+                return $addonSubscriptions;
+            }),
+            static::getValueAsDateTime($response, 'minimumTermEndsAt'),
+            static::getValueIsSet($response, 'isExternal'),
+            static::getValueIsSet($response, 'couponUsage', null, function ($value) {
+                return CouponUsage::fromResponse($value);
+            }),
+            static::getValueIsSet($response, 'currentPeriodEvent', null, function ($value) {
+                return PeriodEvent::fromResponse($value);
+            }),
+            static::getValueIsSet($response, 'nextBillingAmount')
+        );
 	}
 
     /**
@@ -428,27 +448,27 @@ class Subscription implements WorkingObject {
 			$addonSubscriptions[] = $addonSubscription->toArray();
 		}
 
-		return [
-			'subscriptionId' => $this->subscriptionId,
-			'currentPackage' => ($this->currentPackage?$this->currentPackage->toArray():null),
-			'userId' => $this->userId,
-			'status' => $this->status,
-			'startedAt' => ($this->startedAt?$this->startedAt->format('Y-m-d H:i:s'):null),
-			'canceledAt' => ($this->canceledAt?$this->canceledAt->format('Y-m-d H:i:s'):null),
-			'closedAt' => ($this->closedAt?$this->closedAt->format('Y-m-d H:i:s'):null),
-			'expiresAt' => ($this->expiresAt?$this->expiresAt->format('Y-m-d H:i:s'):null),
-			'nextBillingAt' => ($this->nextBillingAt?$this->nextBillingAt->format('Y-m-d H:i:s'):null),
-			'currencyCode' => $this->currencyCode,
-			'isInitialPeriod' => $this->isInitialPeriod,
-			'isProvisioned' => $this->isProvisioned,
-			'provisioningMetaData' => $this->provisioningMetaData,
-			'nextPackage' => ($this->nextPackage?$this->nextPackage->toArray():null),
-			'addonSubscriptions' => $addonSubscriptions,
-			'minimumTermEndsAt' => ($this->minimumTermEndsAt ? $this->minimumTermEndsAt->format('Y-m-d H:i:s') : null),
-			'isExternal' => $this->isExternal,
-			'couponUsage' => ($this->couponUsage ? $this->couponUsage->toArray() : null),
-            'currentPeriodEvent' => $this->currentPeriodEvent ? $this->currentPeriodEvent->toArray() : null,
-            'nextBillingAmount' => $this->nextBillingAmount,
-		];
+        return [
+            'subscriptionId'       => $this->subscriptionId,
+            'currentPackage'       => ($this->currentPackage ? $this->currentPackage->toArray() : null),
+            'userId'               => $this->userId,
+            'status'               => $this->status,
+            'startedAt'            => ($this->startedAt ? $this->startedAt->format('Y-m-d H:i:s') : null),
+            'canceledAt'           => ($this->canceledAt ? $this->canceledAt->format('Y-m-d H:i:s') : null),
+            'closedAt'             => ($this->closedAt ? $this->closedAt->format('Y-m-d H:i:s') : null),
+            'expiresAt'            => ($this->expiresAt ? $this->expiresAt->format('Y-m-d H:i:s') : null),
+            'nextBillingAt'        => ($this->nextBillingAt ? $this->nextBillingAt->format('Y-m-d H:i:s') : null),
+            'currencyCode'         => $this->currencyCode,
+            'isInitialPeriod'      => $this->isInitialPeriod,
+            'isProvisioned'        => $this->isProvisioned,
+            'provisioningMetaData' => $this->provisioningMetaData,
+            'nextPackage'          => ($this->nextPackage ? $this->nextPackage->toArray() : null),
+            'addonSubscriptions'   => $addonSubscriptions,
+            'minimumTermEndsAt'    => ($this->minimumTermEndsAt ? $this->minimumTermEndsAt->format('Y-m-d H:i:s') : null),
+            'isExternal'           => $this->isExternal,
+            'couponUsage'          => ($this->couponUsage ? $this->couponUsage->toArray() : null),
+            'currentPeriodEvent'   => $this->currentPeriodEvent ? $this->currentPeriodEvent->toArray() : null,
+            'nextBillingAmount'    => $this->nextBillingAmount,
+        ];
 	}
 }

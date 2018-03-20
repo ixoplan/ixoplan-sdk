@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
-use Ixolit\Dislo\WorkingObjectsCustom\Subscription\DisplayNameObjectCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\DisplayNameCustom;
 
 /**
  * Class DisplayNameObject
@@ -34,11 +34,11 @@ final class DisplayNameObject extends AbstractWorkingObject {
     }
 
     /**
-     * @return DisplayNameObjectCustom|null
+     * @return DisplayNameCustom|null
      */
     public function getCustom() {
-        /** @var DisplayNameObjectCustom $custom */
-        $custom = ($this->getCustomObject() instanceof DisplayNameObjectCustom) ? $this->getCustomObject() : null;
+        /** @var DisplayNameCustom $custom */
+        $custom = ($this->getCustomObject() instanceof DisplayNameCustom) ? $this->getCustomObject() : null;
         return $custom;
     }
 

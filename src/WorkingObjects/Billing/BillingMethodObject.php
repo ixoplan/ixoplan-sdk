@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\Billing;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
-use Ixolit\Dislo\WorkingObjectsCustom\Billing\BillingMethodObjectCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\Billing\BillingMethodCustom;
 
 /**
  * Class BillingMethodObject
@@ -85,11 +85,11 @@ final class BillingMethodObject extends AbstractWorkingObject {
     }
 
     /**
-     * @return BillingMethodObjectCustom|null
+     * @return BillingMethodCustom|null
      */
     public function getCustom() {
-        /** @var BillingMethodObjectCustom $custom */
-        $custom = ($this->getCustomObject() instanceof BillingMethodObjectCustom) ? $this->getCustomObject() : null;
+        /** @var BillingMethodCustom $custom */
+        $custom = ($this->getCustomObject() instanceof BillingMethodCustom) ? $this->getCustomObject() : null;
         return $custom;
     }
 

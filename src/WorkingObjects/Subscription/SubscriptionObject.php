@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\Subscription;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
-use Ixolit\Dislo\WorkingObjectsCustom\Subscription\SubscriptionObjectCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\Subscription\SubscriptionCustom;
 
 
 /**
@@ -195,11 +195,11 @@ final class SubscriptionObject extends AbstractWorkingObject {
     }
 
     /**
-     * @return SubscriptionObjectCustom|null
+     * @return SubscriptionCustom|null
      */
     public function getCustom() {
-        /** @var SubscriptionObjectCustom $custom */
-        $custom = ($this->getCustomObject() instanceof SubscriptionObjectCustom) ? $this->getCustomObject() : null;
+        /** @var SubscriptionCustom $custom */
+        $custom = ($this->getCustomObject() instanceof SubscriptionCustom) ? $this->getCustomObject() : null;
         return $custom;
     }
 
