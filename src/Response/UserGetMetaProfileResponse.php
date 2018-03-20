@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\MetaProfileElement;
  * Class UserGetMetaProfileResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserGetMetaProfileResponseObject instead
  */
 class UserGetMetaProfileResponse {
+
 	/**
 	 * @var MetaProfileElement[]
 	 */
@@ -31,6 +30,11 @@ class UserGetMetaProfileResponse {
 		return $this->elements;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserGetMetaProfileResponse
+     */
 	public static function fromResponse($response) {
 		$elements = [];
 		foreach ($response['metaProfile'] as $elementDescriptor) {

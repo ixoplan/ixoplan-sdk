@@ -7,8 +7,6 @@ namespace Ixolit\Dislo\WorkingObjects;
  * Class Flexible
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\FlexibleObject instead
  */
 class Flexible implements WorkingObject {
 
@@ -40,7 +38,9 @@ class Flexible implements WorkingObject {
 	 */
 	private $billingMethod;
 
-	/** @var BillingMethod */
+    /**
+     * @var BillingMethod
+     */
 	private $billingMethodObject;
 
 	/**
@@ -67,76 +67,77 @@ class Flexible implements WorkingObject {
 		$this->billingMethodObject = $billingMethodObject;
 	}
 
-	/**
-	 * @param array $response
-	 *
-	 * @return self
-	 */
-	public static function fromResponse($response) {
-		return new Flexible(
-			$response['flexibleId'],
-			$response['status'],
-			$response['metaData'],
-			new \DateTime($response['createdAt']),
-			$response['billingMethod'],
-			isset($response['billingMethodObject']) ? BillingMethod::fromResponse($response['billingMethodObject']) : null
-		);
-	}
-
-	/**
-	 * @return array
-	 */
-	public function toArray() {
-		return [
-			'_type'         => 'Flexible',
-			'flexibleId'    => $this->getFlexibleId(),
-			'status'        => $this->getStatus(),
-			'metaData'      => $this->getMetaData(),
-			'createdAt'     => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-			'billingMethod' => $this->getBillingMethod(),
-			'billingMethodObject' => $this->getBillingMethodObject()->toArray(),
-		];
-	}
-
-	/**
+    /**
 	 * @return int
 	 */
 	public function getFlexibleId() {
 		return $this->flexibleId;
 	}
 
-	/**
+    /**
 	 * @return string
 	 */
 	public function getStatus() {
 		return $this->status;
 	}
 
-	/**
+    /**
 	 * @return \string[]
 	 */
 	public function getMetaData() {
 		return $this->metaData;
 	}
 
-	/**
+    /**
 	 * @return \DateTime
 	 */
 	public function getCreatedAt() {
 		return $this->createdAt;
 	}
 
-	/**
+    /**
 	 * @return string
 	 */
 	public function getBillingMethod() {
 		return $this->billingMethod;
 	}
 
-	/**
+    /**
 	 * @return BillingMethod|null
 	 */
 	public function getBillingMethodObject() {
 		return $this->billingMethodObject;
 	}
+
+    /**
+     * @param array $response
+     *
+     * @return self
+     */
+    public static function fromResponse($response) {
+        return new Flexible(
+            $response['flexibleId'],
+            $response['status'],
+            $response['metaData'],
+            new \DateTime($response['createdAt']),
+            $response['billingMethod'],
+            isset($response['billingMethodObject']) ? BillingMethod::fromResponse($response['billingMethodObject']) : null
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        return [
+            '_type'               => 'Flexible',
+            'flexibleId'          => $this->getFlexibleId(),
+            'status'              => $this->getStatus(),
+            'metaData'            => $this->getMetaData(),
+            'createdAt'           => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'billingMethod'       => $this->getBillingMethod(),
+            'billingMethodObject' => $this->getBillingMethodObject()->toArray(),
+        ];
+    }
+
 }

@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserEnableLoginResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserEnableLoginResponseObject
  */
 class UserEnableLoginResponse {
+
 	/**
 	 * @var User
 	 */
@@ -31,6 +30,11 @@ class UserEnableLoginResponse {
 		return $this->user;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserEnableLoginResponse
+     */
 	public static function fromResponse($response) {
 		return new UserEnableLoginResponse(User::fromResponse($response['user']));
 	}

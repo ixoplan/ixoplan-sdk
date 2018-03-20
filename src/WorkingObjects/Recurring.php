@@ -7,8 +7,6 @@ namespace Ixolit\Dislo\WorkingObjects;
  * Class Recurring
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\RecurringObject instead
  */
 class Recurring implements WorkingObject {
 
@@ -112,50 +110,13 @@ class Recurring implements WorkingObject {
     }
 
     /**
-	 * @param array $response
-	 *
-	 * @return self
-	 */
-	public static function fromResponse($response) {
-		return new Recurring(
-			$response['recurringId'],
-			$response['status'],
-			$response['providerToken'],
-			Subscription::fromResponse($response['subscription']),
-			new \DateTime($response['createdAt']),
-			empty($response['canceledAt']) ? null : new \DateTime($response['canceledAt']),
-			empty($response['closedAt']) ? null : new \DateTime($response['closedAt']),
-			$response['parameters'],
-			$response['amount'],
-			$response['currency'],
-			BillingMethod::fromResponse($response['billingMethod'])
-		);
-	}
-
-    /**
-	 * @return array
-	 */
-	public function toArray() {
-		return [
-			'_type'         => 'Recurring',
-			'recurringId'   => $this->getRecurringId(),
-			'status'        => $this->getStatus(),
-			'createdAt'     => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-			'canceledAt'    => $this->getCanceledAt() ? $this->getCreatedAt()->format('Y-m-d H:i:s') : null,
-			'closedAt'      => $this->getClosedAt() ? $this->getClosedAt()->format('Y-m-d H:i:s') : null,
-			'parameters'    => $this->getParameters(),
-			'billingMethod' => $this->getBillingMethod()->toArray(),
-		];
-	}
-
-	/**
 	 * @return int
 	 */
 	public function getRecurringId() {
 		return $this->recurringId;
 	}
 
-	/**
+    /**
 	 * @return string
 	 */
 	public function getStatus() {
@@ -176,28 +137,28 @@ class Recurring implements WorkingObject {
         return $this->subscription;
     }
 
-	/**
+    /**
 	 * @return \DateTime
 	 */
 	public function getCreatedAt() {
 		return $this->createdAt;
 	}
 
-	/**
+    /**
 	 * @return \DateTime
 	 */
 	public function getCanceledAt() {
 		return $this->canceledAt;
 	}
 
-	/**
+    /**
 	 * @return \DateTime
 	 */
 	public function getClosedAt() {
 		return $this->closedAt;
 	}
 
-	/**
+    /**
 	 * @return \string[]
 	 */
 	public function getParameters() {
@@ -218,10 +179,48 @@ class Recurring implements WorkingObject {
         return $this->currency;
     }
 
-	/**
+    /**
 	 * @return BillingMethod
 	 */
 	public function getBillingMethod() {
 		return $this->billingMethod;
 	}
+
+    /**
+     * @param array $response
+     *
+     * @return self
+     */
+    public static function fromResponse($response) {
+        return new Recurring(
+            $response['recurringId'],
+            $response['status'],
+            $response['providerToken'],
+            Subscription::fromResponse($response['subscription']),
+            new \DateTime($response['createdAt']),
+            empty($response['canceledAt']) ? null : new \DateTime($response['canceledAt']),
+            empty($response['closedAt']) ? null : new \DateTime($response['closedAt']),
+            $response['parameters'],
+            $response['amount'],
+            $response['currency'],
+            BillingMethod::fromResponse($response['billingMethod'])
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        return [
+            '_type'         => 'Recurring',
+            'recurringId'   => $this->getRecurringId(),
+            'status'        => $this->getStatus(),
+            'createdAt'     => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'canceledAt'    => $this->getCanceledAt() ? $this->getCreatedAt()->format('Y-m-d H:i:s') : null,
+            'closedAt'      => $this->getClosedAt() ? $this->getClosedAt()->format('Y-m-d H:i:s') : null,
+            'parameters'    => $this->getParameters(),
+            'billingMethod' => $this->getBillingMethod()->toArray(),
+        ];
+    }
+
 }

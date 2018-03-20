@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Subscription;
  * Class SubscriptionCancelResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionCancelResponseObject instead
  */
 class SubscriptionCancelResponse {
+
 	/**
 	 * @var Subscription
 	 */

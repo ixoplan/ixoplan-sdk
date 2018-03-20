@@ -8,8 +8,6 @@ use Ixolit\Dislo\WorkingObjects\Price;
  * Class SubscriptionCalculatePriceResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionCalculatePriceResponseObject instead
  */
 class SubscriptionCalculatePriceResponse extends SubscriptionPriceResponse {
 

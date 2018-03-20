@@ -7,8 +7,6 @@ namespace Ixolit\Dislo\Response;
  * Class UserRecoveryCheckResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserRecoveryCheckResponseObject instead
  */
 class UserRecoveryCheckResponse {
 	/**
@@ -30,6 +28,11 @@ class UserRecoveryCheckResponse {
 		return $this->valid;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserRecoveryCheckResponse
+     */
 	public static function fromResponse($response) {
 		return new UserRecoveryCheckResponse($response['valid']);
 	}

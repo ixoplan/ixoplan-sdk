@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Package;
  * Class PackageGetResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\PackageGetResponseObject instead
  */
 class PackageGetResponse {
+
 	/**
 	 * @var Package
 	 */
@@ -31,6 +30,11 @@ class PackageGetResponse {
 		return $this->package;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return PackageGetResponse
+     */
 	public static function fromResponse($response) {
 		return new PackageGetResponse(Package::fromResponse($response));
 	}

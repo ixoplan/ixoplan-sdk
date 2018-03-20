@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\AuthToken;
  * Class UserGetTokensResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserGetTokensResponseObject
  */
 class UserGetTokensResponse {
+
 	/**
 	 * @var AuthToken[]
 	 */
@@ -31,6 +30,11 @@ class UserGetTokensResponse {
 		return $this->tokens;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserGetTokensResponse
+     */
 	public static function fromResponse($response) {
 		$tokens = [];
 		foreach ($response['authTokens'] as $authTokenDefinition) {

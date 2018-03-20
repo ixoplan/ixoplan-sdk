@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Recurring;
  * Class BillingGetActiveRecurringResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\BillingGetActiveRecurringResponseObject instead
  */
 class BillingGetActiveRecurringResponse {
+
 	/**
 	 * @var Recurring
 	 */

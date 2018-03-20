@@ -7,10 +7,9 @@ namespace Ixolit\Dislo\WorkingObjects;
  * Class ExternalProfile
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\ExternalProfileObject instead
  */
 class ExternalProfile implements WorkingObject {
+
 	/**
 	 * @var int
 	 */
@@ -93,11 +92,11 @@ class ExternalProfile implements WorkingObject {
 	 */
 	public function toArray() {
 		return [
-			'_type' => 'ExternalProfile',
-			'userId' => $this->userId,
-			'subscriptionId' => $this->subscriptionId,
-			'extraData' => $this->extraData,
-			'externalId' => $this->externalId
-		];
+            '_type'          => 'ExternalProfile',
+            'userId'         => $this->userId,
+            'subscriptionId' => $this->subscriptionId,
+            'extraData'      => $this->extraData,
+            'externalId'     => $this->externalId,
+        ];
 	}
 }

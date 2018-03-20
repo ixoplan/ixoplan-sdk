@@ -6,11 +6,7 @@ use Ixolit\Dislo\Exceptions\AuthenticationException;
 use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
 use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\DisloException;
-use Ixolit\Dislo\Exceptions\InvalidTokenException;
-use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
-use Ixolit\Dislo\Request\RequestClient;
-use Ixolit\Dislo\Request\RequestClientExtra;
 use Ixolit\Dislo\Response\BillingCloseActiveRecurringResponse;
 use Ixolit\Dislo\Response\BillingCloseFlexibleResponse;
 use Ixolit\Dislo\Response\BillingCreateFlexibleResponse;
@@ -68,7 +64,6 @@ use Ixolit\Dislo\Response\UserGetAuthenticatedResponse;
 use Ixolit\Dislo\Response\UserGetBalanceResponse;
 use Ixolit\Dislo\Response\UserGetMetaProfileResponse;
 use Ixolit\Dislo\Response\UserGetResponse;
-use Ixolit\Dislo\Response\UserGetSignupStatusResponse;
 use Ixolit\Dislo\Response\UserGetTokensResponse;
 use Ixolit\Dislo\Response\UserPhoneVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserPhoneVerificationStartResponse;
@@ -79,7 +74,6 @@ use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
 use Ixolit\Dislo\Response\UserVerificationStartResponse;
-use Ixolit\Dislo\WorkingObjects\AuthToken;
 use Ixolit\Dislo\WorkingObjects\BillingEvent;
 use Ixolit\Dislo\WorkingObjects\Flexible;
 use Ixolit\Dislo\WorkingObjects\Subscription;
@@ -94,10 +88,9 @@ use Psr\Http\Message\StreamInterface;
  *
  * For details about the Dislo API, the available calls and Dislo itself please read the documentation available at
  * https://docs.dislo.com/
- *
- * @deprecated use \Ixolit\Dislo\FrontendClient instead
  */
 class Client extends AbstractClient {
+
 	const COUPON_EVENT_START    = 'subscription_start';
 	const COUPON_EVENT_UPGRADE  = 'subscription_upgrade';
 

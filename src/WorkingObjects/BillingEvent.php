@@ -7,10 +7,9 @@ namespace Ixolit\Dislo\WorkingObjects;
  * Class BillingEvent
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\BillingEventObject instead
  */
 class BillingEvent implements WorkingObject {
+
 	const TYPE_AUTHORIZE = 'authorize';
 	const TYPE_CHARGE = 'charge';
 	const TYPE_REFUND = 'refund';
@@ -70,177 +69,179 @@ class BillingEvent implements WorkingObject {
 	 */
 	private $modifiedAt;
 
-	/** @var BillingMethod */
+    /**
+     * @var BillingMethod
+     */
 	private $billingMethodObject;
 
-	/**
-	 * @param array $response
-	 *
-	 * @return self
-	 */
-	public static function fromResponse($response) {
-		if (isset($response['subscription']) && $response['subscription']) {
-			$subscription = Subscription::fromResponse($response['subscription']);
-		} else {
-			$subscription = null;
-		}
+    /**
+     * BillingEvent constructor.
+     *
+     * @param int               $billingEventId
+     * @param int               $userId
+     * @param string            $currencyCode
+     * @param float             $amount
+     * @param \DateTime         $createdAt
+     * @param string            $type
+     * @param string            $status
+     * @param string            $description
+     * @param string|null       $techinfo
+     * @param string            $billingMethod
+     * @param Subscription|null $subscription
+     * @param \DateTime|null    $modifiedAt
+     * @param BillingMethod|null $billingMethodObject
+     */
+    public function __construct(
+        $billingEventId,
+        $userId,
+        $currencyCode,
+        $amount,
+        $createdAt,
+        $type,
+        $status,
+        $description,
+        $techinfo,
+        $billingMethod,
+        Subscription $subscription = null,
+        $modifiedAt = null,
+        $billingMethodObject = null
+    ) {
+        $this->billingEventId      = $billingEventId;
+        $this->userId              = $userId;
+        $this->currencyCode        = $currencyCode;
+        $this->amount              = $amount;
+        $this->createdAt           = $createdAt;
+        $this->type                = $type;
+        $this->status              = $status;
+        $this->description         = $description;
+        $this->techinfo            = $techinfo;
+        $this->billingMethod       = $billingMethod;
+        $this->subscription        = $subscription;
+        $this->modifiedAt          = $modifiedAt;
+        $this->billingMethodObject = $billingMethodObject;
+    }
 
-		return new BillingEvent(
-			$response['billingEventId'],
-			$response['userId'],
-			$response['currencyCode'],
-			$response['amount'],
-			new \DateTime($response['createdAt']),
-			$response['type'],
-			$response['status'],
-			$response['description'],
-			$response['techinfo'],
-			$response['billingMethod'],
-			$subscription,
-			isset($response['modifiedAt']) ? new \DateTime($response['modifiedAt']) : null,
-			isset($response['billingMethodObject']) ? BillingMethod::fromResponse($response['billingMethodObject']) : null
-		);
-	}
-
-	/**
-	 * BillingEvent constructor.
-	 *
-	 * @param int               $billingEventId
-	 * @param int               $userId
-	 * @param string            $currencyCode
-	 * @param float             $amount
-	 * @param \DateTime         $createdAt
-	 * @param string            $type
-	 * @param string            $status
-	 * @param string            $description
-	 * @param string|null       $techinfo
-	 * @param string            $billingMethod
-	 * @param Subscription|null $subscription
-	 * @param \DateTime|null    $modifiedAt
-	 * @param BillingMethod|null $billingMethodObject
-	 */
-	public function __construct(
-		$billingEventId,
-		$userId,
-		$currencyCode,
-		$amount,
-		$createdAt,
-		$type,
-		$status,
-		$description,
-		$techinfo,
-		$billingMethod,
-		Subscription $subscription = null,
-		$modifiedAt = null,
-		$billingMethodObject = null
-	) {
-		$this->billingEventId = $billingEventId;
-		$this->userId         = $userId;
-		$this->currencyCode   = $currencyCode;
-		$this->amount         = $amount;
-		$this->createdAt      = $createdAt;
-		$this->type           = $type;
-		$this->status         = $status;
-		$this->description    = $description;
-		$this->techinfo       = $techinfo;
-		$this->billingMethod  = $billingMethod;
-		$this->subscription   = $subscription;
-		$this->modifiedAt     = $modifiedAt;
-		$this->billingMethodObject = $billingMethodObject;
-	}
-
-	/**
+    /**
 	 * @return int
 	 */
 	public function getBillingEventId() {
 		return $this->billingEventId;
 	}
 
-	/**
+    /**
 	 * @return int
 	 */
 	public function getUserId() {
 		return $this->userId;
 	}
 
-	/**
+    /**
 	 * @return string
 	 */
 	public function getCurrencyCode() {
 		return $this->currencyCode;
 	}
 
-	/**
+    /**
 	 * @return float
 	 */
 	public function getAmount() {
 		return $this->amount;
 	}
 
-	/**
+    /**
 	 * @return \DateTime
 	 */
 	public function getCreatedAt() {
 		return $this->createdAt;
 	}
 
-	/**
+    /**
 	 * @return string
 	 */
 	public function getType() {
 		return $this->type;
 	}
 
-	/**
+    /**
 	 * @return string
 	 */
 	public function getStatus() {
 		return $this->status;
 	}
 
-	/**
+    /**
 	 * @return string
 	 */
 	public function getDescription() {
 		return $this->description;
 	}
 
-	/**
+    /**
 	 * @return null|string
 	 */
 	public function getTechinfo() {
 		return $this->techinfo;
 	}
 
-	/**
+    /**
 	 * @return string
 	 */
 	public function getBillingMethod() {
 		return $this->billingMethod;
 	}
 
-	/**
+    /**
 	 * @return Subscription|null
 	 */
 	public function getSubscription() {
 		return $this->subscription;
 	}
 
-	/**
+    /**
 	 * @return \DateTime|null
 	 */
 	public function getModifiedAt() {
 		return $this->modifiedAt;
 	}
 
-	/**
+    /**
 	 * @return BillingMethod
 	 */
 	public function getBillingMethodObject() {
 		return $this->billingMethodObject;
 	}
 
-	/**
+    /**
+     * @param array $response
+     *
+     * @return self
+     */
+    public static function fromResponse($response) {
+        if (isset($response['subscription']) && $response['subscription']) {
+            $subscription = Subscription::fromResponse($response['subscription']);
+        } else {
+            $subscription = null;
+        }
+
+        return new BillingEvent(
+            $response['billingEventId'],
+            $response['userId'],
+            $response['currencyCode'],
+            $response['amount'],
+            new \DateTime($response['createdAt']),
+            $response['type'],
+            $response['status'],
+            $response['description'],
+            $response['techinfo'],
+            $response['billingMethod'],
+            $subscription,
+            isset($response['modifiedAt']) ? new \DateTime($response['modifiedAt']) : null,
+            isset($response['billingMethodObject']) ? BillingMethod::fromResponse($response['billingMethodObject']) : null
+        );
+    }
+
+    /**
 	 * @return array
 	 */
 	public function toArray() {

@@ -2,15 +2,13 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
-
 /**
  * Class Price
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects PriceObject instead
  */
 class Price implements WorkingObject {
+
 	const TAG_BASEPRICE = 'baseprice';
 	const TAG_PRORATE_PRICE = 'prorate_price';
 	const TAG_COUPON = 'coupon';
@@ -24,24 +22,28 @@ class Price implements WorkingObject {
 	 * @var float
 	 */
 	private $amount;
+
 	/**
 	 * Currency code for the price
 	 *
 	 * @var string
 	 */
 	private $currencyCode;
+
 	/**
 	 * Identifies the group to which this price belongs (e.g. package identifier)
 	 *
 	 * @var string
 	 */
 	private $group;
+
 	/**
 	 * Defines the type of price, options are
 	 *
 	 * @var string
 	 */
 	private $tag;
+
 	/**
 	 * @var Price[]
 	 */
@@ -126,14 +128,15 @@ class Price implements WorkingObject {
 	 */
 	public function toArray() {
 		$result = [
-			'_type' => 'Price',
-		];
-		$result['amount'] = $this->amount;
-		$result['currencyCode'] = $this->currencyCode;
+            '_type'        => 'Price',
+            'amount'       => $this->amount,
+            'currencyCode' => $this->currencyCode,
+            'tag'          => $this->tag,
+        ];
+
 		if ($this->group) {
 			$result['group'] = $this->group;
 		}
-		$result['tag'] = $this->tag;
 
 		if ($this->compositePrices) {
 			$result['compositePrices'] = [];
@@ -141,6 +144,7 @@ class Price implements WorkingObject {
 				$result['compositePrices'][] = $compositePrice->toArray();
 			}
 		}
+
 		return $result;
 	}
 }

@@ -2,7 +2,6 @@
 
 namespace Ixolit\Dislo\Response;
 
-
 use Ixolit\Dislo\WorkingObjects\Price;
 
 /**
@@ -17,7 +16,9 @@ abstract class SubscriptionPriceResponse {
      */
     private $price;
 
-    /** @var Price|null */
+    /**
+     * @var Price|null
+     */
     private $recurringPrice;
 
     /**

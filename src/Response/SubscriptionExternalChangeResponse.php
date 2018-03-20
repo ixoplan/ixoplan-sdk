@@ -7,10 +7,9 @@ namespace Ixolit\Dislo\Response;
  * Class SubscriptionExternalChangeResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionExternalChangeResponseObject instead
  */
 class SubscriptionExternalChangeResponse {
+
 	/**
 	 * @var int
 	 */
@@ -30,6 +29,11 @@ class SubscriptionExternalChangeResponse {
 		return $this->upgradeId;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return SubscriptionExternalChangeResponse
+     */
 	public static function fromResponse($response) {
 		return new SubscriptionExternalChangeResponse($response['upgradeId']);
 	}

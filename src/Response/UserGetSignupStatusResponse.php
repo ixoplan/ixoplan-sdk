@@ -6,6 +6,13 @@ use Ixolit\Dislo\WorkingObjects\BillingEvent;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 use Ixolit\Dislo\WorkingObjects\User;
 
+/**
+ * Class UserGetSignupStatusResponse
+ *
+ * @package Ixolit\Dislo\Response
+ *
+ * @deprecated
+ */
 class UserGetSignupStatusResponse {
 	const STATUS_FINISHED = 'finished';
 	const STATUS_FAILED   = 'failed';
@@ -75,6 +82,11 @@ class UserGetSignupStatusResponse {
 		return $this->billingEvent;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserGetSignupStatusResponse
+     */
 	public static function fromResponse($response) {
 		return new UserGetSignupStatusResponse(
 			$response['status'],

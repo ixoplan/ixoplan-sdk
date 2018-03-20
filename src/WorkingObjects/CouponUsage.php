@@ -2,40 +2,46 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
-
 /**
  * Class CouponUsage
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\CouponUsageObject instead
  */
 class CouponUsage implements WorkingObject {
 
-	/** @var Coupon|null */
+    /**
+     * @var Coupon|null
+     */
 	private $coupon;
 
-	/** @var int */
+    /**
+     * @var int
+     */
 	private $numPeriods;
 
-	/** @var \DateTime|null */
+    /**
+     * @var \DateTime|null
+     */
 	private $createdAt;
 
-	/** @var \DateTime|null */
+    /**
+     * @var \DateTime|null
+     */
 	private $modifiedAt;
 
 	/**
 	 * CouponUsage constructor.
+     *
 	 * @param Coupon|null $coupon
 	 * @param int $numPeriods
 	 * @param \DateTime|null $createdAt
 	 * @param \DateTime|null $modifiedAt
 	 */
 	public function __construct($coupon, $numPeriods, $createdAt, $modifiedAt) {
-		$this->coupon = $coupon;
-		$this->numPeriods = $numPeriods;
-		$this->createdAt = $createdAt;
-		$this->modifiedAt = $modifiedAt;
+        $this->coupon     = $coupon;
+        $this->numPeriods = $numPeriods;
+        $this->createdAt  = $createdAt;
+        $this->modifiedAt = $modifiedAt;
 	}
 
 	/**
@@ -85,10 +91,10 @@ class CouponUsage implements WorkingObject {
 	 */
 	public function toArray() {
 		return [
-			'coupon' => ($this->coupon ? $this->coupon->toArray() : null),
-			'numPeriods' => $this->numPeriods,
-			'createdAt' => ($this->createdAt ? $this->createdAt->format('Y-m-d H:i:s') : null),
-			'modifiedAt' => ($this->modifiedAt ? $this->modifiedAt->format('Y-m-d H:i:s') : null),
-		];
+            'coupon'     => ($this->coupon ? $this->coupon->toArray() : null),
+            'numPeriods' => $this->numPeriods,
+            'createdAt'  => ($this->createdAt ? $this->createdAt->format('Y-m-d H:i:s') : null),
+            'modifiedAt' => ($this->modifiedAt ? $this->modifiedAt->format('Y-m-d H:i:s') : null),
+        ];
 	}
 }

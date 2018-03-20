@@ -9,8 +9,6 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserVerificationFinishResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserVerificationFinishResponseObject instead
  */
 class UserVerificationFinishResponse {
 
@@ -36,7 +34,7 @@ class UserVerificationFinishResponse {
     /**
      * @param array $response
      *
-     * @return UserEmailVerificationFinishResponse
+     * @return UserVerificationFinishResponse
      */
     public static function fromResponse($response) {
         return new self(!empty($response['user']) ? User::fromResponse($response['user']) : null);

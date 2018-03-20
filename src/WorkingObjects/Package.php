@@ -8,14 +8,14 @@ use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
  * Class Package
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\PackageObject instead
  */
 class Package implements WorkingObject {
+
 	/**
 	 * @var string
 	 */
 	private $packageIdentifier;
+
 	/**
 	 * @var string
 	 */
@@ -25,34 +25,45 @@ class Package implements WorkingObject {
 	 * @var DisplayName[]
 	 */
 	private $displayNames;
+
 	/**
 	 * @var bool
 	 */
 	private $signupAvailable;
+
 	/**
 	 * @var Package[]
 	 */
 	private $addonPackages;
+
 	/**
 	 * @var string[]
 	 */
 	private $metaData;
+
 	/**
 	 * @var PackagePeriod
 	 */
 	private $initialPeriod;
+
 	/**
 	 * @var PackagePeriod|null
 	 */
 	private $recurringPeriod;
 
-	/** @var bool */
+    /**
+     * @var bool
+     */
 	private $hasTrialPeriod;
 
-	/** @var BillingMethod[] */
+    /**
+     * @var BillingMethod[]
+     */
 	private $billingMethods = [];
 
-	/** @var bool */
+    /**
+     * @var bool
+     */
 	private $requireFlexibleForFreeSignup;
 
     /**
@@ -68,17 +79,18 @@ class Package implements WorkingObject {
      * @param BillingMethod[]    $billingMethods
      * @param bool               $requireFlexibleForFreeSignup
      */
-	public function __construct($packageIdentifier,
-                                $serviceIdentifier,
-                                $displayNames,
-                                $signupAvailable,
-								$addonPackages,
-                                $metaData,
-                                $initialPeriod,
-                                $recurringPeriod,
-                                $hasTrialPeriod = false,
-								$billingMethods = null,
-                                $requireFlexibleForFreeSignup = false
+	public function __construct(
+        $packageIdentifier,
+        $serviceIdentifier,
+        $displayNames,
+        $signupAvailable,
+        $addonPackages,
+        $metaData,
+        $initialPeriod,
+        $recurringPeriod,
+        $hasTrialPeriod = false,
+        $billingMethods = null,
+        $requireFlexibleForFreeSignup = false
     ) {
         $this->packageIdentifier            = $packageIdentifier;
         $this->serviceIdentifier            = $serviceIdentifier;

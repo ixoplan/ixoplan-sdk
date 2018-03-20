@@ -8,16 +8,17 @@ use Ixolit\Dislo\WorkingObjects\Price;
  * Class CouponCodeValidateResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated
  */
 class CouponCodeValidateResponse extends CouponCodeResponse {
+
 	/**
 	 * @var Price
 	 */
 	private $discountedPrice;
 
-	/** @var Price|null */
+    /**
+     * @var Price|null
+     */
 	private $recurringPrice;
 
 	/**
@@ -28,7 +29,14 @@ class CouponCodeValidateResponse extends CouponCodeResponse {
 	 * @param Price 	 $discountedPrice
 	 * @param Price|null $recurringPrice
 	 */
-	public function __construct($valid, $reason, $couponCode, $event, Price $discountedPrice, Price $recurringPrice = null) {
+	public function __construct(
+	    $valid,
+        $reason,
+        $couponCode,
+        $event,
+        Price $discountedPrice,
+        Price $recurringPrice = null
+    ) {
 		parent::__construct($valid, $reason, $couponCode, $event);
 		$this->discountedPrice = $discountedPrice;
 		$this->recurringPrice = $recurringPrice;
@@ -48,6 +56,13 @@ class CouponCodeValidateResponse extends CouponCodeResponse {
 		return $this->recurringPrice;
 	}
 
+    /**
+     * @param array  $response
+     * @param string $couponCode
+     * @param string $event
+     *
+     * @return CouponCodeValidateResponse
+     */
 	public static function fromResponse($response, $couponCode, $event) {
 		return new CouponCodeValidateResponse(
 			$response['valid'],
@@ -58,4 +73,5 @@ class CouponCodeValidateResponse extends CouponCodeResponse {
 			Price::fromResponse($response['recurringPrice'])
 		);
 	}
+
 }

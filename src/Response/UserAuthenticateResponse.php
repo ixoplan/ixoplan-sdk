@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserAuthenticateResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserAuthenticateResponseObject instead
  */
 class UserAuthenticateResponse {
+
 	/**
 	 * @var User
 	 */
@@ -45,6 +44,11 @@ class UserAuthenticateResponse {
 		return $this->authToken;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserAuthenticateResponse
+     */
 	public static function fromResponse($response) {
 		return new UserAuthenticateResponse(
 			User::fromResponse($response['user']),

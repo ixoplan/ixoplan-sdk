@@ -7,18 +7,19 @@ namespace Ixolit\Dislo\WorkingObjects;
  * Class MetaProfileElement
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\MetaProfileElementObject instead
  */
 class MetaProfileElement implements WorkingObject {
+
 	/**
 	 * @var string
 	 */
 	private $name;
+
 	/**
 	 * @var bool
 	 */
 	private $required;
+
 	/**
 	 * @var bool
 	 */
@@ -74,10 +75,10 @@ class MetaProfileElement implements WorkingObject {
 	 */
 	public function toArray() {
 		return [
-			'_type' => 'MetaProfileElement',
-			'name' => $this->getName(),
-			'required' => $this->isRequired(),
-			'unique' => $this->isUnique()
-		];
+            '_type'    => 'MetaProfileElement',
+            'name'     => $this->getName(),
+            'required' => $this->isRequired(),
+            'unique'   => $this->isUnique(),
+        ];
 	}
 }

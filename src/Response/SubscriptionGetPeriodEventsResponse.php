@@ -2,23 +2,23 @@
 
 namespace Ixolit\Dislo\Response;
 
-
 use Ixolit\Dislo\WorkingObjects\PeriodEvent;
-
 
 /**
  * Class SubscriptionGetPeriodEventsResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponseObject instead
  */
 class SubscriptionGetPeriodEventsResponse {
 
-    /** @var PeriodEvent[] */
+    /**
+     * @var PeriodEvent[]
+     */
     private $periodEvents;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $totalCount;
 
     /**
@@ -38,6 +38,9 @@ class SubscriptionGetPeriodEventsResponse {
         return $this->periodEvents;
     }
 
+    /**
+     * @return int
+     */
     public function getTotalCount() {
         return $this->totalCount;
     }

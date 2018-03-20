@@ -2,38 +2,51 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
-
 /**
  * Class PeriodEvent
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\PeriodEventObjects instead
  */
 class PeriodEvent {
 
-    /** @var int  */
+    /**
+     * @var int
+     */
     private $periodEventId;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $periodId;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $subscriptionHistoryId;
 
-    /** @var \DateTime */
+    /**
+     * @var \DateTime
+     */
     private $startedAt;
 
-    /** @var \DateTime */
+    /**
+     * @var \DateTime
+     */
     private $endsAt;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $parentPeriodEventId;
 
-    /** @var \DateTime */
+    /**
+     * @var \DateTime
+     */
     private $originalEndsAt;
 
-    /** @var BillingEvent */
+    /**
+     * @var BillingEvent
+     */
     private $billingEvent;
 
     /**
@@ -48,23 +61,24 @@ class PeriodEvent {
      * @param \DateTime|null    $originalEndsAt
      * @param BillingEvent|null $billingEvent
      */
-    public function __construct($periodEventId,
-                                $periodId,
-                                $subscriptionHistoryId,
-                                \DateTime $startedAt = null,
-                                \DateTime $endsAt = null,
-                                $parentPeriodEventId = null,
-                                \DateTime $originalEndsAt = null,
-                                BillingEvent $billingEvent = null
+    public function __construct(
+        $periodEventId,
+        $periodId,
+        $subscriptionHistoryId,
+        \DateTime $startedAt = null,
+        \DateTime $endsAt = null,
+        $parentPeriodEventId = null,
+        \DateTime $originalEndsAt = null,
+        BillingEvent $billingEvent = null
     ) {
-        $this->periodEventId = $periodEventId;
-        $this->periodId = $periodId;
+        $this->periodEventId         = $periodEventId;
+        $this->periodId              = $periodId;
         $this->subscriptionHistoryId = $subscriptionHistoryId;
-        $this->startedAt = $startedAt;
-        $this->endsAt = $endsAt;
-        $this->parentPeriodEventId = $parentPeriodEventId;
-        $this->originalEndsAt = $originalEndsAt;
-        $this->billingEvent = $billingEvent;
+        $this->startedAt             = $startedAt;
+        $this->endsAt                = $endsAt;
+        $this->parentPeriodEventId   = $parentPeriodEventId;
+        $this->originalEndsAt        = $originalEndsAt;
+        $this->billingEvent          = $billingEvent;
     }
 
     /**
@@ -146,14 +160,14 @@ class PeriodEvent {
      */
     public function toArray() {
         return [
-            'id' => $this->periodEventId,
-            'periodId' => $this->periodId,
+            'id'                    => $this->periodEventId,
+            'periodId'              => $this->periodId,
             'subscriptionHistoryId' => $this->subscriptionHistoryId,
-            'startedAt' => $this->startedAt ? $this->startedAt->format('Y-m-d H:i:s') : null,
-            'endsAt' => $this->endsAt ? $this->endsAt->format('Y-m-d H:i:s') : null,
-            'parentPeriodEventId' => $this->parentPeriodEventId,
-            'originalEndsAt' => $this->originalEndsAt ? $this->originalEndsAt->format('Y-m-d H:i:s') : null,
-            'billingEvent' => $this->billingEvent->toArray(),
+            'startedAt'             => $this->startedAt ? $this->startedAt->format('Y-m-d H:i:s') : null,
+            'endsAt'                => $this->endsAt ? $this->endsAt->format('Y-m-d H:i:s') : null,
+            'parentPeriodEventId'   => $this->parentPeriodEventId,
+            'originalEndsAt'        => $this->originalEndsAt ? $this->originalEndsAt->format('Y-m-d H:i:s') : null,
+            'billingEvent'          => $this->billingEvent->toArray(),
         ];
     }
 

@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Package;
  * Class PackagesListResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\PackagesListResponseObject instead
  */
 class PackagesListResponse {
+
 	/**
 	 * @var Package[]
 	 */
@@ -31,11 +30,17 @@ class PackagesListResponse {
 		return $this->packages;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return PackagesListResponse
+     */
 	public static function fromResponse($response) {
 		$packages = [];
 		foreach ($response['packages'] as $packageDefinition) {
 			$packages[] = Package::fromResponse($packageDefinition);
 		}
+
 		return new PackagesListResponse($packages);
 	}
 }

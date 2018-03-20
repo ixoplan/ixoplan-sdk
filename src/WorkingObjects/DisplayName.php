@@ -7,8 +7,6 @@ namespace Ixolit\Dislo\WorkingObjects;
  * Class DisplayName
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\DisplayNameObject instead
  */
 class DisplayName implements WorkingObject {
 
@@ -31,44 +29,45 @@ class DisplayName implements WorkingObject {
 		$this->name     = $name;
 	}
 
-	/**
-	 * @param array $response
-	 *
-	 * @return self
-	 */
-	public static function fromResponse($response) {
-		return new DisplayName(
-			$response['language'],
-			$response['name']
-		);
-	}
-
-	/**
-	 * @return array
-	 */
-	public function toArray() {
-		return [
-			'_type'    => 'DisplayName',
-			'language' => $this->getLanguage(),
-			'name'     => $this->getName(),
-		];
-	}
-
-	/**
+    /**
 	 * @return string
 	 */
 	public function getLanguage() {
 		return $this->language;
 	}
 
-	/**
+    /**
 	 * @return string
 	 */
 	public function getName() {
 		return $this->name;
 	}
 
-	public function __toString() {
-		return $this->getName();
-	}
+    /**
+     * @param array $response
+     *
+     * @return self
+     */
+    public static function fromResponse($response) {
+        return new DisplayName(
+            $response['language'],
+            $response['name']
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        return [
+            '_type'    => 'DisplayName',
+            'language' => $this->getLanguage(),
+            'name'     => $this->getName(),
+        ];
+    }
+
+    public function __toString() {
+        return $this->getName();
+    }
+
 }

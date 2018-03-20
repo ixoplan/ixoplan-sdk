@@ -7,10 +7,9 @@ namespace Ixolit\Dislo\Response;
  * Class BillingExternalCreateChargebackResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated
  */
 class BillingExternalCreateChargebackResponse {
+
 	/**
 	 * @var int
 	 */

@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Subscription;
  * Class SubscriptionGetAllResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionGetAllResponseObject instead
  */
 class SubscriptionGetAllResponse {
+
 	/**
 	 * @var Subscription[]
 	 */
@@ -31,6 +30,11 @@ class SubscriptionGetAllResponse {
 		return $this->subscriptions;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return SubscriptionGetAllResponse
+     */
 	public static function fromResponse($response) {
 		$subscriptions = [];
 

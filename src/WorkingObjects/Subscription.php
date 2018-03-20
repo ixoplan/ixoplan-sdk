@@ -2,13 +2,10 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
-
 /**
  * Class Subscription
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\SubscriptionObject instead
  */
 class Subscription implements WorkingObject {
 
@@ -24,73 +21,95 @@ class Subscription implements WorkingObject {
 	 * @var int
 	 */
 	private $subscriptionId;
+
 	/**
 	 * @var Package
 	 */
 	private $currentPackage;
+
 	/**
 	 * @var int
 	 */
 	private $userId;
+
 	/**
 	 * @var string
 	 */
 	private $status;
+
 	/**
 	 * @var \DateTime
 	 */
 	private $startedAt;
+
 	/**
 	 * @var \DateTime|null
 	 */
 	private $canceledAt;
+
 	/**
 	 * @var \DateTime|null
 	 */
 	private $closedAt;
+
 	/**
 	 * @var \DateTime|null
 	 */
 	private $expiresAt;
+
 	/**
 	 * @var \DateTime|null
 	 */
 	private $nextBillingAt;
+
 	/**
 	 * @var string
 	 */
 	private $currencyCode;
+
 	/**
 	 * @var bool
 	 */
 	private $isInitialPeriod;
+
 	/**
 	 * @var bool
 	 */
 	private $isProvisioned;
+
 	/**
 	 * @var array
 	 */
 	private $provisioningMetaData;
+
 	/**
 	 * @var NextPackage|null
 	 */
 	private $nextPackage;
+
 	/**
 	 * @var Subscription[]
 	 */
 	private $addonSubscriptions = [];
 
-	/** @var \DateTime|null */
+    /**
+     * @var \DateTime|null
+     */
 	private $minimumTermEndsAt;
 
-	/** @var bool */
+    /**
+     * @var bool
+     */
 	private $isExternal;
 
-	/** @var CouponUsage */
+    /**
+     * @var CouponUsage
+     */
 	private $couponUsage;
 
-	/** @var  */
+    /**
+     * @var
+     */
 	private $currentPeriodEvent;
 
     /**
@@ -347,7 +366,19 @@ class Subscription implements WorkingObject {
 	    return $this->nextBillingAmount;
     }
 
-	/**
+    /**
+     * @return bool
+     */
+    public function isActive() {
+        return \in_array($this->getStatus(), [
+            self::STATUS_RUNNING,
+            self::STATUS_CANCELED,
+            self::STATUS_SUSPENDED_RUNNING,
+            self::STATUS_SUSPENDED_CANCELED,
+        ]);
+    }
+
+    /**
 	 * @param array $response
 	 *
 	 * @return self
@@ -388,7 +419,7 @@ class Subscription implements WorkingObject {
 		);
 	}
 
-	/**
+    /**
 	 * @return array
 	 */
 	public function toArray() {
@@ -396,6 +427,7 @@ class Subscription implements WorkingObject {
 		foreach ($this->addonSubscriptions as $addonSubscription) {
 			$addonSubscriptions[] = $addonSubscription->toArray();
 		}
+
 		return [
 			'subscriptionId' => $this->subscriptionId,
 			'currentPackage' => ($this->currentPackage?$this->currentPackage->toArray():null),
@@ -418,14 +450,5 @@ class Subscription implements WorkingObject {
             'currentPeriodEvent' => $this->currentPeriodEvent ? $this->currentPeriodEvent->toArray() : null,
             'nextBillingAmount' => $this->nextBillingAmount,
 		];
-	}
-
-	public function isActive() {
-		return \in_array($this->getStatus(), [
-			self::STATUS_RUNNING,
-			self::STATUS_CANCELED,
-			self::STATUS_SUSPENDED_RUNNING,
-			self::STATUS_SUSPENDED_CANCELED,
-		]);
 	}
 }

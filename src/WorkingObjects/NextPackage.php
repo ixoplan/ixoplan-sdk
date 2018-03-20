@@ -2,20 +2,21 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
-
 /**
  * Class NextPackage
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\NextPackageObject instead
  */
 class NextPackage extends Package implements WorkingObject {
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
 	private $paid;
 
-	/** @var \DateTime */
+    /**
+     * @var \DateTime
+     */
 	private $effectiveAt;
 
     /**
@@ -82,10 +83,12 @@ class NextPackage extends Package implements WorkingObject {
 		foreach ($response['displayNames'] as $displayName) {
 			$displayNames[] = DisplayName::fromResponse($displayName);
 		}
+
 		$addonPackages = [];
 		foreach ($response['addonPackages'] as $addonPackage) {
 			$addonPackages[] = Package::fromResponse($addonPackage);
 		}
+
 		return new NextPackage(
 			$response['packageIdentifier'],
 			$response['serviceIdentifier'],
@@ -112,6 +115,7 @@ class NextPackage extends Package implements WorkingObject {
 		$data['_type'] = 'NextPackage';
 		$data['paid'] = $this->paid;
 		$data['effectiveAt'] = $this->effectiveAt->format('Y-m-d H:i:s');
+
 		return $data;
 	}
 }

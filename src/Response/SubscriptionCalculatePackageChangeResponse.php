@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Price;
  * Class SubscriptionCalculatePackageChangeResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponseObject instead
  */
 class SubscriptionCalculatePackageChangeResponse extends SubscriptionPriceResponse {
+
 	/**
 	 * @var bool
 	 */

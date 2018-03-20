@@ -2,15 +2,13 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
-
 /**
  * Class BillingMethod
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\BillingMethodObject instead
  */
 class BillingMethod implements WorkingObject {
+
 	/**
 	 * @var int
 	 */
@@ -160,15 +158,15 @@ class BillingMethod implements WorkingObject {
 	 */
 	public function toArray() {
 		return [
-			'_type' => 'BillingMethod',
-			'billingMethodId' => $this->getBillingMethodId(),
-			'name' => $this->getName(),
-			'displayName' => $this->getDisplayName(),
-			'available' => $this->isAvailable(),
-			'checkout' => $this->isCheckout(),
-			'flexible' => $this->isFlexible(),
-			'recurring' => $this->isRecurring(),
-			'replaceable' => $this->isReplaceable(),
-		];
+            '_type'           => 'BillingMethod',
+            'billingMethodId' => $this->getBillingMethodId(),
+            'name'            => $this->getName(),
+            'displayName'     => $this->getDisplayName(),
+            'available'       => $this->isAvailable(),
+            'checkout'        => $this->isCheckout(),
+            'flexible'        => $this->isFlexible(),
+            'recurring'       => $this->isRecurring(),
+            'replaceable'     => $this->isReplaceable(),
+        ];
 	}
 }

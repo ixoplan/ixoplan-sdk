@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserCreateResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserCreateResponseObject instead
  */
 class UserCreateResponse {
+
 	/**
 	 * @var User
 	 */
@@ -31,6 +30,11 @@ class UserCreateResponse {
 		return $this->user;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserCreateResponse
+     */
 	public static function fromResponse($response) {
 		return new UserCreateResponse(User::fromResponse($response['user']));
 	}

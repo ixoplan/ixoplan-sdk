@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserRecoveryFinishResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserRecoveryFinishResponseObject instead
  */
 class UserRecoveryFinishResponse {
+
 	/**
 	 * @var User
 	 */
@@ -31,6 +30,11 @@ class UserRecoveryFinishResponse {
 		return $this->user;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserRecoveryFinishResponse
+     */
 	public static function fromResponse($response) {
 		return new UserRecoveryFinishResponse(User::fromResponse($response['user']));
 	}

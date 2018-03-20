@@ -8,12 +8,22 @@ use Ixolit\Dislo\WorkingObjects\BillingEvent;
  * Class BillingCreatePaymentResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\BillingCreatePaymentResponseObject instead
  */
 class BillingCreatePaymentResponse {
+
+    /**
+     * @var string
+     */
 	private $redirectUrl;
+
+    /**
+     * @var array
+     */
 	private $metaData = [];
+
+    /**
+     * @var BillingEvent
+     */
 	private $billingEvent;
 
 	/**

@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Subscription;
  * Class SubscriptionContinueResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionContinueResponseObject instead
  */
 class SubscriptionContinueResponse {
+
 	/**
 	 * @var Subscription
 	 */

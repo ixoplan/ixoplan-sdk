@@ -2,20 +2,18 @@
 
 namespace Ixolit\Dislo\Response;
 
-
 use Ixolit\Dislo\WorkingObjects\User;
-
 
 /**
  * Class UserGetAuthenticatedResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserGetAuthenticatedResponseObject instead
  */
 class UserGetAuthenticatedResponse {
 
-    /** @var User */
+    /**
+     * @var User
+     */
     private $user;
 
     /**

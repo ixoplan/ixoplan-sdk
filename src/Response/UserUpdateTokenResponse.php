@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\AuthToken;
  * Class UserUpdateTokenResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserUpdateTokenResponseObject instead
  */
 class UserUpdateTokenResponse {
+
 	/**
 	 * @var AuthToken
 	 */
@@ -31,6 +30,11 @@ class UserUpdateTokenResponse {
 		return $this->authToken;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserUpdateTokenResponse
+     */
 	public static function fromResponse($response) {
 		return new UserUpdateTokenResponse(
 			AuthToken::fromResponse($response['authToken'])

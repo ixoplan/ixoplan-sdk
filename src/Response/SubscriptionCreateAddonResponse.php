@@ -9,10 +9,9 @@ use Ixolit\Dislo\WorkingObjects\Subscription;
  * Class SubscriptionCreateAddonResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionCreateAddonResponseObject instead
  */
 class SubscriptionCreateAddonResponse {
+
 	/**
 	 * @var Subscription
 	 */

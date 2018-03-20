@@ -2,7 +2,6 @@
 
 namespace Ixolit\Dislo\Context;
 
-
 use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
@@ -18,38 +17,52 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserContext
  *
  * @package Ixolit\Dislo\Context
- *
- * @deprecated use Ixolit\Dislo\Context\User instead
  */
 class UserContext {
 
-    /** @var Client */
+    /**
+     * @var Client
+     */
     private $client;
 
-    /** @var UserContextWrapper */
+    /**
+     * @var UserContextWrapper
+     */
     private $user;
 
-    /** @var CachedObject|null */
+    /**
+     * @var CachedObject|null
+     */
     private $subscriptionsCachedObject;
 
-    /** @var CachedObject|null */
+    /**
+     * @var CachedObject|null
+     */
     private $activeFlexibleCachedObject;
 
-    /** @var BillingEvent[] */
+    /**
+     * @var BillingEvent[]
+     */
     private $billingEvents;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $billingEventsTotalCount;
 
-    /** @var CachedObject|null */
+    /**
+     * @var CachedObject|null
+     */
     private $accountBalanceCachedObject;
 
-    /** @var CachedObject|null*/
+    /**
+     * @var CachedObject|null
+     */
     private $authTokensCachedObject;
 
     /**
      * @param Client             $client
-     * @param UserContextWrapper $user
+     * @param User               $user
      *
      * @throws InvalidTokenException
      */
@@ -63,7 +76,7 @@ class UserContext {
     }
 
     /**
-     * @return UserContextWrapper
+     * @return User
      *
      * @throws InvalidTokenException
      */
@@ -473,10 +486,10 @@ class UserContext {
     }
 
     /**
-     * @param UserContextWrapper $user
-     * @param AuthToken          $authToken
+     * @param User      $user
+     * @param AuthToken $authToken
      *
-     * @return UserContextWrapper
+     * @return User
      */
     protected function convertFromUserWithAuthToken(User $user, AuthToken $authToken) {
         $changedUser = new User(

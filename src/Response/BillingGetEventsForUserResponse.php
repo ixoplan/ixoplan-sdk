@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\BillingEvent;
  * Class BillingGetEventsForUserResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\BillingGetEventsForUserResponseObject instead
  */
 class BillingGetEventsForUserResponse {
+
 	/**
 	 * @var BillingEvent[]
 	 */

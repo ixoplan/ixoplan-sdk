@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\ExternalProfile;
  * Class BillingExternalGetProfileResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated
  */
 class BillingExternalGetProfileResponse {
+
 	/**
 	 * @var ExternalProfile
 	 */

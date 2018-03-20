@@ -2,7 +2,6 @@
 
 namespace Ixolit\Dislo\Response;
 
-
 use Ixolit\Dislo\WorkingObjects\Price;
 use Ixolit\Dislo\WorkingObjects\Subscription;
 
@@ -10,8 +9,6 @@ use Ixolit\Dislo\WorkingObjects\Subscription;
  * Class SubscriptionChangeResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionChangeResponseObject instead
  */
 class SubscriptionChangeResponse extends SubscriptionResponse {
 

@@ -10,9 +10,13 @@ use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\RequestClient;
 use Ixolit\Dislo\Request\RequestClientExtra;
-use Ixolit\Dislo\WorkingObjects\AuthToken;
 use Ixolit\Dislo\WorkingObjects\User;
 
+/**
+ * Class AbstractClient
+ *
+ * @package Ixolit\Dislo
+ */
 abstract class AbstractClient {
 
     const ORDER_DIR_ASC = 'ASC';
@@ -54,9 +58,8 @@ abstract class AbstractClient {
         if ($this->getRequestClient() instanceof RequestClientExtra) {
             return $this->requestClient;
         }
-        else {
-            throw new NotImplementedException();
-        }
+
+        throw new NotImplementedException();
     }
 
     /**
@@ -73,6 +76,12 @@ abstract class AbstractClient {
         return $this->forceTokenMode;
     }
 
+    /**
+     * @param int|string|User $userTokenOrId
+     * @param array           $data
+     *
+     * @return array
+     */
     protected function userToData($userTokenOrId, &$data = []) {
 
         // TODO: cleanup!

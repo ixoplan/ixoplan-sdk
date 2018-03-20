@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Subscription;
  * Class SubscriptionGetResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionGetResponseObject instead
  */
 class SubscriptionGetResponse {
+
 	/**
 	 * @var Subscription
 	 */
@@ -31,6 +30,11 @@ class SubscriptionGetResponse {
 		return $this->subscription;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return SubscriptionGetResponse
+     */
 	public static function fromResponse($response) {
 		return new SubscriptionGetResponse(Subscription::fromResponse($response['subscription']));
 	}

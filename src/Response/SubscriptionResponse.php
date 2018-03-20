@@ -2,10 +2,8 @@
 
 namespace Ixolit\Dislo\Response;
 
-
 use Ixolit\Dislo\WorkingObjects\Price;
 use Ixolit\Dislo\WorkingObjects\Subscription;
-
 
 /**
  * Class SubscriptionResponse
@@ -14,16 +12,24 @@ use Ixolit\Dislo\WorkingObjects\Subscription;
  */
 abstract class SubscriptionResponse {
 
-    /** @var Subscription */
+    /**
+     * @var Subscription
+     */
     private $subscription;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $needsBilling;
 
-    /** @var Price */
+    /**
+     * @var Price
+     */
     private $price;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $requireFlexible;
 
     /**

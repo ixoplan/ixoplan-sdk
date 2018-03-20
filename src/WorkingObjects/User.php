@@ -2,39 +2,43 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
-
 /**
  * Class User
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\UserObject instead
  */
 class User implements WorkingObject {
+
 	/**
 	 * @var int
 	 */
 	private $userId;
+
 	/**
 	 * @var \DateTime
 	 */
 	private $createdAt;
+
 	/**
 	 * @var bool
 	 */
 	private $loginDisabled;
+
 	/**
 	 * @var string
 	 */
 	private $language;
+
 	/**
 	 * @var \DateTime|null
 	 */
 	private $lastLoginDate;
+
 	/**
 	 * @var string
 	 */
 	private $lastLoginIp;
+
 	/**
 	 * @var array
 	 */
@@ -67,16 +71,17 @@ class User implements WorkingObject {
      * @param string[]       $verifiedData
      * @param AuthToken|null $authToken
      */
-	public function __construct($userId,
-                                $createdAt,
-                                $loginDisabled,
-                                $language,
-                                $lastLoginDate,
-                                $lastLoginIp,
-								$metaData,
-                                $currencyCode = null,
-                                $verifiedData = [],
-                                AuthToken $authToken = null
+	public function __construct(
+        $userId,
+        $createdAt,
+        $loginDisabled,
+        $language,
+        $lastLoginDate,
+        $lastLoginIp,
+        $metaData,
+        $currencyCode = null,
+        $verifiedData = [],
+        AuthToken $authToken = null
     ) {
 		$this->userId        = $userId;
 		$this->createdAt     = $createdAt;

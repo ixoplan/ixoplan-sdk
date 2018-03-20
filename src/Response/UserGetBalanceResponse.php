@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Price;
  * Class UserGetBalanceResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserGetBalanceResponseObject
  */
 class UserGetBalanceResponse {
+
 	/**
 	 * @var Price
 	 */
@@ -31,6 +30,11 @@ class UserGetBalanceResponse {
 		return $this->balance;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserGetBalanceResponse
+     */
 	public static function fromResponse($response) {
 		return new UserGetBalanceResponse(Price::fromResponse($response['balance']));
 	}

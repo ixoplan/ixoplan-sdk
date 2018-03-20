@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Subscription;
  * Class SubscriptionExternalChangePeriodResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionExternalChangePeriodResponseObject instead
  */
 class SubscriptionExternalChangePeriodResponse {
+
 	/**
 	 * @var Subscription
 	 */
@@ -31,6 +30,11 @@ class SubscriptionExternalChangePeriodResponse {
 		return $this->subscription;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return SubscriptionExternalChangePeriodResponse
+     */
 	public static function fromResponse($response) {
 		return new SubscriptionExternalChangePeriodResponse(Subscription::fromResponse($response['subscription']));
 	}

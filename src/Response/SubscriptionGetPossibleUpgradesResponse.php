@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Package;
  * Class SubscriptionGetPossibleUpgradesResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionGetPossiblePackageChangesResponseObject instead
  */
 class SubscriptionGetPossibleUpgradesResponse {
+
 	/**
 	 * @var Package[]
 	 */
@@ -31,6 +30,11 @@ class SubscriptionGetPossibleUpgradesResponse {
 		return $this->packages;
 	}
 
+    /**
+     * @param array $data
+     *
+     * @return SubscriptionGetPossibleUpgradesResponse
+     */
 	public static function fromResponse($data) {
 		$result = [];
 		foreach ($data['plans'] as $plan) {

@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Subscription;
  * Class SubscriptionExternalCloseResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionExternalCloseResponseObject instead
  */
 class SubscriptionExternalCloseResponse {
+
 	/**
 	 * @var Subscription
 	 */
@@ -31,6 +30,11 @@ class SubscriptionExternalCloseResponse {
 		return $this->subscription;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return SubscriptionExternalCloseResponse
+     */
 	public static function fromResponse($response) {
 		return new SubscriptionExternalCloseResponse(Subscription::fromResponse($response['subscription']));
 	}

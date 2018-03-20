@@ -8,12 +8,12 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserSmsVerificationFinishResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserSmsVerificationFinishResponseObject instead
  */
 class UserSmsVerificationFinishResponse extends UserVerificationFinishResponse {
 
-    /** @var \DateTime|null */
+    /**
+     * @var \DateTime|null
+     */
     private $verifiedAt;
 
     /**
@@ -31,7 +31,7 @@ class UserSmsVerificationFinishResponse extends UserVerificationFinishResponse {
      *
      * @return self
      */
-    public static function fromResponse(array $response) {
+    public static function fromResponse($response) {
         return new self(
             isset($response['user']) ? User::fromResponse($response['user']) : null,
             !empty($response['verifiedAt']) ? new \DateTime($response['verifiedAt']) : null

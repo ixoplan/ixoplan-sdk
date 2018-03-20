@@ -6,15 +6,17 @@ namespace Ixolit\Dislo\Response;
  * Class UserVerificationStartResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionAttachCouponResponseObject instead
  */
 class SubscriptionAttachCouponResponse {
 
-	/** @var bool|null */
+    /**
+     * @var bool|null
+     */
 	private $attached;
 
-	/** @var string|null */
+    /**
+     * @var string|null
+     */
 	private $reason;
 
 	/**

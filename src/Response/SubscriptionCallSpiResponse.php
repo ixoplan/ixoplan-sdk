@@ -2,15 +2,13 @@
 
 namespace Ixolit\Dislo\Response;
 
-
 /**
  * Class SubscriptionCallSpiResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionCallSpiResponseObject instead
  */
 class SubscriptionCallSpiResponse {
+
 	/**
 	 * @var array
 	 */

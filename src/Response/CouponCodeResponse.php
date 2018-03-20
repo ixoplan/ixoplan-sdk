@@ -8,10 +8,9 @@ use Ixolit\Dislo\Client;
  * Class CouponCodeResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated
  */
 abstract class CouponCodeResponse {
+
 	/**
 	 * Coupon code does not exist.
 	 */
@@ -36,9 +35,24 @@ abstract class CouponCodeResponse {
 	 */
 	const REASON_INVALID_EVENT = 'INVALID_EVENT';
 
+    /**
+     * @var string
+     */
 	private $couponCode;
+
+    /**
+     * @var string
+     */
 	private $event;
+
+    /**
+     * @var bool
+     */
 	private $valid;
+
+    /**
+     * @var string
+     */
 	private $reason;
 
 	/**
@@ -103,6 +117,13 @@ abstract class CouponCodeResponse {
 		return $this->event;
 	}
 
+    /**
+     * @param array $response
+     * @param string $couponCode
+     * @param string $event
+     *
+     * @return CouponCodeCheckResponse
+     */
 	public static function fromResponse($response, $couponCode, $event) {
 		return new CouponCodeCheckResponse(
 			$response['valid'],

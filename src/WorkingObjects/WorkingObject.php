@@ -2,7 +2,13 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+/**
+ * Interface WorkingObject
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ */
 interface WorkingObject {
+
 	/**
 	 * @param array $response
 	 *
@@ -14,4 +20,5 @@ interface WorkingObject {
 	 * @return array
 	 */
 	public function toArray();
+
 }

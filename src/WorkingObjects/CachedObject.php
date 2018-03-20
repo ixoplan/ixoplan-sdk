@@ -2,7 +2,6 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
-
 /**
  * Class CachedObject
  *
@@ -10,7 +9,9 @@ namespace Ixolit\Dislo\WorkingObjects;
  */
 class CachedObject {
 
-    /** @var mixed */
+    /**
+     * @var mixed
+     */
     private $object;
 
     /**

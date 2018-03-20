@@ -7,15 +7,17 @@ namespace Ixolit\Dislo\WorkingObjects;
  * Class Coupon
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\CouponObject instead
  */
 class Coupon implements WorkingObject {
 
-	/** @var string */
+    /**
+     * @var string
+     */
 	private $code;
 
-	/** @var string */
+    /**
+     * @var string
+     */
 	private $description;
 
 	/**
@@ -59,9 +61,9 @@ class Coupon implements WorkingObject {
 	 * @return array
 	 */
 	public function toArray() {
-		return [
-			'code' => $this->code,
-			'description' => $this->description,
-		];
+        return [
+            'code'        => $this->code,
+            'description' => $this->description,
+        ];
 	}
 }

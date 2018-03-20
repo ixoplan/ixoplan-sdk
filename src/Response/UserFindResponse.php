@@ -12,6 +12,7 @@ use Ixolit\Dislo\WorkingObjects\User;
  * @deprecated use Ixolit\Dislo\Response\UserFindResponseObject instead
  */
 class UserFindResponse {
+
 	/**
 	 * @var User
 	 */
@@ -31,6 +32,11 @@ class UserFindResponse {
 		return $this->user;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserFindResponse
+     */
 	public static function fromResponse($response) {
 		return new UserFindResponse(User::fromResponse($response['user']));
 	}

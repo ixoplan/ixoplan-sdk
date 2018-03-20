@@ -9,12 +9,12 @@ use Ixolit\Dislo\Redirector\RulesParser;
  * Class MiscGetRedirectorConfigurationResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponseObject instead
  */
 class MiscGetRedirectorConfigurationResponse {
 
-	/** @var Redirector */
+    /**
+     * @var Redirector
+     */
 	private $redirector;
 
 	/**
@@ -37,7 +37,6 @@ class MiscGetRedirectorConfigurationResponse {
 	 * @return self
 	 */
 	public static function fromData($data) {
-
 		$parser = new RulesParser();
 		$rules = $parser->buildRulesFromData($data);
 		$redirector = new Redirector($rules);

@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Subscription;
  * Class SubscriptionExternalCreateResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionExternalCreateResponseObject instead
  */
 class SubscriptionExternalCreateResponse {
+
 	/**
 	 * @var Subscription
 	 */
@@ -31,6 +30,11 @@ class SubscriptionExternalCreateResponse {
 		return $this->subscription;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return SubscriptionExternalCreateResponse
+     */
 	public static function fromResponse($response) {
 		return new SubscriptionExternalCreateResponse(Subscription::fromResponse($response['subscription']));
 	}

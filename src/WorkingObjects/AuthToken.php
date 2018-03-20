@@ -7,10 +7,9 @@ namespace Ixolit\Dislo\WorkingObjects;
  * Class AuthToken
  *
  * @package Ixolit\Dislo\WorkingObjects
- *
- * @deprecated use Ixolit\Dislo\WorkingObjects\AuthTokenObject instead
  */
 class AuthToken implements WorkingObject {
+
 	/**
 	 * @var int
 	 */
@@ -135,24 +134,24 @@ class AuthToken implements WorkingObject {
 	}
 
     /**
+     * @return array
+     */
+    public function toArray() {
+        return [
+            'id'         => $this->getId(),
+            'userId'     => $this->getUserId(),
+            'loginToken' => $this->getToken(),
+            'createdAt'  => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'modifiedAt' => $this->getModifiedAt()->format('Y-m-d H:i:s'),
+            'validUntil' => $this->getValidUntil()->format('Y-m-d H:i:s'),
+            'metaInfo'   => $this->getMetaInfo(),
+        ];
+    }
+
+    /**
      * @return string
      */
 	public function __toString() {
         return $this->token;
     }
-
-    /**
-	 * @return array
-	 */
-	public function toArray() {
-		return [
-			'id' => $this->getId(),
-			'userId' => $this->getUserId(),
-			'loginToken' => $this->getToken(),
-			'createdAt' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-			'modifiedAt' => $this->getModifiedAt()->format('Y-m-d H:i:s'),
-			'validUntil' => $this->getValidUntil()->format('Y-m-d H:i:s'),
-			'metaInfo' => $this->getMetaInfo()
-		];
-	}
 }

@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserChangePasswordResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated
  */
 class UserChangePasswordResponse {
+
 	/**
 	 * @var User
 	 */
@@ -31,6 +30,11 @@ class UserChangePasswordResponse {
 		return $this->user;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserChangePasswordResponse
+     */
 	public static function fromResponse($response) {
 		return new UserChangePasswordResponse(User::fromResponse($response['user']));
 	}

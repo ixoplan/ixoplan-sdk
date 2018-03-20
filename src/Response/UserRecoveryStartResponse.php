@@ -2,19 +2,24 @@
 
 namespace Ixolit\Dislo\Response;
 
-
 /**
  * Class UserRecoveryStartResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserRecoveryStartResponseObject
  */
 class UserRecoveryStartResponse {
 
+    /**
+     * UserRecoveryStartResponse constructor.
+     */
 	public function __construct() {
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return UserRecoveryStartResponse
+     */
 	public static function fromResponse($response) {
 		return new UserRecoveryStartResponse();
 	}

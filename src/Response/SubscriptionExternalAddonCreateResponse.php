@@ -8,10 +8,9 @@ use Ixolit\Dislo\WorkingObjects\Subscription;
  * Class SubscriptionExternalAddonCreateResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\SubscriptionExternalAddonCreateResponseObject instead
  */
 class SubscriptionExternalAddonCreateResponse {
+
 	/**
 	 * @var Subscription
 	 */
@@ -45,6 +44,11 @@ class SubscriptionExternalAddonCreateResponse {
 		return $this->upgradeId;
 	}
 
+    /**
+     * @param array $response
+     *
+     * @return SubscriptionExternalAddonCreateResponse
+     */
 	public static function fromResponse($response) {
 		return new SubscriptionExternalAddonCreateResponse(
 			Subscription::fromResponse($response['subscription']),
