@@ -1,9 +1,9 @@
 <?php
 
-use Ixolit\Dislo\Context\UserContextWrapper;
+use Ixolit\Dislo\Client;
+use Ixolit\Dislo\Context\UserContext;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
-use Ixolit\Dislo\FrontendClient;
 use Ixolit\Dislo\Test\AbstractTestCase;
 use Ixolit\Dislo\Test\Response\TestBillingCloseFlexibleResponse;
 use Ixolit\Dislo\Test\Response\TestBillingGetFlexibleResponse;
@@ -20,13 +20,13 @@ use Ixolit\Dislo\Test\WorkingObjects\FlexibleMock;
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\Test\WorkingObjects\SubscriptionMock;
 use Ixolit\Dislo\Test\WorkingObjects\UserMock;
-use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
-use Ixolit\Dislo\WorkingObjects\User\UserObject;
+use Ixolit\Dislo\WorkingObjects\Subscription;
+use Ixolit\Dislo\WorkingObjects\User;
 
 /**
  * Class UserContextWrapperTest
  */
-class UserContextWrapperTest extends AbstractTestCase {
+class UserContextTest extends AbstractTestCase {
 
     /**
      * @return void
@@ -205,7 +205,7 @@ class UserContextWrapperTest extends AbstractTestCase {
      * @return void
      */
     public function testGetFirstActiveSubscription() {
-        $testResponse = new TestSubscriptionGetAllResponse(SubscriptionObject::STATUS_RUNNING);
+        $testResponse = new TestSubscriptionGetAllResponse(Subscription::STATUS_RUNNING);
         $testSubscriptions = $testResponse->getActiveSubscriptions();
 
         $activeSubscription = $this->createUserContextWrapper($testResponse)->getFirstActiveSubscription();
@@ -662,7 +662,7 @@ class UserContextWrapperTest extends AbstractTestCase {
 
         $convertFromUserWithAuthTokenMethod = $this->getAccessibleMethod(
             'convertFromUserWithAuthToken',
-            UserContextWrapper::class
+            UserContext::class
         );
 
         $this->assertNotEquals($testUser->getAuthToken(), $testUserWithoutToken->getAuthToken());
@@ -681,7 +681,7 @@ class UserContextWrapperTest extends AbstractTestCase {
 
         $getUserIdentifierForClientMethod = $this->getAccessibleMethod(
             'getUserIdentifierForClient',
-            UserContextWrapper::class
+            UserContext::class
         );
 
         $authToken = $getUserIdentifierForClientMethod->invokeArgs($userContextWrapper, []);
@@ -711,17 +711,17 @@ class UserContextWrapperTest extends AbstractTestCase {
     }
 
     /**
-     * @param FrontendClient|array|TestResponseInterface $frontendClient
-     * @param UserObject|null                            $user
+     * @param Client|array|TestResponseInterface $frontendClient
+     * @param User|null                          $user
      *
-     * @return UserContextWrapper
+     * @return UserContext
      */
-    private function createUserContextWrapper($frontendClient, UserObject $user = null) {
-        if (!($frontendClient instanceof FrontendClient)) {
+    private function createUserContextWrapper($frontendClient, User $user = null) {
+        if (!($frontendClient instanceof Client)) {
             $frontendClient = $this->createFrontendClient($frontendClient);
         }
 
-        return new UserContextWrapper(
+        return new UserContext(
             $frontendClient,
             $user
                 ? $user

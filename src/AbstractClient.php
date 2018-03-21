@@ -42,9 +42,6 @@ abstract class AbstractClient {
      * @throws DisloException if the $requestClient parameter is missing
      */
     public function __construct(RequestClient $requestClient, $forceTokenMode = true) {
-        if (!($requestClient instanceof RequestClient)) {
-            throw new DisloException('A RequestClient parameter is required!');
-        }
         $this->requestClient  = $requestClient;
         $this->forceTokenMode = $forceTokenMode;
     }
@@ -63,10 +60,32 @@ abstract class AbstractClient {
     }
 
     /**
+     * @param RequestClient $requestClient
+     *
+     * @return $this
+     */
+    public function setRequestClient(RequestClient $requestClient) {
+        $this->requestClient = $requestClient;
+
+        return $this;
+    }
+
+    /**
      * @return RequestClient
      */
     private function getRequestClient() {
         return $this->requestClient;
+    }
+
+    /**
+     * @param bool $forceTokenMode
+     *
+     * @return $this
+     */
+    public function setForceTokenMode($forceTokenMode) {
+        $this->forceTokenMode = $forceTokenMode;
+
+        return $this;
     }
 
     /**

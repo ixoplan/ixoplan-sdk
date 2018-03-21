@@ -374,6 +374,15 @@ class UserContext {
     }
 
     /**
+     * @return $this
+     */
+    public function removeAccountBalanceCache() {
+        $this->accountBalanceCachedObject = null;
+
+        return $this;
+    }
+
+    /**
      * @param bool $cached
      *
      * @return AuthToken[]
@@ -412,15 +421,13 @@ class UserContext {
      * @return $this
      */
     public function changeUserMetaData($userMetaData = []) {
-        $authToken = $this->getUser()->getAuthToken();
-
         $changedUser = $this->getClient()->userChange(
             $this->getUserIdentifierForClient(),
             $this->getUser()->getLanguage(),
             $userMetaData
         )->getUser();
 
-        $this->user = $this->convertFromUserWithAuthToken($changedUser, $authToken);
+        $this->user = $this->convertFromUserWithAuthToken($changedUser);
 
         return $this;
     }
@@ -431,14 +438,12 @@ class UserContext {
      * @return $this
      */
     public function changeUserPassword($newPassword) {
-        $authToken = $this->getUser()->getAuthToken();
-
         $changedUser = $this->getClient()->userChangePassword(
             $this->getUserIdentifierForClient(),
             $newPassword
         )->getUser();
 
-        $this->user = $this->convertFromUserWithAuthToken($changedUser, $authToken);
+        $this->user = $this->convertFromUserWithAuthToken($changedUser);
 
         return $this;
     }
@@ -458,7 +463,20 @@ class UserContext {
      * @return $this
      */
     public function disableUserLogin() {
-        $this->user = $this->getClient()->userDisableLogin($this->getUserIdentifierForClient())->getUser();
+        $changedUser = $this->getClient()->userDisableLogin($this->getUserIdentifierForClient())->getUser();
+
+        $this->user = $this->convertFromUserWithAuthToken($changedUser);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function enableUserLogin() {
+        $changedUser = $this->getClient()->userEnableLogin($this->getUserIdentifierForClient())->getUser();
+
+        $this->user = $this->convertFromUserWithAuthToken($changedUser);
 
         return $this;
     }
@@ -491,7 +509,7 @@ class UserContext {
      *
      * @return User
      */
-    protected function convertFromUserWithAuthToken(User $user, AuthToken $authToken) {
+    protected function convertFromUserWithAuthToken(User $user) {
         $changedUser = new User(
             $user->getUserId(),
             $user->getCreatedAt(),
@@ -502,7 +520,7 @@ class UserContext {
             $user->getMetaData(),
             $user->getCurrencyCode(),
             $user->getVerifiedData(),
-            $authToken
+            $this->getUser()->getAuthToken()
         );
 
         return $changedUser;
