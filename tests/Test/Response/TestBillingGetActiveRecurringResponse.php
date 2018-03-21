@@ -2,9 +2,8 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\RecurringMock;
-use Ixolit\Dislo\WorkingObjects\Billing\RecurringObject;
+use Ixolit\Dislo\WorkingObjects\Recurring;
 
 /**
  * Class TestBillingGetActiveRecurringResponse
@@ -14,7 +13,7 @@ use Ixolit\Dislo\WorkingObjects\Billing\RecurringObject;
 class TestBillingGetActiveRecurringResponse implements TestResponseInterface {
 
     /**
-     * @var RecurringObject
+     * @var Recurring
      */
     private $recurring;
 
@@ -23,7 +22,7 @@ class TestBillingGetActiveRecurringResponse implements TestResponseInterface {
     }
 
     /**
-     * @return RecurringObject
+     * @return Recurring
      */
     public function getRecurring() {
         return $this->recurring;

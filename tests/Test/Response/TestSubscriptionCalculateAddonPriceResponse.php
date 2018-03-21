@@ -2,10 +2,9 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\Test\WorkingObjects\PriceMock;
-use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
+use Ixolit\Dislo\WorkingObjects\Price;
 
 /**
  * Class TestSubscriptionCalculateAddonPriceResponse
@@ -20,7 +19,7 @@ class TestSubscriptionCalculateAddonPriceResponse implements TestResponseInterfa
     private $needsBilling;
 
     /**
-     * @var PriceObject
+     * @var Price
      */
     private $price;
 
@@ -40,7 +39,7 @@ class TestSubscriptionCalculateAddonPriceResponse implements TestResponseInterfa
     }
 
     /**
-     * @return PriceObject
+     * @return Price
      */
     public function getPrice() {
         return $this->price;

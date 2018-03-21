@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\User\AuthTokenObject;
+use Ixolit\Dislo\WorkingObjects\AuthToken;
 
 /**
  * Class AuthTokenMock
@@ -13,10 +13,10 @@ use Ixolit\Dislo\WorkingObjects\User\AuthTokenObject;
 class AuthTokenMock {
 
     /**
-     * @return AuthTokenObject
+     * @return AuthToken
      */
     public static function create() {
-        return new AuthTokenObject(
+        return new AuthToken(
             MockHelper::getFaker()->randomNumber(),
             MockHelper::getFaker()->randomNumber(),
             MockHelper::getFaker()->uuid,

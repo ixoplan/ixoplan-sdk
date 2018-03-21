@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\Subscription\CouponObject;
+use Ixolit\Dislo\WorkingObjects\Coupon;
 
 /**
  * Class CouponMock
@@ -16,15 +16,15 @@ class CouponMock {
      * @var string[]
      */
     protected static $events = [
-        CouponObject::COUPON_EVENT_START,
-        CouponObject::COUPON_EVENT_UPGRADE,
+        Coupon::COUPON_EVENT_START,
+        Coupon::COUPON_EVENT_UPGRADE,
     ];
 
     /**
-     * @return CouponObject
+     * @return Coupon
      */
     public static function create() {
-        return new CouponObject(
+        return new Coupon(
             MockHelper::getFaker()->word,
             MockHelper::getFaker()->words()
         );

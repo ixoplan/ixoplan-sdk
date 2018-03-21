@@ -2,9 +2,7 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Faker\Factory;
-use Ixolit\Dislo\Test\WorkingObjects\CouponMock;
 
 /**
  * Class TestCouponCodeCheckResponse

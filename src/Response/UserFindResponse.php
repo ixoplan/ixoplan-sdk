@@ -8,8 +8,6 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserFindResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated use Ixolit\Dislo\Response\UserFindResponseObject instead
  */
 class UserFindResponse {
 

@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\Subscription\PackageObject;
+use Ixolit\Dislo\WorkingObjects\Package;
 
 /**
  * Class PackageMock
@@ -16,7 +16,7 @@ class PackageMock {
      * @param null $signupAvailable
      * @param bool $withAddonPackages
      *
-     * @return PackageObject
+     * @return Package
      */
     public static function create($signupAvailable = null, $withAddonPackages = true) {
         $displayName = DisplayNameMock::create();
@@ -30,7 +30,7 @@ class PackageMock {
 
         $billingMethod = BillingMethodMock::create();
 
-        return new PackageObject(
+        return new Package(
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->uuid,
             [

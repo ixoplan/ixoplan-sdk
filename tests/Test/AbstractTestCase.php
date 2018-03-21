@@ -3,26 +3,26 @@
 namespace Ixolit\Dislo\Test;
 
 
-use Ixolit\Dislo\FrontendClient;
+use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Test\Request\TestRequestClient;
 use Ixolit\Dislo\Test\Response\TestResponseInterface;
-use Ixolit\Dislo\WorkingObjects\Billing\BillingEventObject;
-use Ixolit\Dislo\WorkingObjects\Billing\BillingMethodObject;
-use Ixolit\Dislo\WorkingObjects\Billing\ExternalProfileObject;
-use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
-use Ixolit\Dislo\WorkingObjects\Billing\RecurringObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\CouponObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\CouponUsageObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\DisplayNameObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\NextPackageObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\PackageObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\PackagePeriodObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\PeriodEventObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
-use Ixolit\Dislo\WorkingObjects\User\AuthTokenObject;
-use Ixolit\Dislo\WorkingObjects\User\MetaProfileElementObject;
-use Ixolit\Dislo\WorkingObjects\User\UserObject;
+use Ixolit\Dislo\WorkingObjects\AuthToken;
+use Ixolit\Dislo\WorkingObjects\BillingEvent;
+use Ixolit\Dislo\WorkingObjects\BillingMethod;
+use Ixolit\Dislo\WorkingObjects\Coupon;
+use Ixolit\Dislo\WorkingObjects\CouponUsage;
+use Ixolit\Dislo\WorkingObjects\DisplayName;
+use Ixolit\Dislo\WorkingObjects\ExternalProfile;
+use Ixolit\Dislo\WorkingObjects\Flexible;
+use Ixolit\Dislo\WorkingObjects\MetaProfileElement;
+use Ixolit\Dislo\WorkingObjects\NextPackage;
+use Ixolit\Dislo\WorkingObjects\Package;
+use Ixolit\Dislo\WorkingObjects\PackagePeriod;
+use Ixolit\Dislo\WorkingObjects\PeriodEvent;
+use Ixolit\Dislo\WorkingObjects\Price;
+use Ixolit\Dislo\WorkingObjects\Recurring;
+use Ixolit\Dislo\WorkingObjects\Subscription;
+use Ixolit\Dislo\WorkingObjects\User;
 use PHPUnit\Framework\TestCase;
 
 
@@ -34,16 +34,16 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractTestCase extends TestCase {
 
     /**
-     * @param BillingMethodObject|null $billingMethod
-     * @param BillingMethodObject|null $testBillingMethod
+     * @param BillingMethod|null $billingMethod
+     * @param BillingMethod|null $testBillingMethod
      *
      * @return $this
      */
     protected function compareBillingMethod(
-        BillingMethodObject $billingMethod = null,
-        BillingMethodObject $testBillingMethod = null
+        BillingMethod $billingMethod = null,
+        BillingMethod $testBillingMethod = null
     ) {
-        if ($this->compareNonObject($billingMethod, $testBillingMethod, BillingMethodObject::class)) {
+        if ($this->compareNonObject($billingMethod, $testBillingMethod, BillingMethod::class)) {
             return $this;
         }
 
@@ -60,16 +60,16 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param FlexibleObject|null $flexible
-     * @param FlexibleObject|null $testFlexible
+     * @param Flexible|null $flexible
+     * @param Flexible|null $testFlexible
      *
      * @return $this
      */
     protected function compareFlexible(
-        FlexibleObject $flexible = null,
-        FlexibleObject $testFlexible = null
+        Flexible $flexible = null,
+        Flexible $testFlexible = null
     ) {
-        if ($this->compareNonObject($flexible, $testFlexible, FlexibleObject::class)) {
+        if ($this->compareNonObject($flexible, $testFlexible, Flexible::class)) {
             return $this;
         }
 
@@ -84,16 +84,16 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param BillingEventObject|null $billingEvent
-     * @param BillingEventObject|null $testBillingEvent
+     * @param BillingEvent|null $billingEvent
+     * @param BillingEvent|null $testBillingEvent
      *
      * @return $this
      */
     protected function compareBillingEvent(
-        BillingEventObject $billingEvent = null,
-        BillingEventObject $testBillingEvent = null
+        BillingEvent $billingEvent = null,
+        BillingEvent $testBillingEvent = null
     ) {
-        if ($this->compareNonObject($billingEvent, $testBillingEvent, BillingEventObject::class)) {
+        if ($this->compareNonObject($billingEvent, $testBillingEvent, BillingEvent::class)) {
             return $this;
         }
 
@@ -114,16 +114,16 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param SubscriptionObject|null $subscription
-     * @param SubscriptionObject|null $testSubscription
+     * @param Subscription|null $subscription
+     * @param Subscription|null $testSubscription
      *
      * @return $this
      */
     protected function compareSubscription(
-        SubscriptionObject $subscription = null,
-        SubscriptionObject $testSubscription = null
+        Subscription $subscription = null,
+        Subscription $testSubscription = null
     ) {
-        if ($this->compareNonObject($subscription, $testSubscription, SubscriptionObject::class)) {
+        if ($this->compareNonObject($subscription, $testSubscription, Subscription::class)) {
             return $this;
         }
 
@@ -165,13 +165,13 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param PackageObject|null $package
-     * @param PackageObject|null $testPackage
+     * @param Package|null $package
+     * @param Package|null $testPackage
      *
      * @return $this
      */
-    protected function comparePackage(PackageObject $package = null, PackageObject $testPackage = null) {
-        if ($this->compareNonObject($package, $testPackage, PackageObject::class)) {
+    protected function comparePackage(Package $package = null, Package $testPackage = null) {
+        if ($this->compareNonObject($package, $testPackage, Package::class)) {
             return $this;
         }
 
@@ -234,16 +234,16 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param NextPackageObject|null $nextPackage
-     * @param NextPackageObject|null $testNextPackage
+     * @param NextPackage|null $nextPackage
+     * @param NextPackage|null $testNextPackage
      *
      * @return $this
      */
     protected function compareNextPackage(
-        NextPackageObject $nextPackage = null,
-        NextPackageObject $testNextPackage = null
+        NextPackage $nextPackage = null,
+        NextPackage $testNextPackage = null
     ) {
-        if ($this->compareNonObject($nextPackage, $testNextPackage, NextPackageObject::class)) {
+        if ($this->compareNonObject($nextPackage, $testNextPackage, NextPackage::class)) {
             return $this;
         }
 
@@ -290,16 +290,16 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param PackagePeriodObject|null $packagePeriod
-     * @param PackagePeriodObject|null $testPackagePeriod
+     * @param PackagePeriod|null $packagePeriod
+     * @param PackagePeriod|null $testPackagePeriod
      *
      * @return $this
      */
     protected function comparePackagePeriod(
-        PackagePeriodObject $packagePeriod = null,
-        PackagePeriodObject $testPackagePeriod = null
+        PackagePeriod $packagePeriod = null,
+        PackagePeriod $testPackagePeriod = null
     ) {
-        if ($this->compareNonObject($packagePeriod, $testPackagePeriod, PackagePeriodObject::class)) {
+        if ($this->compareNonObject($packagePeriod, $testPackagePeriod, PackagePeriod::class)) {
             return $this;
         }
 
@@ -324,13 +324,13 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param PriceObject|null $price
-     * @param PriceObject|null $testPrice
+     * @param Price|null $price
+     * @param Price|null $testPrice
      *
      * @return $this
      */
-    protected function comparePrice(PriceObject $price = null, PriceObject $testPrice = null) {
-        if ($this->compareNonObject($price, $testPrice, PriceObject::class)) {
+    protected function comparePrice(Price $price = null, Price $testPrice = null) {
+        if ($this->compareNonObject($price, $testPrice, Price::class)) {
             return $this;
         }
 
@@ -354,16 +354,16 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param CouponUsageObject|null $couponUsage
-     * @param CouponUsageObject|null $testCouponUsage
+     * @param CouponUsage|null $couponUsage
+     * @param CouponUsage|null $testCouponUsage
      *
      * @return $this
      */
     protected function compareCouponUsage(
-        CouponUsageObject $couponUsage = null,
-        CouponUsageObject $testCouponUsage = null
+        CouponUsage $couponUsage = null,
+        CouponUsage $testCouponUsage = null
     ) {
-        if ($this->compareNonObject($couponUsage, $testCouponUsage, CouponUsageObject::class)) {
+        if ($this->compareNonObject($couponUsage, $testCouponUsage, CouponUsage::class)) {
             return $this;
         }
 
@@ -376,13 +376,13 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param CouponObject|null $coupon
-     * @param CouponObject|null $testCoupon
+     * @param Coupon|null $coupon
+     * @param Coupon|null $testCoupon
      *
      * @return $this
      */
-    protected function compareCoupon(CouponObject $coupon = null, CouponObject $testCoupon = null) {
-        if ($this->compareNonObject($coupon, $testCoupon, CouponObject::class)) {
+    protected function compareCoupon(Coupon $coupon = null, Coupon $testCoupon = null) {
+        if ($this->compareNonObject($coupon, $testCoupon, Coupon::class)) {
             return $this;
         }
 
@@ -393,16 +393,16 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param PeriodEventObject|null $periodEvent
-     * @param PeriodEventObject|null $testPeriodEvent
+     * @param PeriodEvent|null $periodEvent
+     * @param PeriodEvent|null $testPeriodEvent
      *
      * @return $this
      */
     protected function comparePeriodEvent(
-        PeriodEventObject $periodEvent = null,
-        PeriodEventObject $testPeriodEvent = null
+        PeriodEvent $periodEvent = null,
+        PeriodEvent $testPeriodEvent = null
     ) {
-        if ($this->compareNonObject($periodEvent, $testPeriodEvent, PeriodEventObject::class)) {
+        if ($this->compareNonObject($periodEvent, $testPeriodEvent, PeriodEvent::class)) {
             return $this;
         }
 
@@ -418,16 +418,16 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param DisplayNameObject|null $displayName
-     * @param DisplayNameObject|null $testDisplayName
+     * @param DisplayName|null $displayName
+     * @param DisplayName|null $testDisplayName
      *
      * @return $this
      */
     protected function compareDisplayName(
-        DisplayNameObject $displayName = null,
-        DisplayNameObject $testDisplayName = null
+        DisplayName $displayName = null,
+        DisplayName $testDisplayName = null
     ) {
-        if ($this->compareNonObject($displayName, $testDisplayName, DisplayNameObject::class)) {
+        if ($this->compareNonObject($displayName, $testDisplayName, DisplayName::class)) {
             return $this;
         }
 
@@ -438,16 +438,16 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param ExternalProfileObject|null $externalProfile
-     * @param ExternalProfileObject|null $testExternalProfile
+     * @param ExternalProfile|null $externalProfile
+     * @param ExternalProfile|null $testExternalProfile
      *
      * @return $this
      */
     protected function compareExternalProfile(
-        ExternalProfileObject $externalProfile = null,
-        ExternalProfileObject $testExternalProfile = null
+        ExternalProfile $externalProfile = null,
+        ExternalProfile $testExternalProfile = null
     ) {
-        if ($this->compareNonObject($externalProfile, $testExternalProfile, ExternalProfileObject::class)) {
+        if ($this->compareNonObject($externalProfile, $testExternalProfile, ExternalProfile::class)) {
             return $this;
         }
 
@@ -460,13 +460,13 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param RecurringObject|null $recurring
-     * @param RecurringObject|null $testRecurring
+     * @param Recurring|null $recurring
+     * @param Recurring|null $testRecurring
      *
      * @return $this
      */
-    protected function compareRecurring(RecurringObject $recurring = null, RecurringObject $testRecurring = null) {
-        if ($this->compareNonObject($recurring, $testRecurring, RecurringObject::class)) {
+    protected function compareRecurring(Recurring $recurring = null, Recurring $testRecurring = null) {
+        if ($this->compareNonObject($recurring, $testRecurring, Recurring::class)) {
             return $this;
         }
 
@@ -484,13 +484,13 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param UserObject|null $user
-     * @param UserObject|null $testUser
+     * @param User|null $user
+     * @param User|null $testUser
      *
      * @return $this
      */
-    protected function compareUser(UserObject $user = null, UserObject $testUser = null) {
-        if ($this->compareNonObject($user, $testUser, UserObject::class)) {
+    protected function compareUser(User $user = null, User $testUser = null) {
+        if ($this->compareNonObject($user, $testUser, User::class)) {
             return $this;
         }
 
@@ -509,13 +509,13 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param AuthTokenObject|null $authToken
-     * @param AuthTokenObject|null $testAuthToken
+     * @param AuthToken|null $authToken
+     * @param AuthToken|null $testAuthToken
      *
      * @return $this
      */
-    protected function compareAuthToken(AuthTokenObject $authToken = null, AuthTokenObject $testAuthToken = null) {
-        if ($this->compareNonObject($authToken, $testAuthToken, AuthTokenObject::class)) {
+    protected function compareAuthToken(AuthToken $authToken = null, AuthToken $testAuthToken = null) {
+        if ($this->compareNonObject($authToken, $testAuthToken, AuthToken::class)) {
             return $this;
         }
 
@@ -531,17 +531,17 @@ abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * @param MetaProfileElementObject|null $metaProfileElement
-     * @param MetaProfileElementObject|null $testMetaProfileElement
+     * @param MetaProfileElement|null $metaProfileElement
+     * @param MetaProfileElement|null $testMetaProfileElement
      *
      * @return $this
      */
     protected function compareMetaProfileElement(
-        MetaProfileElementObject $metaProfileElement = null,
-        MetaProfileElementObject $testMetaProfileElement = null
+        MetaProfileElement $metaProfileElement = null,
+        MetaProfileElement $testMetaProfileElement = null
     ) {
         if (
-            $this->compareNonObject($metaProfileElement, $testMetaProfileElement, MetaProfileElementObject::class)
+            $this->compareNonObject($metaProfileElement, $testMetaProfileElement, MetaProfileElement::class)
         ) {
             return $this;
         }
@@ -589,10 +589,10 @@ abstract class AbstractTestCase extends TestCase {
      * @param array|TestResponseInterface $response
      * @param bool                        $forceTokenMode
      *
-     * @return FrontendClient
+     * @return Client
      */
     protected function createFrontendClient($response = [], $forceTokenMode = true) {
-        return new FrontendClient(
+        return new Client(
             $this->createTestRequestClient($response),
             $forceTokenMode
         );

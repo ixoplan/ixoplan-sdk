@@ -2,10 +2,9 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\Test\WorkingObjects\PackageMock;
-use Ixolit\Dislo\WorkingObjects\Subscription\PackageObject;
+use Ixolit\Dislo\WorkingObjects\Package;
 
 /**
  * Class TestPackageListResponse
@@ -15,7 +14,7 @@ use Ixolit\Dislo\WorkingObjects\Subscription\PackageObject;
 class TestPackageListResponse implements TestResponseInterface {
 
     /**
-     * @var PackageObject[]
+     * @var Package[]
      */
     private $packages;
 
@@ -33,7 +32,7 @@ class TestPackageListResponse implements TestResponseInterface {
     }
 
     /**
-     * @return PackageObject[]
+     * @return Package[]
      */
     public function getPackages() {
         return $this->packages;

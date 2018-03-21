@@ -282,9 +282,11 @@ class Package extends AbstractWorkingObject {
 		}
 
 		$billingMethods = [];
-		foreach ($this->billingMethods as $billingMethod) {
-			$billingMethods[] = $billingMethod->toArray();
-		}
+		if (!\is_null($this->billingMethods)) {
+            foreach ($this->billingMethods as $billingMethod) {
+                $billingMethods[] = $billingMethod->toArray();
+            }
+        }
 
 		return [
             '_type'                        => 'Package',

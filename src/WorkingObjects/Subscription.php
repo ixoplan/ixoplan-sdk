@@ -20,6 +20,9 @@ class Subscription extends AbstractWorkingObject {
 	const STATUS_SUSPENDED_RUNNING = 'suspended_running';
 	const STATUS_SUSPENDED_CANCELED = 'suspended_canceled';
 
+    const PLAN_CHANGE_IMMEDIATE = 'immediate';
+    const PLAN_CHANGE_QUEUED    = 'queued';
+
 	/**
 	 * @var int
 	 */

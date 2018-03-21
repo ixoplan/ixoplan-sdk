@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\Subscription\NextPackageObject;
+use Ixolit\Dislo\WorkingObjects\NextPackage;
 
 /**
  * Class NextPackageMock
@@ -15,7 +15,7 @@ class NextPackageMock {
     /**
      * @param bool $withAddonPackages
      *
-     * @return NextPackageObject
+     * @return NextPackage
      */
     public static function create($withAddonPackages = true) {
         $displayName = DisplayNameMock::create();
@@ -27,7 +27,7 @@ class NextPackageMock {
             $addonPackages[$addonPackage->getPackageIdentifier()] = $addonPackage;
         }
 
-        return new NextPackageObject(
+        return new NextPackage(
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->uuid,
             [

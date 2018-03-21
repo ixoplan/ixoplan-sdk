@@ -2,11 +2,10 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\Test\WorkingObjects\PriceMock;
-use Ixolit\Dislo\WorkingObjects\Subscription\CouponObject;
-use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
+use Ixolit\Dislo\WorkingObjects\Coupon;
+use Ixolit\Dislo\WorkingObjects\Price;
 
 /**
  * Class TestCouponCodeValidateUpgradeResponse
@@ -36,12 +35,12 @@ class TestCouponCodeValidateUpgradeResponse implements TestResponseInterface {
     private $reason;
 
     /**
-     * @var PriceObject
+     * @var Price
      */
     private $discountedPrice;
 
     /**
-     * @var PriceObject|null
+     * @var Price|null
      */
     private $recurringPrice;
 
@@ -50,7 +49,7 @@ class TestCouponCodeValidateUpgradeResponse implements TestResponseInterface {
      */
     public function __construct() {
         $this->couponCode = MockHelper::getFaker()->word;
-        $this->event = CouponObject::COUPON_EVENT_UPGRADE;
+        $this->event = Coupon::COUPON_EVENT_UPGRADE;
         $this->valid = MockHelper::getFaker()->boolean();
         $this->reason = MockHelper::getFaker()->word;
         $this->discountedPrice = PriceMock::create();
@@ -86,14 +85,14 @@ class TestCouponCodeValidateUpgradeResponse implements TestResponseInterface {
     }
 
     /**
-     * @return PriceObject
+     * @return Price
      */
     public function getDiscountedPrice() {
         return $this->discountedPrice;
     }
 
     /**
-     * @return PriceObject|null
+     * @return Price|null
      */
     public function getRecurringPrice() {
         return $this->recurringPrice;

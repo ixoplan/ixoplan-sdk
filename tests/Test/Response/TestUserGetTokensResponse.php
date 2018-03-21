@@ -2,10 +2,9 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\AuthTokenMock;
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
-use Ixolit\Dislo\WorkingObjects\User\AuthTokenObject;
+use Ixolit\Dislo\WorkingObjects\AuthToken;
 
 /**
  * Class TestUserGetTokensResponse
@@ -15,7 +14,7 @@ use Ixolit\Dislo\WorkingObjects\User\AuthTokenObject;
 class TestUserGetTokensResponse implements TestResponseInterface {
 
     /**
-     * @var AuthTokenObject[]
+     * @var AuthToken[]
      */
     private $tokens;
 
@@ -33,7 +32,7 @@ class TestUserGetTokensResponse implements TestResponseInterface {
     }
 
     /**
-     * @return AuthTokenObject[]
+     * @return AuthToken[]
      */
     public function getTokens() {
         return $this->tokens;

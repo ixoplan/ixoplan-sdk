@@ -3,8 +3,8 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\User\AuthTokenObject;
-use Ixolit\Dislo\WorkingObjects\User\UserObject;
+use Ixolit\Dislo\WorkingObjects\AuthToken;
+use Ixolit\Dislo\WorkingObjects\User;
 
 /**
  * Class UserMock
@@ -17,10 +17,10 @@ class UserMock {
      * @param bool|null $withAuthToken
      * @param bool|null $loginDisabled
      *
-     * @return UserObject
+     * @return User
      */
     public static function create($withAuthToken = null, $loginDisabled = null) {
-        return new UserObject(
+        return new User(
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->dateTime(),
             !\is_null($loginDisabled)
@@ -43,13 +43,13 @@ class UserMock {
     }
 
     /**
-     * @param UserObject           $user
-     * @param AuthTokenObject|null $authToken
+     * @param User           $user
+     * @param AuthToken|null $authToken
      *
-     * @return UserObject
+     * @return User
      */
-    public static function changeAuthToken(UserObject $user, AuthTokenObject $authToken = null) {
-        return new UserObject(
+    public static function changeAuthToken(User $user, AuthToken $authToken = null) {
+        return new User(
             $user->getUserId(),
             $user->getCreatedAt(),
             $user->isLoginDisabled(),
@@ -64,13 +64,13 @@ class UserMock {
     }
 
     /**
-     * @param UserObject $user
-     * @param array      $metaData
+     * @param User  $user
+     * @param array $metaData
      *
-     * @return UserObject
+     * @return User
      */
-    public static function changeUserMetaData(UserObject $user, $metaData = []) {
-        return new UserObject(
+    public static function changeUserMetaData(User $user, $metaData = []) {
+        return new User(
             $user->getUserId(),
             $user->getCreatedAt(),
             $user->isLoginDisabled(),
@@ -85,13 +85,13 @@ class UserMock {
     }
 
     /**
-     * @param UserObject $user
-     * @param bool       $loginDisabled
+     * @param User $user
+     * @param bool $loginDisabled
      *
-     * @return UserObject
+     * @return User
      */
-    public static function changeUserIsLoginDisabled(UserObject $user, $loginDisabled) {
-        return new UserObject(
+    public static function changeUserIsLoginDisabled(User $user, $loginDisabled) {
+        return new User(
             $user->getUserId(),
             $user->getCreatedAt(),
             $loginDisabled,

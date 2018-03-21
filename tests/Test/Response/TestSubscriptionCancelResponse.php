@@ -2,9 +2,8 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\SubscriptionMock;
-use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjects\Subscription;
 
 /**
  * Class TestSubscriptionCancelResponse
@@ -14,7 +13,7 @@ use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
 class TestSubscriptionCancelResponse implements TestResponseInterface {
 
     /**
-     * @var SubscriptionObject
+     * @var Subscription
      */
     private $subscription;
 
@@ -22,11 +21,11 @@ class TestSubscriptionCancelResponse implements TestResponseInterface {
      * TestSubscriptionCancelResponse constructor.
      */
     public function __construct() {
-        $this->subscription = SubscriptionMock::create(SubscriptionObject::STATUS_CANCELED);
+        $this->subscription = SubscriptionMock::create(Subscription::STATUS_CANCELED);
     }
 
     /**
-     * @return SubscriptionObject
+     * @return Subscription
      */
     public function getSubscription() {
         return $this->subscription;

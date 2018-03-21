@@ -2,7 +2,6 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 /**
  * Class TestUserDeleteResponse
  *

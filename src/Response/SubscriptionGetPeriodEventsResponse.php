@@ -29,6 +29,7 @@ class SubscriptionGetPeriodEventsResponse {
      */
     public function __construct($periodEvents, $totalCount) {
         $this->periodEvents = $periodEvents;
+        $this->totalCount = $totalCount;
     }
 
     /**

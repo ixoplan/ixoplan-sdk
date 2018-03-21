@@ -2,8 +2,7 @@
 
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
-
-use Ixolit\Dislo\WorkingObjects\Billing\ExternalProfileObject;
+use Ixolit\Dislo\WorkingObjects\ExternalProfile;
 
 /**
  * Class ExternalProfileMock
@@ -13,10 +12,10 @@ use Ixolit\Dislo\WorkingObjects\Billing\ExternalProfileObject;
 class ExternalProfileMock {
 
     /**
-     * @return ExternalProfileObject
+     * @return ExternalProfile
      */
     public static function create() {
-        return new ExternalProfileObject(
+        return new ExternalProfile(
             MockHelper::getFaker()->randomNumber(),
             MockHelper::getFaker()->randomNumber(),
             [

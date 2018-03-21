@@ -2,9 +2,8 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\UserMock;
-use Ixolit\Dislo\WorkingObjects\User\UserObject;
+use Ixolit\Dislo\WorkingObjects\User;
 
 /**
  * Class TestUserChangeResponse
@@ -16,9 +15,9 @@ class TestUserChangeResponse extends AbstractTestUserResponse implements TestRes
     /**
      * TestUserChangeResponseExtends constructor.
      *
-     * @param UserObject|null $user
+     * @param User|null $user
      */
-    public function __construct(UserObject $user = null) {
+    public function __construct(User $user = null) {
         parent::__construct(
             $user
                 ? $user

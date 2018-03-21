@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
+use Ixolit\Dislo\WorkingObjects\Flexible;
 
 /**
  * Class FlexibleMock
@@ -16,27 +16,27 @@ class FlexibleMock {
      * @var array
      */
     protected static $states = [
-        FlexibleObject::STATUS_ACTIVE,
-        FlexibleObject::STATUS_PENDING,
-        FlexibleObject::STATUS_CLOSED,
+        Flexible::STATUS_ACTIVE,
+        Flexible::STATUS_PENDING,
+        Flexible::STATUS_CLOSED,
     ];
 
     /**
      * @param string|null $status
      *
-     * @return FlexibleObject
+     * @return Flexible
      */
     public static function create($status = null) {
         $billingMethod = BillingMethodMock::create();
 
-        return new FlexibleObject(
+        return new Flexible(
             MockHelper::getFaker()->uuid,
             (
                     \is_null($status)
                     && \in_array($status, [
-                        FlexibleObject::STATUS_ACTIVE,
-                        FlexibleObject::STATUS_PENDING,
-                        FlexibleObject::STATUS_CLOSED,
+                        Flexible::STATUS_ACTIVE,
+                        Flexible::STATUS_PENDING,
+                        Flexible::STATUS_CLOSED,
                     ])
                 )
                 ? self::randomStatus()

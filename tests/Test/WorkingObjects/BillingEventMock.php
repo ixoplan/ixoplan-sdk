@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\Billing\BillingEventObject;
+use Ixolit\Dislo\WorkingObjects\BillingEvent;
 
 /**
  * Class BillingEventMock
@@ -16,31 +16,31 @@ class BillingEventMock {
      * @var string[]
      */
     protected static $types = [
-        BillingEventObject::TYPE_AUTHORIZE,
-        BillingEventObject::TYPE_CHARGE,
-        BillingEventObject::TYPE_CHARGEBACK,
-        BillingEventObject::TYPE_REFUND,
+        BillingEvent::TYPE_AUTHORIZE,
+        BillingEvent::TYPE_CHARGE,
+        BillingEvent::TYPE_CHARGEBACK,
+        BillingEvent::TYPE_REFUND,
     ];
 
     /**
      * @var string[]
      */
     protected static $states = [
-        BillingEventObject::STATUS_SUCCESS,
-        BillingEventObject::STATUS_REQUESTED,
-        BillingEventObject::STATUS_ERROR,
+        BillingEvent::STATUS_SUCCESS,
+        BillingEvent::STATUS_REQUESTED,
+        BillingEvent::STATUS_ERROR,
     ];
 
     /**
      * @param string|null $type
      * @param string|null $status
      *
-     * @return BillingEventObject
+     * @return BillingEvent
      */
     public static function create($type = null, $status = null) {
         $billingMethod = BillingMethodMock::create(true);
 
-        return new BillingEventObject(
+        return new BillingEvent(
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->randomNumber(),
             MockHelper::getFaker()->currencyCode,

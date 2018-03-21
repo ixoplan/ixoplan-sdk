@@ -3,8 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Faker\Factory;
-use Ixolit\Dislo\WorkingObjects\Billing\RecurringObject;
+use Ixolit\Dislo\WorkingObjects\Recurring;
 
 /**
  * Class RecurringMock
@@ -17,17 +16,17 @@ class RecurringMock {
      * @var string[]
      */
     protected static $states = [
-        RecurringObject::STATUS_CANCELED,
-        RecurringObject::STATUS_PENDING,
-        RecurringObject::STATUS_CLOSED,
-        RecurringObject::STATUS_ACTIVE,
+        Recurring::STATUS_CANCELED,
+        Recurring::STATUS_PENDING,
+        Recurring::STATUS_CLOSED,
+        Recurring::STATUS_ACTIVE,
     ];
 
     /**
-     * @return RecurringObject
+     * @return Recurring
      */
     public static function create() {
-        return new RecurringObject(
+        return new Recurring(
             MockHelper::getFaker()->uuid,
             self::randomStatus(),
             MockHelper::getFaker()->uuid,

@@ -2,11 +2,10 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
-use Ixolit\Dislo\FrontendClient;
+use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Test\WorkingObjects\BillingMethodMock;
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
-use Ixolit\Dislo\WorkingObjects\Billing\BillingMethodObject;
+use Ixolit\Dislo\WorkingObjects\BillingMethod;
 
 
 /**
@@ -17,12 +16,12 @@ use Ixolit\Dislo\WorkingObjects\Billing\BillingMethodObject;
 class TestBillingMethodsGetResponse implements TestResponseInterface {
 
     /**
-     * @var BillingMethodObject[]
+     * @var BillingMethod[]
      */
     private $billingMethodsWithoutRequirement;
 
     /**
-     * @var BillingMethodObject[]
+     * @var BillingMethod[]
      */
     private $billingMethodsWithRequirement;
 
@@ -42,14 +41,14 @@ class TestBillingMethodsGetResponse implements TestResponseInterface {
     }
 
     /**
-     * @return BillingMethodObject[]
+     * @return BillingMethod[]
      */
     public function getBillingMethodsWithoutRequirement() {
         return $this->billingMethodsWithoutRequirement;
     }
 
     /**
-     * @return BillingMethodObject[]
+     * @return BillingMethod[]
      */
     public function getBillingMethodsWithRequirement() {
         return $this->billingMethodsWithRequirement;
@@ -63,11 +62,11 @@ class TestBillingMethodsGetResponse implements TestResponseInterface {
      */
     public function handleRequest($uri, array $data = []) {
         switch ($uri) {
-            case FrontendClient::API_URI_BILLING_METHODS_GET_FOR_PACKAGE:
+            case Client::API_URI_BILLING_METHODS_GET_FOR_PACKAGE:
                 $billingMethods = $this->getBillingMethodsWithRequirement();
 
                 break;
-            case FrontendClient::API_URI_BILLING_METHODS_GET:
+            case Client::API_URI_BILLING_METHODS_GET:
                 $billingMethods = $this->getBillingMethodsWithoutRequirement();
 
                 break;

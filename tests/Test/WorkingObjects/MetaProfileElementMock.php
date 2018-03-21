@@ -3,8 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\User\MetaProfileElementObject;
-
+use Ixolit\Dislo\WorkingObjects\MetaProfileElement;
 
 /**
  * Class MetaProfileElementMock
@@ -14,10 +13,10 @@ use Ixolit\Dislo\WorkingObjects\User\MetaProfileElementObject;
 class MetaProfileElementMock {
 
     /**
-     * @return MetaProfileElementObject
+     * @return MetaProfileElement
      */
     public static function create() {
-        return new MetaProfileElementObject(
+        return new MetaProfileElement(
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->boolean(),
             MockHelper::getFaker()->boolean()

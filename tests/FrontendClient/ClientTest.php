@@ -1,81 +1,76 @@
 <?php
 
-
+use Ixolit\Dislo\Client;
 use Ixolit\Dislo\Exceptions\AuthenticationException;
 use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
 use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\DisloException;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
-use Ixolit\Dislo\FrontendClient;
-use Ixolit\Dislo\Response\Billing\BillingCloseActiveRecurringResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingCloseFlexibleResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingCreateFlexibleResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingCreatePaymentResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingExternalCreateChargebackByEventIdResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingExternalCreateChargebackByTransactionIdResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingExternalCreateChargeResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingExternalGetProfileByExternalIdResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingExternalGetProfileBySubscriptionIdResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingGetActiveRecurringResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingGetEventResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingGetEventsForUserResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingGetFlexibleByIdentifierResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingGetFlexibleResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingMethodsGetAvailableResponseObject;
-use Ixolit\Dislo\Response\Billing\BillingMethodsGetResponseObject;
-use Ixolit\Dislo\Response\Subscription\CouponCodeCheckResponseObject;
-use Ixolit\Dislo\Response\Subscription\CouponCodeValidateNewResponseObject;
-use Ixolit\Dislo\Response\Subscription\CouponCodeValidateUpgradeResponseObject;
-use Ixolit\Dislo\Response\Subscription\PackageGetResponseObject;
-use Ixolit\Dislo\Response\Subscription\PackagesListResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionAttachCouponResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionCalculateAddonPriceResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionCalculatePackageChangeResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionCalculatePriceResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionCallSpiResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionCancelPackageChangeResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionCancelResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionChangeResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionCloseResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionCreateAddonResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionCreateResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionExternalAddonCreateResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionExternalChangePeriodResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionExternalChangeResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionExternalCloseResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionExternalCreateResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionFireEventResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionGetAllResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionGetPeriodEventsResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionGetPossiblePackageChangesResponseObject;
-use Ixolit\Dislo\Response\Subscription\SubscriptionGetResponseObject;
-use Ixolit\Dislo\Response\User\UserAuthenticateResponseObject;
-use Ixolit\Dislo\Response\User\UserChangePasswordResponseObject;
-use Ixolit\Dislo\Response\User\UserChangeResponseObject;
-use Ixolit\Dislo\Response\User\UserCreateResponseObject;
-use Ixolit\Dislo\Response\User\UserDeauthenticateResponseObject;
-use Ixolit\Dislo\Response\User\UserDeleteResponseObject;
-use Ixolit\Dislo\Response\User\UserDisableLoginResponseObject;
-use Ixolit\Dislo\Response\User\UserEmailVerificationFinishResponseObject;
-use Ixolit\Dislo\Response\User\UserEmailVerificationStartResponseObject;
-use Ixolit\Dislo\Response\User\UserEnableLoginResponseObject;
-use Ixolit\Dislo\Response\User\UserExtendTokenResponseObject;
-use Ixolit\Dislo\Response\User\UserFindResponseObject;
-use Ixolit\Dislo\Response\User\UserFireEventResponseObject;
-use Ixolit\Dislo\Response\User\UserGetAuthenticatedResponseObject;
-use Ixolit\Dislo\Response\User\UserGetBalanceResponseObject;
-use Ixolit\Dislo\Response\User\UserGetMetaProfileResponseObject;
-use Ixolit\Dislo\Response\User\UserGetResponseObject;
-use Ixolit\Dislo\Response\User\UserGetTokensResponseObject;
-use Ixolit\Dislo\Response\User\UserPhoneVerificationFinishResponseObject;
-use Ixolit\Dislo\Response\User\UserPhoneVerificationStartResponseObject;
-use Ixolit\Dislo\Response\User\UserRecoveryCheckResponseObject;
-use Ixolit\Dislo\Response\User\UserRecoveryFinishResponseObject;
-use Ixolit\Dislo\Response\User\UserRecoveryStartResponseObject;
-use Ixolit\Dislo\Response\User\UserSmsVerificationFinishResponseObject;
-use Ixolit\Dislo\Response\User\UserSmsVerificationStartResponseObject;
-use Ixolit\Dislo\Response\User\UserUpdateTokenResponseObject;
+use Ixolit\Dislo\Response\BillingCloseActiveRecurringResponse;
+use Ixolit\Dislo\Response\BillingCloseFlexibleResponse;
+use Ixolit\Dislo\Response\BillingCreateFlexibleResponse;
+use Ixolit\Dislo\Response\BillingCreatePaymentResponse;
+use Ixolit\Dislo\Response\BillingExternalCreateChargebackResponse;
+use Ixolit\Dislo\Response\BillingExternalCreateChargeResponse;
+use Ixolit\Dislo\Response\BillingExternalGetProfileResponse;
+use Ixolit\Dislo\Response\BillingGetActiveRecurringResponse;
+use Ixolit\Dislo\Response\BillingGetEventResponse;
+use Ixolit\Dislo\Response\BillingGetEventsForUserResponse;
+use Ixolit\Dislo\Response\BillingGetFlexibleByIdentifierResponse;
+use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
+use Ixolit\Dislo\Response\BillingMethodsGetAvailableResponse;
+use Ixolit\Dislo\Response\BillingMethodsGetResponse;
+use Ixolit\Dislo\Response\CouponCodeCheckResponse;
+use Ixolit\Dislo\Response\CouponCodeValidateResponse;
+use Ixolit\Dislo\Response\PackageGetResponse;
+use Ixolit\Dislo\Response\PackagesListResponse;
+use Ixolit\Dislo\Response\SubscriptionAttachCouponResponse;
+use Ixolit\Dislo\Response\SubscriptionCalculateAddonPriceResponse;
+use Ixolit\Dislo\Response\SubscriptionCalculatePackageChangeResponse;
+use Ixolit\Dislo\Response\SubscriptionCalculatePriceResponse;
+use Ixolit\Dislo\Response\SubscriptionCallSpiResponse;
+use Ixolit\Dislo\Response\SubscriptionCancelPackageChangeResponse;
+use Ixolit\Dislo\Response\SubscriptionCancelResponse;
+use Ixolit\Dislo\Response\SubscriptionChangeResponse;
+use Ixolit\Dislo\Response\SubscriptionCloseResponse;
+use Ixolit\Dislo\Response\SubscriptionCreateAddonResponse;
+use Ixolit\Dislo\Response\SubscriptionCreateResponse;
+use Ixolit\Dislo\Response\SubscriptionExternalAddonCreateResponse;
+use Ixolit\Dislo\Response\SubscriptionExternalChangePeriodResponse;
+use Ixolit\Dislo\Response\SubscriptionExternalChangeResponse;
+use Ixolit\Dislo\Response\SubscriptionExternalCloseResponse;
+use Ixolit\Dislo\Response\SubscriptionExternalCreateResponse;
+use Ixolit\Dislo\Response\SubscriptionFireEventResponse;
+use Ixolit\Dislo\Response\SubscriptionGetAllResponse;
+use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponse;
+use Ixolit\Dislo\Response\SubscriptionGetPossibleUpgradesResponse;
+use Ixolit\Dislo\Response\SubscriptionGetResponse;
+use Ixolit\Dislo\Response\UserAuthenticateResponse;
+use Ixolit\Dislo\Response\UserChangePasswordResponse;
+use Ixolit\Dislo\Response\UserChangeResponse;
+use Ixolit\Dislo\Response\UserCreateResponse;
+use Ixolit\Dislo\Response\UserDeauthenticateResponse;
+use Ixolit\Dislo\Response\UserDeleteResponse;
+use Ixolit\Dislo\Response\UserDisableLoginResponse;
+use Ixolit\Dislo\Response\UserEmailVerificationFinishResponse;
+use Ixolit\Dislo\Response\UserEmailVerificationStartResponse;
+use Ixolit\Dislo\Response\UserEnableLoginResponse;
+use Ixolit\Dislo\Response\UserFindResponse;
+use Ixolit\Dislo\Response\UserFireEventResponse;
+use Ixolit\Dislo\Response\UserGetAuthenticatedResponse;
+use Ixolit\Dislo\Response\UserGetBalanceResponse;
+use Ixolit\Dislo\Response\UserGetMetaProfileResponse;
+use Ixolit\Dislo\Response\UserGetResponse;
+use Ixolit\Dislo\Response\UserGetTokensResponse;
+use Ixolit\Dislo\Response\UserPhoneVerificationFinishResponse;
+use Ixolit\Dislo\Response\UserPhoneVerificationStartResponse;
+use Ixolit\Dislo\Response\UserRecoveryCheckResponse;
+use Ixolit\Dislo\Response\UserRecoveryFinishResponse;
+use Ixolit\Dislo\Response\UserRecoveryStartResponse;
+use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
+use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
+use Ixolit\Dislo\Response\UserUpdateTokenResponse;
 use Ixolit\Dislo\Test\AbstractTestCase;
 use Ixolit\Dislo\Test\Response\TestBillingCloseActiveRecurringResponse;
 use Ixolit\Dislo\Test\Response\TestBillingCloseFlexibleResponse;
@@ -145,17 +140,17 @@ use Ixolit\Dislo\Test\Response\TestUserRecoveryStartResponse;
 use Ixolit\Dislo\Test\Response\TestUserSmsVerificationFinishResponse;
 use Ixolit\Dislo\Test\Response\TestUserSmsVerificationStartResponse;
 use Ixolit\Dislo\Test\Response\TestUserUpdateTokenResponse;
+use Ixolit\Dislo\Test\WorkingObjects\AuthTokenMock;
 use Ixolit\Dislo\Test\WorkingObjects\BillingEventMock;
 use Ixolit\Dislo\Test\WorkingObjects\CouponMock;
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\Test\WorkingObjects\SubscriptionMock;
 use Ixolit\Dislo\Test\WorkingObjects\UserMock;
-use Ixolit\Dislo\WorkingObjects\User\AuthTokenObject;
 
 /**
- * Class FrontendClientTest
+ * Class ClientTest
  */
-final class FrontendClientTest extends AbstractTestCase {
+final class ClientTest extends AbstractTestCase {
 
     /**
      * @return void
@@ -165,32 +160,31 @@ final class FrontendClientTest extends AbstractTestCase {
         //test the userToData function with a FrontendClient in forceTokenMode
         $frontendClientWithForceTokenMode = $this->createFrontendClient();
 
-        $userToDataMethod = $this->getAccessibleMethod('userToData', FrontendClient::class);
+        $userToDataMethod = $this->getAccessibleMethod('userToData', Client::class);
 
-        $authToken = MockHelper::getFaker()->uuid;
+        $authTokenObject = AuthTokenMock::create();
+
+        $testData = [];
 
         //test auth token string
-        $testData = $userToDataMethod->invokeArgs($frontendClientWithForceTokenMode, [$authToken, []]);
-
-        $this->assertArrayHasKey('authToken', $testData);
-        $this->assertArrayNotHasKey('userId', $testData);
-        $this->assertEquals($testData['authToken'], $authToken);
-
-        $authTokenObject = new AuthTokenObject(
-            MockHelper::getFaker()->randomNumber(),
-            MockHelper::getFaker()->randomNumber(),
-            $authToken,
-            MockHelper::getFaker()->dateTime(),
-            MockHelper::getFaker()->dateTime(),
-            MockHelper::getFaker()->dateTime(),
-            MockHelper::getFaker()->word
+        $testData = $userToDataMethod->invokeArgs(
+            $frontendClientWithForceTokenMode,
+            [
+                $authTokenObject->getToken(),
+                &$testData
+            ]
         );
 
-        $testData = $userToDataMethod->invokeArgs($frontendClientWithForceTokenMode, [$authTokenObject, []]);
+        $this->assertArrayHasKey('authToken', $testData);
+        $this->assertArrayNotHasKey('userId', $testData);
+        $this->assertEquals($testData['authToken'], $authTokenObject->getToken());
+
+        $testData = [];
+        $testData = $userToDataMethod->invokeArgs($frontendClientWithForceTokenMode, [$authTokenObject, &$testData]);
 
         $this->assertArrayHasKey('authToken', $testData);
         $this->assertArrayNotHasKey('userId', $testData);
-        $this->assertEquals($testData['authToken'], $authToken);
+        $this->assertEquals($testData['authToken'], $authTokenObject->getToken());
 
         //test forceTokenMode = false
         $frontendClientWithoutForceTokenMode = $this->createFrontendClient([], false);
@@ -198,7 +192,8 @@ final class FrontendClientTest extends AbstractTestCase {
         //test user id as intC
         $userIdInt = MockHelper::getFaker()->randomNumber();
 
-        $testData = $userToDataMethod->invokeArgs($frontendClientWithoutForceTokenMode, [$userIdInt, []]);
+        $testData = [];
+        $testData = $userToDataMethod->invokeArgs($frontendClientWithoutForceTokenMode, [$userIdInt, &$testData]);
 
         $this->assertArrayHasKey('userId', $testData);
         $this->assertArrayNotHasKey('authToken', $testData);
@@ -207,7 +202,8 @@ final class FrontendClientTest extends AbstractTestCase {
         //test user id as string
         $userIdString = (string)MockHelper::getFaker()->randomNumber();
 
-        $testData = $userToDataMethod->invokeArgs($frontendClientWithoutForceTokenMode, [$userIdString, []]);
+        $testData = [];
+        $testData = $userToDataMethod->invokeArgs($frontendClientWithoutForceTokenMode, [$userIdString, &$testData]);
 
         $this->assertArrayHasKey('userId', $testData);
         $this->assertArrayNotHasKey('authToken', $testData);
@@ -217,7 +213,8 @@ final class FrontendClientTest extends AbstractTestCase {
         //test user object
         $userObject = UserMock::create();
 
-        $testData = $userToDataMethod->invokeArgs($frontendClientWithoutForceTokenMode, [$userObject, []]);
+        $testData = [];
+        $testData = $userToDataMethod->invokeArgs($frontendClientWithoutForceTokenMode, [$userObject, &$testData]);
 
         $this->assertArrayHasKey('userId', $testData);
         $this->assertArrayNotHasKey('authToken', $testData);
@@ -228,14 +225,16 @@ final class FrontendClientTest extends AbstractTestCase {
 
         //user id is null
         $userIdNull = null;
-        $testData = $userToDataMethod->invokeArgs($frontendClientWithoutForceTokenMode, [$userIdNull, []]);
+        $testData = [];
+        $testData = $userToDataMethod->invokeArgs($frontendClientWithoutForceTokenMode, [$userIdNull, &$testData]);
 
         $this->assertArrayNotHasKey('userId', $testData);
         $this->assertArrayNotHasKey('authToken', $testData);
 
         foreach ([true, 1.00, [],] as $testUserId) {
             try {
-                $userToDataMethod->invokeArgs($frontendClientWithoutForceTokenMode, [$testUserId, []]);
+                $testData = [];
+                $userToDataMethod->invokeArgs($frontendClientWithoutForceTokenMode, [$testUserId, &$testData]);
 
                 $this->assertTrue(false);
             } catch (\InvalidArgumentException $e) {
@@ -248,14 +247,12 @@ final class FrontendClientTest extends AbstractTestCase {
      * @return void
      */
     public function testRequest() {
-        $frontendClient = $this->createFrontendClient([]);
-
-        $requestMethod = $this->getAccessibleMethod('request', FrontendClient::class);
+        $requestMethod = $this->getAccessibleMethod('request', Client::class);
 
         //test correct response
-        $frontendClient->setRequestClient($this->createTestRequestClient([
+        $frontendClient = $this->createFrontendClient([
             'success' => true,
-        ]));
+        ]);
 
         $testResponse = $requestMethod->invokeArgs($frontendClient, ['/', []]);
 
@@ -273,7 +270,7 @@ final class FrontendClientTest extends AbstractTestCase {
             ],
         ];
 
-        $frontendClient->setRequestClient($this->createTestRequestClient($errorResponse));
+        $frontendClient = $this->createFrontendClient($errorResponse);
 
         try {
             $requestMethod->invokeArgs($frontendClient, ['/', []]);
@@ -287,7 +284,7 @@ final class FrontendClientTest extends AbstractTestCase {
 
         $errorResponse['errors'][0]['code'] = 9002;
 
-        $frontendClient->setRequestClient($this->createTestRequestClient($errorResponse));
+        $frontendClient = $this->createFrontendClient($errorResponse);
 
         try {
             $requestMethod->invokeArgs($frontendClient, ['/', []]);
@@ -301,7 +298,7 @@ final class FrontendClientTest extends AbstractTestCase {
 
         $errorResponse['errors'][0]['code'] = 9999;
 
-        $frontendClient->setRequestClient($this->createTestRequestClient($errorResponse));
+        $frontendClient = $this->createFrontendClient($errorResponse);
 
         try {
             $requestMethod->invokeArgs($frontendClient, ['/', []]);
@@ -325,7 +322,7 @@ final class FrontendClientTest extends AbstractTestCase {
 
         $billingMethodsGetResponse = $frontendClient->billingMethodsGet();
 
-        $this->assertTrue(($billingMethodsGetResponse instanceof BillingMethodsGetResponseObject));
+        $this->assertTrue(($billingMethodsGetResponse instanceof BillingMethodsGetResponse));
 
         $billingMethods = $billingMethodsGetResponse->getBillingMethods();
 
@@ -349,7 +346,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->countryCode
         );
 
-        $this->assertTrue(($billingMethodsForPackageGetResponse instanceof BillingMethodsGetResponseObject));
+        $this->assertTrue(($billingMethodsForPackageGetResponse instanceof BillingMethodsGetResponse));
 
         $billingMethods = $billingMethodsForPackageGetResponse->getBillingMethods();
 
@@ -378,7 +375,7 @@ final class FrontendClientTest extends AbstractTestCase {
 
         $billingMethodsGetAvailableResponse = $frontendClient->billingMethodsGetAvailable();
 
-        $this->assertTrue(($billingMethodsGetAvailableResponse instanceof BillingMethodsGetAvailableResponseObject));
+        $this->assertTrue(($billingMethodsGetAvailableResponse instanceof BillingMethodsGetAvailableResponse));
 
         $billingMethods = $billingMethodsGetAvailableResponse->getBillingMethods();
 
@@ -408,7 +405,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue(($response instanceof BillingCloseFlexibleResponseObject));
+        $this->assertTrue(($response instanceof BillingCloseFlexibleResponse));
 
         $this->compareFlexible($response->getFlexible(), $testResponse->getFlexible());
     }
@@ -432,7 +429,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->randomNumber()
         );
 
-        $this->assertTrue(($response instanceof BillingCreateFlexibleResponseObject));
+        $this->assertTrue(($response instanceof BillingCreateFlexibleResponse));
 
         $this->compareFlexible($response->getFlexible(), $testResponse->getFlexible());
         $this->assertEquals($testResponse->getRedirectUrl(), $response->getRedirectUrl());
@@ -457,7 +454,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->countryCode
         );
 
-        $this->assertTrue(($response instanceof BillingCreatePaymentResponseObject));
+        $this->assertTrue(($response instanceof BillingCreatePaymentResponse));
 
         $this->assertEquals($response->getRedirectUrl(), $testResponse->getRedirectUrl());
         $this->assertEmpty(\array_diff($response->getMetaData(), $testResponse->getMetaData()));
@@ -487,7 +484,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof BillingExternalCreateChargeResponseObject);
+        $this->assertTrue($response instanceof BillingExternalCreateChargeResponse);
 
         $this->assertEquals($response->getBillingEventId(), $testResponse->getBillingEventId());
     }
@@ -507,7 +504,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof BillingExternalCreateChargebackByTransactionIdResponseObject);
+        $this->assertTrue($response instanceof BillingExternalCreateChargebackResponse);
         $this->assertEquals($response->getBillingEventId(), $testResponse->getBillingEventId());
     }
 
@@ -526,7 +523,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof BillingExternalCreateChargebackByEventIdResponseObject);
+        $this->assertTrue($response instanceof BillingExternalCreateChargebackResponse);
         $this->assertEquals($response->getBillingEventId(), $testResponse->getBillingEventId());
     }
 
@@ -543,7 +540,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof BillingExternalGetProfileByExternalIdResponseObject);
+        $this->assertTrue($response instanceof BillingExternalGetProfileResponse);
         $this->compareExternalProfile($response->getExternalProfile(), $testResponse->getExternalProfile());
     }
 
@@ -560,7 +557,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof BillingExternalGetProfileBySubscriptionIdResponseObject);
+        $this->assertTrue($response instanceof BillingExternalGetProfileResponse);
         $this->compareExternalProfile($response->getExternalProfile(), $testResponse->getExternalProfile());
     }
 
@@ -577,7 +574,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof BillingGetEventResponseObject);
+        $this->assertTrue($response instanceof BillingGetEventResponse);
         $this->compareBillingEvent($response->getBillingEvent(), $testResponse->getBillingEvent());
     }
 
@@ -591,7 +588,7 @@ final class FrontendClientTest extends AbstractTestCase {
 
         $response = $frontendClient->billingGetEventsForUser(MockHelper::getFaker()->uuid);
 
-        $this->assertTrue($response instanceof BillingGetEventsForUserResponseObject);
+        $this->assertTrue($response instanceof BillingGetEventsForUserResponse);
         $this->assertEquals($response->getTotalCount(), $testResponse->getTotalCount());
 
         $testBillingEvents = $testResponse->getBillingEvents();
@@ -619,7 +616,7 @@ final class FrontendClientTest extends AbstractTestCase {
 
         $response = $frontendClient->billingGetFlexible(MockHelper::getFaker()->uuid);
 
-        $this->assertTrue($response instanceof BillingGetFlexibleResponseObject);
+        $this->assertTrue($response instanceof BillingGetFlexibleResponse);
         $this->compareFlexible($response->getFlexible(), $testResponse->getFlexible());
     }
 
@@ -636,7 +633,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof BillingGetFlexibleByIdentifierResponseObject);
+        $this->assertTrue($response instanceof BillingGetFlexibleByIdentifierResponse);
         $this->compareFlexible($response->getFlexible(), $testResponse->getFlexible());
     }
 
@@ -653,7 +650,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof BillingGetActiveRecurringResponseObject);
+        $this->assertTrue($response instanceof BillingGetActiveRecurringResponse);
         $this->compareRecurring($response->getRecurring(), $testResponse->getRecurring());
     }
 
@@ -670,7 +667,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof BillingCloseActiveRecurringResponseObject);
+        $this->assertTrue($response instanceof BillingCloseActiveRecurringResponse);
         $this->compareRecurring($response->getRecurring(), $testResponse->getRecurring());
     }
 
@@ -689,7 +686,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionCalculateAddonPriceResponseObject);
+        $this->assertTrue($response instanceof SubscriptionCalculateAddonPriceResponse);
         $this->assertEquals($response->isNeedsBilling(), $testResponse->needsBilling());
         $this->comparePrice($response->getPrice(), $testResponse->getPrice());
     }
@@ -712,7 +709,7 @@ final class FrontendClientTest extends AbstractTestCase {
             ]
         );
 
-        $this->assertTrue($response instanceof SubscriptionCalculatePackageChangeResponseObject);
+        $this->assertTrue($response instanceof SubscriptionCalculatePackageChangeResponse);
         $this->assertEquals($response->isNeedsBilling(), $testResponse->needsBilling());
         $this->assertEquals($response->isAppliedImmediately(), $testResponse->appliedImmediately());
         $this->comparePrice($response->getPrice(), $testResponse->getPrice());
@@ -737,9 +734,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionCalculatePriceResponseObject);
-        $this->assertEquals($response->isNeedsBilling(), $testResponse->needsBilling());
-        $this->assertEquals($response->isAppliedImmediately(), $testResponse->appliedImmediately());
+        $this->assertTrue($response instanceof SubscriptionCalculatePriceResponse);
         $this->comparePrice($response->getPrice(), $testResponse->getPrice());
         $this->comparePrice($response->getRecurringPrice(), $testResponse->getRecurringPrice());
     }
@@ -757,7 +752,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof  SubscriptionCancelPackageChangeResponseObject);
+        $this->assertTrue($response instanceof  SubscriptionCancelPackageChangeResponse);
 
         $testSubscriptions = $testResponse->getSubscriptions();
 
@@ -790,7 +785,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionCancelResponseObject);
+        $this->assertTrue($response instanceof SubscriptionCancelResponse);
         $this->compareSubscription($response->getSubscription(), $testResponse->getSubscription());
     }
 
@@ -816,7 +811,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionChangeResponseObject);
+        $this->assertTrue($response instanceof SubscriptionChangeResponse);
         $this->compareSubscription($response->getSubscription(), $testResponse->getSubscription());
         $this->assertEquals($response->needsBilling(), $testResponse->needsBilling());
         $this->comparePrice($response->getPrice(), $testResponse->getPrice());
@@ -837,7 +832,7 @@ final class FrontendClientTest extends AbstractTestCase {
 
         $response = $frontendClient->couponCodeCheck($couponCode, $event);
 
-        $this->assertTrue($response instanceof CouponCodeCheckResponseObject);
+        $this->assertTrue($response instanceof CouponCodeCheckResponse);
         $this->assertEquals($response->getCouponCode(), $testResponse->getCouponCode());
         $this->assertEquals($response->getEvent(), $testResponse->getEvent());
         $this->assertEquals($response->getReason(), $testResponse->getReason());
@@ -858,7 +853,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionCloseResponseObject);
+        $this->assertTrue($response instanceof SubscriptionCloseResponse);
         $this->compareSubscription($response->getSubscription(), $testResponse->getSubscription());
     }
 
@@ -879,7 +874,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionCreateAddonResponseObject);
+        $this->assertTrue($response instanceof SubscriptionCreateAddonResponse);
         $this->compareSubscription($response->getSubscription(), $testResponse->getSubscription());
         $this->assertEquals($response->isNeedsBilling(), $testResponse->needsBilling());
         $this->comparePrice($response->getPrice(), $testResponse->getPrice());
@@ -903,7 +898,7 @@ final class FrontendClientTest extends AbstractTestCase {
             ]
         );
 
-        $this->assertTrue($response instanceof SubscriptionCreateResponseObject);
+        $this->assertTrue($response instanceof SubscriptionCreateResponse);
         $this->compareSubscription($response->getSubscription(), $testResponse->getSubscription());
         $this->assertEquals($response->needsBilling(), $testResponse->needsBilling());
         $this->comparePrice($response->getPrice(), $testResponse->getPrice());
@@ -932,7 +927,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionExternalChangeResponseObject);
+        $this->assertTrue($response instanceof SubscriptionExternalChangeResponse);
         $this->assertEquals($response->getUpgradeId(), $testResponse->getUpgradeId());
     }
 
@@ -950,7 +945,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionExternalChangePeriodResponseObject);
+        $this->assertTrue($response instanceof SubscriptionExternalChangePeriodResponse);
         $this->compareSubscription($response->getSubscription(), $testResponse->getSubscription());
     }
 
@@ -968,7 +963,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionExternalCloseResponseObject);
+        $this->assertTrue($response instanceof SubscriptionExternalCloseResponse);
         $this->compareSubscription($response->getSubscription(), $testResponse->getSubscription());
     }
 
@@ -988,7 +983,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionExternalAddonCreateResponseObject);
+        $this->assertTrue($response instanceof SubscriptionExternalAddonCreateResponse);
         $this->compareSubscription($response->getSubscription(), $testResponse->getSubscription());
         $this->assertEquals($response->getUpgradeId(), $testResponse->getUpgradeId());
     }
@@ -1015,7 +1010,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionExternalCreateResponseObject);
+        $this->assertTrue($response instanceof SubscriptionExternalCreateResponse);
         $this->compareSubscription($response->getSubscription(), $testResponse->getSubscription());
     }
 
@@ -1037,25 +1032,25 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->randomNumber()
         );
 
-        $this->assertTrue($response instanceof SubscriptionCallSpiResponseObject);
+        $this->assertTrue($response instanceof SubscriptionCallSpiResponse);
         $this->assertEmpty(\array_diff($response->getSpiResponse(), $testResponse->getSpiResponse()));
     }
 
     /**
      * @return void
      */
-    public function testSubscriptionGetPossiblePackageChanges() {
+    public function testSubscriptionGetPossibleUpgrades() {
         $testResponse = new TestSubscriptionGetPossiblePackageChangesResponse();
 
         $frontendClient = $this->createFrontendClient($testResponse);
 
-        $response = $frontendClient->subscriptionGetPossiblePackageChanges(
+        $response = $frontendClient->subscriptionGetPossibleUpgrades(
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->randomNumber(),
             SubscriptionMock::randomPlanChangeType()
         );
 
-        $this->assertTrue($response instanceof SubscriptionGetPossiblePackageChangesResponseObject);
+        $this->assertTrue($response instanceof SubscriptionGetPossibleUpgradesResponse);
 
         $testPackages = $testResponse->getPackages();
 
@@ -1075,16 +1070,16 @@ final class FrontendClientTest extends AbstractTestCase {
     /**
      * @return void
      */
-    public function testPackageList() {
+    public function testPackagesList() {
         $testResponse = new TestPackageListResponse();
 
         $frontendClient = $this->createFrontendClient($testResponse);
 
-        $response = $frontendClient->packageList(
+        $response = $frontendClient->packagesList(
             MockHelper::getFaker()->randomNumber()
         );
 
-        $this->assertTrue($response instanceof PackagesListResponseObject);
+        $this->assertTrue($response instanceof PackagesListResponse);
 
         $testPackages = $testResponse->getPackages();
 
@@ -1118,7 +1113,7 @@ final class FrontendClientTest extends AbstractTestCase {
                 $testPackage->getPackageIdentifier()
             );
 
-            $this->assertTrue($response instanceof PackageGetResponseObject);
+            $this->assertTrue($response instanceof PackageGetResponse);
             $this->comparePackage($response->getPackage(), $testPackage);
         } catch (ObjectNotFoundException $e) {
             $this->assertTrue(false);
@@ -1126,7 +1121,7 @@ final class FrontendClientTest extends AbstractTestCase {
 
         //test with false package
         try {
-            $response = $frontendClient->packageGet(
+            $frontendClient->packageGet(
                 MockHelper::getFaker()->uuid
             );
 
@@ -1149,7 +1144,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionGetResponseObject);
+        $this->assertTrue($response instanceof SubscriptionGetResponse);
         $this->compareSubscription($response->getSubscription(), $testResponse->getSubscription());
     }
 
@@ -1165,7 +1160,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionGetAllResponseObject);
+        $this->assertTrue($response instanceof SubscriptionGetAllResponse);
 
         $testSubscriptions = $testResponse->getSubscriptions();
 
@@ -1195,7 +1190,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionGetPeriodEventsResponseObject);
+        $this->assertTrue($response instanceof SubscriptionGetPeriodEventsResponse);
         $this->assertEquals($response->getTotalCount(), $testResponse->getTotalCount());
 
         $testPeriodEvents = $testResponse->getPeriodEvents();
@@ -1227,7 +1222,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionAttachCouponResponseObject);
+        $this->assertTrue($response instanceof SubscriptionAttachCouponResponse);
         $this->assertEquals($response->getAttached(), $testResponse->isAttached());
         $this->assertEquals($response->getReason(), $testResponse->getReason());
     }
@@ -1252,7 +1247,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof SubscriptionFireEventResponseObject);
+        $this->assertTrue($response instanceof SubscriptionFireEventResponse);
     }
 
     /**
@@ -1272,7 +1267,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->currencyCode
         );
 
-        $this->assertTrue($response instanceof CouponCodeValidateNewResponseObject);
+        $this->assertTrue($response instanceof CouponCodeValidateResponse);
         $this->assertEquals($response->getCouponCode(), $testResponse->getCouponCode());
         $this->assertEquals($response->getEvent(), $testResponse->getEvent());
         $this->assertEquals($response->isValid(), $testResponse->isValid());
@@ -1300,7 +1295,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof CouponCodeValidateUpgradeResponseObject);
+        $this->assertTrue($response instanceof CouponCodeValidateResponse);
         $this->assertEquals($response->getCouponCode(), $testResponse->getCouponCode());
         $this->assertEquals($response->getEvent(), $testResponse->getEvent());
         $this->assertEquals($response->isValid(), $testResponse->isValid());
@@ -1330,16 +1325,17 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->languageCode
         );
 
-        $this->assertTrue($response instanceof UserAuthenticateResponseObject);
+        $this->assertTrue($response instanceof UserAuthenticateResponse);
         $this->assertEquals($response->getAuthToken(), $testResponse->getAuthToken());
         $this->compareUser($response->getUser(), $testResponse->getUser());
 
         //authentication errors
         $testResponse = new TestUserAuthenticateResponse(TestUserAuthenticateResponse::ERROR_RATE_LIMIT);
-        $frontendClient->setRequestClient($this->createTestRequestClient($testResponse));
+
+        $frontendClient = $this->createFrontendClient($testResponse);
 
         try {
-            $response = $frontendClient->userAuthenticate(
+            $frontendClient->userAuthenticate(
                 MockHelper::getFaker()->uuid,
                 MockHelper::getFaker()->word,
                 MockHelper::getFaker()->ipv4,
@@ -1359,10 +1355,10 @@ final class FrontendClientTest extends AbstractTestCase {
         }
 
         $testResponse = new TestUserAuthenticateResponse(TestUserAuthenticateResponse::ERROR_INVALID_CREDENTIALS);
-        $frontendClient->setRequestClient($this->createTestRequestClient($testResponse));
+        $frontendClient = $this->createFrontendClient($testResponse);
 
         try {
-            $response = $frontendClient->userAuthenticate(
+            $frontendClient->userAuthenticate(
                 MockHelper::getFaker()->uuid,
                 MockHelper::getFaker()->word,
                 MockHelper::getFaker()->ipv4,
@@ -1382,10 +1378,10 @@ final class FrontendClientTest extends AbstractTestCase {
         }
 
         $testResponse = new TestUserAuthenticateResponse('false_error_code');
-        $frontendClient->setRequestClient($this->createTestRequestClient($testResponse));
+        $frontendClient = $this->createFrontendClient($testResponse);
 
         try {
-            $response = $frontendClient->userAuthenticate(
+            $frontendClient->userAuthenticate(
                 MockHelper::getFaker()->uuid,
                 MockHelper::getFaker()->word,
                 MockHelper::getFaker()->ipv4,
@@ -1417,7 +1413,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof UserDeauthenticateResponseObject);
+        $this->assertTrue($response instanceof UserDeauthenticateResponse);
     }
 
     /**
@@ -1440,7 +1436,7 @@ final class FrontendClientTest extends AbstractTestCase {
 
         $testUser = UserMock::changeUserMetaData($testResponse->getUser(), $newMetaData);
 
-        $this->assertTrue($response instanceof UserChangeResponseObject);
+        $this->assertTrue($response instanceof UserChangeResponse);
         $this->compareUser($response->getUser(), $testUser);
     }
 
@@ -1457,7 +1453,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->password
         );
 
-        $this->assertTrue($response instanceof UserChangePasswordResponseObject);
+        $this->assertTrue($response instanceof UserChangeResponse);
         $this->compareUser($response->getUser(), $testResponse->getUser());
     }
 
@@ -1477,7 +1473,7 @@ final class FrontendClientTest extends AbstractTestCase {
             ]
         );
 
-        $this->assertTrue($response instanceof UserCreateResponseObject);
+        $this->assertTrue($response instanceof UserCreateResponse);
         $this->compareUser($response->getUser(), $testResponse->getUser());
     }
 
@@ -1493,7 +1489,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof UserDeleteResponseObject);
+        $this->assertTrue($response instanceof UserDeleteResponse);
     }
 
     /**
@@ -1510,7 +1506,7 @@ final class FrontendClientTest extends AbstractTestCase {
 
         $testUser = UserMock::changeUserIsLoginDisabled($testResponse->getUser(), true);
 
-        $this->assertTrue($response instanceof UserDisableLoginResponseObject);
+        $this->assertTrue($response instanceof UserDisableLoginResponse);
         $this->compareUser($response->getUser(), $testUser);
     }
 
@@ -1522,12 +1518,12 @@ final class FrontendClientTest extends AbstractTestCase {
 
         $frontendClient = $this->createFrontendClient($testResponse);
 
-        $response = $frontendClient->userEnableLogin(
-            MockHelper::getFaker()->uuid
-        );
+        $response = $frontendClient->userEnableLogin(MockHelper::getFaker()->uuid);
 
-        $this->assertTrue($response instanceof UserEnableLoginResponseObject);
-        $this->compareUser($response->getUser(), $testResponse->getUser());
+        $testUser = UserMock::changeUserIsLoginDisabled($testResponse->getUser(), false);
+
+        $this->assertTrue($response instanceof UserEnableLoginResponse);
+        $this->compareUser($response->getUser(), $testUser);
     }
 
     /**
@@ -1538,11 +1534,11 @@ final class FrontendClientTest extends AbstractTestCase {
 
         $frontendClient = $this->createFrontendClient($testResponse);
 
-        $response = $frontendClient->userGetAccountBalance(
+        $response = $frontendClient->userGetBalance(
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof UserGetBalanceResponseObject);
+        $this->assertTrue($response instanceof UserGetBalanceResponse);
         $this->comparePrice($response->getBalance(), $testResponse->getBalance());
     }
 
@@ -1556,7 +1552,7 @@ final class FrontendClientTest extends AbstractTestCase {
 
         $response = $frontendClient->userGetMetaProfile();
 
-        $this->assertTrue($response instanceof UserGetMetaProfileResponseObject);
+        $this->assertTrue($response instanceof UserGetMetaProfileResponse);
 
         $testMetaProfileElements = $testResponse->getElements();
 
@@ -1585,7 +1581,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof UserGetTokensResponseObject);
+        $this->assertTrue($response instanceof UserGetTokensResponse);
 
         $testAuthTokens = $testResponse->getTokens();
 
@@ -1614,7 +1610,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof UserGetResponseObject);
+        $this->assertTrue($response instanceof UserGetResponse);
         $this->compareUser($response->getUser(), $testResponse->getUser());
     }
 
@@ -1632,7 +1628,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->ipv4
         );
 
-        $this->assertTrue($response instanceof UserUpdateTokenResponseObject);
+        $this->assertTrue($response instanceof UserUpdateTokenResponse);
         $this->compareAuthToken($response->getAuthToken(), $testResponse->getAuthToken());
     }
 
@@ -1650,7 +1646,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->randomNumber()
         );
 
-        $this->assertTrue($response instanceof UserExtendTokenResponseObject);
+        $this->assertTrue($response instanceof UserUpdateTokenResponse);
         $this->compareAuthToken($response->getAuthToken(), $testResponse->getAuthToken());
     }
 
@@ -1667,7 +1663,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->ipv4
         );
 
-        $this->assertTrue($response instanceof UserGetAuthenticatedResponseObject);
+        $this->assertTrue($response instanceof UserGetAuthenticatedResponse);
         $this->compareUser($response->getUser(), $testResponse->getUser());
     }
 
@@ -1683,7 +1679,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof UserFindResponseObject);
+        $this->assertTrue($response instanceof UserFindResponse);
         $this->compareUser($response->getUser(), $testResponse->getUser());
     }
 
@@ -1701,7 +1697,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->url
         );
 
-        $this->assertTrue($response instanceof UserRecoveryStartResponseObject);
+        $this->assertTrue($response instanceof UserRecoveryStartResponse);
     }
 
     /**
@@ -1717,7 +1713,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->ipv4
         );
 
-        $this->assertTrue($response instanceof UserRecoveryCheckResponseObject);
+        $this->assertTrue($response instanceof UserRecoveryCheckResponse);
         $this->assertEquals($response->isValid(), $testResponse->isValid());
     }
 
@@ -1735,7 +1731,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->password
         );
 
-        $this->assertTrue($response instanceof UserRecoveryFinishResponseObject);
+        $this->assertTrue($response instanceof UserRecoveryFinishResponse);
         $this->compareUser($response->getUser(), $testResponse->getUser());
     }
 
@@ -1753,7 +1749,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->url
         );
 
-        $this->assertTrue($response instanceof UserEmailVerificationStartResponseObject);
+        $this->assertTrue($response instanceof UserEmailVerificationStartResponse);
     }
 
     /**
@@ -1768,7 +1764,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid
         );
 
-        $this->assertTrue($response instanceof UserEmailVerificationFinishResponseObject);
+        $this->assertTrue($response instanceof UserEmailVerificationFinishResponse);
         $this->compareUser($response->getUser(), $testResponse->getUser());
     }
 
@@ -1786,7 +1782,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->phoneNumber
         );
 
-        $this->assertTrue($response instanceof  UserPhoneVerificationStartResponseObject);
+        $this->assertTrue($response instanceof  UserPhoneVerificationStartResponse);
     }
 
     /**
@@ -1803,7 +1799,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->phoneNumber
         );
 
-        $this->assertTrue($response instanceof UserPhoneVerificationFinishResponseObject);
+        $this->assertTrue($response instanceof UserPhoneVerificationFinishResponse);
         $this->compareUser($response->getUser(), $testResponse->getUser());
         $this->assertEquals($response->getVerifiedAt(), $testResponse->getVerifiedAt());
     }
@@ -1822,7 +1818,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->phoneNumber
         );
 
-        $this->assertTrue($response instanceof UserSmsVerificationStartResponseObject);
+        $this->assertTrue($response instanceof UserSmsVerificationStartResponse);
     }
 
     /**
@@ -1839,7 +1835,7 @@ final class FrontendClientTest extends AbstractTestCase {
             MockHelper::getFaker()->phoneNumber
         );
 
-        $this->assertTrue($response instanceof UserSmsVerificationFinishResponseObject);
+        $this->assertTrue($response instanceof UserSmsVerificationFinishResponse);
         $this->compareUser($response->getUser(), $testResponse->getUser());
         $this->assertEquals($response->getVerifiedAt(), $testResponse->getVerifiedAt());
     }
@@ -1863,7 +1859,7 @@ final class FrontendClientTest extends AbstractTestCase {
             ]
         );
 
-        $this->assertTrue($response instanceof UserFireEventResponseObject);
+        $this->assertTrue($response instanceof UserFireEventResponse);
     }
 
 }

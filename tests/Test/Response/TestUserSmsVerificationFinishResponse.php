@@ -2,10 +2,8 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\Test\WorkingObjects\UserMock;
-use Ixolit\Dislo\WorkingObjects\User\UserObject;
 
 /**
  * Class TestUserSmsVerificationFinishResponse

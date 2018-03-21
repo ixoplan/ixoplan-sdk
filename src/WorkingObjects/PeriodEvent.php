@@ -186,7 +186,7 @@ class PeriodEvent extends AbstractWorkingObject {
             'endsAt'                => $this->endsAt ? $this->endsAt->format('Y-m-d H:i:s') : null,
             'parentPeriodEventId'   => $this->parentPeriodEventId,
             'originalEndsAt'        => $this->originalEndsAt ? $this->originalEndsAt->format('Y-m-d H:i:s') : null,
-            'billingEvent'          => $this->billingEvent->toArray(),
+            'billingEvent'          => $this->billingEvent ? $this->billingEvent->toArray() : null,
         ];
     }
 

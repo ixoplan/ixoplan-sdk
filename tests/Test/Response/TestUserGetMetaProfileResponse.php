@@ -2,10 +2,9 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\MetaProfileElementMock;
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
-use Ixolit\Dislo\WorkingObjects\User\MetaProfileElementObject;
+use Ixolit\Dislo\WorkingObjects\MetaProfileElement;
 
 /**
  * Class TestUserGetMetaProfileResponse
@@ -15,7 +14,7 @@ use Ixolit\Dislo\WorkingObjects\User\MetaProfileElementObject;
 class TestUserGetMetaProfileResponse implements TestResponseInterface {
 
     /**
-     * @var MetaProfileElementObject[]
+     * @var MetaProfileElement[]
      */
     private $elements;
 
@@ -33,7 +32,7 @@ class TestUserGetMetaProfileResponse implements TestResponseInterface {
     }
 
     /**
-     * @return MetaProfileElementObject[]
+     * @return MetaProfileElement[]
      */
     public function getElements() {
         return $this->elements;

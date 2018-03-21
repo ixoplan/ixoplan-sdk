@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\Subscription\CouponUsageObject;
+use Ixolit\Dislo\WorkingObjects\CouponUsage;
 
 /**
  * Class CouponUsageMock
@@ -13,10 +13,10 @@ use Ixolit\Dislo\WorkingObjects\Subscription\CouponUsageObject;
 class CouponUsageMock {
 
     /**
-     * @return CouponUsageObject
+     * @return CouponUsage
      */
     public static function create() {
-        return new CouponUsageObject(
+        return new CouponUsage(
             CouponMock::create(),
             MockHelper::getFaker()->randomNumber(),
             MockHelper::getFaker()->dateTime(),

@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\Subscription\DisplayNameObject;
+use Ixolit\Dislo\WorkingObjects\DisplayName;
 
 /**
  * Class DisplayNameMock
@@ -13,10 +13,10 @@ use Ixolit\Dislo\WorkingObjects\Subscription\DisplayNameObject;
 class DisplayNameMock {
 
     /**
-     * @return DisplayNameObject
+     * @return DisplayName
      */
     public static function create() {
-        return new DisplayNameObject(
+        return new DisplayName(
             MockHelper::getFaker()->languageCode,
             MockHelper::getFaker()->uuid
         );

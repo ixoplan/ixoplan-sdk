@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjects\Subscription;
 
 /**
  * Class SubscriptionMock
@@ -16,26 +16,26 @@ class SubscriptionMock {
      * @var string[]
      */
     protected static $states = [
-        SubscriptionObject::STATUS_CLOSED,
-        SubscriptionObject::STATUS_PENDING,
-        SubscriptionObject::STATUS_RUNNING,
-        SubscriptionObject::STATUS_ARCHIVED,
-        SubscriptionObject::STATUS_CANCELED,
+        Subscription::STATUS_CLOSED,
+        Subscription::STATUS_PENDING,
+        Subscription::STATUS_RUNNING,
+        Subscription::STATUS_ARCHIVED,
+        Subscription::STATUS_CANCELED,
     ];
 
     /**
      * @var string[]
      */
     protected static $planChangeTypes = [
-        SubscriptionObject::PLAN_CHANGE_IMMEDIATE,
-        SubscriptionObject::PLAN_CHANGE_QUEUED,
+        Subscription::PLAN_CHANGE_IMMEDIATE,
+        Subscription::PLAN_CHANGE_QUEUED,
     ];
 
     /**
      * @param string|null $state
      * @param bool        $withAddonSubscription
      *
-     * @return SubscriptionObject
+     * @return Subscription
      */
     public static function create($state = null, $withAddonSubscription = true) {
         $addonSubscriptions = [];
@@ -45,7 +45,7 @@ class SubscriptionMock {
             $addonSubscriptions[$addonSubscription->getSubscriptionId()] = $addonSubscription;
         }
 
-        return new SubscriptionObject(
+        return new Subscription(
             MockHelper::getFaker()->uuid,
             PackageMock::create(true),
             MockHelper::getFaker()->randomNumber(),

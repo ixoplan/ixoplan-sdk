@@ -2,11 +2,9 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
-use Faker\Factory;
 use Ixolit\Dislo\Test\WorkingObjects\BillingEventMock;
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
-use Ixolit\Dislo\WorkingObjects\Billing\BillingEventObject;
+use Ixolit\Dislo\WorkingObjects\BillingEvent;
 
 /**
  * Class TestBillingCreatePaymentResponse
@@ -26,7 +24,7 @@ class TestBillingCreatePaymentResponse implements TestResponseInterface {
     private $metaData;
 
     /**
-     * @var BillingEventObject
+     * @var BillingEvent
      */
     private $billingEvent;
 
@@ -56,7 +54,7 @@ class TestBillingCreatePaymentResponse implements TestResponseInterface {
     }
 
     /**
-     * @return BillingEventObject
+     * @return BillingEvent
      */
     public function getBillingEvent() {
         return $this->billingEvent;

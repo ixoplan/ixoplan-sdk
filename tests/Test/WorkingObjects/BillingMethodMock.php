@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\Billing\BillingMethodObject;
+use Ixolit\Dislo\WorkingObjects\BillingMethod;
 
 /**
  * Class BillingMethodMock
@@ -15,10 +15,10 @@ class BillingMethodMock {
     /**
      * @param bool|null $available
      *
-     * @return BillingMethodObject
+     * @return BillingMethod
      */
     public static function create($available = null) {
-        return new BillingMethodObject(
+        return new BillingMethod(
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->word,

@@ -2,11 +2,8 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
-use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\Test\WorkingObjects\PriceMock;
-use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
-
+use Ixolit\Dislo\WorkingObjects\Price;
 
 /**
  * Class TestUserGetAccountBalanceResponse
@@ -16,7 +13,7 @@ use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
 class TestUserGetAccountBalanceResponse implements TestResponseInterface {
 
     /**
-     * @var PriceObject
+     * @var Price
      */
     private $balance;
 
@@ -28,7 +25,7 @@ class TestUserGetAccountBalanceResponse implements TestResponseInterface {
     }
 
     /**
-     * @return PriceObject
+     * @return Price
      */
     public function getBalance() {
         return $this->balance;

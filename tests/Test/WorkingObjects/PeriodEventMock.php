@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\Subscription\PeriodEventObject;
+use Ixolit\Dislo\WorkingObjects\PeriodEvent;
 
 /**
  * Class PeriodEventMock
@@ -13,10 +13,10 @@ use Ixolit\Dislo\WorkingObjects\Subscription\PeriodEventObject;
 class PeriodEventMock {
 
     /**
-     * @return PeriodEventObject
+     * @return PeriodEvent
      */
     public static function create() {
-        return new PeriodEventObject(
+        return new PeriodEvent(
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->randomNumber(),
             MockHelper::getFaker()->randomNumber(),

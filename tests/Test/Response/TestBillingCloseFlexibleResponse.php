@@ -2,9 +2,8 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\FlexibleMock;
-use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
+use Ixolit\Dislo\WorkingObjects\Flexible;
 
 /**
  * Class TestBillingCloseFlexibleResponse
@@ -14,7 +13,7 @@ use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
 class TestBillingCloseFlexibleResponse implements TestResponseInterface {
 
     /**
-     * @var FlexibleObject
+     * @var Flexible
      */
     private $flexible;
 
@@ -22,11 +21,11 @@ class TestBillingCloseFlexibleResponse implements TestResponseInterface {
      * TestBillingCloseFlexibleResponse constructor.
      */
     public function __construct() {
-        $this->flexible = FlexibleMock::create(FlexibleObject::STATUS_CLOSED);
+        $this->flexible = FlexibleMock::create(Flexible::STATUS_CLOSED);
     }
 
     /**
-     * @return FlexibleObject
+     * @return Flexible
      */
     public function getFlexible() {
         return $this->flexible;

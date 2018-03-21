@@ -270,7 +270,7 @@ class BillingEvent extends AbstractWorkingObject {
             'type'                => $this->getType(),
             'status'              => $this->getStatus(),
             'description'         => $this->getDescription(),
-            'techinfo'            => $this->getDescription(),
+            'techinfo'            => $this->getTechinfo(),
             'billingMethod'       => $this->getBillingMethod(),
             'subscription'        => ($this->getSubscription() ? $this->getSubscription()->toArray() : null),
             'modifiedAt'          => ($this->getModifiedAt() ? $this->getModifiedAt()->format('Y-m-d H:i:s') : null),

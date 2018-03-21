@@ -5,7 +5,7 @@ namespace Ixolit\Dislo\Test\Response;
 
 use Ixolit\Dislo\Test\WorkingObjects\BillingMethodMock;
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
-use Ixolit\Dislo\WorkingObjects\Billing\BillingMethodObject;
+use Ixolit\Dislo\WorkingObjects\BillingMethod;
 
 
 /**
@@ -16,7 +16,7 @@ use Ixolit\Dislo\WorkingObjects\Billing\BillingMethodObject;
 class TestBillingMethodsGetAvailableResponse implements TestResponseInterface {
 
     /**
-     * @var BillingMethodObject[]
+     * @var BillingMethod[]
      */
     private $billingMethods;
 
@@ -33,7 +33,7 @@ class TestBillingMethodsGetAvailableResponse implements TestResponseInterface {
     }
 
     /**
-     * @return BillingMethodObject[]
+     * @return BillingMethod[]
      */
     public function getBillingMethods() {
         return $this->billingMethods;

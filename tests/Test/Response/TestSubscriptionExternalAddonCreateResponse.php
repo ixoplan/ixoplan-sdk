@@ -2,10 +2,9 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\Test\WorkingObjects\SubscriptionMock;
-use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjects\Subscription;
 
 /**
  * Class TestSubscriptionExternalAddonCreateResponse
@@ -15,7 +14,7 @@ use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
 class TestSubscriptionExternalAddonCreateResponse implements TestResponseInterface {
 
     /**
-     * @var SubscriptionObject
+     * @var Subscription
      */
     private $subscription;
 
@@ -30,7 +29,7 @@ class TestSubscriptionExternalAddonCreateResponse implements TestResponseInterfa
     }
 
     /**
-     * @return SubscriptionObject
+     * @return Subscription
      */
     public function getSubscription() {
         return $this->subscription;

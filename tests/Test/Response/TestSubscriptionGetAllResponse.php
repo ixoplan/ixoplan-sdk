@@ -2,10 +2,9 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\Test\WorkingObjects\SubscriptionMock;
-use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjects\Subscription;
 
 /**
  * Class TestSubscriptionGetAllResponse
@@ -15,7 +14,7 @@ use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
 class TestSubscriptionGetAllResponse implements TestResponseInterface {
 
     /**
-     * @var SubscriptionObject[]
+     * @var Subscription[]
      */
     public $subscriptions;
 
@@ -37,24 +36,24 @@ class TestSubscriptionGetAllResponse implements TestResponseInterface {
     }
 
     /**
-     * @return SubscriptionObject[]
+     * @return Subscription[]
      */
     public function getSubscriptions() {
         return $this->subscriptions;
     }
 
     /**
-     * @return SubscriptionObject[]
+     * @return Subscription[]
      */
     public function getActiveSubscriptions() {
         return \array_filter(
             $this->getSubscriptions(),
-            function(SubscriptionObject $subscription) {
+            function(Subscription $subscription) {
                 return \in_array(
                     $subscription->getStatus(),
                     [
-                        SubscriptionObject::STATUS_CANCELED,
-                        SubscriptionObject::STATUS_RUNNING,
+                        Subscription::STATUS_CANCELED,
+                        Subscription::STATUS_RUNNING,
                     ]
                 );
             }
@@ -62,12 +61,12 @@ class TestSubscriptionGetAllResponse implements TestResponseInterface {
     }
 
     /**
-     * @return SubscriptionObject[]
+     * @return Subscription[]
      */
     public function getStartedSubscriptions() {
         return \array_filter(
             $this->getSubscriptions(),
-            function (SubscriptionObject $subscription) {
+            function (Subscription $subscription) {
                 return !empty($subscription->getStartedAt());
             }
         );

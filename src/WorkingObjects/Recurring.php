@@ -213,7 +213,7 @@ class Recurring extends AbstractWorkingObject {
             static::getValueIsSet($response, 'recurringId'),
             static::getValueIsSet($response, 'status'),
             static::getValueIsSet($response, 'providerToken'),
-            static::getValueIsSet($response, 'providerToken', null, function ($value) {
+            static::getValueIsSet($response, 'subscription', null, function ($value) {
                 return Subscription::fromResponse($value);
             }),
             static::getValueAsDateTime($response, 'createdAt'),
@@ -222,7 +222,7 @@ class Recurring extends AbstractWorkingObject {
             static::getValueIsSet($response, 'parameters'),
             static::getValueIsSet($response, 'amount'),
             static::getValueIsSet($response, 'currency'),
-            static::getValueIsSet($response, 'providerToken', null, function ($value) {
+            static::getValueIsSet($response, 'billingMethod', null, function ($value) {
                 return BillingMethod::fromResponse($value);
             })
         );
@@ -236,10 +236,14 @@ class Recurring extends AbstractWorkingObject {
             '_type'         => 'Recurring',
             'recurringId'   => $this->getRecurringId(),
             'status'        => $this->getStatus(),
+            'providerToken' => $this->getProviderToken(),
+            'subscription'  => $this->getSubscription()->toArray(),
             'createdAt'     => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-            'canceledAt'    => $this->getCanceledAt() ? $this->getCreatedAt()->format('Y-m-d H:i:s') : null,
+            'canceledAt'    => $this->getCanceledAt() ? $this->getCanceledAt()->format('Y-m-d H:i:s') : null,
             'closedAt'      => $this->getClosedAt() ? $this->getClosedAt()->format('Y-m-d H:i:s') : null,
             'parameters'    => $this->getParameters(),
+            'amount'        => $this->getAmount(),
+            'currency'      => $this->getCurrency(),
             'billingMethod' => $this->getBillingMethod()->toArray(),
         ];
     }

@@ -2,11 +2,9 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
-use Faker\Factory;
 use Ixolit\Dislo\Test\WorkingObjects\FlexibleMock;
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
-use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
+use Ixolit\Dislo\WorkingObjects\Flexible;
 
 /**
  * Class TestBillingCreateFlexibleResponse
@@ -16,7 +14,7 @@ use Ixolit\Dislo\WorkingObjects\Billing\FlexibleObject;
 class TestBillingCreateFlexibleResponse implements TestResponseInterface {
 
     /**
-     * @var FlexibleObject
+     * @var Flexible
      */
     private $flexible;
 
@@ -34,7 +32,7 @@ class TestBillingCreateFlexibleResponse implements TestResponseInterface {
     }
 
     /**
-     * @return FlexibleObject
+     * @return Flexible
      */
     public function getFlexible() {
         return $this->flexible;

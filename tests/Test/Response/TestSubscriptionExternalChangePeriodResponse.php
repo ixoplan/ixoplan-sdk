@@ -2,9 +2,8 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\SubscriptionMock;
-use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
+use Ixolit\Dislo\WorkingObjects\Subscription;
 
 /**
  * Class TestSubscriptionExternalChangePeriodResponse
@@ -14,7 +13,7 @@ use Ixolit\Dislo\WorkingObjects\Subscription\SubscriptionObject;
 class TestSubscriptionExternalChangePeriodResponse implements TestResponseInterface {
 
     /**
-     * @var SubscriptionObject
+     * @var Subscription
      */
     private $subscription;
 
@@ -26,7 +25,7 @@ class TestSubscriptionExternalChangePeriodResponse implements TestResponseInterf
     }
 
     /**
-     * @return SubscriptionObject
+     * @return Subscription
      */
     public function getSubscription() {
         return $this->subscription;
@@ -40,7 +39,7 @@ class TestSubscriptionExternalChangePeriodResponse implements TestResponseInterf
      */
     public function handleRequest($uri, array $data = []) {
         return [
-            $this->getSubscription()->toArray(),
+            'subscription' => $this->getSubscription()->toArray(),
         ];
     }
 

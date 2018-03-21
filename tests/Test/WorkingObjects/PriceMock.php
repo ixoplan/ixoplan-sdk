@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Test\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
+use Ixolit\Dislo\WorkingObjects\Price;
 
 /**
  * Class PriceMock
@@ -15,7 +15,7 @@ class PriceMock {
     /**
      * @param bool $withCompositePrices
      *
-     * @return PriceObject
+     * @return Price
      */
     public static function create($withCompositePrices = true) {
         $compositePrices = [];
@@ -25,7 +25,7 @@ class PriceMock {
             $compositePrices[$compositePrice->getTag()] = $compositePrice;
         }
 
-        return new PriceObject(
+        return new Price(
             MockHelper::getFaker()->randomFloat(),
             MockHelper::getFaker()->currencyCode,
             MockHelper::getFaker()->uuid,

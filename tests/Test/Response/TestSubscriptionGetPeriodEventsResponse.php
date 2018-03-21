@@ -2,10 +2,9 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\Test\WorkingObjects\PeriodEventMock;
-use Ixolit\Dislo\WorkingObjects\Subscription\PeriodEventObject;
+use Ixolit\Dislo\WorkingObjects\PeriodEvent;
 
 /**
  * Class TestSubscriptionGetPeriodEventsResponse
@@ -15,7 +14,7 @@ use Ixolit\Dislo\WorkingObjects\Subscription\PeriodEventObject;
 class TestSubscriptionGetPeriodEventsResponse implements TestResponseInterface {
 
     /**
-     * @var PeriodEventObject[]
+     * @var PeriodEvent[]
      */
     private $periodEvents;
 
@@ -40,7 +39,7 @@ class TestSubscriptionGetPeriodEventsResponse implements TestResponseInterface {
     }
 
     /**
-     * @return PeriodEventObject[]
+     * @return PeriodEvent[]
      */
     public function getPeriodEvents() {
         return $this->periodEvents;

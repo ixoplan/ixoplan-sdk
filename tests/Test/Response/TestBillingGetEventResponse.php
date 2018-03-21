@@ -2,9 +2,8 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\BillingEventMock;
-use Ixolit\Dislo\WorkingObjects\Billing\BillingEventObject;
+use Ixolit\Dislo\WorkingObjects\BillingEvent;
 
 /**
  * Class TestBillingGetEventResponse
@@ -14,7 +13,7 @@ use Ixolit\Dislo\WorkingObjects\Billing\BillingEventObject;
 class TestBillingGetEventResponse implements TestResponseInterface {
 
     /**
-     * @var BillingEventObject
+     * @var BillingEvent
      */
     private $billingEvent;
 
@@ -26,7 +25,7 @@ class TestBillingGetEventResponse implements TestResponseInterface {
     }
 
     /**
-     * @return BillingEventObject
+     * @return BillingEvent
      */
     public function getBillingEvent() {
         return $this->billingEvent;

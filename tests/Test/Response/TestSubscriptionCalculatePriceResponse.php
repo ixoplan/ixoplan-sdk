@@ -2,10 +2,9 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\MockHelper;
 use Ixolit\Dislo\Test\WorkingObjects\PriceMock;
-use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
+use Ixolit\Dislo\WorkingObjects\Price;
 
 /**
  * Class TestSubscriptionCalculatePriceResponse
@@ -15,7 +14,7 @@ use Ixolit\Dislo\WorkingObjects\Subscription\PriceObject;
 class TestSubscriptionCalculatePriceResponse implements TestResponseInterface {
 
     /**
-     * @var PriceObject
+     * @var Price
      */
     private $price;
 
@@ -30,7 +29,7 @@ class TestSubscriptionCalculatePriceResponse implements TestResponseInterface {
     private $appliedImmediately;
 
     /**
-     * @var PriceObject|null
+     * @var Price|null
      */
     private $recurringPrice;
 
@@ -45,7 +44,7 @@ class TestSubscriptionCalculatePriceResponse implements TestResponseInterface {
     }
 
     /**
-     * @return PriceObject
+     * @return Price
      */
     public function getPrice() {
         return $this->price;
@@ -66,7 +65,7 @@ class TestSubscriptionCalculatePriceResponse implements TestResponseInterface {
     }
 
     /**
-     * @return PriceObject|null
+     * @return Price|null
      */
     public function getRecurringPrice() {
         return $this->recurringPrice;

@@ -2,9 +2,8 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\UserMock;
-use Ixolit\Dislo\WorkingObjects\User\UserObject;
+use Ixolit\Dislo\WorkingObjects\User;
 
 /**
  * Class AbstractTestUserResponse
@@ -14,7 +13,7 @@ use Ixolit\Dislo\WorkingObjects\User\UserObject;
 abstract class AbstractTestUserResponse {
 
     /**
-     * @var UserObject
+     * @var User
      */
     private $user;
 
@@ -26,10 +25,10 @@ abstract class AbstractTestUserResponse {
     /**
      * TestUserChangeResponse constructor.
      *
-     * @param UserObject|null $user
+     * @param User|null $user
      * @param bool            $responseWithoutAuthToken
      */
-    public function __construct(UserObject $user = null, $responseWithoutAuthToken = true) {
+    public function __construct(User $user = null, $responseWithoutAuthToken = true) {
         $this->user = $user
             ? $user
             : UserMock::create(false);
@@ -38,7 +37,7 @@ abstract class AbstractTestUserResponse {
     }
 
     /**
-     * @return UserObject
+     * @return User
      */
     public function getUser() {
         return $this->user;
@@ -52,7 +51,7 @@ abstract class AbstractTestUserResponse {
     }
 
     /**
-     * @return UserObject
+     * @return User
      */
     public function getResponseUser() {
         $user = $this->getUser();

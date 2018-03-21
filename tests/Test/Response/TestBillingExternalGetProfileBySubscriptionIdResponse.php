@@ -2,9 +2,8 @@
 
 namespace Ixolit\Dislo\Test\Response;
 
-
 use Ixolit\Dislo\Test\WorkingObjects\ExternalProfileMock;
-use Ixolit\Dislo\WorkingObjects\Billing\ExternalProfileObject;
+use Ixolit\Dislo\WorkingObjects\ExternalProfile;
 
 /**
  * Class TestBillingExternalGetProfileBySubscriptionIdResponse
@@ -14,7 +13,7 @@ use Ixolit\Dislo\WorkingObjects\Billing\ExternalProfileObject;
 class TestBillingExternalGetProfileBySubscriptionIdResponse implements TestResponseInterface {
 
     /**
-     * @var ExternalProfileObject
+     * @var ExternalProfile
      */
     private $externalProfile;
 
@@ -26,7 +25,7 @@ class TestBillingExternalGetProfileBySubscriptionIdResponse implements TestRespo
     }
 
     /**
-     * @return ExternalProfileObject
+     * @return ExternalProfile
      */
     public function getExternalProfile() {
         return $this->externalProfile;

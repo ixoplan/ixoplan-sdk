@@ -13,6 +13,9 @@ use Ixolit\Dislo\WorkingObjectsCustom\Subscription\CouponCustom;
  */
 class Coupon extends AbstractWorkingObject {
 
+    const COUPON_EVENT_START = 'subscription_start';
+    const COUPON_EVENT_UPGRADE = 'subscription_upgrade';
+
     /**
      * @var string
      */
