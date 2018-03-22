@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjectsCustom\Subscription\SubscriptionCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\SubscriptionCustom;
 
 /**
  * Class Subscription

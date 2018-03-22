@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
-use Ixolit\Dislo\WorkingObjectsCustom\Subscription\PackageCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\PackageCustom;
 
 /**
  * Class Package

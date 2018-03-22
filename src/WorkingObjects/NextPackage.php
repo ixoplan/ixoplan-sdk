@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjectsCustom\Subscription\NextPackageCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\NextPackageCustom;
 
 /**
  * Class NextPackage

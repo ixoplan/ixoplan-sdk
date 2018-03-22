@@ -3,8 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjectsCustom\Billing\BillingEventCustom;
-
+use Ixolit\Dislo\WorkingObjectsCustom\BillingEventCustom;
 
 /**
  * Class BillingEvent

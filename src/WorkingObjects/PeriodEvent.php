@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjectsCustom\Subscription\PeriodEventCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\PeriodEventCustom;
 
 /**
  * Class PeriodEvent

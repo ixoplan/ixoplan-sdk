@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjectsCustom\Subscription\PriceCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\PriceCustom;
 
 /**
  * Class Price

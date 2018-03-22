@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjectsCustom\Subscription\DisplayNameCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\DisplayNameCustom;
 
 
 /**

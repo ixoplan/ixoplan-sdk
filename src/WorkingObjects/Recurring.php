@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjectsCustom\Billing\RecurringCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\RecurringCustom;
 
 
 /**

@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjectsCustom\Subscription\CouponCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\CouponCustom;
 
 
 /**

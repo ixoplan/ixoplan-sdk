@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjectsCustom\Billing\BillingMethodCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\BillingMethodCustom;
 
 /**
  * Class BillingMethod

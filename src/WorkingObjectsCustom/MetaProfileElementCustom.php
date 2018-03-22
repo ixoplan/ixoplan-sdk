@@ -1,13 +1,13 @@
 <?php
 
-namespace Ixolit\Dislo\WorkingObjectsCustom\User;
+namespace Ixolit\Dislo\WorkingObjectsCustom;
 
 use Ixolit\Dislo\WorkingObjects\WorkingObjectCustom;
 
 /**
- * Class MetaProfileElementObjectCustom
+ * Class MetaProfileElementCustom
  *
- * @package Ixolit\Dislo\WorkingObjectsCustom\User
+ * @package Ixolit\Dislo\WorkingObjectsCustom
  */
 final class MetaProfileElementCustom extends WorkingObjectCustom {
 

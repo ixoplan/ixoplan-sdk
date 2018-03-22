@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjectsCustom\User\MetaProfileElementCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\MetaProfileElementCustom;
 
 
 /**

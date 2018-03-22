@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\WorkingObjects;
 
 
-use Ixolit\Dislo\WorkingObjectsCustom\Subscription\CouponUsageCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\CouponUsageCustom;
 
 /**
  * Class CouponUsage
