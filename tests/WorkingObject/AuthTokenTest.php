@@ -14,13 +14,13 @@ class AuthTokenTest extends AbstractTestCase {
      * @return void
      */
     public function testConstructor() {
-        $id = MockHelper::getFaker()->uuid;
-        $userId = MockHelper::getFaker()->uuid;
-        $token = MockHelper::getFaker()->uuid;
-        $createdAt = MockHelper::getFaker()->dateTime();
+        $id         = MockHelper::getFaker()->uuid;
+        $userId     = MockHelper::getFaker()->uuid;
+        $token      = MockHelper::getFaker()->uuid;
+        $createdAt  = MockHelper::getFaker()->dateTime();
         $modifiedAt = MockHelper::getFaker()->dateTime();
         $validUntil = MockHelper::getFaker()->dateTime();
-        $metaInfo = MockHelper::getFaker()->word;
+        $metaInfo   = MockHelper::getFaker()->word;
 
         $authToken = new AuthToken(
             $id,
@@ -67,13 +67,13 @@ class AuthTokenTest extends AbstractTestCase {
      * @return void
      */
     public function testGetters() {
-        $id = MockHelper::getFaker()->uuid;
-        $userId = MockHelper::getFaker()->uuid;
-        $token = MockHelper::getFaker()->uuid;
-        $createdAt = MockHelper::getFaker()->dateTime();
+        $id         = MockHelper::getFaker()->uuid;
+        $userId     = MockHelper::getFaker()->uuid;
+        $token      = MockHelper::getFaker()->uuid;
+        $createdAt  = MockHelper::getFaker()->dateTime();
         $modifiedAt = MockHelper::getFaker()->dateTime();
         $validUntil = MockHelper::getFaker()->dateTime();
-        $metaInfo = MockHelper::getFaker()->word;
+        $metaInfo   = MockHelper::getFaker()->word;
 
         $authToken = new AuthToken(
             $id,
@@ -98,18 +98,18 @@ class AuthTokenTest extends AbstractTestCase {
      * @return void
      */
     public function testFromResponse() {
-        $createdAt = MockHelper::getFaker()->dateTime();
+        $createdAt  = MockHelper::getFaker()->dateTime();
         $modifiedAt = MockHelper::getFaker()->dateTime();
         $validUntil = MockHelper::getFaker()->dateTime();
 
         $response = [
-            'id' => MockHelper::getFaker()->uuid,
-            'userId' => MockHelper::getFaker()->uuid,
+            'id'         => MockHelper::getFaker()->uuid,
+            'userId'     => MockHelper::getFaker()->uuid,
             'loginToken' => MockHelper::getFaker()->uuid,
             'modifiedAt' => $modifiedAt->format('Y-m-d H:i:s'),
-            'createdAt' => $createdAt->format('Y-m-d H:i:s'),
+            'createdAt'  => $createdAt->format('Y-m-d H:i:s'),
             'validUntil' => $validUntil->format('Y-m-d H:i:s'),
-            'metaInfo' => MockHelper::getFaker()->word,
+            'metaInfo'   => MockHelper::getFaker()->word,
         ];
 
         $authToken = AuthToken::fromResponse($response);
@@ -127,13 +127,13 @@ class AuthTokenTest extends AbstractTestCase {
      * @return void
      */
     public function testToArray() {
-        $id = MockHelper::getFaker()->uuid;
-        $userId = MockHelper::getFaker()->uuid;
-        $token = MockHelper::getFaker()->uuid;
-        $createdAt = MockHelper::getFaker()->dateTime();
+        $id         = MockHelper::getFaker()->uuid;
+        $userId     = MockHelper::getFaker()->uuid;
+        $token      = MockHelper::getFaker()->uuid;
+        $createdAt  = MockHelper::getFaker()->dateTime();
         $modifiedAt = MockHelper::getFaker()->dateTime();
         $validUntil = MockHelper::getFaker()->dateTime();
-        $metaInfo = MockHelper::getFaker()->word;
+        $metaInfo   = MockHelper::getFaker()->word;
 
         $authToken = new AuthToken(
             $id,
