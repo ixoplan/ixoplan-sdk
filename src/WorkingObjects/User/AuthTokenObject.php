@@ -4,7 +4,7 @@ namespace Ixolit\Dislo\WorkingObjects\User;
 
 
 use Ixolit\Dislo\WorkingObjects\AbstractWorkingObject;
-use Ixolit\Dislo\WorkingObjectsCustom\User\AuthTokenCustom;
+use Ixolit\Dislo\WorkingObjectsCustom\AuthTokenCustom;
 
 /**
  * Class AuthTokenObject
