@@ -51,7 +51,7 @@ class FlexibleMock {
     /**
      * @return string
      */
-    protected static function randomStatus() {
+    public static function randomStatus() {
         return self::$states[\rand(0, (\count(self::$states) -1))];
     }
 

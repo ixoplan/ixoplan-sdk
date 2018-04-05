@@ -99,7 +99,7 @@ class ExternalProfileTest extends AbstractTestCase {
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->uuid,
             [
-                MockHelper::getFaker()->uuid
+                MockHelper::getFaker()->uuid,
             ],
             MockHelper::getFaker()->uuid
         );
