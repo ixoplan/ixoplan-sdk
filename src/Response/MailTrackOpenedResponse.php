@@ -2,8 +2,11 @@
 
 namespace Ixolit\Dislo\Response;
 
+
 /**
- * @deprecated use Ixolit\Dislo\Response\Misc\MailTrackOpenedResponseObject instead
+ * Class MailTrackOpenedResponse
+ *
+ * @package Ixolit\Dislo\Response
  */
 class MailTrackOpenedResponse {
 
