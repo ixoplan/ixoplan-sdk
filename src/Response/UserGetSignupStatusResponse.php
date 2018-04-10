@@ -10,8 +10,6 @@ use Ixolit\Dislo\WorkingObjects\User;
  * Class UserGetSignupStatusResponse
  *
  * @package Ixolit\Dislo\Response
- *
- * @deprecated
  */
 class UserGetSignupStatusResponse {
 	const STATUS_FINISHED = 'finished';

@@ -10,12 +10,6 @@ namespace Ixolit\Dislo\Response;
 class UserRecoveryStartResponse {
 
     /**
-     * UserRecoveryStartResponse constructor.
-     */
-	public function __construct() {
-	}
-
-    /**
      * @param array $response
      *
      * @return UserRecoveryStartResponse
