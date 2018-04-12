@@ -316,7 +316,7 @@ class Client extends AbstractClient {
 		$data['paymentDetails'] = $paymentDetails;
 		$data['countryCode'] = $countryCode;
 		$response               = $this->request(self::API_URI_BILLING_CREATE_PAYMENT, $data);
-		if (!$response['redirectUrl']) {
+		if (empty($response['redirectUrl'])) {
 			$response['redirectUrl'] = $returnUrl;
 		}
 		return BillingCreatePaymentResponse::fromResponse($response);
@@ -1495,8 +1495,6 @@ class Client extends AbstractClient {
 					throw new AuthenticationRateLimitedException($username);
 				case 'invalid_credentials':
 					throw new AuthenticationInvalidCredentialsException($username);
-				case null;
-					break;
 				default:
 					throw new AuthenticationException($username);
 			}

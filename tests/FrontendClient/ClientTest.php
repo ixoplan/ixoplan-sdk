@@ -34,6 +34,7 @@ use Ixolit\Dislo\Response\SubscriptionCancelPackageChangeResponse;
 use Ixolit\Dislo\Response\SubscriptionCancelResponse;
 use Ixolit\Dislo\Response\SubscriptionChangeResponse;
 use Ixolit\Dislo\Response\SubscriptionCloseResponse;
+use Ixolit\Dislo\Response\SubscriptionContinueResponse;
 use Ixolit\Dislo\Response\SubscriptionCreateAddonResponse;
 use Ixolit\Dislo\Response\SubscriptionCreateResponse;
 use Ixolit\Dislo\Response\SubscriptionExternalAddonCreateResponse;
@@ -102,6 +103,7 @@ use Ixolit\Dislo\Test\Response\TestSubscriptionCancelPackageChangeResponse;
 use Ixolit\Dislo\Test\Response\TestSubscriptionCancelResponse;
 use Ixolit\Dislo\Test\Response\TestSubscriptionChangeResponse;
 use Ixolit\Dislo\Test\Response\TestSubscriptionCloseResponse;
+use Ixolit\Dislo\Test\Response\TestSubscriptionContinueResponse;
 use Ixolit\Dislo\Test\Response\TestSubscriptionCreateAddonResponse;
 use Ixolit\Dislo\Test\Response\TestSubscriptionCreateResponse;
 use Ixolit\Dislo\Test\Response\TestSubscriptionExternalAddonCreateResponse;
@@ -459,6 +461,29 @@ final class ClientTest extends AbstractTestCase {
         $this->assertEquals($response->getRedirectUrl(), $testResponse->getRedirectUrl());
         $this->assertEmpty(\array_diff($response->getMetaData(), $testResponse->getMetaData()));
         $this->compareBillingEvent($response->getBillingEvent(), $testResponse->getBillingEvent());
+
+        $testResponse = new TestBillingCreatePaymentResponse(false);
+
+        $frontendClient = $this->createFrontendClient($testResponse);
+
+        $returnUrl = MockHelper::getFaker()->url;
+
+        $response = $frontendClient->billingCreatePayment(
+            MockHelper::getFaker()->randomNumber(),
+            MockHelper::getFaker()->uuid,
+            $returnUrl,
+            [
+                MockHelper::getFaker()->word => MockHelper::getFaker()->word,
+            ],
+            MockHelper::getFaker()->uuid,
+            MockHelper::getFaker()->countryCode
+        );
+
+        $this->assertTrue(($response instanceof BillingCreatePaymentResponse));
+
+        $this->assertEquals($response->getRedirectUrl(), $returnUrl);
+        $this->assertEmpty(\array_diff($response->getMetaData(), $testResponse->getMetaData()));
+        $this->compareBillingEvent($response->getBillingEvent(), $testResponse->getBillingEvent());
     }
 
     /**
@@ -475,6 +500,32 @@ final class ClientTest extends AbstractTestCase {
             MockHelper::getFaker()->currencyCode,
             MockHelper::getFaker()->randomFloat(2),
             MockHelper::getFaker()->randomNumber(),
+            MockHelper::getFaker()->randomNumber(),
+            [
+                MockHelper::getFaker()->word => MockHelper::getFaker()->word,
+            ],
+            MockHelper::getFaker()->words(3),
+            BillingEventMock::randomstatus(),
+            MockHelper::getFaker()->uuid
+        );
+
+        $this->assertTrue($response instanceof BillingExternalCreateChargeResponse);
+
+        $this->assertEquals($response->getBillingEventId(), $testResponse->getBillingEventId());
+    }
+
+    /**
+     * @return void
+     */
+    public function testBillingExternalCreateChargeWithoutProfile() {
+        $testResponse = new TestBillingExternalCreateChargeResponse();
+
+        $frontendClient = $this->createFrontendClient($testResponse);
+
+        $response = $frontendClient->billingExternalCreateChargeWithoutProfile(
+            MockHelper::getFaker()->randomNumber(),
+            MockHelper::getFaker()->currencyCode,
+            MockHelper::getFaker()->randomFloat(2),
             MockHelper::getFaker()->randomNumber(),
             [
                 MockHelper::getFaker()->word => MockHelper::getFaker()->word,
@@ -860,6 +911,23 @@ final class ClientTest extends AbstractTestCase {
     /**
      * @return void
      */
+    public function testSubscriptionContinue() {
+        $testResponse = new TestSubscriptionContinueResponse();
+
+        $frontendClient = $this->createFrontendClient($testResponse);
+
+        $response = $frontendClient->subscriptionContinue(
+            MockHelper::getFaker()->randomNumber(),
+            MockHelper::getFaker()->uuid
+        );
+
+        $this->assertInstanceOf(SubscriptionContinueResponse::class, $response);
+        $this->compareSubscription($response->getSubscription(), $testResponse->getSubscription());
+    }
+
+    /**
+     * @return void
+     */
     public function testSubscriptionCreateAddon() {
         $testResponse = new TestSubscriptionCreateAddonResponse();
 
@@ -908,7 +976,7 @@ final class ClientTest extends AbstractTestCase {
     /**
      * @return void
      */
-    public function subscriptionExternalChange() {
+    public function testSubscriptionExternalChange() {
         $testResponse = new TestSubscriptionExternalChangeResponse();
 
         $frontendClient = $this->createFrontendClient($testResponse);
@@ -1025,6 +1093,19 @@ final class ClientTest extends AbstractTestCase {
         $response = $frontendClient->subscriptionCallSpi(
             MockHelper::getFaker()->uuid,
             MockHelper::getFaker()->randomNumber(),
+            MockHelper::getFaker()->word,
+            [
+                MockHelper::getFaker()->word => MockHelper::getFaker()->word,
+            ],
+            MockHelper::getFaker()->randomNumber()
+        );
+
+        $this->assertTrue($response instanceof SubscriptionCallSpiResponse);
+        $this->assertEmpty(\array_diff($response->getSpiResponse(), $testResponse->getSpiResponse()));
+
+        $response = $frontendClient->subscriptionCallSpi(
+            MockHelper::getFaker()->uuid,
+            SubscriptionMock::create(),
             MockHelper::getFaker()->word,
             [
                 MockHelper::getFaker()->word => MockHelper::getFaker()->word,

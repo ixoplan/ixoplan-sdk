@@ -30,9 +30,13 @@ class TestBillingCreatePaymentResponse implements TestResponseInterface {
 
     /**
      * TestBillingCreatePaymentResponse constructor.
+     *
+     * @param bool $withRedirectUrl
      */
-    public function __construct() {
-        $this->redirectUrl = MockHelper::getFaker()->url;
+    public function __construct($withRedirectUrl = true) {
+        $this->redirectUrl = $withRedirectUrl
+            ? MockHelper::getFaker()->url
+            : null;
         $this->metaData = [
             MockHelper::getFaker()->word => MockHelper::getFaker()->word,
         ];
@@ -67,11 +71,16 @@ class TestBillingCreatePaymentResponse implements TestResponseInterface {
      * @return array
      */
     public function handleRequest($uri, array $data = []) {
-        return [
-            'redirectUrl'  => $this->getRedirectUrl(),
+        $response = [
             'metaData'     => $this->getMetaData(),
             'billingEvent' => $this->getBillingEvent()->toArray(),
         ];
+
+        if (!empty($this->redirectUrl)) {
+            $response['redirectUrl']  = $this->getRedirectUrl();
+        }
+
+        return $response;
     }
 
 }
