@@ -25,8 +25,7 @@ abstract class AbstractWorkingObject implements WorkingObject {
         if (class_exists($class)) {
             $object = new $class;
             if ($object instanceof WorkingObjectCustomInterface) {
-                $object->setWorkingObject($this);
-                $this->customObject = $object;
+                $this->customObject = $object->setWorkingObject($this);
             }
         }
 
