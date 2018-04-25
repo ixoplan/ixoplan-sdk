@@ -1210,17 +1210,21 @@ class Client extends AbstractClient {
 		return SubscriptionGetResponse::fromResponse($response);
 	}
 
-	/**
-	 * Retrieves all subscriptions for a user.
-	 *
-	 * @param User|int|string $userTokenOrId User authentication token or user ID.
-	 *
-	 * @return SubscriptionGetAllResponse
-	 */
+    /**
+     * Retrieves all subscriptions for a user.
+     *
+     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param array           $statusWhitelist
+     *
+     * @return SubscriptionGetAllResponse
+     */
 	public function subscriptionGetAll(
-		$userTokenOrId
+		$userTokenOrId,
+        array $statusWhitelist = []
 	) {
-		$data = [];
+		$data = [
+		    'statusWhitelist' => $statusWhitelist,
+        ];
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/getSubscriptions', $data);
 		return SubscriptionGetAllResponse::fromResponse($response);
