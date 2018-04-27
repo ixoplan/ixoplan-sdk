@@ -1215,16 +1215,24 @@ class Client extends AbstractClient {
      *
      * @param User|int|string $userTokenOrId User authentication token or user ID.
      * @param array           $statusWhitelist
+     * @param int|null        $limit
      *
      * @return SubscriptionGetAllResponse
      */
 	public function subscriptionGetAll(
 		$userTokenOrId,
-        array $statusWhitelist = []
+        array $statusWhitelist = [],
+        $limit = null
 	) {
-		$data = [
-		    'statusWhitelist' => $statusWhitelist,
-        ];
+	    $data = [];
+
+	    if (!empty($statusWhitelist)) {
+	        $data['statusWhitelist'] = $statusWhitelist;
+        }
+        if (!empty($limit)) {
+	        $data['limit'] = $limit;
+        }
+
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/getSubscriptions', $data);
 		return SubscriptionGetAllResponse::fromResponse($response);
