@@ -1171,20 +1171,27 @@ class Client extends AbstractClient {
 		throw new ObjectNotFoundException('package with ID ' . $packageIdentifier);
 	}
 
-	/**
-	 * Retrieve a list of all packages registered in the system.
-	 *
-	 * @param string|null $serviceIdentifier
-	 *
-	 * @return PackagesListResponse
-	 */
+    /**
+     * Retrieve a list of all packages registered in the system.
+     *
+     * @param string|null $serviceIdentifier
+     *
+     * @param array $packageIdentifiers
+     * @return PackagesListResponse
+     */
 	public function packagesList(
-		$serviceIdentifier = null
+		$serviceIdentifier = null,
+        array $packageIdentifiers = []
 	) {
 		$data = [];
 		if ($serviceIdentifier) {
 			$data['serviceIdentifier'] = $serviceIdentifier;
 		}
+
+		if(count($packageIdentifiers)) {
+		    $data['packageIdentifiers'] = $packageIdentifiers;
+        }
+
 		$response = $this->request('/frontend/subscription/getPackages', $data);
 		return PackagesListResponse::fromResponse($response);
 	}
