@@ -257,7 +257,7 @@ class Package implements WorkingObject {
             'signupAvailable'              => $this->signupAvailable,
             'addonPackages'                => $addonPackages,
             'metaData'                     => $this->metaData,
-            'initialPeriod'                => $this->initialPeriod->toArray(),
+            'initialPeriod'                => $this->initialPeriod ? $this->initialPeriod->toArray() : null,
             'recurringPeriod'              => ($this->recurringPeriod ? $this->recurringPeriod->toArray() : null),
             'hasTrialPeriod'               => $this->hasTrialPeriod,
             'billingMethods'               => $billingMethods,

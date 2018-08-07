@@ -95,137 +95,12 @@ use Psr\Http\Message\StreamInterface;
  * For details about the Dislo API, the available calls and Dislo itself please read the documentation available at
  * https://docs.dislo.com/
  */
-class Client {
+class Client extends AbstractClient {
 	const COUPON_EVENT_START    = 'subscription_start';
 	const COUPON_EVENT_UPGRADE  = 'subscription_upgrade';
 
 	const PLAN_CHANGE_IMMEDIATE = 'immediate';
 	const PLAN_CHANGE_QUEUED    = 'queued';
-
-	const ORDER_DIR_ASC = 'ASC';
-	const ORDER_DIR_DESC = 'DESC';
-
-	/**
-	 * @var RequestClient
-	 */
-	private $requestClient;
-	/**
-	 * @var bool
-	 */
-	private $forceTokenMode;
-
-	/**
-	 * @return RequestClientExtra
-	 *
-	 * @throws NotImplementedException
-	 */
-	private function getRequestClientExtra() {
-		if ($this->requestClient instanceof RequestClientExtra) {
-			return $this->requestClient;
-		}
-		else {
-			throw new NotImplementedException();
-		}
-	}
-
-	private function userToData($userTokenOrId, &$data = []) {
-		if ($this->forceTokenMode) {
-		    if (is_object($userTokenOrId) && $userTokenOrId instanceof AuthToken) {
-		        $data['authToken'] = (string) $userTokenOrId;
-		    } else {
-		        $data['authToken'] = $userTokenOrId;
-		    }
-			return $data;
-		}
-		if ($userTokenOrId instanceof User) {
-			$data['userId'] = $userTokenOrId->getUserId();
-			return $data;
-		}
-		if (\is_null($userTokenOrId)) {
-			return $data;
-		}
-		if (\is_bool($userTokenOrId) || \is_float($userTokenOrId) || \is_resource($userTokenOrId) ||
-			\is_array($userTokenOrId)
-		) {
-			throw new \InvalidArgumentException('Invalid user specification: ' . \var_export($userTokenOrId, true));
-		}
-		if (\is_object($userTokenOrId)) {
-			if (!\method_exists($userTokenOrId, '__toString')) {
-				throw new \InvalidArgumentException('Invalid user specification: ' . \var_export($userTokenOrId, true));
-			}
-			$userTokenOrId = $userTokenOrId->__toString();
-		}
-
-		if (\is_int($userTokenOrId) || \preg_match('/^[0-9]+$/D', $userTokenOrId)) {
-			$data['userId'] = (int)$userTokenOrId;
-		} else {
-			$data['authToken'] = $userTokenOrId;
-		}
-		return $data;
-	}
-
-	/**
-	 * Perform a request and handle errors.
-	 *
-	 * @param string $uri
-	 * @param array  $data
-	 *
-	 * @return array
-	 *
-	 * @throws DisloException
-	 * @throws ObjectNotFoundException
-	 */
-	private function request($uri, $data) {
-		try {
-			$response = $this->requestClient->request($uri, $data);
-			if (isset($response['success']) && $response['success'] === false) {
-				switch ($response['errors'][0]['code']) {
-					case 404:
-						throw new ObjectNotFoundException(
-							$response['errors'][0]['message'] . ' while trying to query ' . $uri,
-							$response['errors'][0]['code']);
-					case 9002:
-						throw new InvalidTokenException();
-					default:
-						throw new DisloException(
-							$response['errors'][0]['message'] . ' while trying to query ' . $uri,
-							$response['errors'][0]['code']);
-				}
-			} else {
-				return $response;
-			}
-		} catch (ObjectNotFoundException $e) {
-			throw $e;
-		} catch (DisloException $e) {
-			throw $e;
-		} catch (\Exception $e) {
-			throw new DisloException($e->getMessage(), $e->getCode(), $e);
-		}
-	}
-
-	/**
-	 * Initialize the client with a RequestClient, the class that is responsible for transporting messages to and
-	 * from the Dislo API.
-	 *
-	 * @param RequestClient $requestClient
-	 * @param bool          $forceTokenMode Force using tokens. Does not allow passing a user Id.
-	 *
-	 * @throws DisloException if the $requestClient parameter is missing
-	 */
-	public function __construct(RequestClient $requestClient, $forceTokenMode = true) {
-		if (!($requestClient instanceof RequestClient)) {
-			throw new DisloException('A RequestClient parameter is required!');
-		}
-		$this->requestClient  = $requestClient;
-		$this->forceTokenMode = $forceTokenMode;
-	}
-
-    /**
-     * @return bool
-     */
-	public function isForceTokenMode() {
-	    return $this->forceTokenMode;
-    }
 
 	/**
 	 * Retrieve the list of payment methods.
@@ -1296,20 +1171,27 @@ class Client {
 		throw new ObjectNotFoundException('package with ID ' . $packageIdentifier);
 	}
 
-	/**
-	 * Retrieve a list of all packages registered in the system.
-	 *
-	 * @param string|null $serviceIdentifier
-	 *
-	 * @return PackagesListResponse
-	 */
+    /**
+     * Retrieve a list of all packages registered in the system.
+     *
+     * @param string|null $serviceIdentifier
+     *
+     * @param array $packageIdentifiers
+     * @return PackagesListResponse
+     */
 	public function packagesList(
-		$serviceIdentifier = null
+		$serviceIdentifier = null,
+        array $packageIdentifiers = []
 	) {
 		$data = [];
 		if ($serviceIdentifier) {
 			$data['serviceIdentifier'] = $serviceIdentifier;
 		}
+
+		if(count($packageIdentifiers)) {
+		    $data['packageIdentifiers'] = $packageIdentifiers;
+        }
+
 		$response = $this->request('/frontend/subscription/getPackages', $data);
 		return PackagesListResponse::fromResponse($response);
 	}
@@ -1335,17 +1217,29 @@ class Client {
 		return SubscriptionGetResponse::fromResponse($response);
 	}
 
-	/**
-	 * Retrieves all subscriptions for a user.
-	 *
-	 * @param User|int|string $userTokenOrId User authentication token or user ID.
-	 *
-	 * @return SubscriptionGetAllResponse
-	 */
+    /**
+     * Retrieves all subscriptions for a user.
+     *
+     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param array           $statusWhitelist
+     * @param int|null        $limit
+     *
+     * @return SubscriptionGetAllResponse
+     */
 	public function subscriptionGetAll(
-		$userTokenOrId
+		$userTokenOrId,
+        array $statusWhitelist = [],
+        $limit = null
 	) {
-		$data = [];
+	    $data = [];
+
+	    if (!empty($statusWhitelist)) {
+	        $data['statusWhitelist'] = $statusWhitelist;
+        }
+        if (!empty($limit)) {
+	        $data['limit'] = $limit;
+        }
+
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/getSubscriptions', $data);
 		return SubscriptionGetAllResponse::fromResponse($response);
