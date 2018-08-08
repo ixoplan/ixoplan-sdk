@@ -1245,21 +1245,28 @@ class Client extends AbstractClient {
 		throw new ObjectNotFoundException('package with ID ' . $packageIdentifier);
 	}
 
-	/**
-	 * Retrieve a list of all packages registered in the system.
-	 *
-	 * @param string|null $serviceIdentifier
-	 *
-	 * @return PackagesListResponse
-	 */
+    /**
+     * Retrieve a list of all packages registered in the system.
+     *
+     * @param string|null $serviceIdentifier
+     *
+     * @param array $packageIdentifiers
+     * @return PackagesListResponse
+     */
 	public function packagesList(
-		$serviceIdentifier = null
+		$serviceIdentifier = null,
+        array $packageIdentifiers = []
 	) {
 		$data = [];
 		if ($serviceIdentifier) {
 			$data['serviceIdentifier'] = $serviceIdentifier;
 		}
 		$response = $this->request(self::API_URI_PACKAGE_LIST, $data);
+
+		if(count($packageIdentifiers)) {
+		    $data['packageIdentifiers'] = $packageIdentifiers;
+        }
+
 		return PackagesListResponse::fromResponse($response);
 	}
 
@@ -1284,17 +1291,29 @@ class Client extends AbstractClient {
 		return SubscriptionGetResponse::fromResponse($response);
 	}
 
-	/**
-	 * Retrieves all subscriptions for a user.
-	 *
-	 * @param User|int|string $userTokenOrId User authentication token or user ID.
-	 *
-	 * @return SubscriptionGetAllResponse
-	 */
+    /**
+     * Retrieves all subscriptions for a user.
+     *
+     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param array           $statusWhitelist
+     * @param int|null        $limit
+     *
+     * @return SubscriptionGetAllResponse
+     */
 	public function subscriptionGetAll(
-		$userTokenOrId
+		$userTokenOrId,
+        array $statusWhitelist = [],
+        $limit = null
 	) {
-		$data = [];
+	    $data = [];
+
+	    if (!empty($statusWhitelist)) {
+	        $data['statusWhitelist'] = $statusWhitelist;
+        }
+        if (!empty($limit)) {
+	        $data['limit'] = $limit;
+        }
+
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request(self::API_URI_SUBSCRIPTION_GET_ALL, $data);
 		return SubscriptionGetAllResponse::fromResponse($response);

@@ -17,7 +17,7 @@
 		"ixolit/dislo-sdk-http-guzzle": "Guzzle connector for the Dislo SDK"
 	},
 	"require": {
-		"ixolit/dislo-sdk-http": "^1.0",
+		"ixolit/dislo-sdk-http": "dev-beta",
 		"psr/http-message": "^1.0"
 	},
 	"require-dev": {
