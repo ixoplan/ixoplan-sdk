@@ -26,7 +26,7 @@ class UserContext {
     private $client;
 
     /**
-     * @var UserContextWrapper
+     * @var User
      */
     private $user;
 

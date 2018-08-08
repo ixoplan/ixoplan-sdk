@@ -2,7 +2,17 @@
 
 namespace Ixolit\Dislo\WorkingObjects;
 
+/**
+ * Interface WorkingObjectCustomInterface
+ *
+ * @package Ixolit\Dislo\WorkingObjects
+ */
 interface WorkingObjectCustomInterface {
 
-    public function setWorkingObject($object);
+    /**
+     * @param WorkingObject $object
+     *
+     * @return $this
+     */
+    public function setWorkingObject(WorkingObject $object);
 }
