@@ -91,85 +91,83 @@ use Psr\Http\Message\StreamInterface;
  */
 class Client extends AbstractClient {
 
-    const API_URI_BILLING_METHODS_GET = '/frontend/billing/getPaymentMethods';
-    const API_URI_BILLING_METHODS_GET_FOR_PACKAGE = '/frontend/billing/getPaymentMethodsForPackage';
-    const API_URI_BILLING_CLOSE_FLEXIBLE = '/frontend/billing/closeFlexible';
-    const API_URI_BILLING_CREATE_FLEXIBLE = '/frontend/billing/createFlexible';
-    const API_URI_BILLING_CREATE_PAYMENT = '/frontend/billing/createPayment';
-    const API_URI_BILLING_EXTERNAL_CREATE_CHARGE = '/frontend/billing/externalCreateCharge';
+    const API_URI_BILLING_METHODS_GET                            = '/frontend/billing/getPaymentMethods';
+    const API_URI_BILLING_METHODS_GET_FOR_PACKAGE                = '/frontend/billing/getPaymentMethodsForPackage';
+    const API_URI_BILLING_CLOSE_FLEXIBLE                         = '/frontend/billing/closeFlexible';
+    const API_URI_BILLING_CREATE_FLEXIBLE                        = '/frontend/billing/createFlexible';
+    const API_URI_BILLING_CREATE_PAYMENT                         = '/frontend/billing/createPayment';
+    const API_URI_BILLING_EXTERNAL_CREATE_CHARGE                 = '/frontend/billing/externalCreateCharge';
     const API_URI_BILLING_EXTERNAL_CREATE_CHARGE_WITHOUT_PROFILE = '/frontend/billing/externalCreateChargeWithoutProfile';
-    const API_URI_BILLING_EXTERNAL_CREATE_CHARGEBACK = '/frontend/billing/externalCreateChargeback';
-    const API_URI_BILLING_EXTERNAL_GET_PROFILE = '/frontend/billing/externalGetProfile';
-    const API_URI_BILLING_GET_EVENT = '/frontend/billing/getBillingEvent';
-    const API_URI_BILLING_GET_EVENTS_FOR_USER = '/frontend/billing/getBillingEventsForUser';
-    const API_URI_BILLING_GET_FLEXIBLE = '/frontend/billing/getFlexible';
-    const API_URI_BILLING_GET_FLEXIBLE_BY_ID = '/frontend/billing/getFlexibleById';
-    const API_URI_BILLING_GET_ACTIVE_RECURRING = '/frontend/billing/getActiveRecurring';
-    const API_URI_BILLING_CLOSE_ACTIVE_RECURRING = '/frontend/billing/closeActiveRecurring';
+    const API_URI_BILLING_EXTERNAL_CREATE_CHARGEBACK             = '/frontend/billing/externalCreateChargeback';
+    const API_URI_BILLING_EXTERNAL_GET_PROFILE                   = '/frontend/billing/externalGetProfile';
+    const API_URI_BILLING_GET_EVENT                              = '/frontend/billing/getBillingEvent';
+    const API_URI_BILLING_GET_EVENTS_FOR_USER                    = '/frontend/billing/getBillingEventsForUser';
+    const API_URI_BILLING_GET_FLEXIBLE                           = '/frontend/billing/getFlexible';
+    const API_URI_BILLING_GET_FLEXIBLE_BY_ID                     = '/frontend/billing/getFlexibleById';
+    const API_URI_BILLING_GET_ACTIVE_RECURRING                   = '/frontend/billing/getActiveRecurring';
+    const API_URI_BILLING_CLOSE_ACTIVE_RECURRING                 = '/frontend/billing/closeActiveRecurring';
 
-    const API_URI_SUBSCRIPTION_CALCULATE_ADDON_PRICE = '/frontend/subscription/calculateAddonPrice';
-    const API_URI_SUBSCRIPTION_CALCULATE_PACKAGE_CHANGE = '/frontend/subscription/calculatePackageChange';
-    const API_URI_SUBSCRIPTION_CALCULATE_PRICE = '/frontend/subscription/calculateSubscriptionPrice';
-    const API_URI_SUBSCRIPTION_CANCEL_PACKAGE_CHANGE = '/frontend/subscription/cancelPackageChange';
-    const API_URI_SUBSCRIPTION_CANCEL = '/frontend/subscription/cancel';
-    const API_URI_SUBSCRIPTION_CHANGE = '/frontend/subscription/changePackage';
-    const API_URI_COUPON_CODE_CHECK = '/frontend/subscription/checkCouponCode';
-    const API_URI_SUBSCRIPTION_CLOSE = '/frontend/subscription/close';
-    const API_URI_SUBSCRIPTION_CONTINUE = '/frontend/subscription/continue';
-    const API_URI_SUBSCRIPTION_CREATE_ADDON = '/frontend/subscription/createAddonSubscription';
-    const API_URI_SUBSCRIPTION_CREATE = '/frontend/subscription/create';
-    const API_URI_SUBSCRIPTION_EXTERNAL_CHANGE = '/frontend/subscription/externalChangePackage';
-    const API_URI_SUBSCRIPTION_EXTERNAL_CHANGE_PERIOD = '/frontend/subscription/externalChangePeriod';
-    const API_URI_SUBSCRIPTION_EXTERNAL_CLOSE = '/frontend/subscription/externalCloseSubscription';
+    const API_URI_SUBSCRIPTION_CALCULATE_ADDON_PRICE              = '/frontend/subscription/calculateAddonPrice';
+    const API_URI_SUBSCRIPTION_CALCULATE_PACKAGE_CHANGE           = '/frontend/subscription/calculatePackageChange';
+    const API_URI_SUBSCRIPTION_CALCULATE_PRICE                    = '/frontend/subscription/calculateSubscriptionPrice';
+    const API_URI_SUBSCRIPTION_CANCEL_PACKAGE_CHANGE              = '/frontend/subscription/cancelPackageChange';
+    const API_URI_SUBSCRIPTION_CANCEL                             = '/frontend/subscription/cancel';
+    const API_URI_SUBSCRIPTION_CHANGE                             = '/frontend/subscription/changePackage';
+    const API_URI_COUPON_CODE_CHECK                               = '/frontend/subscription/checkCouponCode';
+    const API_URI_SUBSCRIPTION_CLOSE                              = '/frontend/subscription/close';
+    const API_URI_SUBSCRIPTION_CONTINUE                           = '/frontend/subscription/continue';
+    const API_URI_SUBSCRIPTION_CREATE_ADDON                       = '/frontend/subscription/createAddonSubscription';
+    const API_URI_SUBSCRIPTION_CREATE                             = '/frontend/subscription/create';
+    const API_URI_SUBSCRIPTION_EXTERNAL_CHANGE                    = '/frontend/subscription/externalChangePackage';
+    const API_URI_SUBSCRIPTION_EXTERNAL_CHANGE_PERIOD             = '/frontend/subscription/externalChangePeriod';
+    const API_URI_SUBSCRIPTION_EXTERNAL_CLOSE                     = '/frontend/subscription/externalCloseSubscription';
     const API_URI_SUBSCRIPTION_EXTERNAL_CREATE_ADDON_SUBSCRIPTION = '/frontend/subscription/externalCreateAddonSubscription';
-    const API_URI_SUBSCRIPTION_EXTERNAL_CREATE = '/frontend/subscription/externalCreateSubscription';
-    const API_URI_SUBSCRIPTION_CALL_SPI = '/frontend/subscription/callSpi';
-    const API_URI_SUBSCRIPTION_GET_POSSIBLE_PACKAGE_CHANGES = '/frontend/subscription/getPossiblePackageChanges';
-    const API_URI_PACKAGE_LIST = '/frontend/subscription/getPackages';
-    const API_URI_SUBSCRIPTION_GET = '/frontend/subscription/get';
-    const API_URI_SUBSCRIPTION_GET_ALL = '/frontend/subscription/getSubscriptions';
-    const API_URI_SUBSCRIPTION_GET_PERIOD_EVENTS = '/frontend/subscription/getPeriodHistory';
-    const API_URI_SUBSCRIPTION_ATTACH_COUPON = '/frontend/subscription/attachCoupon';
-    const API_URI_SUBSCRIPTION_FIRE_EVENT = '/frontend/subscription/fireEvent';
-    const API_URI_COUPON_CODE_VALIDATE = '/frontend/subscription/validateCoupon';
+    const API_URI_SUBSCRIPTION_EXTERNAL_CREATE                    = '/frontend/subscription/externalCreateSubscription';
+    const API_URI_SUBSCRIPTION_CALL_SPI                           = '/frontend/subscription/callSpi';
+    const API_URI_SUBSCRIPTION_GET_POSSIBLE_PLAN_CHANGES          = '/frontend/subscription/getPossiblePlanChanges';
+    const API_URI_PACKAGE_LIST                                    = '/frontend/subscription/getPackages';
+    const API_URI_SUBSCRIPTION_GET                                = '/frontend/subscription/get';
+    const API_URI_SUBSCRIPTION_GET_ALL                            = '/frontend/subscription/getSubscriptions';
+    const API_URI_SUBSCRIPTION_GET_PERIOD_EVENTS                  = '/frontend/subscription/getPeriodHistory';
+    const API_URI_SUBSCRIPTION_ATTACH_COUPON                      = '/frontend/subscription/attachCoupon';
+    const API_URI_SUBSCRIPTION_FIRE_EVENT                         = '/frontend/subscription/fireEvent';
+    const API_URI_COUPON_CODE_VALIDATE                            = '/frontend/subscription/validateCoupon';
 
-    const API_URI_USER_AUTHENTICATE = '/frontend/user/authenticate';
-    const API_URI_USER_DEAUTHENTICATE = '/frontend/user/deAuthToken';
-    const API_URI_USER_CHANGE = '/frontend/user/change';
-    const API_URI_USER_CHANGE_PASSWORD = '/frontend/user/changePassword';
-    const API_URI_USER_CREATE = '/frontend/user/create';
-    const API_URI_USER_DELETE = '/frontend/user/delete';
-    const API_URI_USER_DISABLE_LOGIN = '/frontend/user/disableLogin';
-    const API_URI_USER_ENABLE_LOGIN = '/frontend/user/enableLogin';
+    const API_URI_USER_AUTHENTICATE        = '/frontend/user/authenticate';
+    const API_URI_USER_DEAUTHENTICATE      = '/frontend/user/deAuthToken';
+    const API_URI_USER_CHANGE              = '/frontend/user/change';
+    const API_URI_USER_CHANGE_PASSWORD     = '/frontend/user/changePassword';
+    const API_URI_USER_CREATE              = '/frontend/user/create';
+    const API_URI_USER_DELETE              = '/frontend/user/delete';
+    const API_URI_USER_DISABLE_LOGIN       = '/frontend/user/disableLogin';
+    const API_URI_USER_ENABLE_LOGIN        = '/frontend/user/enableLogin';
     const API_URI_USER_GET_ACCOUNT_BALANCE = '/frontend/user/getBalance';
-    const API_URI_USER_GET_META_PROFILE = '/frontend/user/getMetaProfile';
-    const API_URI_USER_GET_AUTH_TOKENS = '/frontend/user/getTokens';
-    const API_URI_USER_GET = '/frontend/user/get';
-    const API_URI_USER_UPDATE_AUTH_TOKEN = '/frontend/user/updateToken';
-    const API_URI_USER_EXTEND_AUTH_TOKEN = '/frontend/user/extendTokenLifeTime';
-    const API_URI_USER_GET_AUTHENTICATED = '/frontend/user/getAuthenticated';
-    const API_URI_USER_FIND = '/frontend/user/findUser';
-    const API_URI_USER_RECOVERY_START = '/frontend/user/passwordRecovery/start';
-    const API_URI_USER_RECOVERY_CHECK = '/frontend/user/passwordRecovery/check';
-    const API_URI_USER_RECOVERY_FINISH = '/frontend/user/passwordRecovery/finalize';
-    const API_URI_USER_VERIFICATION_START = '/frontend/user/verification/start';
+    const API_URI_USER_GET_META_PROFILE    = '/frontend/user/getMetaProfile';
+    const API_URI_USER_GET_AUTH_TOKENS     = '/frontend/user/getTokens';
+    const API_URI_USER_GET                 = '/frontend/user/get';
+    const API_URI_USER_UPDATE_AUTH_TOKEN   = '/frontend/user/updateToken';
+    const API_URI_USER_EXTEND_AUTH_TOKEN   = '/frontend/user/extendTokenLifeTime';
+    const API_URI_USER_GET_AUTHENTICATED   = '/frontend/user/getAuthenticated';
+    const API_URI_USER_FIND                = '/frontend/user/findUser';
+    const API_URI_USER_RECOVERY_START      = '/frontend/user/passwordRecovery/start';
+    const API_URI_USER_RECOVERY_CHECK      = '/frontend/user/passwordRecovery/check';
+    const API_URI_USER_RECOVERY_FINISH     = '/frontend/user/passwordRecovery/finalize';
+    const API_URI_USER_VERIFICATION_START  = '/frontend/user/verification/start';
     const API_URI_USER_VERIFICATION_FINISH = '/frontend/user/verification/finalize';
-    const API_URI_USER_FIRE_EVENT = '/frontend/user/fireEvent';
+    const API_URI_USER_FIRE_EVENT          = '/frontend/user/fireEvent';
 
-    const API_URI_TRACK_OPENED_MAIL = '/frontend/misc/trackOpenedMail';
-
+    const API_URI_TRACK_OPENED_MAIL            = '/frontend/misc/trackOpenedMail';
     const API_URI_REDIRECTOR_GET_CONFIGURATION = '/frontend/misc/getRedirectorConfiguration';
+    const API_URI_EXPORT_STREAM_REPORT         = '/export/v2/report/';
+    const API_URI_EXPORT_STREAM_QUERY          = '/export/v2/query';
 
-    const API_URI_EXPORT_STREAM_REPORT = '/export/v2/report/';
-    const API_URI_EXPORT_STREAM_QUERY = '/export/v2/query';
+    const COUPON_EVENT_START   = 'subscription_start';
+    const COUPON_EVENT_UPGRADE = 'subscription_upgrade';
 
-	const COUPON_EVENT_START    = 'subscription_start';
-	const COUPON_EVENT_UPGRADE  = 'subscription_upgrade';
+    const PLAN_CHANGE_IMMEDIATE = 'immediate';
+    const PLAN_CHANGE_QUEUED    = 'queued';
 
-	const PLAN_CHANGE_IMMEDIATE = 'immediate';
-	const PLAN_CHANGE_QUEUED    = 'queued';
-
-	/**
+    /**
 	 * Retrieve the list of payment methods.
 	 *
 	 * @param string|null $packageIdentifier
@@ -1223,7 +1221,7 @@ class Client extends AbstractClient {
 			$data['type'] = $type;
 		}
 		$this->userToData($userTokenOrId, $data);
-		$response = $this->request(self::API_URI_SUBSCRIPTION_GET_POSSIBLE_PACKAGE_CHANGES, $data);
+		$response = $this->request(self::API_URI_SUBSCRIPTION_GET_POSSIBLE_PLAN_CHANGES, $data);
 		return SubscriptionGetPossibleUpgradesResponse::fromResponse($response);
 	}
 
