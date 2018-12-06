@@ -38,8 +38,6 @@ abstract class AbstractClient {
      *
      * @param RequestClient $requestClient
      * @param bool          $forceTokenMode Force using tokens. Does not allow passing a user Id.
-     *
-     * @throws DisloException if the $requestClient parameter is missing
      */
     public function __construct(RequestClient $requestClient, $forceTokenMode = true) {
         $this->requestClient  = $requestClient;
@@ -53,6 +51,7 @@ abstract class AbstractClient {
      */
     protected function getRequestClientExtra() {
         if ($this->getRequestClient() instanceof RequestClientExtra) {
+            /** @noinspection PhpIncompatibleReturnTypeInspection */
             return $this->requestClient;
         }
 
