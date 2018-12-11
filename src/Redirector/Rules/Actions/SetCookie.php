@@ -4,10 +4,9 @@ namespace Ixolit\Dislo\Redirector\Rules\Actions;
 
 use Ixolit\Dislo\Exceptions\RedirectorException;
 use Ixolit\Dislo\Redirector\Base\Cookie;
-use Ixolit\Dislo\Redirector\Base\RedirectorStateInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
-use Ixolit\Dislo\Redirector\Redirector;
+use Ixolit\Dislo\Redirector\Base\RedirectorStateInterface;
 
 /**
  * Class SetCookie

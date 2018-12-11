@@ -2,10 +2,10 @@
 
 namespace Ixolit\Dislo\Redirector;
 
-use Ixolit\Dislo\Redirector\Base\RedirectorState;
-use Ixolit\Dislo\Redirector\Base\RedirectorStateInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
+use Ixolit\Dislo\Redirector\Base\RedirectorState;
+use Ixolit\Dislo\Redirector\Base\RedirectorStateInterface;
 use Ixolit\Dislo\Redirector\Rules\Actions\Action;
 use Ixolit\Dislo\Redirector\Rules\Conditions\Condition;
 use Ixolit\Dislo\Redirector\Rules\Rule;

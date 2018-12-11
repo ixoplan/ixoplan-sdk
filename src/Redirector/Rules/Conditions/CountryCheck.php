@@ -3,9 +3,9 @@
 namespace Ixolit\Dislo\Redirector\Rules\Conditions;
 
 use Ixolit\Dislo\Exceptions\RedirectorException;
-use Ixolit\Dislo\Redirector\Base\RedirectorStateInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorRequestInterface;
 use Ixolit\Dislo\Redirector\Base\RedirectorResultInterface;
+use Ixolit\Dislo\Redirector\Base\RedirectorStateInterface;
 
 
 /**
