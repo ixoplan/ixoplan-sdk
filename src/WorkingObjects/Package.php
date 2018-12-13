@@ -180,13 +180,14 @@ class Package extends AbstractWorkingObject {
 
 	/**
 	 * @param string $metaDataName
+	 * @param mixed $defaultValue
 	 *
-	 * @return null|string
+	 * @return null|mixed
 	 */
-	public function getMetaDataEntry($metaDataName) {
+	public function getMetaDataEntry($metaDataName, $defaultValue = null) {
 		$metaData = $this->getMetaData();
 
-		return isset($metaData[$metaDataName]) ? $metaData[$metaDataName] : null;
+		return isset($metaData[$metaDataName]) ? $metaData[$metaDataName] : $defaultValue;
 	}
 
 	/**
