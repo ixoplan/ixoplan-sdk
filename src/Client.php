@@ -51,6 +51,7 @@ use Ixolit\Dislo\Response\SubscriptionExternalCreateResponse;
 use Ixolit\Dislo\Response\SubscriptionFireEventResponse;
 use Ixolit\Dislo\Response\SubscriptionGetAllResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponse;
+use Ixolit\Dislo\Response\SubscriptionGetPossiblePlanChangeStrategiesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPossibleUpgradesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetResponse;
 use Ixolit\Dislo\Response\UserAuthenticateResponse;
@@ -626,7 +627,8 @@ class Client extends AbstractClient {
 		$subscription,
 		$packageIdentifiers,
 		$couponCode = null,
-		$userTokenOrId
+		$userTokenOrId,
+		$strategyIdentifier = null
 	) {
 		$data = [
 			'subscriptionId'     =>
@@ -634,6 +636,9 @@ class Client extends AbstractClient {
 			'packageIdentifiers' => $packageIdentifiers,
 			'couponCode'         => $couponCode,
 		];
+		if ($strategyIdentifier) {
+		    $data['strategyIdentifier'] = $strategyIdentifier;
+		}
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/calculateAddonPrice', $data);
 		return SubscriptionCalculateAddonPriceResponse::fromResponse($response);
@@ -649,6 +654,7 @@ class Client extends AbstractClient {
 	 * @param string|null      $couponCode
 	 * @param User|string|int  $userTokenOrId User authentication token or user ID.
 	 * @param string[]		   $addonPackageIdentifiers
+     * @param string           $strategyIdentifier
 	 *
 	 * @return SubscriptionCalculatePackageChangeResponse
 	 */
@@ -657,15 +663,19 @@ class Client extends AbstractClient {
 		$newPackageIdentifier,
 		$couponCode = null,
 		$userTokenOrId = null,
-		$addonPackageIdentifiers = []
+		$addonPackageIdentifiers = [],
+		$strategyIdentifier = null
 	) {
 		$data = [
 			'subscriptionId'          =>
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
 			'newPackageIdentifier'    => $newPackageIdentifier,
 			'couponCode'           	  => $couponCode,
-			'addonPackageIdentifiers' => $addonPackageIdentifiers
+			'addonPackageIdentifiers' => $addonPackageIdentifiers,
 		];
+		if ($strategyIdentifier) {
+		    $data['strategyIdentifier'] = $strategyIdentifier;
+		}
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/calculatePackageChange', $data);
 		return SubscriptionCalculatePackageChangeResponse::fromResponse($response);
@@ -771,6 +781,7 @@ class Client extends AbstractClient {
 	 * @param bool             $useFlexible                 use the existing flexible payment method from the user to
 	 *                                                      pay for the package change immediately
 	 * @param User|int|string  $userTokenOrId               User authentication token or user ID.
+     * @param string|null      $strategyIdentifier          Which strategy to use. Uses default strategy when not provided
 	 *
 	 * @return SubscriptionChangeResponse
 	 */
@@ -781,7 +792,8 @@ class Client extends AbstractClient {
 		$couponCode = '',
 		$metaData = [],
 		$useFlexible = false,
-		$userTokenOrId = null
+		$userTokenOrId = null,
+		$strategyIdentifier = null
 	) {
 		$data = [
 			'subscriptionId'       =>
@@ -796,6 +808,9 @@ class Client extends AbstractClient {
 		}
 		if ($metaData) {
 			$data['metaData'] = $metaData;
+		}
+		if ($strategyIdentifier) {
+		    $data['strategyIdentifier'] = $strategyIdentifier;
 		}
 		$data['useFlexible'] = $useFlexible;
 		$this->userToData($userTokenOrId, $data);
@@ -1136,10 +1151,20 @@ class Client extends AbstractClient {
 		return SubscriptionCallSpiResponse::fromResponse($response);
 	}
 
+    /**
+     * @param $userTokenOrId
+     * @param $subscriptionId
+     * @param string $type
+     * @param string|null $strategyIdentifier
+     * @return SubscriptionGetPossibleUpgradesResponse
+     * @throws DisloException
+     * @throws ObjectNotFoundException
+     */
 	public function subscriptionGetPossibleUpgrades(
 		$userTokenOrId,
 		$subscriptionId,
-		$type = ''
+		$type = '',
+		$strategyIdentifier = null
 	) {
 		$data = [
 			'subscriptionId' =>
@@ -1148,9 +1173,23 @@ class Client extends AbstractClient {
 		if ($type) {
 			$data['type'] = $type;
 		}
+		if ($strategyIdentifier) {
+		    $data['strategyIdentifier'] = $strategyIdentifier;
+		}
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/getPossiblePlanChanges', $data);
 		return SubscriptionGetPossibleUpgradesResponse::fromResponse($response);
+	}
+
+	/**
+     * Retrieve all possible plan change strategies
+     * @return SubscriptionGetPossiblePlanChangeStrategiesResponse
+     * @throws DisloException
+     * @throws ObjectNotFoundException
+     */
+	public function subscriptionGetPossiblePlanChangeStrategies() {
+	    $response = $this->request('/frontend/subscription/getPossiblePlanChangeStrategies', []);
+		return SubscriptionGetPossiblePlanChangeStrategiesResponse::fromResponse($response);
 	}
 
 	/**
