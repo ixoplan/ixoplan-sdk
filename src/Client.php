@@ -168,49 +168,61 @@ class Client extends AbstractClient {
     const PLAN_CHANGE_QUEUED    = 'queued';
 
     /**
-	 * Retrieve the list of payment methods.
-	 *
-	 * @param string|null $packageIdentifier
-	 * @param string|null $countryCode
-	 *
-	 * @return BillingMethodsGetResponse
-	 */
+     * Retrieve the list of payment methods.
+     *
+     * @param string|null $packageIdentifier
+     * @param string|null $countryCode
+     * @param string|null $currencyCode
+     * @param bool        $isAvailable
+     *
+     * @return BillingMethodsGetResponse
+     */
 	public function billingMethodsGet(
-		$packageIdentifier = null,
-		$countryCode = null
+        $packageIdentifier = null,
+        $countryCode = null,
+        $currencyCode = null,
+        $isAvailable = false
 	) {
-		if (!$packageIdentifier) {
-			$response = $this->request(self::API_URI_BILLING_METHODS_GET, []);
-		} else {
-			$response = $this->request(self::API_URI_BILLING_METHODS_GET_FOR_PACKAGE, [
-				'packageIdentifier' => $packageIdentifier,
-				'countryCode' => $countryCode
-			]);
-		}
-		return BillingMethodsGetResponse::fromResponse($response);
+	    if ($packageIdentifier) {
+            return BillingMethodsGetResponse::fromResponse(
+                $this->request(
+	    		    self::API_URI_BILLING_METHODS_GET_FOR_PACKAGE,
+                    [
+                        'packageIdentifier' => $packageIdentifier,
+                        'countryCode'       => $countryCode,
+                        'currencyCode'      => $currencyCode,
+                    ]
+                )
+            );
+        }
+
+		return BillingMethodsGetResponse::fromResponse(
+    		 $this->request(
+                self::API_URI_BILLING_METHODS_GET,
+                [
+                    'isAvailable'  => $isAvailable,
+                    'countryCode'  => $countryCode,
+                    'currencyCode' => $currencyCode,
+                ]
+            )
+        );
 	}
 
-	/**
-	 * Retrieve the list of available payment methods.
-	 *
-	 * @param string|null $packageIdentifier
-	 * @param string|null $countryCode
-	 *
-	 * @return BillingMethodsGetAvailableResponse
-	 */
-	public function billingMethodsGetAvailable(
-		$packageIdentifier = null,
-		$countryCode = null
-	) {
-		$billingMethods = $this->billingMethodsGet($packageIdentifier, $countryCode)->getBillingMethods();
-		$availableBillingMethods = [];
-		foreach ($billingMethods as $billingMethod) {
-			if ($billingMethod->isAvailable()) {
-				$availableBillingMethods[] = $billingMethod;
-			}
-		}
+    /**
+     * Retrieve the list of available payment methods.
+     *
+     * @param string|null $packageIdentifier
+     * @param string|null $countryCode
+     * @param string|null $currencyCode
+     *
+     * @return BillingMethodsGetAvailableResponse
+     */
+	public function billingMethodsGetAvailable($packageIdentifier = null, $countryCode = null, $currencyCode = null)
+    {
+		$billingMethods = $this->billingMethodsGet($packageIdentifier, $countryCode, $currencyCode, true)
+            ->getBillingMethods();
 
-		return new BillingMethodsGetAvailableResponse($availableBillingMethods);
+		return new BillingMethodsGetAvailableResponse($billingMethods);
 	}
 
 	/**
