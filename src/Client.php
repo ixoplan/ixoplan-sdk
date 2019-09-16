@@ -21,6 +21,8 @@ use Ixolit\Dislo\Response\BillingGetFlexibleByIdentifierResponse;
 use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
 use Ixolit\Dislo\Response\BillingMethodsGetAvailableResponse;
 use Ixolit\Dislo\Response\BillingMethodsGetResponse;
+use Ixolit\Dislo\Response\CaptchaCreateResponse;
+use Ixolit\Dislo\Response\CaptchaVerifyResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
 use Ixolit\Dislo\Response\MailTrackOpenedResponse;
@@ -1571,6 +1573,26 @@ class Client extends AbstractClient {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request(self::API_URI_USER_CHANGE, $data);
 		return UserChangeResponse::fromResponse($response);
+	}
+
+    /**
+     * @param array $data
+     * @return CaptchaVerifyResponse
+     * @throws DisloException on error
+     */
+	public function captchaVerify(array $data) {
+		$response = $this->request('/frontend/misc/captcha/verify', $data);
+		return CaptchaVerifyResponse::fromResponse($response);
+	}
+
+	/**
+     * @param array $data
+     * @return CaptchaCreateResponse
+     * @throws DisloException on error
+     */
+	public function captchaCreate(array $data) {
+		$response = $this->request('/frontend/misc/captcha/create', $data);
+		return CaptchaCreateResponse::fromResponse($response);
 	}
 
 	/**
