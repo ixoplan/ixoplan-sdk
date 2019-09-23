@@ -21,6 +21,8 @@ use Ixolit\Dislo\Response\BillingGetFlexibleByIdentifierResponse;
 use Ixolit\Dislo\Response\BillingGetFlexibleResponse;
 use Ixolit\Dislo\Response\BillingMethodsGetAvailableResponse;
 use Ixolit\Dislo\Response\BillingMethodsGetResponse;
+use Ixolit\Dislo\Response\CaptchaCreateResponse;
+use Ixolit\Dislo\Response\CaptchaVerifyResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
 use Ixolit\Dislo\Response\MailTrackOpenedResponse;
@@ -170,49 +172,61 @@ class Client extends AbstractClient {
     const PLAN_CHANGE_QUEUED    = 'queued';
 
     /**
-	 * Retrieve the list of payment methods.
-	 *
-	 * @param string|null $packageIdentifier
-	 * @param string|null $countryCode
-	 *
-	 * @return BillingMethodsGetResponse
-	 */
+     * Retrieve the list of payment methods.
+     *
+     * @param string|null $packageIdentifier
+     * @param string|null $countryCode
+     * @param string|null $currencyCode
+     * @param bool        $isAvailable
+     *
+     * @return BillingMethodsGetResponse
+     */
 	public function billingMethodsGet(
-		$packageIdentifier = null,
-		$countryCode = null
+        $packageIdentifier = null,
+        $countryCode = null,
+        $currencyCode = null,
+        $isAvailable = false
 	) {
-		if (!$packageIdentifier) {
-			$response = $this->request(self::API_URI_BILLING_METHODS_GET, []);
-		} else {
-			$response = $this->request(self::API_URI_BILLING_METHODS_GET_FOR_PACKAGE, [
-				'packageIdentifier' => $packageIdentifier,
-				'countryCode' => $countryCode
-			]);
-		}
-		return BillingMethodsGetResponse::fromResponse($response);
+	    if ($packageIdentifier) {
+            return BillingMethodsGetResponse::fromResponse(
+                $this->request(
+	    		    self::API_URI_BILLING_METHODS_GET_FOR_PACKAGE,
+                    [
+                        'packageIdentifier' => $packageIdentifier,
+                        'countryCode'       => $countryCode,
+                        'currencyCode'      => $currencyCode,
+                    ]
+                )
+            );
+        }
+
+		return BillingMethodsGetResponse::fromResponse(
+    		 $this->request(
+                self::API_URI_BILLING_METHODS_GET,
+                [
+                    'isAvailable'  => $isAvailable,
+                    'countryCode'  => $countryCode,
+                    'currencyCode' => $currencyCode,
+                ]
+            )
+        );
 	}
 
-	/**
-	 * Retrieve the list of available payment methods.
-	 *
-	 * @param string|null $packageIdentifier
-	 * @param string|null $countryCode
-	 *
-	 * @return BillingMethodsGetAvailableResponse
-	 */
-	public function billingMethodsGetAvailable(
-		$packageIdentifier = null,
-		$countryCode = null
-	) {
-		$billingMethods = $this->billingMethodsGet($packageIdentifier, $countryCode)->getBillingMethods();
-		$availableBillingMethods = [];
-		foreach ($billingMethods as $billingMethod) {
-			if ($billingMethod->isAvailable()) {
-				$availableBillingMethods[] = $billingMethod;
-			}
-		}
+    /**
+     * Retrieve the list of available payment methods.
+     *
+     * @param string|null $packageIdentifier
+     * @param string|null $countryCode
+     * @param string|null $currencyCode
+     *
+     * @return BillingMethodsGetAvailableResponse
+     */
+	public function billingMethodsGetAvailable($packageIdentifier = null, $countryCode = null, $currencyCode = null)
+    {
+		$billingMethods = $this->billingMethodsGet($packageIdentifier, $countryCode, $currencyCode, true)
+            ->getBillingMethods();
 
-		return new BillingMethodsGetAvailableResponse($availableBillingMethods);
+		return new BillingMethodsGetAvailableResponse($billingMethods);
 	}
 
 	/**
@@ -1592,6 +1606,26 @@ class Client extends AbstractClient {
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request(self::API_URI_USER_CHANGE, $data);
 		return UserChangeResponse::fromResponse($response);
+	}
+
+    /**
+     * @param array $data
+     * @return CaptchaVerifyResponse
+     * @throws DisloException on error
+     */
+	public function captchaVerify(array $data) {
+		$response = $this->request('/frontend/misc/captcha/verify', $data);
+		return CaptchaVerifyResponse::fromResponse($response);
+	}
+
+	/**
+     * @param array $data
+     * @return CaptchaCreateResponse
+     * @throws DisloException on error
+     */
+	public function captchaCreate(array $data) {
+		$response = $this->request('/frontend/misc/captcha/create', $data);
+		return CaptchaCreateResponse::fromResponse($response);
 	}
 
 	/**
