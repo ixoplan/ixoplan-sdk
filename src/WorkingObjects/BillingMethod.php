@@ -44,6 +44,11 @@ class BillingMethod implements WorkingObject {
 	private $replaceable;
 
 	/**
+	 * @var string[]
+	 */
+	private $metaData;
+
+	/**
 	 * @param int    	$billingMethodId
 	 * @param string 	$name
 	 * @param string 	$displayName
@@ -52,6 +57,7 @@ class BillingMethod implements WorkingObject {
 	 * @param bool|null $flexible
 	 * @param bool|null $recurring
 	 * @param bool|null $replaceable
+     * @param string[]  $metaData
 	 */
 	public function __construct(
 		$billingMethodId,
@@ -61,7 +67,8 @@ class BillingMethod implements WorkingObject {
 		$checkout = null,
 		$flexible = null,
 		$recurring = null,
-		$replaceable = null
+		$replaceable = null,
+		$metaData = []
 	) {
 		$this->billingMethodId = $billingMethodId;
 		$this->name            = $name;
@@ -71,6 +78,7 @@ class BillingMethod implements WorkingObject {
 		$this->flexible        = $flexible;
 		$this->recurring       = $recurring;
 		$this->replaceable     = $replaceable;
+		$this->metaData        = $metaData;
 	}
 
 	/**
@@ -130,6 +138,24 @@ class BillingMethod implements WorkingObject {
 	}
 
 	/**
+	 * @return string[]
+	 */
+	public function getMetaData() {
+		return $this->metaData;
+	}
+
+	/**
+	 * @param string $metaDataName
+	 *
+	 * @return null|string
+	 */
+	public function getMetaDataEntry($metaDataName) {
+		$metaData = $this->getMetaData();
+
+		return isset($metaData[$metaDataName]) ? $metaData[$metaDataName] : null;
+	}
+
+	/**
 	 * @param array $response
 	 *
 	 * @return self
@@ -143,7 +169,8 @@ class BillingMethod implements WorkingObject {
 			isset($response['checkout']) ? $response['checkout'] : null,
 			isset($response['flexible']) ? $response['flexible'] : null,
 			isset($response['recurring']) ? $response['recurring'] : null,
-			isset($response['replaceable']) ? $response['replaceable'] : null
+			isset($response['replaceable']) ? $response['replaceable'] : null,
+			isset($response['metaData']) && is_array($response['metaData']) ? $response['metaData'] : []
 		);
 	}
 
@@ -161,6 +188,7 @@ class BillingMethod implements WorkingObject {
 			'flexible' => $this->isFlexible(),
 			'recurring' => $this->isRecurring(),
 			'replaceable' => $this->isReplaceable(),
+			'metaData' => $this->metaData
 		];
 	}
 }
