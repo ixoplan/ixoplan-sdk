@@ -76,6 +76,11 @@ class BillingEvent extends AbstractWorkingObject {
      */
 	private $billingMethodObject;
 
+	/**
+	 * @var array
+	 */
+	private $paymentDetails;
+
     /**
      * BillingEvent constructor.
      *
@@ -92,6 +97,7 @@ class BillingEvent extends AbstractWorkingObject {
      * @param Subscription|null $subscription
      * @param \DateTime|null    $modifiedAt
      * @param BillingMethod|null $billingMethodObject
+     * @param array             $paymentDetails
      */
     public function __construct(
         $billingEventId,
@@ -106,7 +112,8 @@ class BillingEvent extends AbstractWorkingObject {
         $billingMethod,
         Subscription $subscription = null,
         $modifiedAt = null,
-        $billingMethodObject = null
+        $billingMethodObject = null,
+        $paymentDetails = []
     ) {
         $this->billingEventId      = $billingEventId;
         $this->userId              = $userId;
@@ -121,6 +128,7 @@ class BillingEvent extends AbstractWorkingObject {
         $this->subscription        = $subscription;
         $this->modifiedAt          = $modifiedAt;
         $this->billingMethodObject = $billingMethodObject;
+        $this->paymentDetails      = $paymentDetails;
 
         $this->addCustomObject();
     }
@@ -228,6 +236,23 @@ class BillingEvent extends AbstractWorkingObject {
 		return $this->billingMethodObject;
 	}
 
+	/**
+	 * @return array
+	 */
+	public function getPaymentDetails() {
+		return $this->paymentDetails;
+	}
+
+	/**
+	 * @param string $name
+	 * @param mixed $defaultValue
+	 * @return mixed|null
+	 */
+	public function getPaymentDetailValue($name, $defaultValue = null) {
+		$paymentDetails = $this->getPaymentDetails();
+		return isset($paymentDetails[$name]) ? $paymentDetails[$name] : $defaultValue;
+	}
+
     /**
      * @param array $response
      *
@@ -251,7 +276,8 @@ class BillingEvent extends AbstractWorkingObject {
             static::getValueAsDateTime($response, 'modifiedAt'),
             static::getValueNotEmpty($response, 'billingMethodObject', null, function ($value) {
                 return BillingMethod::fromResponse($value);
-            })
+            }),
+            static::getValueIsSet($response, 'paymentDetails', [])
         );
     }
 
@@ -274,6 +300,7 @@ class BillingEvent extends AbstractWorkingObject {
             'subscription'        => ($this->getSubscription() ? $this->getSubscription()->toArray() : null),
             'modifiedAt'          => ($this->getModifiedAt() ? $this->getModifiedAt()->format('Y-m-d H:i:s') : null),
             'billingMethodObject' => ($this->getBillingMethodObject() ? $this->getBillingMethodObject()->toArray() : null),
+            'paymentDetails'      => $this->getPaymentDetails(),
         ];
     }
 }
