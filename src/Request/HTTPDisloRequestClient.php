@@ -17,7 +17,8 @@ use Psr\Http\Message\StreamInterface;
  *
  * @package Ixolit\Dislo\Request
  */
-final class HTTPDisloRequestClient {
+final class HTTPDisloRequestClient implements RequestClient, RequestClientExtra
+{
 
     /**
      * @var HTTPClientAdapter
