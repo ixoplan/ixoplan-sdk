@@ -165,6 +165,8 @@ class Client extends AbstractClient {
     const API_URI_EXPORT_STREAM_REPORT         = '/export/v2/report/';
     const API_URI_EXPORT_STREAM_QUERY          = '/export/v2/query';
 
+    const API_URI_SYSTEM_INFO               = '/system/info/get';
+
     const COUPON_EVENT_START   = 'subscription_start';
     const COUPON_EVENT_UPGRADE = 'subscription_upgrade';
 
@@ -2204,4 +2206,15 @@ class Client extends AbstractClient {
 	) {
 		return $this->exportStreamQuery($query, $parameters, \fopen('php://temp', 'w+'))->getContents();
 	}
+
+    /**
+     * Return System Details
+     * @return array
+     * @throws DisloException
+     */
+	public function systemInfoGet() {
+		return $this->request(self::API_URI_SYSTEM_INFO, []);
+	}
+
+
 }

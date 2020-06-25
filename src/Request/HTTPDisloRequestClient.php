@@ -17,8 +17,7 @@ use Psr\Http\Message\StreamInterface;
  *
  * @package Ixolit\Dislo\Request
  */
-final class HTTPDisloRequestClient implements RequestClient, RequestClientExtra
-{
+final class HTTPDisloRequestClient implements RequestClient, RequestClientExtra, RequestClientWithDevModeSupport {
 
     /**
      * @var HTTPClientAdapter
@@ -50,6 +49,12 @@ final class HTTPDisloRequestClient implements RequestClient, RequestClientExtra
      * @var bool
      */
     private $https = true;
+
+    /**
+     * Enable/Disable the developer mode, which when enabled, might return different plans/billing methods etc. depending on the backend configuration
+     * @var bool
+     */
+    private $devMode = false;
 
     /**
      * @param HTTPClientAdapter $httpClient
@@ -109,7 +114,8 @@ final class HTTPDisloRequestClient implements RequestClient, RequestClientExtra
             ->withPath($path)
             ->withQuery(
                 'api_key=' . \urlencode($this->apiKey) .
-                '&timestamp=' . \urlencode($this->timeProvider->getTimestamp())
+                '&timestamp=' . \urlencode($this->timeProvider->getTimestamp()) .
+                '&devMode=' . ($this->devMode ? 1 : 0)
             );
 
         $signature = \hash_hmac('MD5', $uri->getPath() . '?' . $uri->getQuery() . $payload, $this->apiSecret);
@@ -180,5 +186,16 @@ final class HTTPDisloRequestClient implements RequestClient, RequestClientExtra
 
         return $this;
     }
+
+    /**
+     * Enables/Disables the developer mode
+     * @param bool $enabled
+     * @return $this|HTTPDisloRequestClient
+     */
+    public function setDevMode($enabled) {
+        $this->devMode = (bool) $enabled;
+        return $this;
+    }
+
 
 }

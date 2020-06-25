@@ -10,6 +10,7 @@ use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\RequestClient;
 use Ixolit\Dislo\Request\RequestClientExtra;
+use Ixolit\Dislo\Request\RequestClientWithDevModeSupport;
 use Ixolit\Dislo\WorkingObjects\User;
 
 /**
@@ -31,6 +32,13 @@ abstract class AbstractClient {
      * @var bool
      */
     protected $forceTokenMode;
+
+    /**
+     * If the dev mode setting is enabled, additional data might be returned.
+     * E.g. new plans for testing or new billing methods which are not supposed to be visible for all customers
+     * @var bool
+     */
+    protected $devMode=false;
 
     /**
      * Initialize the client with a RequestClient, the class that is responsible for transporting messages to and
@@ -147,8 +155,15 @@ abstract class AbstractClient {
      * @throws ObjectNotFoundException
      */
     protected function request($uri, $data) {
+
         try {
-            $response = $this->getRequestClient()->request($uri, $data);
+
+            $requestClient = $this->getRequestClient();
+            if ($requestClient instanceof RequestClientWithDevModeSupport) {
+                $requestClient->setDevMode($this->devMode);
+            }
+        
+            $response = $requestClient->request($uri, $data);
             if (isset($response['success']) && $response['success'] === false) {
                 switch ($response['errors'][0]['code']) {
                     case 404:
@@ -172,5 +187,22 @@ abstract class AbstractClient {
         } catch (\Exception $e) {
             throw new DisloException($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * Enable/Disable Dev mode
+     * @param $enabled
+     * @return $this
+     */
+    public function setDevMode($enabled) {
+        $this->devMode = (bool) $enabled;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDevMode(){
+        return $this->devMode;
     }
 }

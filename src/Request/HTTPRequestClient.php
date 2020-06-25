@@ -16,7 +16,7 @@ use Psr\Http\Message\StreamInterface;
  *
  * @deprecated use Ixolit\Dislo\Request\HTTPDisloRequestClient instead
  */
-class HTTPRequestClient implements RequestClient, RequestClientExtra {
+class HTTPRequestClient implements RequestClient, RequestClientExtra, RequestClientWithDevModeSupport {
 
 	/**
 	 * @var HTTPClientAdapter
@@ -46,6 +46,12 @@ class HTTPRequestClient implements RequestClient, RequestClientExtra {
 	private $https = true;
 
 	/**
+     * Enable/Disable the developer mode, which when enables might return different plans/billing methods etc. depending on the backend configuration
+     * @var bool
+     */
+    private $devMode = false;
+
+	/**
 	 * @return HTTPClientAdapterExtra
 	 *
 	 * @throws NotImplementedException
@@ -73,7 +79,8 @@ class HTTPRequestClient implements RequestClient, RequestClientExtra {
 			->withPath($path)
 			->withQuery(
 				'api_key=' . \urlencode($this->apiKey) .
-				'&timestamp=' . \urlencode($this->timeProvider->getTimestamp())
+				'&timestamp=' . \urlencode($this->timeProvider->getTimestamp()).
+				'&devMode=' . ($this->devMode ? 1 : 0)
 			);
 		$signature = \hash_hmac('MD5', $uri->getPath() . '?' . $uri->getQuery() . $payload, $this->apiSecret);
 		$uri       = $uri->withQuery($uri->getQuery() . '&signature=' . \urlencode($signature));
@@ -124,7 +131,9 @@ class HTTPRequestClient implements RequestClient, RequestClientExtra {
 
 		$response = $this->httpClient->send($request);
 
-		$decodedBody = \json_decode($response->getBody(), true);
+        $body = (string) $response->getBody();
+
+		$decodedBody = \json_decode($body, true);
 
 		if (\json_last_error() == JSON_ERROR_NONE) {
 			return $decodedBody;
@@ -165,4 +174,15 @@ class HTTPRequestClient implements RequestClient, RequestClientExtra {
 	    $this->https = (bool) $https;
 	    return $this;
 	}
+
+    /**
+     * Enable/disable the devMode
+     * @param bool $enabled
+     * @return $this
+     */
+    public function setDevMode($enabled) {
+        $this->devMode = (bool) $enabled;
+        return $this;
+    }
+
 }
