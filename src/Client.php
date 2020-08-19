@@ -929,30 +929,34 @@ class Client extends AbstractClient {
 		return SubscriptionCreateAddonResponse::fromResponse($response);
 	}
 
-	/**
-	 * Create a new subscription for a user, with optional addons.
-	 *
-	 * NOTE: users are locked to one currency code once their first subscription is created. You MUST pass the
-	 * users currency code in $currencyCode if it is already set up. You can obtain the currency code via
-	 * userGetBalance.
-	 *
-	 * NOTE: Always observe the needsBilling flag in the response. If it is true, call createPayment afterwards. If
-	 * it is false, you can use createFlexible to register a payment method without a payment. Don't mix up the two!
-	 *
-	 * @param User|int|string $userTokenOrId User authentication token or user ID.
-	 * @param string          $packageIdentifier
-	 * @param string          $currencyCode
-	 * @param string          $couponCode
-	 * @param array           $addonPackageIdentifiers
-	 *
-	 * @return SubscriptionCreateResponse
-	 */
+    /**
+     * Create a new subscription for a user, with optional addons.
+     *
+     * NOTE: users are locked to one currency code once their first subscription is created. You MUST pass the
+     * users currency code in $currencyCode if it is already set up. You can obtain the currency code via
+     * userGetBalance.
+     *
+     * NOTE: Always observe the needsBilling flag in the response. If it is true, call createPayment afterwards. If
+     * it is false, you can use createFlexible to register a payment method without a payment. Don't mix up the two!
+     *
+     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param string $packageIdentifier
+     * @param string $currencyCode
+     * @param string $couponCode
+     * @param array $addonPackageIdentifiers
+     *
+     * @param array $metadata
+     * @return SubscriptionCreateResponse
+     * @throws DisloException
+     * @throws ObjectNotFoundException
+     */
 	public function subscriptionCreate(
 		$userTokenOrId,
 		$packageIdentifier,
 		$currencyCode,
 		$couponCode = '',
-		$addonPackageIdentifiers = []
+		$addonPackageIdentifiers = [],
+        $metadata = []
 	) {
 		$data = [
 			'packageIdentifier' => $packageIdentifier,
@@ -964,6 +968,9 @@ class Client extends AbstractClient {
 		if ($couponCode) {
 			$data['couponCode'] = $couponCode;
 		}
+        if ($metadata) {
+            $data['metadata'] = $metadata;
+        }
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/create', $data);
 		return SubscriptionCreateResponse::fromResponse($response);
