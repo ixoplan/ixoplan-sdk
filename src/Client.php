@@ -56,6 +56,7 @@ use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPossiblePlanChangeStrategiesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPossibleUpgradesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetResponse;
+use Ixolit\Dislo\Response\SubscriptionMetadataChangeResponse;
 use Ixolit\Dislo\Response\UserAuthenticateResponse;
 use Ixolit\Dislo\Response\UserChangeResponse;
 use Ixolit\Dislo\Response\UserCreateResponse;
@@ -1549,6 +1550,29 @@ class Client extends AbstractClient {
 		$response = $this->request('/frontend/user/change', $data);
 		return UserChangeResponse::fromResponse($response);
 	}
+
+    /**
+     * Change metadata of an existing subscription.
+     *
+     * @param string $subscriptionId the unique user id to change
+     * @param string[]        $metaData      meta data for this user (such as first name, last names etc.). NOTE: these
+     *                                       meta data keys must exist in the meta data profile in Distribload
+     *
+     * @return SubscriptionMetadataChangeResponse
+     */
+    public function subscriptionMetadataChange(
+        $userTokenOrId,
+        $subscriptionId,
+        $metaData
+    ) {
+        $data = [
+            'subscriptionId' => $subscriptionId,
+            'metaData' => $metaData,
+        ];
+        $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/subscription/changeMetadata', $data);
+        return SubscriptionMetadataChangeResponse::fromResponse($response);
+    }
 
     /**
      * @param array $data
