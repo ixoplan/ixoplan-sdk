@@ -784,22 +784,25 @@ class Client extends AbstractClient {
 		return SubscriptionCancelResponse::fromResponse($response);
 	}
 
-	/**
-	 * Change the package for a subscription.
-	 *
-	 * @param Subscription|int $subscription                the unique subscription id to change
-	 * @param string           $newPackageIdentifier        the identifier of the new package
-	 * @param string[]         $addonPackageIdentifiers     optional - package identifiers of the addons
-	 * @param string           $couponCode                  optional - the coupon code to apply
-	 * @param array            $metaData                    optional - additional data (if supported by Dislo
-	 *                                                      installation)
-	 * @param bool             $useFlexible                 use the existing flexible payment method from the user to
-	 *                                                      pay for the package change immediately
-	 * @param User|int|string  $userTokenOrId               User authentication token or user ID.
-     * @param string|null      $strategyIdentifier          Which strategy to use. Uses default strategy when not provided
-	 *
-	 * @return SubscriptionChangeResponse
-	 */
+    /**
+     * Change the package for a subscription.
+     *
+     * @param Subscription|int $subscription the unique subscription id to change
+     * @param string $newPackageIdentifier the identifier of the new package
+     * @param string[] $addonPackageIdentifiers optional - package identifiers of the addons
+     * @param string $couponCode optional - the coupon code to apply
+     * @param array $metaData optional - additional data (if supported by Dislo
+     *                                                      installation)
+     * @param bool $useFlexible use the existing flexible payment method from the user to
+     *                                                      pay for the package change immediately
+     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param string|null $strategyIdentifier Which strategy to use. Uses default strategy when not provided
+     *
+     * @param array $addonSubscriptionMetadata
+     * @return SubscriptionChangeResponse
+     * @throws DisloException
+     * @throws ObjectNotFoundException
+     */
 	public function subscriptionChange(
 		$subscription,
 		$newPackageIdentifier,
@@ -808,7 +811,8 @@ class Client extends AbstractClient {
 		$metaData = [],
 		$useFlexible = false,
 		$userTokenOrId = null,
-		$strategyIdentifier = null
+		$strategyIdentifier = null,
+        $addonSubscriptionMetadata = []
 	) {
 		$data = [
 			'subscriptionId'       =>
@@ -827,6 +831,9 @@ class Client extends AbstractClient {
 		if ($strategyIdentifier) {
 		    $data['strategyIdentifier'] = $strategyIdentifier;
 		}
+        if ($addonSubscriptionMetadata) {
+            $data['addonSubscriptionMetadata'] = $addonSubscriptionMetadata;
+        }
 		$data['useFlexible'] = $useFlexible;
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/changePackage', $data);
@@ -957,7 +964,8 @@ class Client extends AbstractClient {
 		$currencyCode,
 		$couponCode = '',
 		$addonPackageIdentifiers = [],
-        $metadata = []
+        $metadata = [],
+        $addonMetadata = []
 	) {
 		$data = [
 			'packageIdentifier' => $packageIdentifier,
@@ -972,10 +980,47 @@ class Client extends AbstractClient {
         if ($metadata) {
             $data['metadata'] = $metadata;
         }
+        if ($addonMetadata) {
+            $data['addonMetadata'] = $addonMetadata;
+        }
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/subscription/create', $data);
 		return SubscriptionCreateResponse::fromResponse($response);
 	}
+
+    /**
+     * Create a new addonSubscription.
+     *
+     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param $subscriptionId
+     * @param $packageIdentifiers
+     * @param string $couponCode
+     * @param array $addonMetadata
+     * @return SubscriptionCreateResponse
+     * @throws DisloException
+     * @throws ObjectNotFoundException
+     */
+    public function addonSubscriptionCreate(
+        $userTokenOrId,
+        $subscriptionId,
+        $packageIdentifiers,
+        $couponCode = '',
+        $addonMetadata = []
+    ) {
+        $data = [
+            'subscriptionId' => $subscriptionId,
+            'packageIdentifiers'      => $packageIdentifiers,
+        ];
+        if ($couponCode) {
+            $data['couponCode'] = $couponCode;
+        }
+        if ($addonMetadata) {
+            $data['addonMetadata'] = $addonMetadata;
+        }
+        $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/subscription/createAddonSubscription', $data);
+        return SubscriptionCreateResponse::fromResponse($response);
+    }
 
 	/**
 	 * Change the package for an external subscription.
@@ -1554,8 +1599,9 @@ class Client extends AbstractClient {
     /**
      * Change metadata of an existing subscription.
      *
-     * @param string $subscriptionId the unique user id to change
-     * @param string[]        $metaData      meta data for this user (such as first name, last names etc.). NOTE: these
+     * @param string $userTokenOrId the unique user id to change
+     * @param string $subscriptionId the unique subscription id to change
+     * @param string[]        $metadata      meta data for this user (such as first name, last names etc.). NOTE: these
      *                                       meta data keys must exist in the meta data profile in Distribload
      *
      * @return SubscriptionMetadataChangeResponse
@@ -1563,12 +1609,14 @@ class Client extends AbstractClient {
     public function subscriptionMetadataChange(
         $userTokenOrId,
         $subscriptionId,
-        $metaData
+        $metadata
     ) {
         $data = [
             'subscriptionId' => $subscriptionId,
-            'metaData' => $metaData,
         ];
+        if($metadata){
+            $data['metadata'] = $metadata;
+        }
         $this->userToData($userTokenOrId, $data);
         $response = $this->request('/frontend/subscription/changeMetadata', $data);
         return SubscriptionMetadataChangeResponse::fromResponse($response);
