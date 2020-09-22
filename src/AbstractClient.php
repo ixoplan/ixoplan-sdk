@@ -5,6 +5,7 @@ namespace Ixolit\Dislo;
 
 
 use Ixolit\Dislo\Exceptions\DisloException;
+use Ixolit\Dislo\Exceptions\InvalidRequestParameterException;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
@@ -173,6 +174,14 @@ abstract class AbstractClient {
                     case 9002:
                         throw new InvalidTokenException();
                     default:
+                        if (!empty($response['errors'][0]['parameters'])) {
+                            throw new InvalidRequestParameterException(
+                                $response['errors'][0]['parameters'],
+                                $response['errors'][0]['message'],
+                                $response['errors'][0]['code']
+                            );
+                        }
+
                         throw new DisloException(
                             $response['errors'][0]['message'] . ' while trying to query ' . $uri,
                             $response['errors'][0]['code']);
