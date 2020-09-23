@@ -52,6 +52,7 @@ use Ixolit\Dislo\Response\SubscriptionExternalCloseResponse;
 use Ixolit\Dislo\Response\SubscriptionExternalCreateResponse;
 use Ixolit\Dislo\Response\SubscriptionFireEventResponse;
 use Ixolit\Dislo\Response\SubscriptionGetAllResponse;
+use Ixolit\Dislo\Response\SubscriptionGetMetadataElementsResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPossiblePlanChangeStrategiesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPossibleUpgradesResponse;
@@ -1620,6 +1621,17 @@ class Client extends AbstractClient {
         $this->userToData($userTokenOrId, $data);
         $response = $this->request('/frontend/subscription/changeMetadata', $data);
         return SubscriptionMetadataChangeResponse::fromResponse($response);
+    }
+
+    /**
+     * @param string $serviceIdentifier
+     *
+     * @return SubscriptionGetMetadataElementsResponse
+     */
+    public function subscriptionGetMetadataElements($serviceIdentifier)
+    {
+        $response = $this->request('/frontend/subscription/getMetadataElements', ['serviceIdentifier' => $serviceIdentifier]);
+        return SubscriptionGetMetadataElementsResponse::fromResponse($response);
     }
 
     /**
