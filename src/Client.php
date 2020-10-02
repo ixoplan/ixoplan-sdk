@@ -1674,13 +1674,16 @@ class Client extends AbstractClient {
 		return UserGetBalanceResponse::fromResponse($response);
 	}
 
-	/**
-	 * Retrieve a list of metadata elements.
-	 *
-	 * @return UserGetMetaProfileResponse
-	 */
-	public function userGetMetaProfile() {
-		$data     = [];
+    /**
+     * Retrieve a list of metadata elements.
+     *
+     * @param string|null $metapPofileName
+     *
+     * @return UserGetMetaProfileResponse
+     */
+	public function userGetMetaProfile($metapPofileName = null)
+    {
+		$data     = ['metaprofileName' => $metapPofileName];
 		$response = $this->request('/frontend/user/getMetaProfile', $data);
 		return UserGetMetaProfileResponse::fromResponse($response);
 	}
