@@ -65,6 +65,9 @@ class BillingEvent implements WorkingObject {
 	/** @var BillingMethod */
 	private $billingMethodObject;
 
+	/** @var array */
+	private $paymentDetails;
+
 	/**
 	 * @param array $response
 	 *
@@ -90,7 +93,8 @@ class BillingEvent implements WorkingObject {
 			$response['billingMethod'],
 			$subscription,
 			isset($response['modifiedAt']) ? new \DateTime($response['modifiedAt']) : null,
-			isset($response['billingMethodObject']) ? BillingMethod::fromResponse($response['billingMethodObject']) : null
+			isset($response['billingMethodObject']) ? BillingMethod::fromResponse($response['billingMethodObject']) : null,
+			isset($response['paymentDetails']) ? $response['paymentDetails'] : []
 		);
 	}
 
@@ -110,6 +114,7 @@ class BillingEvent implements WorkingObject {
 	 * @param Subscription|null $subscription
 	 * @param \DateTime|null    $modifiedAt
 	 * @param BillingMethod|null $billingMethodObject
+	 * @param array             $paymentDetails
 	 */
 	public function __construct(
 		$billingEventId,
@@ -124,7 +129,8 @@ class BillingEvent implements WorkingObject {
 		$billingMethod,
 		Subscription $subscription = null,
 		$modifiedAt = null,
-		$billingMethodObject = null
+		$billingMethodObject = null,
+		$paymentDetails = []
 	) {
 		$this->billingEventId = $billingEventId;
 		$this->userId         = $userId;
@@ -139,6 +145,7 @@ class BillingEvent implements WorkingObject {
 		$this->subscription   = $subscription;
 		$this->modifiedAt     = $modifiedAt;
 		$this->billingMethodObject = $billingMethodObject;
+		$this->paymentDetails = $paymentDetails;
 	}
 
 	/**
@@ -235,6 +242,23 @@ class BillingEvent implements WorkingObject {
 	/**
 	 * @return array
 	 */
+	public function getPaymentDetails() {
+		return $this->paymentDetails;
+	}
+
+	/**
+	 * @param string $name
+	 * @param mixed $defaultValue
+	 * @return mixed|null
+	 */
+	public function getPaymentDetailValue($name, $defaultValue = null) {
+		$paymentDetails = $this->getPaymentDetails();
+		return isset($paymentDetails[$name]) ? $paymentDetails[$name] : $defaultValue;
+    }
+
+	/**
+	 * @return array
+	 */
 	public function toArray() {
 		return array(
 			'_type'          => 'BillingEvent',
@@ -251,6 +275,7 @@ class BillingEvent implements WorkingObject {
 			'subscription'   => ($this->getSubscription() ? $this->getSubscription()->toArray() : null),
 			'modifiedAt'	 => ($this->getModifiedAt() ? $this->getModifiedAt()->format('Y-m-d H:i:s') : null),
 			'billingMethodObject' => ($this->getBillingMethodObject() ? $this->getBillingMethodObject()->toArray() : null),
+			'paymentDetails' => $this->getPaymentDetails(),
 		);
 	}
 }
