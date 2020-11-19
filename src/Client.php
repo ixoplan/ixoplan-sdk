@@ -1015,7 +1015,7 @@ class Client extends AbstractClient {
             $data['couponCode'] = $couponCode;
         }
         if ($addonMetadata) {
-            $data['addonMetadata'] = $addonMetadata;
+            $data['addonSubscriptionMetadata'] = $addonMetadata;
         }
         $this->userToData($userTokenOrId, $data);
         $response = $this->request('/frontend/subscription/createAddonSubscription', $data);
