@@ -11,12 +11,22 @@ use Ixolit\Dislo\WorkingObjectsCustom\MetaProfileElementCustom;
  *
  * @package Ixolit\Dislo\WorkingObjects
  */
-class MetaProfileElement extends AbstractWorkingObject {
-
+class MetaProfileElement extends AbstractWorkingObject
+{
 	/**
 	 * @var string
 	 */
 	private $name;
+
+    /**
+     * @var string|null
+     */
+	private $displayName;
+
+    /**
+     * @var string|null
+     */
+	private $metaprofileName;
 
 	/**
 	 * @var bool
@@ -28,15 +38,20 @@ class MetaProfileElement extends AbstractWorkingObject {
 	 */
 	private $unique;
 
-	/**
-	 * @param string $name
-	 * @param bool   $required
-	 * @param bool   $unique
-	 */
-	public function __construct($name, $required, $unique) {
+    /**
+     * @param string      $name
+     * @param bool        $required
+     * @param bool        $unique
+     * @param string||null   $displayName
+     * @param string|null $metaprofileName
+     */
+	public function __construct($name, $required, $unique, $displayName = null, $metaprofileName = null)
+    {
 		$this->name     = $name;
 		$this->required = $required;
 		$this->unique   = $unique;
+        $this->displayName = $displayName;
+        $this->metaprofileName = $metaprofileName;
 
 		$this->addCustomObject();
 	}
@@ -56,21 +71,40 @@ class MetaProfileElement extends AbstractWorkingObject {
 	/**
 	 * @return string
 	 */
-	public function getName() {
+	public function getName()
+    {
 		return $this->name;
 	}
+
+    /**
+     * @return string|null
+     */
+	public function getDisplayName()
+    {
+        return $this->displayName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMetaprofileName()
+    {
+        return $this->metaprofileName;
+    }
 
 	/**
 	 * @return boolean
 	 */
-	public function isRequired() {
+	public function isRequired()
+    {
 		return $this->required;
 	}
 
 	/**
 	 * @return boolean
 	 */
-	public function isUnique() {
+	public function isUnique()
+    {
 		return $this->unique;
 	}
 
@@ -83,19 +117,24 @@ class MetaProfileElement extends AbstractWorkingObject {
         return new self(
             static::getValueIsSet($response, 'name'),
             static::getValueAsBool($response, 'required'),
-            static::getValueAsBool($response, 'unique')
+            static::getValueAsBool($response, 'unique'),
+            static::getValueIsSet($response, 'displayName'),
+            static::getValueIsSet($response, 'metaprofileName')
         );
 	}
 
 	/**
 	 * @return array
 	 */
-	public function toArray() {
+	public function toArray()
+    {
 		return [
-            '_type'    => 'MetaProfileElement',
-            'name'     => $this->getName(),
-            'required' => $this->isRequired(),
-            'unique'   => $this->isUnique(),
-        ];
+            '_type'           => 'MetaProfileElement',
+            'name'            => $this->getName(),
+            'required'        => $this->isRequired(),
+            'unique'          => $this->isUnique(),
+            'displayName'     => $this->getDisplayName(),
+            'metaprofileName' => $this->getMetaprofileName(),
+		];
 	}
 }

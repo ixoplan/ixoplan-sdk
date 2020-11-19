@@ -1653,22 +1653,25 @@ class Client extends AbstractClient {
 	/**
 	 * Creates a new user with the given meta data.
 	 *
-	 * @param string   $language          iso-2-letter language key to use for this user
-	 * @param string   $plaintextPassword password for this user
-	 * @param string[] $metaData          meta data for this user (such as first name, last names etc.). NOTE: these
-	 *                                    meta data keys must exist in the meta data profile in Distribload
+     * @param string      $language          iso-2-letter language key to use for this user
+     * @param string      $plaintextPassword password for this user
+     * @param string[]    $metaData          meta data for this user (such as first name, last names etc.). NOTE: these
+     *                                       meta data keys must exist in the meta data profile in Distribload
+     * @param string|null $metaprofileName
 	 *
 	 * @return UserCreateResponse
 	 */
 	public function userCreate(
 		$language,
 		$plaintextPassword,
-		$metaData
+		$metaData,
+        $metaprofileName = null
 	) {
 		$data     = [
 			'language'          => $language,
 			'plaintextPassword' => $plaintextPassword,
 			'metaData'          => $metaData,
+            'metaprofileName'   => $metaprofileName
 		];
 		$response = $this->request(self::API_URI_USER_CREATE, $data);
 		return UserCreateResponse::fromResponse($response);
@@ -1738,13 +1741,16 @@ class Client extends AbstractClient {
 		return UserGetBalanceResponse::fromResponse($response);
 	}
 
-	/**
-	 * Retrieve a list of metadata elements.
-	 *
-	 * @return UserGetMetaProfileResponse
-	 */
-	public function userGetMetaProfile() {
-		$data     = [];
+    /**
+     * Retrieve a list of metadata elements.
+     *
+     * @param string|null $metapPofileName
+     *
+     * @return UserGetMetaProfileResponse
+     */
+	public function userGetMetaProfile($metapPofileName = null)
+    {
+		$data     = ['metaprofileName' => $metapPofileName];
 		$response = $this->request(self::API_URI_USER_GET_META_PROFILE, $data);
 		return UserGetMetaProfileResponse::fromResponse($response);
 	}
@@ -1860,14 +1866,21 @@ class Client extends AbstractClient {
 	/**
 	 * Searches among the unique properties of all users in order to find one user. The search term must match exactly.
 	 *
-	 * @param string $searchTerm
+     * @param string   $searchTerm
+     * @param int|null $metaprofileName
 	 *
 	 * @return UserFindResponse
 	 *
 	 * @throws ObjectNotFoundException
 	 */
-	public function userFind($searchTerm) {
-		$response = $this->request(self::API_URI_USER_FIND, ['searchTerm' => $searchTerm]);
+	public function userFind($searchTerm, $metaprofileName = null) {
+		$response = $this->request(
+            self::API_URI_USER_FIND,
+            [
+                'searchTerm'      => $searchTerm,
+                'metaprofileName' => $metaprofileName,
+            ]
+        );
 		return UserFindResponse::fromResponse($response);
 	}
 
