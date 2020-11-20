@@ -1325,26 +1325,6 @@ class Client extends AbstractClient {
 	}
 
     /**
-     * Retrieves a single subscription by its id.
-     *
-     * @param Subscription|int $subscription
-     * @param User|int|string  $userTokenOrId User authentication token or user ID.
-     *
-     * @return SubscriptionGetResponse
-     */
-    public function subscriptionMetadataElementsGet(
-        $serviceIdentifier,
-        $userTokenOrId = null
-    ) {
-        $data = [
-            'serviceIdentifier' => $serviceIdentifier
-        ];
-        $this->userToData($userTokenOrId, $data);
-        $response = $this->request('/frontend/subscription/getMetadataElements', $data);
-        return SubscriptionGetResponse::fromResponse($response);
-    }
-
-    /**
      * Retrieves all subscriptions for a user.
      *
      * @param User|int|string $userTokenOrId User authentication token or user ID.
