@@ -81,6 +81,7 @@ use Ixolit\Dislo\Response\UserRecoveryStartResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
+use Ixolit\Dislo\Response\UserValidateMetaDataResponse;
 use Ixolit\Dislo\Response\UserVerificationStartResponse;
 use Ixolit\Dislo\WorkingObjects\AuthToken;
 use Ixolit\Dislo\WorkingObjects\BillingEvent;
@@ -2039,6 +2040,25 @@ class Client extends AbstractClient {
 		$response = $this->request('/frontend/user/fireEvent', $data);
 		return UserFireEventResponse::fromResponse($response);
 	}
+
+    /**
+     * @param array                $metaData
+     * @param string|null          $metaProfileName
+     * @param string|int|User|null $userTokenOrId
+     *
+     * @return UserValidateMetaDataResponse
+     */
+	public function userValidateMetaData(array $metaData, $metaProfileName = null, $userTokenOrId = null)
+    {
+        $data = ['metaData' => $metaData];
+        if (!empty($metaProfileName)) {
+            $data['metaprofileName'] = $metaProfileName;
+        }
+        $data = $this->userToData($userTokenOrId, $data);
+
+        $response = $this->request('/frontend/user/validateMetaData', $data);
+        return UserValidateMetaDataResponse::fromResponse($response);
+    }
 
 	/**
 	 * Flags an email as opened
