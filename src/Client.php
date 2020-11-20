@@ -1337,7 +1337,7 @@ class Client extends AbstractClient {
         $userTokenOrId = null
     ) {
         $data = [
-            'subscriptionId' => $serviceIdentifier
+            'serviceIdentifier' => $serviceIdentifier
         ];
         $this->userToData($userTokenOrId, $data);
         $response = $this->request('/frontend/subscription/getMetadataElements', $data);
