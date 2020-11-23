@@ -6,6 +6,7 @@ use Ixolit\Dislo\Exceptions\AuthenticationException;
 use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
 use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\DisloException;
+use Ixolit\Dislo\Exceptions\InvalidRequestParameterException;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
@@ -56,6 +57,7 @@ use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPossiblePlanChangeStrategiesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPossibleUpgradesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetResponse;
+use Ixolit\Dislo\Response\SubscriptionValidateMetaDataResponse;
 use Ixolit\Dislo\Response\UserAuthenticateResponse;
 use Ixolit\Dislo\Response\UserChangeResponse;
 use Ixolit\Dislo\Response\UserCreateResponse;
@@ -1383,6 +1385,34 @@ class Client extends AbstractClient {
 		$response = $this->request('/frontend/subscription/fireEvent', $data);
 		return SubscriptionFireEventResponse::fromResponse($response);
 	}
+
+    /**
+     * @param array $metaData
+     * @param       $planIdentifier
+     * @param null  $subscriptionId
+     * @param null  $userTokenOrId
+     *
+     * @return SubscriptionValidateMetaDataResponse
+     *
+     * @throws InvalidRequestParameterException
+     */
+	public function subscriptionValidateMetaData(
+        array $metaData,
+        $planIdentifier,
+        $subscriptionId = null,
+        $userTokenOrId = null
+    ) {
+        $data = [
+            'metaData'       => $metaData,
+            'planIdentifier' => $planIdentifier,
+        ];
+        if (!empty($subscriptionId)) {
+            $data['subscriptionId'] = $subscriptionId;
+        }
+        $data = $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/subscription/validateMetaData', $data);
+        return SubscriptionValidateMetaDataResponse::fromResponse($response);
+    }
 
 	/**
 	 * Check if a coupon is valid for the given context package/addons/event/user/sub and calculates the discounted
