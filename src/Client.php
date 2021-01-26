@@ -508,30 +508,34 @@ class Client extends AbstractClient {
 		return BillingGetEventResponse::fromResponse($response);
 	}
 
-	/**
-	 * Create a charge back for an external charge by using the original billing event ID.
-	 *
-	 * @see https://docs.dislo.com/display/DIS/GetBillingEventsForUser
-	 *
-	 * @param User|int|string $userTokenOrId User authentication token or user ID.
-	 * @param int             $limit
-	 * @param int             $offset
-	 * @param string          $orderDir
-	 *
-	 * @return BillingGetEventsForUserResponse
-	 *
-	 * @throws DisloException
-	 */
+    /**
+     * Create a charge back for an external charge by using the original billing event ID.
+     *
+     * @see https://docs.dislo.com/display/DIS/GetBillingEventsForUser
+     *
+     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param int             $limit
+     * @param int             $offset
+     * @param string          $orderDir
+     * @param array           $eventTypeWhitelist
+     *
+     * @return BillingGetEventsForUserResponse
+     *
+     * @throws DisloException
+     * @throws ObjectNotFoundException
+     */
 	public function billingGetEventsForUser(
 		$userTokenOrId,
 		$limit = 10,
 		$offset = 0,
-		$orderDir = self::ORDER_DIR_ASC
+		$orderDir = self::ORDER_DIR_ASC,
+        $eventTypeWhitelist = []
 	) {
 		$data = [
-			'limit'    => $limit,
-			'offset'   => $offset,
-			'orderDir' => $orderDir,
+            'limit'              => $limit,
+            'offset'             => $offset,
+            'orderDir'           => $orderDir,
+            'eventTypeWhitelist' => $eventTypeWhitelist,
 		];
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/billing/getBillingEventsForUser', $data);
@@ -1677,22 +1681,25 @@ class Client extends AbstractClient {
 	/**
 	 * Creates a new user with the given meta data.
 	 *
-	 * @param string   $language          iso-2-letter language key to use for this user
-	 * @param string   $plaintextPassword password for this user
-	 * @param string[] $metaData          meta data for this user (such as first name, last names etc.). NOTE: these
-	 *                                    meta data keys must exist in the meta data profile in Distribload
+     * @param string      $language          iso-2-letter language key to use for this user
+     * @param string      $plaintextPassword password for this user
+     * @param string[]    $metaData          meta data for this user (such as first name, last names etc.). NOTE: these
+     *                                       meta data keys must exist in the meta data profile in Distribload
+     * @param string|null $metaprofileName
 	 *
 	 * @return UserCreateResponse
 	 */
 	public function userCreate(
 		$language,
 		$plaintextPassword,
-		$metaData
+		$metaData,
+        $metaprofileName = null
 	) {
 		$data     = [
 			'language'          => $language,
 			'plaintextPassword' => $plaintextPassword,
 			'metaData'          => $metaData,
+            'metaprofileName'   => $metaprofileName
 		];
 		$response = $this->request('/frontend/user/create', $data);
 		return UserCreateResponse::fromResponse($response);
@@ -1762,13 +1769,16 @@ class Client extends AbstractClient {
 		return UserGetBalanceResponse::fromResponse($response);
 	}
 
-	/**
-	 * Retrieve a list of metadata elements.
-	 *
-	 * @return UserGetMetaProfileResponse
-	 */
-	public function userGetMetaProfile() {
-		$data     = [];
+    /**
+     * Retrieve a list of metadata elements.
+     *
+     * @param string|null $metapPofileName
+     *
+     * @return UserGetMetaProfileResponse
+     */
+	public function userGetMetaProfile($metapPofileName = null)
+    {
+		$data     = ['metaprofileName' => $metapPofileName];
 		$response = $this->request('/frontend/user/getMetaProfile', $data);
 		return UserGetMetaProfileResponse::fromResponse($response);
 	}
@@ -1884,14 +1894,21 @@ class Client extends AbstractClient {
 	/**
 	 * Searches among the unique properties of all users in order to find one user. The search term must match exactly.
 	 *
-	 * @param string $searchTerm
+     * @param string   $searchTerm
+     * @param int|null $metaprofileName
 	 *
 	 * @return UserFindResponse
 	 *
 	 * @throws ObjectNotFoundException
 	 */
-	public function userFind($searchTerm) {
-		$response = $this->request('/frontend/user/findUser', ['searchTerm' => $searchTerm]);
+	public function userFind($searchTerm, $metaprofileName = null) {
+		$response = $this->request(
+		    '/frontend/user/findUser',
+            [
+                'searchTerm'      => $searchTerm,
+                'metaprofileName' => $metaprofileName,
+            ]
+        );
 		return UserFindResponse::fromResponse($response);
 	}
 
