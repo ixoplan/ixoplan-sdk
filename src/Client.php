@@ -506,30 +506,34 @@ class Client extends AbstractClient {
 		return BillingGetEventResponse::fromResponse($response);
 	}
 
-	/**
-	 * Create a charge back for an external charge by using the original billing event ID.
-	 *
-	 * @see https://docs.dislo.com/display/DIS/GetBillingEventsForUser
-	 *
-	 * @param User|int|string $userTokenOrId User authentication token or user ID.
-	 * @param int             $limit
-	 * @param int             $offset
-	 * @param string          $orderDir
-	 *
-	 * @return BillingGetEventsForUserResponse
-	 *
-	 * @throws DisloException
-	 */
+    /**
+     * Create a charge back for an external charge by using the original billing event ID.
+     *
+     * @see https://docs.dislo.com/display/DIS/GetBillingEventsForUser
+     *
+     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param int             $limit
+     * @param int             $offset
+     * @param string          $orderDir
+     * @param array           $eventTypeWhitelist
+     *
+     * @return BillingGetEventsForUserResponse
+     *
+     * @throws DisloException
+     * @throws ObjectNotFoundException
+     */
 	public function billingGetEventsForUser(
 		$userTokenOrId,
 		$limit = 10,
 		$offset = 0,
-		$orderDir = self::ORDER_DIR_ASC
+		$orderDir = self::ORDER_DIR_ASC,
+        $eventTypeWhitelist = []
 	) {
 		$data = [
-			'limit'    => $limit,
-			'offset'   => $offset,
-			'orderDir' => $orderDir,
+            'limit'              => $limit,
+            'offset'             => $offset,
+            'orderDir'           => $orderDir,
+            'eventTypeWhitelist' => $eventTypeWhitelist,
 		];
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request('/frontend/billing/getBillingEventsForUser', $data);
