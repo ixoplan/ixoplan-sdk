@@ -6,6 +6,7 @@ use Ixolit\Dislo\Exceptions\AuthenticationException;
 use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
 use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\DisloException;
+use Ixolit\Dislo\Exceptions\InvalidRequestParameterException;
 use Ixolit\Dislo\Exceptions\InvalidTokenException;
 use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
@@ -58,6 +59,7 @@ use Ixolit\Dislo\Response\SubscriptionGetPossiblePlanChangeStrategiesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPossibleUpgradesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetResponse;
 use Ixolit\Dislo\Response\SubscriptionMetadataChangeResponse;
+use Ixolit\Dislo\Response\SubscriptionValidateMetaDataResponse;
 use Ixolit\Dislo\Response\UserAuthenticateResponse;
 use Ixolit\Dislo\Response\UserChangeResponse;
 use Ixolit\Dislo\Response\UserCreateResponse;
@@ -83,6 +85,7 @@ use Ixolit\Dislo\Response\UserRecoveryStartResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
+use Ixolit\Dislo\Response\UserValidateMetaDataResponse;
 use Ixolit\Dislo\Response\UserVerificationStartResponse;
 use Ixolit\Dislo\WorkingObjects\AuthToken;
 use Ixolit\Dislo\WorkingObjects\BillingEvent;
@@ -1441,6 +1444,34 @@ class Client extends AbstractClient {
 		return SubscriptionFireEventResponse::fromResponse($response);
 	}
 
+    /**
+     * @param array $metaData
+     * @param       $planIdentifier
+     * @param null  $subscriptionId
+     * @param null  $userTokenOrId
+     *
+     * @return SubscriptionValidateMetaDataResponse
+     *
+     * @throws InvalidRequestParameterException
+     */
+	public function subscriptionValidateMetaData(
+        array $metaData,
+        $planIdentifier,
+        $subscriptionId = null,
+        $userTokenOrId = null
+    ) {
+        $data = [
+            'metaData'       => $metaData,
+            'planIdentifier' => $planIdentifier,
+        ];
+        if (!empty($subscriptionId)) {
+            $data['subscriptionId'] = $subscriptionId;
+        }
+        $data = $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/subscription/validateMetaData', $data);
+        return SubscriptionValidateMetaDataResponse::fromResponse($response);
+    }
+
 	/**
 	 * Check if a coupon is valid for the given context package/addons/event/user/sub and calculates the discounted
 	 * price, for new subscriptions.
@@ -2134,6 +2165,25 @@ class Client extends AbstractClient {
 		$response = $this->request('/frontend/user/fireEvent', $data);
 		return UserFireEventResponse::fromResponse($response);
 	}
+
+    /**
+     * @param array                $metaData
+     * @param string|null          $metaProfileName
+     * @param string|int|User|null $userTokenOrId
+     *
+     * @return UserValidateMetaDataResponse
+     */
+	public function userValidateMetaData(array $metaData, $metaProfileName = null, $userTokenOrId = null)
+    {
+        $data = ['metaData' => $metaData];
+        if (!empty($metaProfileName)) {
+            $data['metaprofileName'] = $metaProfileName;
+        }
+        $data = $this->userToData($userTokenOrId, $data);
+
+        $response = $this->request('/frontend/user/validateMetaData', $data);
+        return UserValidateMetaDataResponse::fromResponse($response);
+    }
 
 	/**
 	 * Flags an email as opened
