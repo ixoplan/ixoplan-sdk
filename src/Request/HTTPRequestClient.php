@@ -14,7 +14,7 @@ use Psr\Http\Message\StreamInterface;
  *
  * @package Dislo
  */
-class HTTPRequestClient implements RequestClient, RequestClientExtra {
+class HTTPRequestClient implements RequestClient, RequestClientExtra, RequestClientWithDevModeSupport {
 
 	/**
 	 * @var HTTPClientAdapter
@@ -42,6 +42,12 @@ class HTTPRequestClient implements RequestClient, RequestClientExtra {
      * @var bool
      */
 	private $https = true;
+
+    /**
+     * Enable/Disable the developer mode, which when enables might return different plans/billing methods etc. depending on the backend configuration
+     * @var bool
+     */
+    private $devMode = false;
 
 	/**
 	 * @return HTTPClientAdapterExtra
@@ -71,7 +77,8 @@ class HTTPRequestClient implements RequestClient, RequestClientExtra {
 			->withPath($path)
 			->withQuery(
 				'api_key=' . \urlencode($this->apiKey) .
-				'&timestamp=' . \urlencode($this->timeProvider->getTimestamp())
+                '&timestamp=' . \urlencode($this->timeProvider->getTimestamp()).
+                '&devMode=' . ($this->devMode ? 1 : 0)
 			);
 		$signature = \hash_hmac('MD5', $uri->getPath() . '?' . $uri->getQuery() . $payload, $this->apiSecret);
 		$uri       = $uri->withQuery($uri->getQuery() . '&signature=' . \urlencode($signature));
@@ -163,4 +170,14 @@ class HTTPRequestClient implements RequestClient, RequestClientExtra {
 	    $this->https = (bool) $https;
 	    return $this;
 	}
+
+    /**
+     * Enable/disable the devMode
+     * @param bool $enabled
+     * @return $this
+     */
+    public function setDevMode($enabled) {
+        $this->devMode = (bool) $enabled;
+        return $this;
+    }
 }
