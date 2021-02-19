@@ -6,6 +6,9 @@ use Ixolit\Dislo\Exceptions\AuthenticationException;
 use Ixolit\Dislo\Exceptions\AuthenticationInvalidCredentialsException;
 use Ixolit\Dislo\Exceptions\AuthenticationRateLimitedException;
 use Ixolit\Dislo\Exceptions\DisloException;
+use Ixolit\Dislo\Exceptions\InvalidRequestParameterException;
+use Ixolit\Dislo\Exceptions\InvalidTokenException;
+use Ixolit\Dislo\Exceptions\NotImplementedException;
 use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Response\BillingCloseActiveRecurringResponse;
 use Ixolit\Dislo\Response\BillingCloseFlexibleResponse;
@@ -48,10 +51,13 @@ use Ixolit\Dislo\Response\SubscriptionExternalCloseResponse;
 use Ixolit\Dislo\Response\SubscriptionExternalCreateResponse;
 use Ixolit\Dislo\Response\SubscriptionFireEventResponse;
 use Ixolit\Dislo\Response\SubscriptionGetAllResponse;
+use Ixolit\Dislo\Response\SubscriptionGetMetadataElementsResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPeriodEventsResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPossiblePlanChangeStrategiesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetPossibleUpgradesResponse;
 use Ixolit\Dislo\Response\SubscriptionGetResponse;
+use Ixolit\Dislo\Response\SubscriptionMetadataChangeResponse;
+use Ixolit\Dislo\Response\SubscriptionValidateMetaDataResponse;
 use Ixolit\Dislo\Response\UserAuthenticateResponse;
 use Ixolit\Dislo\Response\UserChangeResponse;
 use Ixolit\Dislo\Response\UserCreateResponse;
@@ -76,6 +82,7 @@ use Ixolit\Dislo\Response\UserRecoveryStartResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationFinishResponse;
 use Ixolit\Dislo\Response\UserSmsVerificationStartResponse;
 use Ixolit\Dislo\Response\UserUpdateTokenResponse;
+use Ixolit\Dislo\Response\UserValidateMetaDataResponse;
 use Ixolit\Dislo\Response\UserVerificationStartResponse;
 use Ixolit\Dislo\WorkingObjects\BillingEvent;
 use Ixolit\Dislo\WorkingObjects\Flexible;
@@ -869,6 +876,7 @@ class Client extends AbstractClient {
 	 *                                                      pay for the package change immediately
 	 * @param User|int|string  $userTokenOrId               User authentication token or user ID.
 	 * @param string|null      $strategyIdentifier          Which strategy to use. Uses default strategy when not provided
+     * @param array            $addonSubscriptionMetadata
 	 *
 	 * @return SubscriptionChangeResponse
 	 */
@@ -880,7 +888,8 @@ class Client extends AbstractClient {
 		$metaData = [],
 		$useFlexible = false,
 		$userTokenOrId = null,
-		$strategyIdentifier = null
+		$strategyIdentifier = null,
+        $addonSubscriptionMetadata = []
 	) {
 		$data = [
 			'subscriptionId'       =>
@@ -899,6 +908,9 @@ class Client extends AbstractClient {
 		if ($strategyIdentifier) {
 			$data['strategyIdentifier'] = $strategyIdentifier;
 		}
+        if ($addonSubscriptionMetadata) {
+            $data['addonSubscriptionMetadata'] = $addonSubscriptionMetadata;
+        }
 		$data['useFlexible'] = $useFlexible;
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request(self::API_URI_SUBSCRIPTION_CHANGE, $data);
@@ -1002,30 +1014,34 @@ class Client extends AbstractClient {
 		return SubscriptionCreateAddonResponse::fromResponse($response);
 	}
 
-	/**
-	 * Create a new subscription for a user, with optional addons.
-	 *
-	 * NOTE: users are locked to one currency code once their first subscription is created. You MUST pass the
-	 * users currency code in $currencyCode if it is already set up. You can obtain the currency code via
-	 * userGetBalance.
-	 *
-	 * NOTE: Always observe the needsBilling flag in the response. If it is true, call createPayment afterwards. If
-	 * it is false, you can use createFlexible to register a payment method without a payment. Don't mix up the two!
-	 *
-	 * @param User|int|string $userTokenOrId User authentication token or user ID.
-	 * @param string          $packageIdentifier
-	 * @param string          $currencyCode
-	 * @param string          $couponCode
-	 * @param array           $addonPackageIdentifiers
-	 *
-	 * @return SubscriptionCreateResponse
-	 */
+    /**
+     * Create a new subscription for a user, with optional addons.
+     *
+     * NOTE: users are locked to one currency code once their first subscription is created. You MUST pass the
+     * users currency code in $currencyCode if it is already set up. You can obtain the currency code via
+     * userGetBalance.
+     *
+     * NOTE: Always observe the needsBilling flag in the response. If it is true, call createPayment afterwards. If
+     * it is false, you can use createFlexible to register a payment method without a payment. Don't mix up the two!
+     *
+     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param string          $packageIdentifier
+     * @param string          $currencyCode
+     * @param string          $couponCode
+     * @param array           $addonPackageIdentifiers
+     * @param array           $metadata
+     * @param array           $addonMetadata
+     *
+     * @return SubscriptionCreateResponse
+     */
 	public function subscriptionCreate(
 		$userTokenOrId,
 		$packageIdentifier,
 		$currencyCode,
 		$couponCode = '',
-		$addonPackageIdentifiers = []
+		$addonPackageIdentifiers = [],
+        $metadata = [],
+        $addonMetadata = []
 	) {
 		$data = [
 			'packageIdentifier' => $packageIdentifier,
@@ -1037,10 +1053,50 @@ class Client extends AbstractClient {
 		if ($couponCode) {
 			$data['couponCode'] = $couponCode;
 		}
+        if ($metadata) {
+            $data['metadata'] = $metadata;
+        }
+        if ($addonMetadata) {
+            $data['addonMetadata'] = $addonMetadata;
+        }
 		$this->userToData($userTokenOrId, $data);
 		$response = $this->request(self::API_URI_SUBSCRIPTION_CREATE, $data);
 		return SubscriptionCreateResponse::fromResponse($response);
 	}
+
+    /**
+     * Create a new addonSubscription.
+     *
+     * @param User|int|string $userTokenOrId User authentication token or user ID.
+     * @param $subscriptionId
+     * @param $packageIdentifiers
+     * @param string $couponCode
+     * @param array $addonMetadata
+     * @return SubscriptionCreateResponse
+     * @throws DisloException
+     * @throws ObjectNotFoundException
+     */
+    public function addonSubscriptionCreate(
+        $userTokenOrId,
+        $subscriptionId,
+        $packageIdentifiers,
+        $couponCode = '',
+        $addonMetadata = []
+    ) {
+        $data = [
+            'subscriptionId' => $subscriptionId,
+            'packageIdentifiers'      => $packageIdentifiers,
+        ];
+        if ($couponCode) {
+            $data['couponCode'] = $couponCode;
+        }
+        if ($addonMetadata) {
+            $data['addonSubscriptionMetadata'] = $addonMetadata;
+        }
+        $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/subscription/createAddonSubscription', $data);
+        return SubscriptionCreateResponse::fromResponse($response);
+    }
 
 	/**
 	 * Change the package for an external subscription.
@@ -1456,6 +1512,34 @@ class Client extends AbstractClient {
 		return SubscriptionFireEventResponse::fromResponse($response);
 	}
 
+    /**
+     * @param array $metaData
+     * @param       $planIdentifier
+     * @param null  $subscriptionId
+     * @param null  $userTokenOrId
+     *
+     * @return SubscriptionValidateMetaDataResponse
+     *
+     * @throws InvalidRequestParameterException
+     */
+	public function subscriptionValidateMetaData(
+        array $metaData,
+        $planIdentifier,
+        $subscriptionId = null,
+        $userTokenOrId = null
+    ) {
+        $data = [
+            'metaData'       => $metaData,
+            'planIdentifier' => $planIdentifier,
+        ];
+        if (!empty($subscriptionId)) {
+            $data['subscriptionId'] = $subscriptionId;
+        }
+        $data = $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/subscription/validateMetaData', $data);
+        return SubscriptionValidateMetaDataResponse::fromResponse($response);
+    }
+
 	/**
 	 * Check if a coupon is valid for the given context package/addons/event/user/sub and calculates the discounted
 	 * price, for new subscriptions.
@@ -1613,6 +1697,43 @@ class Client extends AbstractClient {
 		$response = $this->request(self::API_URI_USER_CHANGE, $data);
 		return UserChangeResponse::fromResponse($response);
 	}
+
+    /**
+     * Change metadata of an existing subscription.
+     *
+     * @param string $userTokenOrId the unique user id to change
+     * @param string $subscriptionId the unique subscription id to change
+     * @param string[]        $metadata      meta data for this user (such as first name, last names etc.). NOTE: these
+     *                                       meta data keys must exist in the meta data profile in Distribload
+     *
+     * @return SubscriptionMetadataChangeResponse
+     */
+    public function subscriptionMetadataChange(
+        $userTokenOrId,
+        $subscriptionId,
+        $metadata
+    ) {
+        $data = [
+            'subscriptionId' => $subscriptionId,
+        ];
+        if($metadata){
+            $data['metadata'] = $metadata;
+        }
+        $this->userToData($userTokenOrId, $data);
+        $response = $this->request('/frontend/subscription/changeMetadata', $data);
+        return SubscriptionMetadataChangeResponse::fromResponse($response);
+    }
+
+    /**
+     * @param string $serviceIdentifier
+     *
+     * @return SubscriptionGetMetadataElementsResponse
+     */
+    public function subscriptionGetMetadataElements($serviceIdentifier)
+    {
+        $response = $this->request('/frontend/subscription/getMetadataElements', ['serviceIdentifier' => $serviceIdentifier]);
+        return SubscriptionGetMetadataElementsResponse::fromResponse($response);
+    }
 
     /**
      * @param array $data
@@ -2110,6 +2231,25 @@ class Client extends AbstractClient {
 		$response = $this->request(self::API_URI_USER_FIRE_EVENT, $data);
 		return UserFireEventResponse::fromResponse($response);
 	}
+
+    /**
+     * @param array                $metaData
+     * @param string|null          $metaProfileName
+     * @param string|int|User|null $userTokenOrId
+     *
+     * @return UserValidateMetaDataResponse
+     */
+	public function userValidateMetaData(array $metaData, $metaProfileName = null, $userTokenOrId = null)
+    {
+        $data = ['metaData' => $metaData];
+        if (!empty($metaProfileName)) {
+            $data['metaprofileName'] = $metaProfileName;
+        }
+        $data = $this->userToData($userTokenOrId, $data);
+
+        $response = $this->request('/frontend/user/validateMetaData', $data);
+        return UserValidateMetaDataResponse::fromResponse($response);
+    }
 
 	/**
 	 * Flags an email as opened

@@ -12,13 +12,13 @@ use Ixolit\Dislo\WorkingObjectsCustom\SubscriptionCustom;
  */
 class Subscription extends AbstractWorkingObject {
 
-	const STATUS_PENDING = 'pending';
-	const STATUS_RUNNING = 'running';
-	const STATUS_CANCELED = 'canceled';
-	const STATUS_CLOSED = 'closed';
-	const STATUS_ARCHIVED = 'archived';
-	const STATUS_SUSPENDED_RUNNING = 'suspended_running';
-	const STATUS_SUSPENDED_CANCELED = 'suspended_canceled';
+    const STATUS_PENDING = 'pending';
+    const STATUS_RUNNING = 'running';
+    const STATUS_CANCELED = 'canceled';
+    const STATUS_CLOSED = 'closed';
+    const STATUS_ARCHIVED = 'archived';
+    const STATUS_SUSPENDED_RUNNING = 'suspended_running';
+    const STATUS_SUSPENDED_CANCELED = 'suspended_canceled';
 
     const PLAN_CHANGE_IMMEDIATE = 'immediate';
     const PLAN_CHANGE_QUEUED    = 'queued';
@@ -98,30 +98,27 @@ class Subscription extends AbstractWorkingObject {
 	 */
 	private $addonSubscriptions = [];
 
-    /**
-     * @var \DateTime|null
-     */
+	/** @var \DateTime|null */
 	private $minimumTermEndsAt;
 
-    /**
-     * @var bool
-     */
+	/** @var bool */
 	private $isExternal;
 
-    /**
-     * @var CouponUsage
-     */
+	/** @var CouponUsage */
 	private $couponUsage;
 
-    /**
-     * @var
-     */
+	/** @var  */
 	private $currentPeriodEvent;
 
     /**
      * @var float
      */
 	private $nextBillingAmount;
+
+    /**
+     * @var array
+     */
+    private $metaData;
 
     /**
      * Subscription constructor.
@@ -167,7 +164,8 @@ class Subscription extends AbstractWorkingObject {
         $isExternal = false,
         $couponUsage = null,
         PeriodEvent $currentPeriodEvent = null,
-        $nextBillingAmount = null
+        $nextBillingAmount = null,
+        $metaData = []
     ) {
 		$this->subscriptionId       = $subscriptionId;
 		$this->currentPackage       = $currentPackage;
@@ -189,6 +187,7 @@ class Subscription extends AbstractWorkingObject {
 		$this->couponUsage          = $couponUsage;
 		$this->currentPeriodEvent   = $currentPeriodEvent;
 		$this->nextBillingAmount    = $nextBillingAmount;
+        $this->metaData             = $metaData;
 
 		$this->addCustomObject();
 	}
@@ -387,6 +386,16 @@ class Subscription extends AbstractWorkingObject {
     }
 
     /**
+     *
+     */
+    /**
+     * @return array|null
+     */
+    public function getMetaData() {
+        return $this->metaData;
+    }
+
+    /**
      * @return bool
      */
     public function isActive() {
@@ -438,7 +447,8 @@ class Subscription extends AbstractWorkingObject {
             static::getValueIsSet($response, 'currentPeriodEvent', null, function ($value) {
                 return PeriodEvent::fromResponse($value);
             }),
-            static::getValueIsSet($response, 'nextBillingAmount')
+            static::getValueIsSet($response, 'nextBillingAmount'),
+            static::getValueIsSet($response, 'metadata')
         );
 	}
 
@@ -472,6 +482,7 @@ class Subscription extends AbstractWorkingObject {
             'couponUsage'          => ($this->couponUsage ? $this->couponUsage->toArray() : null),
             'currentPeriodEvent'   => $this->currentPeriodEvent ? $this->currentPeriodEvent->toArray() : null,
             'nextBillingAmount'    => $this->nextBillingAmount,
+            'metaData'             => $this->metaData
         ];
 	}
 }

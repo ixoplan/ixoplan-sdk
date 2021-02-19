@@ -12,6 +12,7 @@ use Ixolit\Dislo\Exceptions\ObjectNotFoundException;
 use Ixolit\Dislo\Request\RequestClient;
 use Ixolit\Dislo\Request\RequestClientExtra;
 use Ixolit\Dislo\Request\RequestClientWithDevModeSupport;
+use Ixolit\Dislo\WorkingObjects\AuthToken;
 use Ixolit\Dislo\WorkingObjects\User;
 
 /**
@@ -39,7 +40,7 @@ abstract class AbstractClient {
      * E.g. new plans for testing or new billing methods which are not supposed to be visible for all customers
      * @var bool
      */
-    protected $devMode=false;
+    protected $devMode = false;
 
     /**
      * Initialize the client with a RequestClient, the class that is responsible for transporting messages to and
@@ -163,7 +164,7 @@ abstract class AbstractClient {
             if ($requestClient instanceof RequestClientWithDevModeSupport) {
                 $requestClient->setDevMode($this->devMode);
             }
-        
+
             $response = $requestClient->request($uri, $data);
             if (isset($response['success']) && $response['success'] === false) {
                 switch ($response['errors'][0]['code']) {
