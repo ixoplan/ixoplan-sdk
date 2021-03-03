@@ -1290,12 +1290,15 @@ class Client extends AbstractClient {
      *
      * @param string|null $serviceIdentifier
      *
-     * @param array $packageIdentifiers
+     * @param array       $packageIdentifiers
+     * @param bool        $onlyAvailable
+     *
      * @return PackagesListResponse
      */
 	public function packagesList(
 		$serviceIdentifier = null,
-        array $packageIdentifiers = []
+        array $packageIdentifiers = [],
+        $onlyAvailable = false
 	) {
 		$data = [];
 		if ($serviceIdentifier) {
@@ -1304,6 +1307,9 @@ class Client extends AbstractClient {
 
 		if(count($packageIdentifiers)) {
 		    $data['packageIdentifiers'] = $packageIdentifiers;
+        }
+		if ($onlyAvailable) {
+		    $data['onlyAvailable'] = true;
         }
 
 		$response = $this->request('/frontend/subscription/getPackages', $data);
