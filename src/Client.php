@@ -1371,14 +1371,14 @@ class Client extends AbstractClient {
 		if ($serviceIdentifier) {
 			$data['serviceIdentifier'] = $serviceIdentifier;
 		}
-		$response = $this->request(self::API_URI_PACKAGE_LIST, $data);
+        if(count($packageIdentifiers)) {
+            $data['packageIdentifiers'] = $packageIdentifiers;
+        }
+        if ($onlyAvailable) {
+            $data['onlyAvailable'] = true;
+        }
 
-		if(count($packageIdentifiers)) {
-		    $data['packageIdentifiers'] = $packageIdentifiers;
-        }
-		if ($onlyAvailable) {
-		    $data['onlyAvailable'] = true;
-        }
+		$response = $this->request(self::API_URI_PACKAGE_LIST, $data);
 
 		return PackagesListResponse::fromResponse($response);
 	}
