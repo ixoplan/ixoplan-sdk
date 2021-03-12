@@ -91,13 +91,13 @@ use Ixolit\Dislo\WorkingObjects\User;
 use Psr\Http\Message\StreamInterface;
 
 /**
- * The main client class for use with the Dislo API.
+ * The main client class for use with the IXOPLAN API.
  *
- * Designed for different transport layers. Requires a RequestClient interface for actual communication with Dislo
+ * Designed for different transport layers. Requires a RequestClient interface for actual communication with IXOPLAN
  * (e.g. HTTPRequestClient).
  *
- * For details about the Dislo API, the available calls and Dislo itself please read the documentation available at
- * https://docs.dislo.com/
+ * For details about the IXOPLAN API, the available calls and IXOPLAN itself please read the documentation available at
+ * https://docs.ixoplan.com/
  */
 class Client extends AbstractClient {
 
@@ -243,8 +243,6 @@ class Client extends AbstractClient {
 	 *
 	 * Note: once you close an active flexible, subscriptions cannot get extended automatically!
 	 *
-	 * @see https://docs.dislo.com/display/DIS/CloseFlexible
-	 *
 	 * @param Flexible|int    $flexible
 	 * @param User|int|string $userTokenOrId User authentication token or user ID.
 	 *
@@ -269,8 +267,6 @@ class Client extends AbstractClient {
      *
      * Note: there can only be ONE active flexible per user. In case there is already an active one, and you
      * successfully create a new one, the old flexible will be closed automatically.
-     *
-     * @see https://docs.dislo.com/display/DIS/CreateFlexible
      *
      * @param User|int|string $userTokenOrId User authentication token or user ID.
      * @param string          $billingMethod
@@ -311,8 +307,6 @@ class Client extends AbstractClient {
 	 * or upgrade found for payment. If you just want to register a payment method, use `billingCreateFlexible()`
 	 * instead.
 	 *
-	 * @see https://docs.dislo.com/display/DIS/CreatePayment
-	 *
 	 * @param Subscription|int $subscription
 	 * @param string           $billingMethod
 	 * @param string           $returnUrl
@@ -348,13 +342,10 @@ class Client extends AbstractClient {
 	/**
 	 * Create an external charge.
 	 *
-	 * @see https://docs.dislo.com/display/DIS/ExternalCreateCharge
-	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
-	 *
 	 * @param string          $externalProfileId     the external profile to which the charge should be linked, this is
 	 *                                               the "externalId" you passed in the "subscription/externalCreate"
 	 *                                               call
-	 * @param string          $accountIdentifier     the billing account identifier, you will this from dislo staff
+	 * @param string          $accountIdentifier     the billing account identifier, you will this from IXOPLAN staff
 	 * @param string          $currencyCode          currency code EUR, USD, ...
 	 * @param float           $amount                the amount of the charge
 	 * @param string          $externalTransactionId external unique id for the charge
@@ -364,7 +355,7 @@ class Client extends AbstractClient {
 	 * @param array           $paymentDetails        additional data you want to save with the charge
 	 * @param string          $description           description of the charge
 	 * @param string          $status                status the charge should be created with, you might want to log
-	 *                                               erroneous charges in dislo too, but you don't have to. @see
+	 *                                               erroneous charges in IXOPLAN too, but you don't have to. @see
 	 *                                               BillingEvent::STATUS_*
 	 * @param User|int|string $userTokenOrId         User authentication token or user ID.
 	 *
@@ -403,16 +394,14 @@ class Client extends AbstractClient {
 	/**
 	 * Create an external charge without an external profile.
 	 *
-	 * @see https://docs.dislo.com/display/DIS/ExternalCreateChargeWithoutProfile
-	 *
-	 * @param string          $accountIdentifier     the billing account identifier, you will this from dislo staff
+	 * @param string          $accountIdentifier     the billing account identifier, you will this from IXOPLAN staff
 	 * @param string          $currencyCode          currency code EUR, USD, ...
 	 * @param float           $amount                the amount of the charge
 	 * @param string          $externalTransactionId external unique id for the charge
 	 * @param array           $paymentDetails        additional data you want to save with the charge
 	 * @param string          $description           description of the charge
 	 * @param string          $status                status the charge should be created with, you might want to log
-	 *                                               erroneous charges in dislo too, but you don't have to. @see
+	 *                                               erroneous charges in IXOPLAN too, but you don't have to. @see
 	 *                                               BillingEvent::STATUS_*
 	 * @param User|int|string $userTokenOrId         User authentication token or user ID.
 	 *
@@ -447,10 +436,7 @@ class Client extends AbstractClient {
 	/**
 	 * Create a charge back for an external charge by using the original transaction ID
 	 *
-	 * @see https://docs.dislo.com/display/DIS/ExternalCreateChargeback
-	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
-	 *
-	 * @param string          $accountIdentifier     the billing account identifier, assigned by dislo staff
+	 * @param string          $accountIdentifier     the billing account identifier, assigned by IXOPLAN staff
 	 * @param string          $originalTransactionID external unique id of the original charge
 	 * @param string          $description           textual description of the chargeback for support
 	 * @param User|int|string $userTokenOrId         User authentication token or user ID.
@@ -478,10 +464,7 @@ class Client extends AbstractClient {
 	/**
 	 * Create a charge back for an external charge by using the original billing event ID
 	 *
-	 * @see https://docs.dislo.com/display/DIS/ExternalCreateChargeback
-	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
-	 *
-	 * @param string          $accountIdentifier      the billing account identifier, assigned by dislo staff
+	 * @param string          $accountIdentifier      the billing account identifier, assigned by IXOPLAN staff
 	 * @param int             $originalBillingEventId ID of the original billing event.
 	 * @param string          $description            textual description of the chargeback for support
 	 * @param User|int|string $userTokenOrId          User authentication token or user ID.
@@ -509,9 +492,6 @@ class Client extends AbstractClient {
 	/**
 	 * Retrieve an external profile by the external id that has been passed in "subscription/externalCreate".
 	 *
-	 * @see https://docs.dislo.com/display/DIS/ExternalGetProfile
-	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
-	 *
 	 * @param string          $externalId    ID for the external profile
 	 * @param User|int|string $userTokenOrId User authentication token or user ID.
 	 *
@@ -533,9 +513,6 @@ class Client extends AbstractClient {
 
 	/**
 	 * Retrieve an external profile by the external id that has been passed in "subscription/externalCreate".
-	 *
-	 * @see https://docs.dislo.com/display/DIS/ExternalGetProfile
-	 * @see https://docs.dislo.com/display/DIS/External+payments+guide
 	 *
 	 * @param Subscription|int $subscription  ID for the subscription expected to have an external profile
 	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
@@ -560,8 +537,6 @@ class Client extends AbstractClient {
 	/**
 	 * Create a charge back for an external charge by using the original billing event ID.
 	 *
-	 * @see https://docs.dislo.com/display/DIS/GetBillingEvent
-	 *
 	 * @param int             $billingEventId unique id of the billing event
 	 * @param User|int|string $userTokenOrId  User authentication token or user ID.
 	 *
@@ -583,8 +558,6 @@ class Client extends AbstractClient {
 
     /**
      * Create a charge back for an external charge by using the original billing event ID.
-     *
-     * @see https://docs.dislo.com/display/DIS/GetBillingEventsForUser
      *
      * @param User|int|string $userTokenOrId User authentication token or user ID.
      * @param int             $limit
@@ -705,8 +678,6 @@ class Client extends AbstractClient {
 	/**
 	 * Calculate the price for a subscription addon.
 	 *
-	 * @see https://docs.dislo.com/display/DIS/CalculateAddonPrice
-	 *
 	 * @param Subscription|int $subscription
 	 * @param string|string[]  $packageIdentifiers
 	 * @param string|null      $couponCode
@@ -740,8 +711,6 @@ class Client extends AbstractClient {
 
 	/**
 	 * Calculate the price for a potential package change.
-	 *
-	 * @see https://docs.dislo.com/display/DIS/CalculatePackageChange
 	 *
 	 * @param Subscription|int $subscription
 	 * @param string           $newPackageIdentifier
@@ -778,8 +747,6 @@ class Client extends AbstractClient {
 	/**
 	 * Calculates the price for creating a new subscription for an existing user.
 	 *
-	 * @see https://docs.dislo.com/display/DIS/CalculateSubscriptionPrice
-	 *
 	 * @param string          $packageIdentifier       the package for the subscription
 	 * @param string          $currencyCode            currency which should be used for the user
 	 * @param string|null     $couponCode              optional - coupon which should be applied
@@ -811,8 +778,6 @@ class Client extends AbstractClient {
 	 *
 	 * NOTE: this call only works for package changes which are not applied immediately. In that case you need to call
 	 * ChangePackage again.
-	 *
-	 * @see https://docs.dislo.com/display/DIS/CancelPackageChange
 	 *
 	 * @param Subscription|int $subscription  the unique subscription id to change
 	 * @param User|int|string  $userTokenOrId User authentication token or user ID.
@@ -870,7 +835,7 @@ class Client extends AbstractClient {
 	 * @param string           $newPackageIdentifier        the identifier of the new package
 	 * @param string[]         $addonPackageIdentifiers     optional - package identifiers of the addons
 	 * @param string           $couponCode                  optional - the coupon code to apply
-	 * @param array            $metaData                    optional - additional data (if supported by Dislo
+	 * @param array            $metaData                    optional - additional data (if supported by IXOPLAN
 	 *                                                      installation)
 	 * @param bool             $useFlexible                 use the existing flexible payment method from the user to
 	 *                                                      pay for the package change immediately
@@ -1229,7 +1194,7 @@ class Client extends AbstractClient {
 	 *                                                      passing the externalId to "billing/externalGetProfile"
 	 * @param string          $currencyCode                 currency which should be used for the user
 	 * @param array           $addonPackageIdentifiers      optional - additional addon packages
-	 * @param \DateTime|null  $periodEnd                    end of the first period, if omitted, dislo will calculate
+	 * @param \DateTime|null  $periodEnd                    end of the first period, if omitted, IXOPLAN will calculate
 	 *                                                      the period end itself by using the package duration
 	 * @param User|int|string $userTokenOrId                User authentication token or user ID.
 	 *
@@ -1486,7 +1451,7 @@ class Client extends AbstractClient {
 	}
 
 	/**
-	 * Fires a subscription custom frontend API event to be handled by Dislo's event engine.
+	 * Fires a subscription custom frontend API event to be handled by IXOPLAN's event engine.
 	 *
 	 * @param Subscription|int $subscription
 	 * @param string $eventType To be evaluated in "Compare Custom Event Type" conditions
@@ -2209,7 +2174,7 @@ class Client extends AbstractClient {
 	}
 
 	/**
-	 * Fires an user custom frontend API event to be handled by Dislo's event engine.
+	 * Fires an user custom frontend API event to be handled by IXOPLAN's event engine.
 	 *
 	 * @param string|int|User $userTokenOrId
 	 * @param string $eventType To be evaluated in "Compare Custom Event Type" conditions
@@ -2278,7 +2243,7 @@ class Client extends AbstractClient {
 	}
 
 	/**
-	 * Retrieve Dislo's redirector configuration
+	 * Retrieve IXOPLAN's redirector configuration
 	 *
 	 * @return MiscGetRedirectorConfigurationResponse
 	 */
@@ -2289,10 +2254,10 @@ class Client extends AbstractClient {
 	}
 
 	/**
-	 * Run a stored report against Dislo's search database streaming the returned data. Requires a RequestClient with
+	 * Run a stored report against IXOPLAN's search database streaming the returned data. Requires a RequestClient with
 	 * streaming support.
 	 *
-	 * @param int             $reportId as shown in Dislo's administrator interface
+	 * @param int             $reportId as shown in IXOPLAN's administrator interface
 	 * @param array|null      $parameters name/value pairs to fill placeholders within the report
 	 * @param mixed|null      $stream String, resource, object or interface to stream the response body to, default to stdout
 	 *
@@ -2314,7 +2279,7 @@ class Client extends AbstractClient {
 	}
 
 	/**
-	 * Run a query against Dislo's search database streaming the returned data. Requires a RequestClient with
+	 * Run a query against IXOPLAN's search database streaming the returned data. Requires a RequestClient with
 	 * streaming support.
 	 *
 	 * @param string          $query SQL statement to execute, may contain ":_name(type)" placeholders
@@ -2341,9 +2306,9 @@ class Client extends AbstractClient {
 	}
 
 	/**
-	 * Run a stored report against Dislo's search database returning the result as string. Keep memory limits in mind!
+	 * Run a stored report against IXOPLAN's search database returning the result as string. Keep memory limits in mind!
 	 *
-	 * @param int             $reportId as shown in Dislo's administrator interface
+	 * @param int             $reportId as shown in IXOPLAN's administrator interface
 	 * @param array|null      $parameters name/value pairs to fill placeholders within the report
 	 *
 	 * @return string
@@ -2356,7 +2321,7 @@ class Client extends AbstractClient {
 	}
 
 	/**
-	 * Run a query against Dislo's search database returning the result as string. Keep memory limits im mind!
+	 * Run a query against IXOPLAN's search database returning the result as string. Keep memory limits im mind!
 	 *
 	 * @param string          $query SQL statement to execute, may contain ":_name(type)" placeholders
 	 * @param array|null      $parameters name/value pairs to fill placeholders within the query
