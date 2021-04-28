@@ -5,9 +5,9 @@ namespace Ixolit\Dislo\Request;
 use Psr\Http\Message\StreamInterface;
 
 /**
- * Interface for clients to call Dislo.
+ * Interface for clients to call Ixoplan.
  *
- * @package Dislo
+ * @package Ixolit\Dislo\Request
  */
 interface RequestClientExtra {
 	/**

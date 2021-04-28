@@ -1,8 +1,8 @@
 {
-	"name":"ixolit/dislo-sdk",
+	"name":"ixoplan/ixoplan-sdk",
 	"license": "MIT",
 	"type": "library",
-	"description": "Client library for Dislo APIs",
+	"description": "Client library for Ixoplan APIs",
 	"autoload": {
 		"psr-4": {
 			"Ixolit\\Dislo\\": "./src"
@@ -14,14 +14,14 @@
 		}
 	},
 	"suggest": {
-		"ixolit/dislo-sdk-http-guzzle": "Guzzle connector for the Dislo SDK"
+		"ixoplan/ixoplan-sdk-http-guzzle": "Guzzle connector for the Ixoplan SDK"
 	},
 	"require": {
-		"ixolit/dislo-sdk-http": "^1.0",
+		"ixoplan/ixoplan-sdk-http": "^1.0",
 		"psr/http-message": "^1.0"
 	},
 	"require-dev": {
-		"ixolit/dislo-sdk-http-guzzle": "^1.0",
+		"ixoplan/ixoplan-sdk-http-guzzle": "^1.0",
 		"phpunit/phpunit": "^4.8",
 		"phpmd/phpmd": "^2.4",
 		"phing/phing": "^2.14",

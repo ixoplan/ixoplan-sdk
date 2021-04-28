@@ -147,7 +147,7 @@ abstract class AbstractClient {
 
     /**
      * Initialize the client with a RequestClient, the class that is responsible for transporting messages to and
-     * from the Dislo API.
+     * from the Ixoplan API.
      *
      * @param RequestClient $requestClient
      * @param bool          $forceTokenMode Force using tokens. Does not allow passing a user Id.

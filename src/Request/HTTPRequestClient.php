@@ -10,9 +10,9 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
- * This client uses a PSR-7 client to talk to Dislo.
+ * This client uses a PSR-7 client to talk to Ixoplan.
  *
- * @package Dislo
+ * @package Ixolit\Dislo\Request
  */
 class HTTPRequestClient implements RequestClient, RequestClientExtra, RequestClientWithDevModeSupport {
 

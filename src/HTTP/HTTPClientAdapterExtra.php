@@ -6,7 +6,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * @package Dislo
+ * @package Ixolit\Dislo\HTTP
  */
 interface HTTPClientAdapterExtra {
 

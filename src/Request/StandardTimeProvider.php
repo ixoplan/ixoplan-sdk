@@ -5,7 +5,7 @@ namespace Ixolit\Dislo\Request;
 /**
  * Provides the timestamp using the built-in PHP time() function.
  *
- * @package Dislo
+ * @package Ixolit\Dislo\Request
  */
 class StandardTimeProvider implements TimeProvider {
 	/**

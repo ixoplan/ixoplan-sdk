@@ -3,7 +3,7 @@
 namespace Ixolit\Dislo\Request;
 
 /**
- * Interface for clients to call Dislo.
+ * Interface for clients to call Ixoplan.
  *
  * @package Dislo
  */

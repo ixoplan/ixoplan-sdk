@@ -1,17 +1,17 @@
-# dislo-sdk
-PHP SDK for the Dislo API
+# ixoplan-sdk
+PHP SDK for the Ixoplan API
 
 ## Installation
 
-Simply add `ixolit/dislo-sdk` and a provider of `ixolit/dislo-sdk-http` (e.g. ixolit/dislo-sdk-http-guzzle) to your composer.json, e.g:
+Simply add `ixolit/ixoplan-sdk` and a provider of `ixolit/ixoplan-sdk-http` (e.g. ixolit/ixoplan-sdk-http-guzzle) to your composer.json, e.g:
 
 ```json
 {
     "name": "myvendor/myproject",
-    "description": "Using dislo-sdk",
+    "description": "Using ixoplan-sdk",
     "require": {
-        "ixolit/dislo-sdk": "*",
-        "ixolit/dislo-sdk-http-guzzle": "*"
+        "ixolit/ixoplan-sdk": "*",
+        "ixolit/ixoplan-sdk-http-guzzle": "*"
     }
 }
 ```
@@ -19,7 +19,7 @@ Simply add `ixolit/dislo-sdk` and a provider of `ixolit/dislo-sdk-http` (e.g. ix
 ## Usage
 
 ### Instantiate the Client
-The client is designed for different transport layers. It needs a RequestClient interface (e.g. HTTPRequestClient) to actually communicate with Dislo.
+The client is designed for different transport layers. It needs a RequestClient interface (e.g. HTTPRequestClient) to actually communicate with Ixoplan.
 
 ```php
 use Ixolit\Dislo\Client;
@@ -151,7 +151,7 @@ foreach ($response->getSubscriptions() as $subscription) {
 
 ### Search API
 
-Run a parametrized query against the search database in Dislo, pass a file resource to stream the returned data to.
+Run a parametrized query against the search database in Ixoplan, pass a file resource to stream the returned data to.
 
 ```php
 $apiClient = new \Ixolit\Dislo\Client($httpClient);

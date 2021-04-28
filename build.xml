@@ -2,7 +2,7 @@
 <?xml-model xlink:href="vendor/phing/phing/etc/phing-grammar.rng"
 		type="application/xml"
 		schematypens="http://relaxng.org/ns/structure/1.0" ?>
-<project name="ixolit/moreify-client" basedir="." default="qa">
+<project name="ixoplan/ixoplan-sdk" basedir="." default="qa">
 	<target name="phpunit">
 		<exec command="vendor/bin/phpunit" checkreturn="true" logoutput="true" />
 	</target>
@@ -13,7 +13,7 @@
 
 	<target name="docs">
 		<exec
-			command="vendor/bin/apigen generate -s src -d docs/ --title &quot;Dislo SDK&quot; --main=&quot;Ixolit\\Dislo\\Client&quot; -o --tree"
+			command="vendor/bin/apigen generate -s src -d docs/ --title &quot;Ixoplan SDK&quot; --main=&quot;Ixolit\\Dislo\\Client&quot; -o --tree"
 			checkreturn="true" logoutput="true" />
 	</target>
 
