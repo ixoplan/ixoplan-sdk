@@ -10,9 +10,9 @@ use Psr\Http\Message\UriInterface;
 /**
  * Client adapter for HTTP requests. (It is sad that PSR-7 doesn't provide this.)
  *
- * This interface is the specification for ixolit/dislo-sdk-http version 1.0.0. Don't change it.
+ * This interface is the specification for ixoplan/ixoplan-sdk-http version 1.0.0. Don't change it.
  *
- * @package Dislo
+ * @package Ixolit\Dislo\HTTP
  */
 interface HTTPClientAdapter {
 	/**

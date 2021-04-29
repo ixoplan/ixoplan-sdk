@@ -5,7 +5,7 @@ namespace Ixolit\Dislo\Request;
 /**
  * This exception indicates that the response received was not in JSON format.
  *
- * @package Dislo
+ * @package Ixolit\Dislo\Request
  */
 class InvalidResponseData extends \Exception {
 
