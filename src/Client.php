@@ -349,7 +349,7 @@ class Client extends AbstractClient {
 	 * @param string          $externalProfileId     the external profile to which the charge should be linked, this is
 	 *                                               the "externalId" you passed in the "subscription/externalCreate"
 	 *                                               call
-	 * @param string          $accountIdentifier     the billing account identifier, you will this from dislo staff
+	 * @param string          $accountIdentifier     the billing account identifier, you will this from IXOPLAN staff
 	 * @param string          $currencyCode          currency code EUR, USD, ...
 	 * @param float           $amount                the amount of the charge
 	 * @param string          $externalTransactionId external unique id for the charge
