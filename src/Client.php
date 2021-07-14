@@ -343,6 +343,48 @@ class Client extends AbstractClient {
 	}
 
 	/**
+	 * Initiate a payment transaction for a new subscription or package change with an existing flexible.
+	 *
+	 * Only use CreatePayment if you want to create an actual payment for a subscription that needs billing. If you
+	 * try to create a payment for a subscription that doesn't need one, you will receive the error No subscription
+	 * or upgrade found for payment. If you just want to register a payment method, use `billingCreateFlexible()`
+	 * instead.
+	 *
+	 * @see https://docs.dislo.com/display/DIS/CreatePaymentWithFlexible
+	 *
+	 * @param Subscription|int $subscription
+	 * @param Flexible|int     $flexible
+	 * @param string           $returnUrl
+	 * @param array            $paymentDetails
+	 * @param User|int|string  $userTokenOrId user authentication token or id
+	 * @param string|null      $countryCode
+	 *
+	 * @return BillingCreatePaymentResponse
+	 */
+	public function billingCreatePaymentWithFlexible(
+		$subscription,
+		$flexible,
+		$returnUrl,
+		$paymentDetails,
+		$userTokenOrId,
+		$countryCode = null
+	) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$data['flexibleId']     = ($flexible instanceof Flexible) ? $flexible->getFlexibleId() : $flexible;
+		$data['returnUrl']      = (string)$returnUrl;
+		$data['subscriptionId'] =
+			($subscription instanceof Subscription) ? $subscription->getSubscriptionId() : $subscription;
+		$data['paymentDetails'] = $paymentDetails;
+		$data['countryCode'] = $countryCode;
+		$response               = $this->request(self::API_URI_BILLING_CREATE_PAYMENT, $data);
+		if (empty($response['redirectUrl'])) {
+			$response['redirectUrl'] = $returnUrl;
+		}
+		return BillingCreatePaymentResponse::fromResponse($response);
+	}
+
+	/**
 	 * Create an external charge.
 	 *
 	 *
