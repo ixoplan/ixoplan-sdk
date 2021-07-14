@@ -106,6 +106,7 @@ class Client extends AbstractClient {
     const API_URI_BILLING_CLOSE_FLEXIBLE                         = '/frontend/billing/closeFlexible';
     const API_URI_BILLING_CREATE_FLEXIBLE                        = '/frontend/billing/createFlexible';
     const API_URI_BILLING_CREATE_PAYMENT                         = '/frontend/billing/createPayment';
+    const API_URI_BILLING_CREATE_TOPUP_PAYMENT                   = '/frontend/billing/createTopupPayment';
     const API_URI_BILLING_EXTERNAL_CREATE_CHARGE                 = '/frontend/billing/externalCreateCharge';
     const API_URI_BILLING_EXTERNAL_CREATE_CHARGE_WITHOUT_PROFILE = '/frontend/billing/externalCreateChargeWithoutProfile';
     const API_URI_BILLING_EXTERNAL_CREATE_CHARGEBACK             = '/frontend/billing/externalCreateChargeback';
@@ -342,17 +343,91 @@ class Client extends AbstractClient {
 		return BillingCreatePaymentResponse::fromResponse($response);
 	}
 
+    /**
+     * Initiate a payment transaction for a new subscription or package change with an existing flexible.
+     *
+     * Only use CreatePayment if you want to create an actual payment for a subscription that needs billing. If you
+     * try to create a payment for a subscription that doesn't need one, you will receive the error No subscription
+     * or upgrade found for payment. If you just want to register a payment method, use `billingCreateFlexible()`
+     * instead.
+     *
+     *
+     * @param Subscription|int $subscription
+     * @param Flexible|int     $flexible
+     * @param string           $returnUrl
+     * @param array            $paymentDetails
+     * @param User|int|string  $userTokenOrId user authentication token or id
+     * @param string|null      $countryCode
+     *
+     * @return BillingCreatePaymentResponse
+     */
+    public function billingCreatePaymentWithFlexible(
+        $subscription,
+        $flexible,
+        $returnUrl,
+        $paymentDetails,
+        $userTokenOrId,
+        $countryCode = null
+    ) {
+        $data = [];
+        $this->userToData($userTokenOrId, $data);
+        $data['flexibleId']     = ($flexible instanceof Flexible) ? $flexible->getFlexibleId() : $flexible;
+        $data['returnUrl']      = (string)$returnUrl;
+        $data['subscriptionId'] =
+            ($subscription instanceof Subscription) ? $subscription->getSubscriptionId() : $subscription;
+        $data['paymentDetails'] = $paymentDetails;
+        $data['countryCode'] = $countryCode;
+        $response               = $this->request(self::API_URI_BILLING_CREATE_PAYMENT, $data);
+        if (empty($response['redirectUrl'])) {
+            $response['redirectUrl'] = $returnUrl;
+        }
+        return BillingCreatePaymentResponse::fromResponse($response);
+    }
+
 	/**
-	 * Initiate a payment transaction for a new subscription or package change with an existing flexible.
+	 * Initiate a payment transaction for a account topup.
 	 *
-	 * Only use CreatePayment if you want to create an actual payment for a subscription that needs billing. If you
-	 * try to create a payment for a subscription that doesn't need one, you will receive the error No subscription
-	 * or upgrade found for payment. If you just want to register a payment method, use `billingCreateFlexible()`
-	 * instead.
 	 *
-	 * @see https://docs.dislo.com/display/DIS/CreatePaymentWithFlexible
+	 * @param string           $currencyCode  currency code EUR, USD, ...
+	 * @param float            $amount        the amount of the charge
+	 * @param string           $billingMethod
+	 * @param string           $returnUrl
+	 * @param array            $paymentDetails
+	 * @param User|int|string  $userTokenOrId user authentication token or id
+	 * @param string|null      $countryCode
 	 *
-	 * @param Subscription|int $subscription
+	 * @return BillingCreatePaymentResponse
+	 */
+	public function billingCreateTopupPayment(
+		$currencyCode,
+		$amount,
+		$billingMethod,
+		$returnUrl,
+		$paymentDetails,
+		$userTokenOrId,
+		$countryCode = null
+	) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$data['currencyCode']   = $currencyCode;
+		$data['amount']         = $amount;
+		$data['billingMethod']  = $billingMethod;
+		$data['returnUrl']      = (string)$returnUrl;
+		$data['paymentDetails'] = $paymentDetails;
+		$data['countryCode']    = $countryCode;
+		$response               = $this->request(self::API_URI_BILLING_CREATE_TOPUP_PAYMENT, $data);
+		if (empty($response['redirectUrl'])) {
+			$response['redirectUrl'] = $returnUrl;
+		}
+		return BillingCreatePaymentResponse::fromResponse($response);
+	}
+
+	/**
+	 * Initiate a payment transaction for a account topup with an existing flexible.
+	 *
+	 *
+	 * @param string           $currencyCode  currency code EUR, USD, ...
+	 * @param float            $amount        the amount of the charge
 	 * @param Flexible|int     $flexible
 	 * @param string           $returnUrl
 	 * @param array            $paymentDetails
@@ -361,8 +436,9 @@ class Client extends AbstractClient {
 	 *
 	 * @return BillingCreatePaymentResponse
 	 */
-	public function billingCreatePaymentWithFlexible(
-		$subscription,
+	public function billingCreateTopupPaymentWithFlexible(
+		$currencyCode,
+		$amount,
 		$flexible,
 		$returnUrl,
 		$paymentDetails,
@@ -371,13 +447,13 @@ class Client extends AbstractClient {
 	) {
 		$data = [];
 		$this->userToData($userTokenOrId, $data);
+		$data['currencyCode']   = $currencyCode;
+		$data['amount']         = $amount;
 		$data['flexibleId']     = ($flexible instanceof Flexible) ? $flexible->getFlexibleId() : $flexible;
 		$data['returnUrl']      = (string)$returnUrl;
-		$data['subscriptionId'] =
-			($subscription instanceof Subscription) ? $subscription->getSubscriptionId() : $subscription;
 		$data['paymentDetails'] = $paymentDetails;
-		$data['countryCode'] = $countryCode;
-		$response               = $this->request(self::API_URI_BILLING_CREATE_PAYMENT, $data);
+		$data['countryCode']    = $countryCode;
+		$response               = $this->request(self::API_URI_BILLING_CREATE_TOPUP_PAYMENT, $data);
 		if (empty($response['redirectUrl'])) {
 			$response['redirectUrl'] = $returnUrl;
 		}
