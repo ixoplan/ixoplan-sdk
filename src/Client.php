@@ -315,6 +315,82 @@ class Client extends AbstractClient {
 	}
 
 	/**
+	 * Initiate a payment transaction for a account topup.
+	 *
+	 *
+	 * @param string           $currencyCode  currency code EUR, USD, ...
+	 * @param float            $amount        the amount of the charge
+	 * @param string           $billingMethod
+	 * @param string           $returnUrl
+	 * @param array            $paymentDetails
+	 * @param User|int|string  $userTokenOrId user authentication token or id
+	 * @param string|null      $countryCode
+	 *
+	 * @return BillingCreatePaymentResponse
+	 */
+	public function billingCreateTopupPayment(
+		$currencyCode,
+		$amount,
+		$billingMethod,
+		$returnUrl,
+		$paymentDetails,
+		$userTokenOrId,
+		$countryCode = null
+	) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$data['currencyCode']   = $currencyCode;
+		$data['amount']         = $amount;
+		$data['billingMethod']  = $billingMethod;
+		$data['returnUrl']      = (string)$returnUrl;
+		$data['paymentDetails'] = $paymentDetails;
+		$data['countryCode']    = $countryCode;
+		$response               = $this->request('/frontend/billing/createTopupPayment', $data);
+		if (!$response['redirectUrl']) {
+			$response['redirectUrl'] = $returnUrl;
+		}
+		return BillingCreatePaymentResponse::fromResponse($response);
+	}
+
+	/**
+	 * Initiate a payment transaction for a account topup with an existing flexible.
+	 *
+	 *
+	 * @param string           $currencyCode  currency code EUR, USD, ...
+	 * @param float            $amount        the amount of the charge
+	 * @param Flexible|int     $flexible
+	 * @param string           $returnUrl
+	 * @param array            $paymentDetails
+	 * @param User|int|string  $userTokenOrId user authentication token or id
+	 * @param string|null      $countryCode
+	 *
+	 * @return BillingCreatePaymentResponse
+	 */
+	public function billingCreateTopupPaymentWithFlexible(
+		$currencyCode,
+		$amount,
+		$flexible,
+		$returnUrl,
+		$paymentDetails,
+		$userTokenOrId,
+		$countryCode = null
+	) {
+		$data = [];
+		$this->userToData($userTokenOrId, $data);
+		$data['currencyCode']   = $currencyCode;
+		$data['amount']         = $amount;
+		$data['flexibleId']     = ($flexible instanceof Flexible) ? $flexible->getFlexibleId() : $flexible;
+		$data['returnUrl']      = (string)$returnUrl;
+		$data['paymentDetails'] = $paymentDetails;
+		$data['countryCode'] = $countryCode;
+		$response               = $this->request('/frontend/billing/createTopupPayment', $data);
+		if (!$response['redirectUrl']) {
+			$response['redirectUrl'] = $returnUrl;
+		}
+		return BillingCreatePaymentResponse::fromResponse($response);
+	}
+
+	/**
 	 * Create an external charge.
 	 *
 	 *
