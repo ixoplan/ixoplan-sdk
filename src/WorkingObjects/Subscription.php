@@ -416,7 +416,7 @@ class Subscription implements WorkingObject {
             (isset($response['expiresAt']) && $response['expiresAt'] ?new \DateTime($response['expiresAt']):null),
             (isset($response['nextBillingAt']) && $response['nextBillingAt'] ?new \DateTime($response['nextBillingAt']):null),
             $response['currencyCode'],
-            $response['isInitialPeriod'],
+            isset($response['isInitialPeriod']) ? $response['isInitialPeriod'] : true,
             $response['isProvisioned'],
             isset($response['provisioningMetaData']) ? $response['provisioningMetaData'] : array(),
             (isset($response['nextPackage']) && $response['nextPackage'] ? NextPackage::fromResponse($response['nextPackage']):null),
@@ -430,7 +430,7 @@ class Subscription implements WorkingObject {
             isset($response['nextBillingAmount'])
                 ? $response['nextBillingAmount']
                 : null,
-            $response['metadata']
+            isset($response['metadata']) ? $response['metadata'] : []
         );
     }
 
