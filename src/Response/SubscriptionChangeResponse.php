@@ -26,8 +26,8 @@ class SubscriptionChangeResponse extends SubscriptionResponse {
      */
 	public function __construct(Subscription $subscription,
                                 $needsBilling,
-                                Price $price,
-                                $appliedImmediately,
+                                Price $price = null,
+                                $appliedImmediately = false,
                                 $requireFlexible = false
     ) {
         $this->appliedImmediately = $appliedImmediately;
@@ -51,7 +51,7 @@ class SubscriptionChangeResponse extends SubscriptionResponse {
 		return new SubscriptionChangeResponse(
 			Subscription::fromResponse($response['subscription']),
 			$response['needsBilling'],
-			Price::fromResponse($response['price']),
+            isset($response['price']) ? Price::fromResponse($response['price']) : null,
 			$response['appliedImmediately'],
             isset($response['requireFlexibleForFreeUpgrade'])
                 ? $response['requireFlexibleForFreeUpgrade']
