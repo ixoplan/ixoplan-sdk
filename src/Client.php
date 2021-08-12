@@ -31,6 +31,7 @@ use Ixolit\Dislo\Response\CaptchaVerifyResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
 use Ixolit\Dislo\Response\MailTrackOpenedResponse;
+use Ixolit\Dislo\Response\MiscGetCurrenciesResponse;
 use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse;
 use Ixolit\Dislo\Response\PackageGetResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
@@ -382,7 +383,7 @@ class Client extends AbstractClient {
 		$data['flexibleId']     = ($flexible instanceof Flexible) ? $flexible->getFlexibleId() : $flexible;
 		$data['returnUrl']      = (string)$returnUrl;
 		$data['paymentDetails'] = $paymentDetails;
-		$data['countryCode'] = $countryCode;
+		$data['countryCode']    = $countryCode;
 		$response               = $this->request('/frontend/billing/createTopupPayment', $data);
 		if (!$response['redirectUrl']) {
 			$response['redirectUrl'] = $returnUrl;
@@ -788,7 +789,8 @@ class Client extends AbstractClient {
 		$couponCode = null,
 		$userTokenOrId = null,
 		$addonPackageIdentifiers = [],
-		$strategyIdentifier = null
+		$strategyIdentifier = null,
+        $currencyCode = null
 	) {
 		$data = [
 			'subscriptionId'          =>
@@ -796,6 +798,7 @@ class Client extends AbstractClient {
 			'newPackageIdentifier'    => $newPackageIdentifier,
 			'couponCode'           	  => $couponCode,
 			'addonPackageIdentifiers' => $addonPackageIdentifiers,
+            'currencyCode'            => $currencyCode,
 		];
 		if ($strategyIdentifier) {
 		    $data['strategyIdentifier'] = $strategyIdentifier;
@@ -894,19 +897,21 @@ class Client extends AbstractClient {
     /**
      * Change the package for a subscription.
      *
-     * @param Subscription|int $subscription the unique subscription id to change
-     * @param string $newPackageIdentifier the identifier of the new package
-     * @param string[] $addonPackageIdentifiers optional - package identifiers of the addons
-     * @param string $couponCode optional - the coupon code to apply
-     * @param array $metaData optional - additional data (if supported by Dislo
+     * @param Subscription|int $subscription                the unique subscription id to change
+     * @param string           $newPackageIdentifier        the identifier of the new package
+     * @param string[]         $addonPackageIdentifiers     optional - package identifiers of the addons
+     * @param string           $couponCode                  optional - the coupon code to apply
+     * @param array            $metaData                    optional - additional data (if supported by Dislo
      *                                                      installation)
-     * @param bool $useFlexible use the existing flexible payment method from the user to
+     * @param bool             $useFlexible                 use the existing flexible payment method from the user to
      *                                                      pay for the package change immediately
-     * @param User|int|string $userTokenOrId User authentication token or user ID.
-     * @param string|null $strategyIdentifier Which strategy to use. Uses default strategy when not provided
+     * @param User|int|string  $userTokenOrId               User authentication token or user ID.
+     * @param string|null      $strategyIdentifier          Which strategy to use. Uses default strategy when not provided
+     * @param array            $addonSubscriptionMetadata
+     * @param string|null      $currencyCode
      *
-     * @param array $addonSubscriptionMetadata
      * @return SubscriptionChangeResponse
+     *
      * @throws DisloException
      * @throws ObjectNotFoundException
      */
@@ -919,12 +924,14 @@ class Client extends AbstractClient {
 		$useFlexible = false,
 		$userTokenOrId = null,
 		$strategyIdentifier = null,
-        $addonSubscriptionMetadata = []
+        $addonSubscriptionMetadata = [],
+        $currencyCode = null
 	) {
 		$data = [
-			'subscriptionId'       =>
-				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
-			'newPackageIdentifier' => $newPackageIdentifier,
+            'subscriptionId'       =>
+                ($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+            'newPackageIdentifier' => $newPackageIdentifier,
+            'currencyCode'         => $currencyCode,
 		];
 		if ($addonPackageIdentifiers) {
 			$data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
@@ -1151,7 +1158,8 @@ class Client extends AbstractClient {
 		$addonPackageIdentifiers = [],
 		$newExternalId = null,
 		$extraData = [],
-		$userTokenOrId = null
+		$userTokenOrId = null,
+        $currencyCode = null
 	) {
 		$newPeriodEnd = clone $newPeriodEnd;
 		$newPeriodEnd->setTimezone(new \DateTimeZone('UTC'));
@@ -1160,6 +1168,7 @@ class Client extends AbstractClient {
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
 			'newPackageIdentifier' => $newPackageIdentifier,
 			'newPeriodEnd'         => $newPeriodEnd->format('Y-m-d H:i:s'),
+            'currencyCode'         => $currencyCode,
 		];
 		if ($addonPackageIdentifiers) {
 			$data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
@@ -2402,4 +2411,20 @@ class Client extends AbstractClient {
 	) {
 		return $this->exportStreamQuery($query, $parameters, \fopen('php://temp', 'w+'))->getContents();
 	}
+
+    /**
+     * @param null $userTokenOrId
+     *
+     * @return MiscGetCurrenciesResponse
+     */
+	public function miscGetCurrencies($userTokenOrId = null, $subscriptionId = null)
+    {
+        $data = [];
+        $this->userToData($userTokenOrId, $data) ;
+        if ($subscriptionId) {
+            $data['subscriptionId'] = $subscriptionId;
+        }
+
+        return MiscGetCurrenciesResponse::fromResponse($this->request('/frontend/misc/currencies', $data));
+    }
 }
