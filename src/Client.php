@@ -29,6 +29,7 @@ use Ixolit\Dislo\Response\CaptchaVerifyResponse;
 use Ixolit\Dislo\Response\CouponCodeCheckResponse;
 use Ixolit\Dislo\Response\CouponCodeValidateResponse;
 use Ixolit\Dislo\Response\MailTrackOpenedResponse;
+use Ixolit\Dislo\Response\MiscGetCurrenciesResponse;
 use Ixolit\Dislo\Response\MiscGetRedirectorConfigurationResponse;
 use Ixolit\Dislo\Response\PackageGetResponse;
 use Ixolit\Dislo\Response\PackagesListResponse;
@@ -172,6 +173,7 @@ class Client extends AbstractClient {
     const API_URI_REDIRECTOR_GET_CONFIGURATION = '/frontend/misc/getRedirectorConfiguration';
     const API_URI_EXPORT_STREAM_REPORT         = '/export/v2/report/';
     const API_URI_EXPORT_STREAM_QUERY          = '/export/v2/query';
+    const API_URI_GET_CURRENCIES               = '/frontend/misc/currencies';
 
     const COUPON_EVENT_START   = 'subscription_start';
     const COUPON_EVENT_UPGRADE = 'subscription_upgrade';
@@ -857,14 +859,16 @@ class Client extends AbstractClient {
 		$couponCode = null,
 		$userTokenOrId = null,
 		$addonPackageIdentifiers = [],
-		$strategyIdentifier = null
+		$strategyIdentifier = null,
+        $currencyCode = null
 	) {
 		$data = [
 			'subscriptionId'          =>
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
 			'newPackageIdentifier'    => $newPackageIdentifier,
 			'couponCode'           	  => $couponCode,
-			'addonPackageIdentifiers' => $addonPackageIdentifiers
+			'addonPackageIdentifiers' => $addonPackageIdentifiers,
+            'currencyCode'            => $currencyCode,
 		];
 		if ($strategyIdentifier) {
 			$data['strategyIdentifier'] = $strategyIdentifier;
@@ -974,6 +978,7 @@ class Client extends AbstractClient {
 	 * @param User|int|string  $userTokenOrId               User authentication token or user ID.
 	 * @param string|null      $strategyIdentifier          Which strategy to use. Uses default strategy when not provided
      * @param array            $addonSubscriptionMetadata
+     * @param string|null      $currencyCode
 	 *
 	 * @return SubscriptionChangeResponse
 	 */
@@ -986,12 +991,14 @@ class Client extends AbstractClient {
 		$useFlexible = false,
 		$userTokenOrId = null,
 		$strategyIdentifier = null,
-        $addonSubscriptionMetadata = []
+        $addonSubscriptionMetadata = [],
+        $currencyCode = null
 	) {
 		$data = [
-			'subscriptionId'       =>
-				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
-			'newPackageIdentifier' => $newPackageIdentifier,
+            'subscriptionId'       =>
+                ($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
+            'newPackageIdentifier' => $newPackageIdentifier,
+            'currencyCode'         => $currencyCode,
 		];
 		if ($addonPackageIdentifiers) {
 			$data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
@@ -1217,7 +1224,8 @@ class Client extends AbstractClient {
 		$addonPackageIdentifiers = [],
 		$newExternalId = null,
 		$extraData = [],
-		$userTokenOrId = null
+		$userTokenOrId = null,
+        $currencyCode = null
 	) {
 		$newPeriodEnd = clone $newPeriodEnd;
 		$newPeriodEnd->setTimezone(new \DateTimeZone('UTC'));
@@ -1226,6 +1234,7 @@ class Client extends AbstractClient {
 				($subscription instanceof Subscription ? $subscription->getSubscriptionId() : $subscription),
 			'newPackageIdentifier' => $newPackageIdentifier,
 			'newPeriodEnd'         => $newPeriodEnd->format('Y-m-d H:i:s'),
+            'currencyCode'         => $currencyCode,
 		];
 		if ($addonPackageIdentifiers) {
 			$data['addonPackageIdentifiers'] = $addonPackageIdentifiers;
@@ -2467,4 +2476,19 @@ class Client extends AbstractClient {
 		return $this->exportStreamQuery($query, $parameters, \fopen('php://temp', 'w+'))->getContents();
 	}
 
+    /**
+     * @param null $userTokenOrId
+     *
+     * @return MiscGetCurrenciesResponse
+     */
+	public function miscGetCurrencies($userTokenOrId = null, $subscriptionId = null)
+    {
+        $data = [];
+        $this->userToData($userTokenOrId, $data) ;
+        if ($subscriptionId) {
+            $data['subscriptionId'] = $subscriptionId;
+        }
+
+        return MiscGetCurrenciesResponse::fromResponse($this->request(self::API_URI_GET_CURRENCIES, $data));
+    }
 }
